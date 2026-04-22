@@ -1,0 +1,1 @@
+Place logo.png, favicon.png and og-image.png here before deploy.
