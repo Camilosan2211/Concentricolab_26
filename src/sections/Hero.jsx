@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown } from 'lucide-react'
 
@@ -103,27 +103,8 @@ export default function Hero({ lang }) {
   const t = (es, en) => (lang === 'es' ? es : en)
   const imgs = HERO_LINE_IMAGES[lang] || HERO_LINE_IMAGES.es
   const [parallax, setParallax] = useState({ x: 0, y: 0 })
-  const [motionMode, setMotionMode] = useState('luxury')
+  const motionMode = 'dynamic'
   const variants = useMemo(() => motionPresets[motionMode] || motionPresets.luxury, [motionMode])
-
-  useEffect(() => {
-    try {
-      const fromUrl = new URLSearchParams(window.location.search).get('heroMotion')
-      const fromStorage = window.localStorage.getItem('heroMotionMode')
-      const initial = fromUrl || fromStorage
-      if (initial === 'luxury' || initial === 'dynamic') setMotionMode(initial)
-    } catch {
-      // Ignore storage/browser privacy restrictions and keep default mode.
-    }
-  }, [])
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('heroMotionMode', motionMode)
-    } catch {
-      // Ignore storage/browser privacy restrictions.
-    }
-  }, [motionMode])
 
   return (
     <section
@@ -166,28 +147,7 @@ export default function Hero({ lang }) {
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
             {t('Laboratorio digital · Bogotá', 'Digital Lab · Bogotá')}
           </span>
-          <div className="hero-motion-switch glass rounded-full p-1 inline-flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => setMotionMode('luxury')}
-              className={`px-3 py-1 rounded-full text-[10px] font-semibold transition-all duration-200 ${motionMode === 'luxury'
-                ? 'bg-b-blue text-white'
-                : 'dark:text-white/55 text-black/55 hover:dark:text-white hover:text-black'
-                }`}
-            >
-              {t('Slow Luxury', 'Slow Luxury')}
-            </button>
-            <button
-              type="button"
-              onClick={() => setMotionMode('dynamic')}
-              className={`px-3 py-1 rounded-full text-[10px] font-semibold transition-all duration-200 ${motionMode === 'dynamic'
-                ? 'bg-b-coral text-white'
-                : 'dark:text-white/55 text-black/55 hover:dark:text-white hover:text-black'
-                }`}
-            >
-              {t('Tech Dynamic', 'Tech Dynamic')}
-            </button>
-          </div>
+          
         </motion.div>
 
         <motion.h1

@@ -287,16 +287,17 @@ html.light .hero-motion-switch {
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke: 0 transparent;
     color: transparent;
-    animation: heroShimmer 7.2s linear infinite;
+    animation: heroShimmer 5s ease-in-out infinite alternate;
     will-change: background-position;
   }
   .hero-mode-dynamic .hero-shimmer {
-    animation-duration: 3.1s;
+    animation-duration: 2.6s;
+    animation-timing-function: ease-in-out;
   }
 }
 @keyframes heroShimmer {
-  0% { background-position: 120% center; }
-  100% { background-position: -20% center; }
+  0%   { background-position: 90% center; }
+  100% { background-position: 10% center; }
 }
 
 /* Footer: micro resplandor al hover en la marca */

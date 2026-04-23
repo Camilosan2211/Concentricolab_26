@@ -119,7 +119,65 @@ function FloatingAccent({ darkMode }) {
     </mesh>
   )
 }
+const SHAPE_DATA = [
+  { type: 'box',          color: '#5170FF', emissive: '#3050CC', x: -3.8, y:  1.6, z: -1.2, scale: 0.18, speed: 0.28, phase: 0.0  },
+  { type: 'octahedron',   color: '#FF6D4D', emissive: '#CC4020', x:  3.2, y: -1.1, z: -0.9, scale: 0.22, speed: 0.21, phase: 1.1  },
+  { type: 'cone',         color: '#41EAFF', emissive: '#20B8CC', x: -1.4, y: -2.4, z: -1.5, scale: 0.17, speed: 0.33, phase: 2.2  },
+  { type: 'box',          color: '#828AFF', emissive: '#5060CC', x:  2.6, y:  2.2, z: -2.0, scale: 0.14, speed: 0.18, phase: 3.3  },
+  { type: 'octahedron',   color: '#FF6D4D', emissive: '#AA3A1C', x: -4.4, y: -0.6, z: -1.8, scale: 0.19, speed: 0.24, phase: 0.7  },
+  { type: 'cone',         color: '#5170FF', emissive: '#3050CC', x:  4.1, y:  0.8, z: -1.4, scale: 0.15, speed: 0.30, phase: 1.8  },
+  { type: 'box',          color: '#41EAFF', emissive: '#18A0B8', x:  0.4, y:  2.9, z: -2.4, scale: 0.12, speed: 0.22, phase: 4.1  },
+  { type: 'octahedron',   color: '#828AFF', emissive: '#5060AA', x: -2.2, y:  0.3, z: -2.1, scale: 0.21, speed: 0.16, phase: 2.9  },
+]
 
+function FlatShapes({ darkMode }) {
+  const refs = useRef([])
+  const mouse = useRef({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const onMove = (e) => {
+      mouse.current.x = (e.clientX / window.innerWidth  - 0.5) * 2
+      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2
+    }
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [])
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime()
+    refs.current.forEach((mesh, i) => {
+      if (!mesh) return
+      const d = SHAPE_DATA[i]
+      mesh.position.x = d.x + Math.sin(t * d.speed + d.phase) * 0.22 + mouse.current.x * 0.12
+      mesh.position.y = d.y + Math.cos(t * d.speed * 0.85 + d.phase) * 0.18 + mouse.current.y * 0.09
+      mesh.rotation.x = t * d.speed * 0.6 + d.phase
+      mesh.rotation.y = t * d.speed * 0.9
+    })
+  })
+
+  const opacity = darkMode ? 0.55 : 0.35
+
+  return (
+    <>
+      {SHAPE_DATA.map((d, i) => (
+        <mesh key={i} ref={(el) => (refs.current[i] = el)} position={[d.x, d.y, d.z]} scale={d.scale}>
+          {d.type === 'box'        && <boxGeometry args={[1, 1, 1]} />}
+          {d.type === 'octahedron' && <octahedronGeometry args={[1, 0]} />}
+          {d.type === 'cone'       && <coneGeometry args={[0.8, 1.6, 5, 1]} />}
+          <meshPhongMaterial
+            color={d.color}
+            emissive={d.emissive}
+            emissiveIntensity={darkMode ? 0.35 : 0.18}
+            transparent
+            opacity={opacity}
+            flatShading={true}
+            shininess={30}
+          />
+        </mesh>
+      ))}
+    </>
+  )
+}
 export default function ParticleField({ darkMode = true }) {
   return (
     <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
@@ -134,6 +192,7 @@ export default function ParticleField({ darkMode = true }) {
         <pointLight position={[0, 3, -3]} color="#41EAFF" intensity={0.36} />
         <KineticSpheres darkMode={darkMode} count={180} />
         <FloatingAccent darkMode={darkMode} />
+        <FlatShapes darkMode={darkMode} />
       </Canvas>
     </div>
   )
