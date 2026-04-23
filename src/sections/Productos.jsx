@@ -1,14 +1,18 @@
 import { motion } from 'framer-motion'
 import { ExternalLink, ShoppingBag, Zap, Layers } from 'lucide-react'
 
+/** URL pública “Duplicar” en Notion del kit (sustituir si difiere). */
+const METRICS_NOTION_URL = 'https://concentriclabco.notion.site'
+
 const products=[
   {
     icon: ShoppingBag,
     color:'#5170FF',
     tag_es:'Disponible',tag_en:'Available',
-    es:{title:'Kit de Métricas Digitales',desc:'Templates en Notion para medir, analizar y presentar métricas de proyectos digitales. Listo para usar, adaptable a tu stack.',cta:'Obtener en Gumroad'},
-    en:{title:'Digital Metrics Kit',desc:'Notion templates to measure, analyze and present digital project metrics. Ready to use, adaptable to your stack.',cta:'Get on Gumroad'},
+    es:{title:'Kit de Métricas Digitales',desc:'Templates en Notion para medir, analizar y presentar métricas de proyectos digitales. Listo para usar, adaptable a tu stack.',cta:'Obtener en Gumroad',ctaNotion:'Obtener en Notion'},
+    en:{title:'Digital Metrics Kit',desc:'Notion templates to measure, analyze and present digital project metrics. Ready to use, adaptable to your stack.',cta:'Get on Gumroad',ctaNotion:'Get on Notion'},
     href:'https://concentriclab.gumroad.com/l/metricasdigitales',
+    notionHref: METRICS_NOTION_URL,
     /* Use the real Gumroad cover — swap to local path when downloaded */
     thumb:'https://public-files.gumroad.com/g2wgq4d5iuvqpgr7o6qkpcfhm3ol',
     hasThumb: true,
@@ -90,24 +94,40 @@ export default function Productos({lang}){
                   style={{background:`linear-gradient(to right,transparent,${prod.color}55,transparent)`}}/>
 
                 {/* Content */}
-                <div className="p-7 flex flex-col gap-5 flex-1">
+                <div className="p-6 flex flex-col gap-4 flex-1">
                   {/* Tag */}
                   <span className="inline-flex items-center gap-1.5 self-start text-[11px] font-bold tracking-[.07em] uppercase px-3 py-1 rounded-full"
                     style={{background:`${prod.color}18`,color:prod.color,border:`1px solid ${prod.color}25`}}>
                     <span className="w-1 h-1 rounded-full" style={{background:prod.color}}/>
                     {t(prod.tag_es,prod.tag_en)}
                   </span>
-                  <div className="flex flex-col gap-2 flex-1">
+                  <div className="flex flex-col gap-2 flex-1 min-h-0">
                     <h3 className="font-cal text-xl dark:text-white text-b-dark leading-snug">{c.title}</h3>
-                    <p className="dark:text-white/45 text-black/50 text-sm leading-[1.7]">{c.desc}</p>
+                    <p className="dark:text-white/45 text-black/50 text-sm leading-[1.65]">{c.desc}</p>
                   </div>
-                  <a href={prod.href} target={prod.href.startsWith('http')?'_blank':undefined}
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-semibold transition-all duration-200 group-hover:gap-3"
-                    style={{color:prod.color}}>
-                    <Icon size={14}/>{c.cta}
-                    {prod.href.startsWith('http')&&<ExternalLink size={12} className="opacity-50"/>}
-                  </a>
+                  {prod.notionHref ? (
+                    <div className="flex flex-wrap gap-2">
+                      <a href={prod.href} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex flex-1 min-w-[46%] items-center justify-center gap-1.5 text-[12px] font-semibold px-3 py-2 rounded-xl transition-all duration-200"
+                        style={{background:`${prod.color}18`,color:prod.color,border:`1px solid ${prod.color}30`}}>
+                        <Icon size={13}/>{c.cta}
+                        <ExternalLink size={11} className="opacity-50"/>
+                      </a>
+                      <a href={prod.notionHref} target="_blank" rel="noopener noreferrer"
+                        className="inline-flex flex-1 min-w-[46%] items-center justify-center gap-1.5 glass text-[12px] font-semibold px-3 py-2 rounded-xl dark:text-white/85 text-b-dark border dark:border-white/10 border-black/8 hover:dark:border-white/16 hover:border-black/12 transition-all duration-200">
+                        {c.ctaNotion}
+                        <ExternalLink size={11} className="opacity-45"/>
+                      </a>
+                    </div>
+                  ) : (
+                    <a href={prod.href} target={prod.href.startsWith('http')?'_blank':undefined}
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm font-semibold transition-all duration-200 group-hover:gap-3"
+                      style={{color:prod.color}}>
+                      <Icon size={14}/>{c.cta}
+                      {prod.href.startsWith('http')&&<ExternalLink size={12} className="opacity-50"/>}
+                    </a>
+                  )}
                 </div>
               </motion.div>
             )

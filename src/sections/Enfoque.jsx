@@ -10,7 +10,7 @@ export default function Enfoque({ lang }) {
     : 'We build from the core outward — from the user to the system, from the problem to the solution — combining design, AI and automation.'
   const tags  = lang==='es'?tags_es:tags_en
   return (
-    <section id="enfoque" className="py-28 px-6 relative overflow-hidden">
+    <section id="enfoque" className="py-20 px-6 relative overflow-hidden">
       <div className="absolute top-[-60px] right-[-40px] w-[320px] h-[320px] rounded-full pointer-events-none"
         style={{background:'radial-gradient(ellipse,rgba(81,112,255,.07) 0%,transparent 70%)',filter:'blur(40px)'}} aria-hidden="true"/>
       <div className="max-w-[1200px] mx-auto flex flex-col items-center gap-10">

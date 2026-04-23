@@ -12,6 +12,7 @@ import Enfoque        from './sections/Enfoque'
 import Manifiesto     from './sections/Manifiesto'
 import LabStats       from './sections/LabStats'
 import Productos      from './sections/Productos'
+import Proceso        from './sections/Proceso'
 import Contenido      from './sections/Contenido'
 import Stack          from './sections/Stack'
 import Connect        from './sections/Connect'
@@ -44,17 +45,19 @@ export default function App() {
 
       {/* 3-D canvas background */}
       <ParticleField darkMode={dark} />
+      <div className="film-grain-overlay" aria-hidden="true" />
 
       {/* Nav */}
       <Navbar lang={lang} setLang={setLang} dark={dark} setDark={setDark} />
 
-      <main>
+      <main className="relative z-10">
         <Hero       lang={lang} />
         <Ticker     />
         <Enfoque    lang={lang} />
         <Manifiesto lang={lang} />
         <LabStats   lang={lang} />
         <Productos  lang={lang} />
+        <Proceso    lang={lang} />
         <Contenido  lang={lang} />
         <Stack      lang={lang} />
         <Connect    lang={lang} />

@@ -4,10 +4,9 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navLinks = [
-  { href:'#productos',  es:'Productos',  en:'Products'  },
   { href:'#enfoque',    es:'Enfoque',    en:'Focus'      },
   { href:'#manifiesto', es:'Manifiesto', en:'Manifesto'  },
-  { href:'#contenido',  es:'Contenido',  en:'Content'    },
+  { href:'#connect',    es:'Contacto',   en:'Contact'    },
 ]
 
 export default function Navbar({ lang, setLang, dark, setDark }) {
@@ -48,7 +47,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
         {/* Bar */}
         <div className="w-full max-w-[1200px] flex items-center justify-between px-6 lg:px-10 py-3">
           <a href="#hero" className="flex items-center gap-2">
-            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-6 w-auto"/>
+            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto"/>
           </a>
 
           {/* Desktop nav */}
@@ -82,9 +81,9 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
             </button>
 
             {/* CTA */}
-            <a href="#productos"
+            <a href="#enfoque"
               className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 transition-all duration-200">
-              {t('Ver productos ahora','See products now')}
+              {t('Explorar','Explore')}
             </a>
 
             {/* Hamburger */}

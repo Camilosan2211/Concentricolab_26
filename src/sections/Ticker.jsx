@@ -3,7 +3,7 @@ const tags=['Diseño UX/UI','IA Generativa','Branding','Métricas','Automatizaci
 export default function Ticker() {
   const d=[...tags,...tags]
   return (
-    <div className="relative overflow-hidden py-5 border-y dark:border-white/5 border-black/6">
+    <div className="relative z-10 overflow-hidden py-5 border-y dark:border-white/5 border-black/6">
       <div className="absolute left-0 top-0 w-24 h-full z-10 pointer-events-none dark:[background:linear-gradient(to_right,#00031F,transparent)] [background:linear-gradient(to_right,#F8F7F4,transparent)]"/>
       <div className="absolute right-0 top-0 w-24 h-full z-10 pointer-events-none dark:[background:linear-gradient(to_left,#00031F,transparent)] [background:linear-gradient(to_left,#F8F7F4,transparent)]"/>
       <motion.div className="flex gap-3 w-max" animate={{x:['0%','-50%']}} transition={{duration:32,ease:'linear',repeat:Infinity}}>
