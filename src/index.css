@@ -258,12 +258,7 @@ html.light .hero-motion-switch {
   opacity: 0.56;
   animation-duration: 16s;
 }
-/* ================================================
-   HERO GRID — grid perspectiva holográfica
-   Pegar en src/index.css justo ANTES del bloque
-   "/* Hero shimmer premium compartido */"
-   (aprox. línea 262 en tu archivo actual)
-   ================================================ */
+
 
 /* Contenedor raíz — ocupa todo el hero */
 .hero-grid-root {
