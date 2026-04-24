@@ -4,6 +4,7 @@ import { useCursor }  from './hooks/useCursor'
 
 import ScrollToTop    from './components/ScrollToTop'
 import Navbar         from './components/Navbar'
+import GeometricBackground from './components/ui/geometric'
 
 import Hero           from './sections/Hero'
 import Ticker         from './sections/Ticker'
@@ -33,7 +34,7 @@ export default function App() {
   useCursor()
 
   return (
-    <>
+    <GeometricBackground>
       {/* Progress bar */}
       <div id="pb" aria-hidden="true" />
 
@@ -62,6 +63,6 @@ export default function App() {
 
       <Footer lang={lang} />
       <ScrollToTop />
-    </>
+    </GeometricBackground>
   )
 }
