@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useLenis }   from './hooks/useLenis'
 import { useCursor }  from './hooks/useCursor'
 
-import ParticleField  from './components/ParticleField'
 import ScrollToTop    from './components/ScrollToTop'
 import Navbar         from './components/Navbar'
 
@@ -22,7 +21,6 @@ export default function App() {
   const [lang, setLang] = useState('es')
   const [dark, setDark] = useState(true)
 
-  // Sync dark mode class on <html>
   useEffect(() => {
     if (dark) {
       document.documentElement.classList.remove('light')
@@ -43,8 +41,7 @@ export default function App() {
       <div className="cur-dot"  style={{ opacity: 0 }} aria-hidden="true" />
       <div className="cur-ring" style={{ opacity: 0 }} aria-hidden="true" />
 
-      {/* 3-D canvas background */}
-      <ParticleField darkMode={dark} />
+      {/* Film grain overlay */}
       <div className="film-grain-overlay" aria-hidden="true" />
 
       {/* Nav */}

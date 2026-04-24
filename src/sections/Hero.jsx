@@ -1,36 +1,9 @@
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown } from 'lucide-react'
+import HeroGrid from '../components/HeroGrid'
 
 const motionPresets = {
-  luxury: {
-    container: { hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.28 } } },
-    item: {
-      hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
-      show: {
-        opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
-        transition: { duration: 0.95, ease: [0.16, 1, 0.3, 1] },
-      },
-    },
-    row: {
-      hidden: { opacity: 0, y: 40, scale: 0.985, filter: 'blur(8px)' },
-      show: (i) => ({
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: 'blur(0px)',
-        transition: {
-          delay: 0.25 + i * 0.11,
-          type: 'spring',
-          stiffness: 128,
-          damping: 16,
-          mass: 0.9,
-        },
-      }),
-    },
-  },
   dynamic: {
     container: { hidden: {}, show: { transition: { staggerChildren: 0.07, delayChildren: 0.16 } } },
     item: {
@@ -80,7 +53,7 @@ function HeroLinePhoto({ src, alt }) {
   if (failed) {
     return (
       <span
-        className="inline-block w-[0.84em] h-[0.84em] shrink-0 rounded-full bg-gradient-to-br from-b-blue/80 to-b-coral/70 align-[-0.12em] mx-1.5"
+        className="inline-block w-[0.72em] h-[0.72em] shrink-0 rounded-full bg-gradient-to-br from-b-blue/80 to-b-coral/70 align-[-0.1em] mx-1"
         aria-hidden
       />
     )
@@ -91,7 +64,7 @@ function HeroLinePhoto({ src, alt }) {
       alt={alt}
       width={64}
       height={64}
-      className="inline-block w-[0.84em] h-[0.84em] shrink-0 rounded-full object-cover align-[-0.12em] mx-1.5 shadow-[0_8px_24px_rgba(0,0,0,.16)]"
+      className="inline-block w-[0.72em] h-[0.72em] shrink-0 rounded-full object-cover align-[-0.1em] mx-1 shadow-[0_6px_18px_rgba(0,0,0,.18)]"
       loading="eager"
       decoding="async"
       onError={() => setFailed(true)}
@@ -104,12 +77,12 @@ export default function Hero({ lang }) {
   const imgs = HERO_LINE_IMAGES[lang] || HERO_LINE_IMAGES.es
   const [parallax, setParallax] = useState({ x: 0, y: 0 })
   const motionMode = 'dynamic'
-  const variants = useMemo(() => motionPresets[motionMode] || motionPresets.luxury, [motionMode])
+  const variants = useMemo(() => motionPresets[motionMode], [motionMode])
 
   return (
     <section
       id="hero"
-      className={`relative z-10 min-h-screen flex items-center justify-center text-center overflow-hidden pt-36 pb-24 ${motionMode === 'dynamic' ? 'hero-mode-dynamic' : 'hero-mode-luxury'}`}
+      className="relative z-10 min-h-screen flex items-center justify-center text-center overflow-hidden pt-36 pb-24 hero-mode-dynamic"
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect()
         const x = ((e.clientX - r.left) / r.width - 0.5) * 2
@@ -118,62 +91,62 @@ export default function Hero({ lang }) {
       }}
       onMouseLeave={() => setParallax({ x: 0, y: 0 })}
     >
-      <div className="hero-vignette" aria-hidden="true" />
-      <div className="hero-brand-aurora" aria-hidden="true" />
-      <div className="hero-brand-aurora hero-brand-aurora-2" aria-hidden="true" />
+      {/* Fondo animado — grid holográfico + glows laterales */}
+      <HeroGrid />
+
+      {/* Capas de profundidad con parallax al mouse */}
       <div
         className="hero-blur-layer"
         style={{ transform: `translate3d(${parallax.x * 16}px, ${parallax.y * 12}px, 0)` }}
-        aria-hidden="true"
       />
       <div
         className="hero-blur-layer hero-blur-layer-2"
         style={{ transform: `translate3d(${parallax.x * -12}px, ${parallax.y * -9}px, 0)` }}
-        aria-hidden="true"
       />
       <div
         className="hero-blur-layer hero-blur-layer-3"
         style={{ transform: `translate3d(${parallax.x * 8}px, ${parallax.y * -6}px, 0)` }}
-        aria-hidden="true"
       />
+
       <motion.div
         className="relative z-10 flex flex-col items-center gap-7 px-6 max-w-5xl mx-auto"
         variants={variants.container}
         initial="hidden"
         animate="show"
       >
+        {/* Badge */}
         <motion.div variants={variants.item} className="flex items-center gap-2 flex-wrap justify-center">
           <span className="glass-blue inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.1em] uppercase text-b-blue-lt px-4 py-2 rounded-full">
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
             {t('Laboratorio digital · Bogotá', 'Digital Lab · Bogotá')}
           </span>
-          
         </motion.div>
 
+        {/* Headline — 3 renglones */}
         <motion.h1
           variants={variants.item}
-          className="font-cal text-5xl sm:text-6xl md:text-7xl xl:text-[84px] leading-[1.06] tracking-[-2px] dark:text-white text-b-dark"
+          className="font-cal text-4xl sm:text-5xl md:text-6xl xl:text-[72px] leading-[1.08] tracking-[-1.5px] dark:text-white text-b-dark"
         >
           <motion.span
             custom={0}
             variants={variants.row}
             className="inline-flex flex-nowrap items-center justify-center gap-2"
-            animate={motionMode === 'dynamic' ? { y: [0, -3, 0] } : undefined}
-            transition={motionMode === 'dynamic' ? { duration: 2.2, repeat: Infinity, ease: 'easeInOut', delay: 0.2 } : undefined}
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
           >
             <span>{t('Diseño que', 'Design that')}</span>
             <HeroLinePhoto src={imgs[0]} alt="" />
-            <span className="hero-shimmer font-semibold">{t('Piensa.', 'Thinks.')}</span>
+            <span className="hero-shimmer">{t('Piensa.', 'Thinks.')}</span>
           </motion.span>
           <br />
           <motion.span
             custom={1}
             variants={variants.row}
             className="inline-flex flex-nowrap items-center justify-center gap-2"
-            animate={motionMode === 'dynamic' ? { y: [0, 2, 0] } : undefined}
-            transition={motionMode === 'dynamic' ? { duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay: 0.35 } : undefined}
+            animate={{ y: [0, 2, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay: 0.35 }}
           >
-            <span className="hero-shimmer font-semibold">{t('Sistemas', 'Systems')}</span>
+            <span className="hero-shimmer">{t('Sistemas', 'Systems')}</span>
             <HeroLinePhoto src={imgs[1]} alt="" />
             <span>{t('que funcionan.', 'that work.')}</span>
           </motion.span>
@@ -182,15 +155,16 @@ export default function Hero({ lang }) {
             custom={2}
             variants={variants.row}
             className="inline-flex flex-nowrap items-center justify-center gap-2"
-            animate={motionMode === 'dynamic' ? { y: [0, -2, 0] } : undefined}
-            transition={motionMode === 'dynamic' ? { duration: 2.1, repeat: Infinity, ease: 'easeInOut', delay: 0.5 } : undefined}
+            animate={{ y: [0, -2, 0] }}
+            transition={{ duration: 2.1, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
           >
             <span>{t('Experiencias', 'Experiences')}</span>
             <HeroLinePhoto src={imgs[2]} alt="" />
-            <span className="hero-shimmer font-semibold">{t('que conectan.', 'that connect.')}</span>
+            <span className="hero-shimmer">{t('que conectan.', 'that connect.')}</span>
           </motion.span>
         </motion.h1>
 
+        {/* Subtítulo */}
         <motion.p
           variants={variants.item}
           className="dark:text-white/50 text-black/55 text-base md:text-lg max-w-[520px] leading-[1.75]"
@@ -201,6 +175,7 @@ export default function Hero({ lang }) {
           )}
         </motion.p>
 
+        {/* CTAs */}
         <motion.div variants={variants.item} className="flex flex-wrap items-center gap-4 justify-center">
           <a
             href="#enfoque"
@@ -218,6 +193,7 @@ export default function Hero({ lang }) {
           </a>
         </motion.div>
 
+        {/* Scroll hint */}
         <motion.div
           variants={variants.item}
           className="flex items-center gap-2 dark:text-white/25 text-black/30 text-xs font-medium mt-4"

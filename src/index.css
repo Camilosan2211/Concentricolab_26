@@ -258,6 +258,178 @@ html.light .hero-motion-switch {
   opacity: 0.56;
   animation-duration: 16s;
 }
+/* ================================================
+   HERO GRID — grid perspectiva holográfica
+   Pegar en src/index.css justo ANTES del bloque
+   "/* Hero shimmer premium compartido */"
+   (aprox. línea 262 en tu archivo actual)
+   ================================================ */
+
+/* Contenedor raíz — ocupa todo el hero */
+.hero-grid-root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* ---- Grid perspectiva ---- */
+.hero-grid-perspective {
+  position: absolute;
+  bottom: 0;
+  left: -10%;
+  right: -10%;
+  height: 58%;
+  perspective: 420px;
+  perspective-origin: 50% 0%;
+}
+
+.hero-grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    /* líneas horizontales */
+    repeating-linear-gradient(
+      0deg,
+      rgba(81, 112, 255, 0.10) 0px,
+      rgba(81, 112, 255, 0.10) 1px,
+      transparent 1px,
+      transparent 48px
+    ),
+    /* líneas verticales */
+    repeating-linear-gradient(
+      90deg,
+      rgba(81, 112, 255, 0.08) 0px,
+      rgba(81, 112, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 72px
+    );
+  transform: rotateX(52deg) scaleY(1.8);
+  transform-origin: 50% 100%;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.6) 30%,
+    rgba(0,0,0,0.85) 65%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.6) 30%,
+    rgba(0,0,0,0.85) 65%,
+    transparent 100%
+  );
+  animation: gridPulse 6s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1.0; }
+}
+
+/* ---- Línea de scan ---- */
+.hero-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(65, 234, 255, 0.0) 5%,
+    rgba(65, 234, 255, 0.55) 35%,
+    rgba(65, 234, 255, 0.85) 50%,
+    rgba(65, 234, 255, 0.55) 65%,
+    rgba(65, 234, 255, 0.0) 95%,
+    transparent 100%
+  );
+  animation: scanDown 9s linear infinite;
+  will-change: top;
+  filter: blur(0.5px);
+}
+
+@keyframes scanDown {
+  0%   { top: 15%; opacity: 0; }
+  8%   { opacity: 1; }
+  88%  { opacity: 0.8; }
+  100% { top: 82%; opacity: 0; }
+}
+
+/* ---- Glows laterales ---- */
+.hero-side-glow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 22vw;
+  min-width: 140px;
+  max-width: 280px;
+  pointer-events: none;
+}
+
+.hero-side-glow-left {
+  left: 0;
+  background: radial-gradient(
+    ellipse 100% 60% at 0% 42%,
+    rgba(81, 112, 255, 0.22) 0%,
+    rgba(81, 112, 255, 0.10) 40%,
+    transparent 75%
+  );
+  animation: glowBreathLeft 7s ease-in-out infinite;
+}
+
+.hero-side-glow-right {
+  right: 0;
+  background: radial-gradient(
+    ellipse 100% 60% at 100% 52%,
+    rgba(255, 109, 77, 0.20) 0%,
+    rgba(255, 109, 77, 0.09) 40%,
+    transparent 75%
+  );
+  animation: glowBreathRight 8.5s ease-in-out infinite;
+}
+
+@keyframes glowBreathLeft {
+  0%, 100% { opacity: 0.7; transform: scaleY(1);    }
+  50%       { opacity: 1.0; transform: scaleY(1.06); }
+}
+
+@keyframes glowBreathRight {
+  0%, 100% { opacity: 0.6; transform: scaleY(1);    }
+  50%       { opacity: 1.0; transform: scaleY(1.08); }
+}
+
+/* ---- Orbe central de profundidad ---- */
+.hero-center-orb {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  translate: -50% -50%;
+  width: 55vw;
+  max-width: 700px;
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    rgba(81, 112, 255, 0.07) 0%,
+    rgba(81, 112, 255, 0.03) 45%,
+    transparent 72%
+  );
+  animation: orbPulse 11s ease-in-out infinite;
+}
+
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1);    }
+  50%       { opacity: 1.0; transform: scale(1.05); }
+}
+
+/* Modo light: reducir intensidad */
+html.light .hero-grid-lines       { opacity: 0.25; }
+html.light .hero-scan-line        { opacity: 0.18; }
+html.light .hero-side-glow-left   { opacity: 0.30; }
+html.light .hero-side-glow-right  { opacity: 0.28; }
+html.light .hero-center-orb       { opacity: 0.20; }
 
 /* Hero shimmer premium compartido (viewport-locked) */
 .hero-shimmer {
