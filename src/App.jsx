@@ -34,7 +34,9 @@ export default function App() {
   useCursor()
 
   return (
-    <GeometricBackground>
+    <>
+      <GeometricBackground />
+
       {/* Progress bar */}
       <div id="pb" aria-hidden="true" />
 
@@ -63,6 +65,6 @@ export default function App() {
 
       <Footer lang={lang} />
       <ScrollToTop />
-    </GeometricBackground>
+    </>
   )
 }

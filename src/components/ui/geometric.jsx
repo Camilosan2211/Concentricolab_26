@@ -61,11 +61,10 @@ function ElegantShape({
 }
 
 export default function GeometricBackground({
-  children,
   className
 }) {
   return (
-    <div className={cn("fixed inset-0 w-full h-full overflow-hidden bg-[#0D0F1C] z-[-1]", className)}>
+    <div className={cn("fixed inset-0 w-full h-full bg-[#0D0F1C] z-[-1]", className)}>
       <div
         className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
       <div className="absolute inset-0 overflow-hidden">
@@ -116,7 +115,6 @@ export default function GeometricBackground({
         <div className="hero-side-glow hero-side-glow-right" />
       </div>
 
-      {children}
       <div
         className="absolute inset-0 bg-gradient-to-t from-[#0D0F1C] via-transparent to-[#0D0F1C]/80 pointer-events-none" />
     </div>
