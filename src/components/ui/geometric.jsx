@@ -33,7 +33,8 @@ function ElegantShape({
       className={cn("absolute", className)}>
       <motion.div
         animate={{
-          y: [0, 15, 0],
+          y: [0, 24, 0],
+          x: [0, 6, 0],
         }}
         transition={{
           duration: 12,
@@ -64,7 +65,7 @@ export default function GeometricBackground({
   className
 }) {
   return (
-    <div className={cn("fixed inset-0 w-full h-full bg-[#0D0F1C] z-[-1]", className)}>
+    <div className={cn("geometric-bg fixed inset-0 w-full h-full z-[-1]", className)}>
       <div
         className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
       <div className="absolute inset-0 overflow-hidden">
@@ -116,7 +117,7 @@ export default function GeometricBackground({
       </div>
 
       <div
-        className="absolute inset-0 bg-gradient-to-t from-[#0D0F1C] via-transparent to-[#0D0F1C]/80 pointer-events-none" />
+        className="geometric-fade absolute inset-0 pointer-events-none" />
     </div>
   );
 }

@@ -499,9 +499,9 @@ html.light .hero-motion-switch {
 /* Modo light: reducir intensidad */
 html.light .hero-grid-lines       { opacity: 0.25; }
 html.light .hero-scan-line        { opacity: 0.18; }
-html.light .hero-side-glow-left   { opacity: 0.30; }
-html.light .hero-side-glow-right  { opacity: 0.28; }
-html.light .hero-center-orb       { opacity: 0.20; }
+html.light .hero-side-glow-left   { opacity: 0.30; background: radial-gradient(ellipse 100% 60% at 0% 42%, rgba(81,112,255,0.18) 0%, rgba(81,112,255,0.08) 40%, transparent 75%); }
+html.light .hero-side-glow-right  { opacity: 0.28; background: radial-gradient(ellipse 100% 60% at 100% 52%, rgba(255,109,77,0.18) 0%, rgba(255,109,77,0.09) 40%, transparent 75%); }
+html.light .hero-center-orb       { opacity: 0.24; background: radial-gradient(circle, rgba(81,112,255,0.10) 0%, rgba(81,112,255,0.02) 45%, transparent 72%); }
 
 /* Hero shimmer premium compartido (viewport-locked) */
 .hero-shimmer {
@@ -738,14 +738,14 @@ html.light canvas[aria-hidden="true"] {
 
 /* ── Glass en modo light ─────────────────────────────────────────  */
 html.light .glass {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(10, 10, 24, 0.08);
-  box-shadow: 0 2px 24px rgba(81, 112, 255, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(10, 10, 24, 0.10);
+  box-shadow: 0 4px 40px rgba(81, 112, 255, 0.055), 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 html.light .glass-blue {
-  background: rgba(81, 112, 255, 0.08);
-  border-color: rgba(81, 112, 255, 0.18);
+  background: rgba(81, 112, 255, 0.10);
+  border-color: rgba(81, 112, 255, 0.20);
 }
 
 /* ── Navbar en modo light ─────────────────────────────────────────
@@ -762,6 +762,11 @@ html.light #manifiesto {
   background: var(--manifiesto-bg) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+html.light #manifiesto .rounded-2xl {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(81, 112, 255, 0.10) !important;
 }
 
 /* Ticker en modo light */
@@ -820,8 +825,23 @@ html.light #scroll-to-top {
 
 /* ── Footer en modo light ───────────────────────────────────────  */
 html.light footer {
-  background: rgba(238, 241, 255, 0.85);
+  background: rgba(238, 241, 255, 0.90);
   border-top-color: rgba(81, 112, 255, 0.10);
+}
+
+/* Geometric background para modo light */
+.geometric-bg {
+  background: #0D0F1C;
+}
+html.light .geometric-bg {
+  background: #F8F7F4;
+}
+
+.geometric-fade {
+  background: linear-gradient(to top, rgba(13, 15, 28, 0.78), transparent 45%, rgba(13, 15, 28, 0.54));
+}
+html.light .geometric-fade {
+  background: linear-gradient(to top, rgba(248, 247, 244, 0.86), transparent 45%, rgba(248, 247, 244, 0.58));
 }
 
 /* ── Proceso: iconos en modo light ──────────────────────────────  */

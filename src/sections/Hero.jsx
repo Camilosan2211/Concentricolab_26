@@ -196,7 +196,7 @@ export default function Hero({ lang }) {
         {/* Scroll hint */}
         <motion.div
           variants={variants.item}
-          className="flex items-center gap-2 dark:text-white/25 text-black/30 text-xs font-medium mt-4"
+          className="flex items-center gap-2 dark:text-white/25 text-black/45 text-xs font-medium mt-4"
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
         >
