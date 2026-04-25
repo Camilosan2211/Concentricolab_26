@@ -567,3 +567,137 @@ html.light .footer-brand-glow:hover {
 .hex-clip {
   clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
 }
+/* ================================================================
+   BLOQUE CSS — pegar al FINAL de src/index.css
+   Arregla el modo light en toda la web + mejoras globales
+   ================================================================ */
+
+
+/* ── 1. MODO LIGHT — correcciones globales ─────────────────────── */
+
+/* Secciones sin fondo explícito heredan el body (#F8F7F4) — OK.
+   Problema: las secciones dark-only se veían mal. Ajuste fino: */
+
+   html.light #enfoque,
+   html.light #proceso,
+   html.light #productos,
+   html.light #contenido,
+   html.light #stack,
+   html.light #connect {
+     background: transparent;
+   }
+   
+   /* El Ticker en modo light */
+   html.light .ticker-track {
+     color: rgba(10, 10, 24, 0.45);
+   }
+   
+   /* Glass en modo light — más visible y con sombra */
+   html.light .glass {
+     background: rgba(255, 255, 255, 0.72);
+     border: 1px solid rgba(81, 112, 255, 0.10);
+     box-shadow: 0 2px 20px rgba(81, 112, 255, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+   }
+   
+   html.light .glass-blue {
+     background: rgba(81, 112, 255, 0.07);
+     border: 1px solid rgba(81, 112, 255, 0.16);
+   }
+   
+   /* Texto de etiquetas de sección */
+   html.light .section-label {
+     color: rgba(10, 10, 24, 0.38);
+   }
+   
+   
+   /* ── 2. SEPARADORES SUTILES ENTRE SECCIONES ─────────────────────
+   
+      Añade una línea difusa entre secciones para guiar el ojo.
+      Uso: <div className="section-divider" aria-hidden="true" />
+      Poner entre secciones en App.jsx (opcional).
+      ──────────────────────────────────────────────────────────────── */
+   .section-divider {
+     width: 100%;
+     height: 1px;
+     background: linear-gradient(
+       90deg,
+       transparent 0%,
+       rgba(81, 112, 255, 0.12) 30%,
+       rgba(255, 109, 77, 0.10) 70%,
+       transparent 100%
+     );
+     margin: 0 auto;
+     max-width: 1200px;
+     padding: 0 24px;
+   }
+   
+   html.light .section-divider {
+     background: linear-gradient(
+       90deg,
+       transparent 0%,
+       rgba(81, 112, 255, 0.10) 30%,
+       rgba(255, 109, 77, 0.08) 70%,
+       transparent 100%
+     );
+   }
+   
+   
+   /* ── 3. GLASS DARK — panel oscuro de isla visual ─────────────────
+      Para usar en secciones que quieran el tratamiento "dark island"
+      incluso en modo light (como LabStats o banners CTA).
+      ──────────────────────────────────────────────────────────────── */
+   .glass-dark {
+     background: rgba(5, 8, 40, 0.70);
+     border: 1px solid rgba(255, 255, 255, 0.07);
+     backdrop-filter: blur(20px);
+     -webkit-backdrop-filter: blur(20px);
+   }
+   
+   /* En modo light se mantiene oscuro (es intencional — contraste editorial) */
+   html.light .glass-dark {
+     background: rgba(10, 14, 50, 0.82);
+     border: 1px solid rgba(255, 255, 255, 0.09);
+   }
+   
+   
+   /* ── 4. MEJORA DEL HERO SHIMMER — modo light ─────────────────── */
+   html.light .hero-shimmer {
+     background: linear-gradient(
+       90deg,
+       #5170FF  0%,
+       #FF6D4D 40%,
+       #5170FF  80%
+     );
+     background-size: 220% auto;
+     -webkit-background-clip: text;
+     background-clip: text;
+     -webkit-text-fill-color: transparent;
+     animation: heroShimmer 5s ease-in-out infinite alternate;
+   }
+   
+   
+   /* ── 5. AJUSTE PADDING SECCIONES — ritmo visual más consistente ─
+   
+      Antes: py-28, py-24, py-20, py-16, py-14, py-12 mezclados.
+      Objetivo: escala de 4 valores claros (S/M/L/XL).
+      No tocar los archivos JSX — sobrescribir aquí.
+      ──────────────────────────────────────────────────────────────── */
+   
+   #productos  { padding-top: 80px;  padding-bottom: 80px;  }
+   #proceso    { padding-top: 64px;  padding-bottom: 64px;  }
+   #contenido  { padding-top: 56px;  padding-bottom: 56px;  }
+   #stack      { padding-top: 72px;  padding-bottom: 72px;  }
+   
+   @media (min-width: 768px) {
+     #productos { padding-top: 100px; padding-bottom: 100px; }
+     #proceso   { padding-top: 80px;  padding-bottom: 80px;  }
+     #contenido { padding-top: 72px;  padding-bottom: 72px;  }
+     #stack     { padding-top: 96px;  padding-bottom: 96px;  }
+   }
+   
+   
+   /* ── 6. NAVBAR — borde inferior en modo light ────────────────── */
+   html.light header {
+     border-bottom-color: rgba(81, 112, 255, 0.08) !important;
+   }
+   

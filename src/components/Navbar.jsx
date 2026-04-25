@@ -4,9 +4,10 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navLinks = [
-  { href:'#enfoque',    es:'Enfoque',    en:'Focus'      },
-  { href:'#manifiesto', es:'Manifiesto', en:'Manifesto'  },
-  { href:'#connect',    es:'Contacto',   en:'Contact'    },
+  { href:'#productos',  es:'Productos',  en:'Products'  },
+  { href:'#enfoque',    es:'Enfoque',    en:'Focus'     },
+  { href:'#manifiesto', es:'Manifiesto', en:'Manifesto' },
+  { href:'#contenido',  es:'Contenido',  en:'Content'   },
 ]
 
 export default function Navbar({ lang, setLang, dark, setDark }) {
@@ -31,10 +32,11 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
   return (
     <>
       <header className={clsx(
-        'fixed top-0 left-0 w-full z-50 flex flex-col items-center transition-all duration-300',
+        'fixed top-0 left-0 w-full z-50 flex flex-col items-center transition-all duration-400',
         scrolled
-          ? 'dark:bg-[rgba(0,3,31,.78)] bg-[rgba(248,247,244,.88)] backdrop-blur-xl border-b dark:border-white/5 border-black/6 shadow-md'
-          : ''
+          /* dark — más glass, menos opaco */
+          ? 'dark:bg-[rgba(0,3,31,.42)] bg-[rgba(255,255,255,.55)] backdrop-blur-2xl border-b dark:border-white/[0.06] border-black/[0.07] shadow-[0_2px_24px_rgba(0,0,0,.10)]'
+          : 'backdrop-blur-none'
       )}>
         {/* Notch pill */}
         <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-[60px] mb-1">
@@ -54,7 +56,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
           <nav className="hidden md:flex items-center gap-7">
             {navLinks.map(l=>(
               <a key={l.href} href={l.href}
-                className="text-sm dark:text-white/50 text-black/50 hover:dark:text-white hover:text-black font-medium transition-colors duration-200 relative group">
+                className="text-sm dark:text-white/55 text-black/55 hover:dark:text-white hover:text-black font-medium transition-colors duration-200 relative group">
                 {t(l.es,l.en)}
                 <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300"/>
               </a>
@@ -63,7 +65,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
 
           {/* Controls */}
           <div className="flex items-center gap-2">
-            {/* Light/Dark */}
+            {/* Light/Dark toggle */}
             <button
               onClick={toggleDark}
               aria-label="Toggle theme"
@@ -72,7 +74,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
               {dark ? <Sun size={15}/> : <Moon size={15}/>}
             </button>
 
-            {/* Lang */}
+            {/* Lang toggle */}
             <button
               onClick={()=> setLang(l => l==='es'?'en':'es')}
               className="glass dark:text-white/60 text-black/50 text-[13px] font-bold px-3.5 py-1.5 rounded-full hover:dark:text-white hover:text-black transition-all duration-200"
@@ -81,35 +83,48 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
             </button>
 
             {/* CTA */}
-            <a href="#enfoque"
-              className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 transition-all duration-200">
+            <a href="#productos"
+              className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(81,112,255,.45)] transition-all duration-200">
               {t('Explorar','Explore')}
             </a>
 
-            {/* Hamburger */}
-            <button className="md:hidden dark:text-white/70 text-black/60 hover:dark:text-white hover:text-black transition-colors"
-              onClick={()=>setOpen(true)} aria-label="Menú">
-              <Menu size={22}/>
+            {/* Mobile menu */}
+            <button
+              className="md:hidden glass w-9 h-9 rounded-full flex items-center justify-center dark:text-white/70 text-black/60"
+              onClick={()=>setOpen(o=>!o)}
+              aria-label="Menu">
+              {open ? <X size={16}/> : <Menu size={16}/>}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile menu */}
+      {/* Mobile drawer */}
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-10 dark:bg-b-dark bg-b-light"
-            initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.3}}>
-            <button className="absolute top-6 right-6 dark:text-white/60 text-black/50 hover:dark:text-white hover:text-black"
-              onClick={()=>setOpen(false)}><X size={26}/></button>
-            {navLinks.map((l,i)=>(
-              <motion.a key={l.href} href={l.href} onClick={()=>setOpen(false)}
-                className="font-cal text-4xl dark:text-white text-black hover:text-b-blue transition-colors"
-                initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{delay:i*.08}}>
-                {t(l.es,l.en)}
-              </motion.a>
-            ))}
+            className="fixed inset-0 z-40 flex flex-col pt-28 px-6 pb-8 dark:bg-[rgba(0,3,31,.94)] bg-[rgba(248,247,244,.96)] backdrop-blur-2xl"
+            initial={{opacity:0,y:-16}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-16}}
+            transition={{duration:.25,ease:[.22,1,.36,1]}}>
+            <nav className="flex flex-col gap-4">
+              {navLinks.map((l,i)=>(
+                <motion.a key={l.href} href={l.href}
+                  className="font-cal text-3xl dark:text-white text-b-dark"
+                  onClick={()=>setOpen(false)}
+                  initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}}
+                  transition={{delay:i*.05,duration:.3}}>
+                  {t(l.es,l.en)}
+                </motion.a>
+              ))}
+            </nav>
+            <div className="mt-auto flex gap-3">
+              <button onClick={toggleDark} className="glass px-4 py-2 rounded-full text-sm dark:text-white/70 text-black/60">
+                {dark ? '☀ Claro' : '☾ Oscuro'}
+              </button>
+              <button onClick={()=>setLang(l=>l==='es'?'en':'es')} className="glass px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-black/60">
+                {lang==='es'?'EN':'ES'}
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
