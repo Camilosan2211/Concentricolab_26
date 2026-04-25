@@ -55,6 +55,7 @@ public/assets/images/README_ASSETS.txt
 README.md
 repomix-output.txt
 src/App.jsx
+src/components/HeroGrid.jsx
 src/components/Navbar.jsx
 src/components/ParticleField.jsx
 src/components/ScrollToTop.jsx
@@ -2555,7 +2556,6 @@ import { useState, useEffect } from 'react'
 import { useLenis }   from './hooks/useLenis'
 import { useCursor }  from './hooks/useCursor'
 
-import ParticleField  from './components/ParticleField'
 import ScrollToTop    from './components/ScrollToTop'
 import Navbar         from './components/Navbar'
 
@@ -2575,7 +2575,6 @@ export default function App() {
   const [lang, setLang] = useState('es')
   const [dark, setDark] = useState(true)
 
-  // Sync dark mode class on <html>
   useEffect(() => {
     if (dark) {
       document.documentElement.classList.remove('light')
@@ -2596,8 +2595,7 @@ export default function App() {
       <div className="cur-dot"  style={{ opacity: 0 }} aria-hidden="true" />
       <div className="cur-ring" style={{ opacity: 0 }} aria-hidden="true" />
 
-      {/* 3-D canvas background */}
-      <ParticleField darkMode={dark} />
+      {/* Film grain overlay */}
       <div className="film-grain-overlay" aria-hidden="true" />
 
       {/* Nav */}
@@ -2619,6 +2617,33 @@ export default function App() {
       <Footer lang={lang} />
       <ScrollToTop />
     </>
+  )
+}
+</file>
+
+<file path="src/components/HeroGrid.jsx">
+/**
+ * HeroGrid — grid perspectiva holográfica + glows laterales
+ * Pure CSS animation. Sin Three.js, sin canvas, zero dependencies.
+ */
+export default function HeroGrid() {
+  return (
+    <div className="hero-grid-root" aria-hidden="true">
+      {/* Grid perspectiva inferior */}
+      <div className="hero-grid-perspective">
+        <div className="hero-grid-lines" />
+      </div>
+
+      {/* Línea de scan horizontal animada */}
+      <div className="hero-scan-line" />
+
+      {/* Glows laterales — azul izq, coral der */}
+      <div className="hero-side-glow hero-side-glow-left" />
+      <div className="hero-side-glow hero-side-glow-right" />
+
+      {/* Orbe central difuso de profundidad */}
+      <div className="hero-center-orb" />
+    </div>
   )
 }
 </file>
@@ -3314,6 +3339,173 @@ html.light .hero-motion-switch {
   animation-duration: 16s;
 }
 
+
+/* Contenedor raíz — ocupa todo el hero */
+.hero-grid-root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* ---- Grid perspectiva ---- */
+.hero-grid-perspective {
+  position: absolute;
+  bottom: 0;
+  left: -10%;
+  right: -10%;
+  height: 58%;
+  perspective: 420px;
+  perspective-origin: 50% 0%;
+}
+
+.hero-grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    /* líneas horizontales */
+    repeating-linear-gradient(
+      0deg,
+      rgba(81, 112, 255, 0.10) 0px,
+      rgba(81, 112, 255, 0.10) 1px,
+      transparent 1px,
+      transparent 48px
+    ),
+    /* líneas verticales */
+    repeating-linear-gradient(
+      90deg,
+      rgba(81, 112, 255, 0.08) 0px,
+      rgba(81, 112, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 72px
+    );
+  transform: rotateX(52deg) scaleY(1.8);
+  transform-origin: 50% 100%;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.6) 30%,
+    rgba(0,0,0,0.85) 65%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0,0,0,0.6) 30%,
+    rgba(0,0,0,0.85) 65%,
+    transparent 100%
+  );
+  animation: gridPulse 6s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1.0; }
+}
+
+/* ---- Línea de scan ---- */
+.hero-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(65, 234, 255, 0.0) 5%,
+    rgba(65, 234, 255, 0.55) 35%,
+    rgba(65, 234, 255, 0.85) 50%,
+    rgba(65, 234, 255, 0.55) 65%,
+    rgba(65, 234, 255, 0.0) 95%,
+    transparent 100%
+  );
+  animation: scanDown 9s linear infinite;
+  will-change: top;
+  filter: blur(0.5px);
+}
+
+@keyframes scanDown {
+  0%   { top: 15%; opacity: 0; }
+  8%   { opacity: 1; }
+  88%  { opacity: 0.8; }
+  100% { top: 82%; opacity: 0; }
+}
+
+/* ---- Glows laterales ---- */
+.hero-side-glow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 22vw;
+  min-width: 140px;
+  max-width: 280px;
+  pointer-events: none;
+}
+
+.hero-side-glow-left {
+  left: 0;
+  background: radial-gradient(
+    ellipse 100% 60% at 0% 42%,
+    rgba(81, 112, 255, 0.22) 0%,
+    rgba(81, 112, 255, 0.10) 40%,
+    transparent 75%
+  );
+  animation: glowBreathLeft 7s ease-in-out infinite;
+}
+
+.hero-side-glow-right {
+  right: 0;
+  background: radial-gradient(
+    ellipse 100% 60% at 100% 52%,
+    rgba(255, 109, 77, 0.20) 0%,
+    rgba(255, 109, 77, 0.09) 40%,
+    transparent 75%
+  );
+  animation: glowBreathRight 8.5s ease-in-out infinite;
+}
+
+@keyframes glowBreathLeft {
+  0%, 100% { opacity: 0.7; transform: scaleY(1);    }
+  50%       { opacity: 1.0; transform: scaleY(1.06); }
+}
+
+@keyframes glowBreathRight {
+  0%, 100% { opacity: 0.6; transform: scaleY(1);    }
+  50%       { opacity: 1.0; transform: scaleY(1.08); }
+}
+
+/* ---- Orbe central de profundidad ---- */
+.hero-center-orb {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  translate: -50% -50%;
+  width: 55vw;
+  max-width: 700px;
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    rgba(81, 112, 255, 0.07) 0%,
+    rgba(81, 112, 255, 0.03) 45%,
+    transparent 72%
+  );
+  animation: orbPulse 11s ease-in-out infinite;
+}
+
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1);    }
+  50%       { opacity: 1.0; transform: scale(1.05); }
+}
+
+/* Modo light: reducir intensidad */
+html.light .hero-grid-lines       { opacity: 0.25; }
+html.light .hero-scan-line        { opacity: 0.18; }
+html.light .hero-side-glow-left   { opacity: 0.30; }
+html.light .hero-side-glow-right  { opacity: 0.28; }
+html.light .hero-center-orb       { opacity: 0.20; }
+
 /* Hero shimmer premium compartido (viewport-locked) */
 .hero-shimmer {
   color: var(--coral);
@@ -3848,39 +4040,12 @@ export default function Footer({ lang }) {
 </file>
 
 <file path="src/sections/Hero.jsx">
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown } from 'lucide-react'
+import HeroGrid from '../components/HeroGrid'
 
 const motionPresets = {
-  luxury: {
-    container: { hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.28 } } },
-    item: {
-      hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
-      show: {
-        opacity: 1,
-        y: 0,
-        filter: 'blur(0px)',
-        transition: { duration: 0.95, ease: [0.16, 1, 0.3, 1] },
-      },
-    },
-    row: {
-      hidden: { opacity: 0, y: 40, scale: 0.985, filter: 'blur(8px)' },
-      show: (i) => ({
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: 'blur(0px)',
-        transition: {
-          delay: 0.25 + i * 0.11,
-          type: 'spring',
-          stiffness: 128,
-          damping: 16,
-          mass: 0.9,
-        },
-      }),
-    },
-  },
   dynamic: {
     container: { hidden: {}, show: { transition: { staggerChildren: 0.07, delayChildren: 0.16 } } },
     item: {
@@ -3930,7 +4095,7 @@ function HeroLinePhoto({ src, alt }) {
   if (failed) {
     return (
       <span
-        className="inline-block w-[0.84em] h-[0.84em] shrink-0 rounded-full bg-gradient-to-br from-b-blue/80 to-b-coral/70 align-[-0.12em] mx-1.5"
+        className="inline-block w-[0.72em] h-[0.72em] shrink-0 rounded-full bg-gradient-to-br from-b-blue/80 to-b-coral/70 align-[-0.1em] mx-1"
         aria-hidden
       />
     )
@@ -3941,7 +4106,7 @@ function HeroLinePhoto({ src, alt }) {
       alt={alt}
       width={64}
       height={64}
-      className="inline-block w-[0.84em] h-[0.84em] shrink-0 rounded-full object-cover align-[-0.12em] mx-1.5 shadow-[0_8px_24px_rgba(0,0,0,.16)]"
+      className="inline-block w-[0.72em] h-[0.72em] shrink-0 rounded-full object-cover align-[-0.1em] mx-1 shadow-[0_6px_18px_rgba(0,0,0,.18)]"
       loading="eager"
       decoding="async"
       onError={() => setFailed(true)}
@@ -3954,12 +4119,12 @@ export default function Hero({ lang }) {
   const imgs = HERO_LINE_IMAGES[lang] || HERO_LINE_IMAGES.es
   const [parallax, setParallax] = useState({ x: 0, y: 0 })
   const motionMode = 'dynamic'
-  const variants = useMemo(() => motionPresets[motionMode] || motionPresets.luxury, [motionMode])
+  const variants = useMemo(() => motionPresets[motionMode], [motionMode])
 
   return (
     <section
       id="hero"
-      className={`relative z-10 min-h-screen flex items-center justify-center text-center overflow-hidden pt-36 pb-24 ${motionMode === 'dynamic' ? 'hero-mode-dynamic' : 'hero-mode-luxury'}`}
+      className="relative z-10 min-h-screen flex items-center justify-center text-center overflow-hidden pt-36 pb-24 hero-mode-dynamic"
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect()
         const x = ((e.clientX - r.left) / r.width - 0.5) * 2
@@ -3968,62 +4133,62 @@ export default function Hero({ lang }) {
       }}
       onMouseLeave={() => setParallax({ x: 0, y: 0 })}
     >
-      <div className="hero-vignette" aria-hidden="true" />
-      <div className="hero-brand-aurora" aria-hidden="true" />
-      <div className="hero-brand-aurora hero-brand-aurora-2" aria-hidden="true" />
+      {/* Fondo animado — grid holográfico + glows laterales */}
+      <HeroGrid />
+
+      {/* Capas de profundidad con parallax al mouse */}
       <div
         className="hero-blur-layer"
         style={{ transform: `translate3d(${parallax.x * 16}px, ${parallax.y * 12}px, 0)` }}
-        aria-hidden="true"
       />
       <div
         className="hero-blur-layer hero-blur-layer-2"
         style={{ transform: `translate3d(${parallax.x * -12}px, ${parallax.y * -9}px, 0)` }}
-        aria-hidden="true"
       />
       <div
         className="hero-blur-layer hero-blur-layer-3"
         style={{ transform: `translate3d(${parallax.x * 8}px, ${parallax.y * -6}px, 0)` }}
-        aria-hidden="true"
       />
+
       <motion.div
         className="relative z-10 flex flex-col items-center gap-7 px-6 max-w-5xl mx-auto"
         variants={variants.container}
         initial="hidden"
         animate="show"
       >
+        {/* Badge */}
         <motion.div variants={variants.item} className="flex items-center gap-2 flex-wrap justify-center">
           <span className="glass-blue inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.1em] uppercase text-b-blue-lt px-4 py-2 rounded-full">
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
             {t('Laboratorio digital · Bogotá', 'Digital Lab · Bogotá')}
           </span>
-          
         </motion.div>
 
+        {/* Headline — 3 renglones */}
         <motion.h1
           variants={variants.item}
-          className="font-cal text-5xl sm:text-6xl md:text-7xl xl:text-[84px] leading-[1.06] tracking-[-2px] dark:text-white text-b-dark"
+          className="font-cal text-4xl sm:text-5xl md:text-6xl xl:text-[72px] leading-[1.08] tracking-[-1.5px] dark:text-white text-b-dark"
         >
           <motion.span
             custom={0}
             variants={variants.row}
             className="inline-flex flex-nowrap items-center justify-center gap-2"
-            animate={motionMode === 'dynamic' ? { y: [0, -3, 0] } : undefined}
-            transition={motionMode === 'dynamic' ? { duration: 2.2, repeat: Infinity, ease: 'easeInOut', delay: 0.2 } : undefined}
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
           >
             <span>{t('Diseño que', 'Design that')}</span>
             <HeroLinePhoto src={imgs[0]} alt="" />
-            <span className="hero-shimmer font-semibold">{t('Piensa.', 'Thinks.')}</span>
+            <span className="hero-shimmer">{t('Piensa.', 'Thinks.')}</span>
           </motion.span>
           <br />
           <motion.span
             custom={1}
             variants={variants.row}
             className="inline-flex flex-nowrap items-center justify-center gap-2"
-            animate={motionMode === 'dynamic' ? { y: [0, 2, 0] } : undefined}
-            transition={motionMode === 'dynamic' ? { duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay: 0.35 } : undefined}
+            animate={{ y: [0, 2, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay: 0.35 }}
           >
-            <span className="hero-shimmer font-semibold">{t('Sistemas', 'Systems')}</span>
+            <span className="hero-shimmer">{t('Sistemas', 'Systems')}</span>
             <HeroLinePhoto src={imgs[1]} alt="" />
             <span>{t('que funcionan.', 'that work.')}</span>
           </motion.span>
@@ -4032,15 +4197,16 @@ export default function Hero({ lang }) {
             custom={2}
             variants={variants.row}
             className="inline-flex flex-nowrap items-center justify-center gap-2"
-            animate={motionMode === 'dynamic' ? { y: [0, -2, 0] } : undefined}
-            transition={motionMode === 'dynamic' ? { duration: 2.1, repeat: Infinity, ease: 'easeInOut', delay: 0.5 } : undefined}
+            animate={{ y: [0, -2, 0] }}
+            transition={{ duration: 2.1, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
           >
             <span>{t('Experiencias', 'Experiences')}</span>
             <HeroLinePhoto src={imgs[2]} alt="" />
-            <span className="hero-shimmer font-semibold">{t('que conectan.', 'that connect.')}</span>
+            <span className="hero-shimmer">{t('que conectan.', 'that connect.')}</span>
           </motion.span>
         </motion.h1>
 
+        {/* Subtítulo */}
         <motion.p
           variants={variants.item}
           className="dark:text-white/50 text-black/55 text-base md:text-lg max-w-[520px] leading-[1.75]"
@@ -4051,6 +4217,7 @@ export default function Hero({ lang }) {
           )}
         </motion.p>
 
+        {/* CTAs */}
         <motion.div variants={variants.item} className="flex flex-wrap items-center gap-4 justify-center">
           <a
             href="#enfoque"
@@ -4068,6 +4235,7 @@ export default function Hero({ lang }) {
           </a>
         </motion.div>
 
+        {/* Scroll hint */}
         <motion.div
           variants={variants.item}
           className="flex items-center gap-2 dark:text-white/25 text-black/30 text-xs font-medium mt-4"
