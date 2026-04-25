@@ -700,4 +700,131 @@ html.light .footer-brand-glow:hover {
    html.light header {
      border-bottom-color: rgba(81, 112, 255, 0.08) !important;
    }
-   
+   /* ================================================================
+   PEGAR AL FINAL de src/index.css
+   Corrige modo claro + variable del fondo de Manifiesto
+   ================================================================ */
+
+
+/* ── Variable de fondo Manifiesto ─────────────────────────────────
+   Semi-transparente para que los elementos flotantes sean visibles
+   ──────────────────────────────────────────────────────────────── */
+:root {
+  --manifiesto-bg: rgba(0, 3, 31, 0.72);
+}
+html.light {
+  --manifiesto-bg: rgba(238, 241, 255, 0.72);
+}
+
+
+/* ── MODO CLARO — reset general ───────────────────────────────────
+
+   Problema: las clases dark: no aplican nada en modo light,
+   y los fondos de sección heredan el body blanco, que con el
+   canvas de partículas se veía mal. Fijamos todos los fondos
+   explícitamente para modo light.
+   ──────────────────────────────────────────────────────────────── */
+
+/* Body en modo light: fondo blanco cálido, sin el canvas dark */
+html.light body {
+  background-color: #F8F7F4;
+  color: #0A0A18;
+}
+
+/* El canvas de fondo es fijo — en modo light lo opacamos */
+html.light canvas[aria-hidden="true"] {
+  opacity: 0.22;
+}
+
+/* ── Glass en modo light ─────────────────────────────────────────  */
+html.light .glass {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(10, 10, 24, 0.08);
+  box-shadow: 0 2px 24px rgba(81, 112, 255, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+html.light .glass-blue {
+  background: rgba(81, 112, 255, 0.08);
+  border-color: rgba(81, 112, 255, 0.18);
+}
+
+/* ── Navbar en modo light ─────────────────────────────────────────
+   Añadir directamente al Navbar.jsx ya entregado.
+   Este bloque es un respaldo CSS por si acaso.
+   ──────────────────────────────────────────────────────────────── */
+html.light header {
+  background: rgba(248, 247, 244, 0.82) !important;
+  border-bottom-color: rgba(81, 112, 255, 0.09) !important;
+}
+
+/* ── Secciones con fondo propio en modo light ────────────────────  */
+html.light #manifiesto {
+  background: var(--manifiesto-bg) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Ticker en modo light */
+html.light .ticker-track,
+html.light [class*="ticker"] span {
+  color: rgba(10, 10, 24, 0.40);
+}
+html.light [class*="ticker"] .w-1 {
+  background-color: rgba(81, 112, 255, 0.45);
+}
+
+/* ── Texto en modo light — refuerzo ─────────────────────────────  */
+html.light h1, html.light h2, html.light h3 {
+  color: #0A0A18;
+}
+
+html.light p {
+  color: rgba(10, 10, 24, 0.55);
+}
+
+/* Etiquetas de sección */
+html.light .text-b-dark { color: #0A0A18; }
+
+/* ── Hero shimmer en modo light ─────────────────────────────────  */
+html.light .hero-shimmer {
+  background: linear-gradient(90deg, #5170FF 0%, #FF6D4D 40%, #5170FF 80%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: heroShimmer 5s ease-in-out infinite alternate;
+}
+
+/* ── Glows laterales del Hero en modo light ─────────────────────  */
+html.light .hero-side-glow-left  { opacity: 0.30; }
+html.light .hero-side-glow-right { opacity: 0.28; }
+
+/* ── Cards del Manifiesto en modo light ─────────────────────────  */
+html.light #manifiesto .rounded-2xl {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(10, 10, 24, 0.07);
+}
+
+/* ── Panel de stats en modo light ───────────────────────────────  */
+html.light #manifiesto > div > div > div:last-child {
+  background: rgba(255, 255, 255, 0.65);
+  border-color: rgba(10, 10, 24, 0.07);
+}
+
+/* ── Scroll-to-top en modo light ────────────────────────────────  */
+html.light #scroll-to-top {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(10, 10, 24, 0.10);
+  color: #0A0A18;
+}
+
+/* ── Footer en modo light ───────────────────────────────────────  */
+html.light footer {
+  background: rgba(238, 241, 255, 0.85);
+  border-top-color: rgba(81, 112, 255, 0.10);
+}
+
+/* ── Proceso: iconos en modo light ──────────────────────────────  */
+html.light #proceso .dark\:bg-\[rgba\(5\,8\,40\,0\.70\)\] {
+  background: rgba(255, 255, 255, 0.85) !important;
+}
