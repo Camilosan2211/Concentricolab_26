@@ -703,3 +703,86 @@ html.light footer {
   background: #09090D;
   color: #F5F5F0;
 }
+/* ================================================================
+   PEGAR AL FINAL de src/index.css
+   Scrollbar personalizado + cursor sin clase CSS extra
+   ================================================================ */
+
+
+/* ── Scrollbar — Webkit (Chrome, Edge, Safari) ───────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(81, 112, 255, 0.55) 0%,
+    rgba(255, 109, 77, 0.45) 100%
+  );
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;   /* crea el efecto "flotante" dentro del track */
+  min-height: 40px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(81, 112, 255, 0.80) 0%,
+    rgba(255, 109, 77, 0.70) 100%
+  );
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(
+    180deg,
+    #5170FF 0%,
+    #FF6D4D 100%
+  );
+  background-clip: padding-box;
+}
+
+/* ── Modo light: scrollbar más sutil ─────────────────────────── */
+html.light ::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(58, 92, 224, 0.40) 0%,
+    rgba(208, 72, 40, 0.35) 100%
+  );
+  background-clip: padding-box;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(58, 92, 224, 0.65) 0%,
+    rgba(208, 72, 40, 0.55) 100%
+  );
+  background-clip: padding-box;
+}
+
+/* ── Firefox scrollbar ───────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(81, 112, 255, 0.55) transparent;
+}
+
+html.light * {
+  scrollbar-color: rgba(58, 92, 224, 0.40) transparent;
+}
+
+/* ── Cursor — ocultar el nativo al usar el custom ────────────── */
+/* Se activa solo en dispositivos con pointer fino (mouse real) */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+

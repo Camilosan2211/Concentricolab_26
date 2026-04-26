@@ -7,16 +7,16 @@ const principles = [
     en: { title: 'From the core outward',   body: 'The best solutions start from the center: from the user to the system, from the problem to the solution.' },
   },
   { num: '02', color: '#FF6D4D',
-    es: { title: 'Criterio sobre velocidad', body: 'Mover rápido sin pensar solo acumula deuda. El criterio convierte ideas en sistemas con sentido.' },
-    en: { title: 'Criterion over speed',     body: 'Moving fast without thinking accumulates debt. Criterion turns ideas into meaningful systems.' },
+    es: { title: 'Criterio sobre velocidad', body: 'Mover con intención produce sistemas mejores que mover rápido. El criterio transforma ideas en resultados duraderos.' },
+    en: { title: 'Criterion over speed',     body: 'Moving with intention produces better systems than moving fast. Criterion turns ideas into lasting results.' },
   },
   { num: '03', color: '#828AFF',
-    es: { title: 'Convergencia, no fragmentación', body: 'Diseño, IA y automatización convergen bajo una misma lógica — los resultados se multiplican.' },
-    en: { title: 'Convergence, not fragmentation', body: 'Design, AI and automation converge under the same logic — results multiply.' },
+    es: { title: 'Convergencia, no fragmentación', body: 'Diseño, IA y automatización bajo la misma lógica se potencian mutuamente — los resultados se multiplican.' },
+    en: { title: 'Convergence, not fragmentation', body: 'Design, AI and automation under the same logic amplify each other — results multiply.' },
   },
   { num: '04', color: '#41EAFF',
-    es: { title: 'Sistemas sobre piezas', body: 'Una pieza gráfica impresiona. Un sistema que funciona transforma. El lab construye lo segundo.' },
-    en: { title: 'Systems over pieces',   body: 'A great piece can impress. A system that works transforms. The lab builds the second.' },
+    es: { title: 'Sistemas sobre piezas', body: 'Una pieza gráfica impresiona. Un sistema que funciona transforma y escala. El lab construye lo segundo.' },
+    en: { title: 'Systems over pieces',   body: 'A great piece can impress. A system that works transforms and scales. The lab builds the second.' },
   },
 ]
 
@@ -27,7 +27,10 @@ const stats = [
 ]
 
 function Card({ p, lang, index }) {
-  const c = lang === 'es' ? p.es : p.en
+  const c       = lang === 'es' ? p.es : p.en
+  const numRef  = useRef()
+  const numView = useInView(numRef, { once: true, margin: '-40px' })
+
   return (
     <motion.div
       className="rounded-2xl p-5 flex flex-col gap-2.5 relative overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.04] bg-white/60 backdrop-blur-sm"
@@ -37,13 +40,35 @@ function Card({ p, lang, index }) {
       transition={{ duration: .75, ease: [.16, 1, .3, 1], delay: index * .08 }}
       whileHover={{ y: -4, transition: { duration: .22, ease: 'easeOut' } }}
     >
+      {/* Glow en hover */}
       <div
         className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none opacity-30 group-hover:opacity-70 group-hover:scale-150 transition-all duration-500"
         style={{ background: `radial-gradient(circle,${p.color}30 0%,transparent 70%)`, filter: 'blur(12px)' }}
       />
-      <span className="font-cal text-3xl" style={{ color: p.color, opacity: .18 }}>{p.num}</span>
+
+      {/* Numeral — mismo estilo que las métricas: color + glow */}
+      <motion.span
+        ref={numRef}
+        className="font-cal text-3xl font-bold"
+        style={{ color: p.color }}
+        initial={{ textShadow: 'none', opacity: 0.4 }}
+        animate={numView ? {
+          opacity: 1,
+          textShadow: [
+            `0 0 12px ${p.color}44`,
+            `0 0 28px ${p.color}88`,
+            `0 0 16px ${p.color}66`,
+          ],
+        } : {}}
+        transition={{ delay: index * 0.1 + 0.3, duration: 0.9, ease: [.16,1,.3,1] }}
+      >
+        {p.num}
+      </motion.span>
+
       <h3 className="font-cal text-[17px] dark:text-white text-b-dark leading-snug">{c.title}</h3>
       <p className="dark:text-white/45 text-black/55 leading-[1.65] text-[13px]">{c.body}</p>
+
+      {/* Línea inferior en hover */}
       <div
         className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
         style={{ background: `linear-gradient(to right,${p.color},transparent)` }}
@@ -53,10 +78,10 @@ function Card({ p, lang, index }) {
 }
 
 export default function Manifiesto({ lang }) {
-  const sec  = useRef()
+  const sec      = useRef()
   const statsRef = useRef()
   const { scrollYProgress } = useScroll({ target: sec, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40])
+  const y        = useTransform(scrollYProgress, [0, 1], [40, -40])
   const statsInView = useInView(statsRef, { once: true, margin: '-60px' })
   const t = (es, en) => lang === 'es' ? es : en
 
@@ -65,10 +90,7 @@ export default function Manifiesto({ lang }) {
       id="manifiesto"
       ref={sec}
       className="py-12 md:py-16 px-6 relative overflow-hidden"
-      style={{
-        /* Fondo semi-transparente → los elementos flotantes del hero se ven detrás */
-        background: 'var(--manifiesto-bg)',
-      }}
+      style={{ background: 'var(--manifiesto-bg)' }}
     >
       {/* Orbe parallax */}
       <motion.div
@@ -80,13 +102,14 @@ export default function Manifiesto({ lang }) {
       </motion.div>
 
       <div className="max-w-[1200px] mx-auto flex flex-col gap-8 md:gap-10 relative z-10">
+
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-3">
           <motion.p
             className="text-[11px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/40"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
           >
-            {t('Principios del lab', 'Lab principles')}
+            {t('En qué creemos', 'What we believe')}
           </motion.p>
           <motion.h2
             className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px] max-w-[520px]"
@@ -95,18 +118,18 @@ export default function Manifiesto({ lang }) {
             viewport={{ once: true }}
             transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .06 }}
           >
-            {t('El ', 'The ')}
-            <span className="text-grad">{t('manifiesto', 'manifesto')}</span>
-            {t(' que nos guía', ' that guides us')}
+            {t('La ', 'The ')}
+            <span className="text-grad">{t('filosofía', 'philosophy')}</span>
+            {t(' del lab', ' of the lab')}
           </motion.h2>
           <motion.p
-            className="dark:text-white/40 text-black/45 text-sm max-w-[400px] leading-[1.7]"
+            className="dark:text-white/40 text-black/45 text-sm max-w-[440px] leading-[1.7]"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
             viewport={{ once: true }} transition={{ delay: .12, duration: .7 }}
           >
             {t(
-              'No son valores de cartelera. Son restricciones que usamos para tomar mejores decisiones.',
-              'Not poster values. These are constraints we use to make better decisions.'
+              'Creemos que el diseño con criterio crea sistemas que perduran. Estos son los principios que guían cada decisión en el lab.',
+              'We believe design with purpose creates systems that last. These are the principles behind every decision in the lab.'
             )}
           </motion.p>
         </div>
@@ -116,7 +139,7 @@ export default function Manifiesto({ lang }) {
           {principles.map((p, i) => <Card key={p.num} p={p} lang={lang} index={i} />)}
         </div>
 
-        {/* ── Métricas integradas ───────────────────────────────── */}
+        {/* Métricas integradas */}
         <motion.div
           ref={statsRef}
           className="relative overflow-hidden rounded-2xl border dark:border-white/[0.07] border-black/[0.07] dark:bg-[rgba(5,8,40,0.55)] bg-white/55 backdrop-blur-xl"
@@ -124,9 +147,7 @@ export default function Manifiesto({ lang }) {
           animate={statsInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: .9, ease: [.16, 1, .3, 1] }}
         >
-          {/* línea decorativa superior */}
           <div className="absolute top-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-b-blue/30 to-transparent" />
-
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x dark:divide-white/[0.06] divide-black/[0.06] px-2 py-7">
             {stats.map((s, i) => (
               <motion.div
@@ -138,9 +159,12 @@ export default function Manifiesto({ lang }) {
               >
                 <motion.span
                   className="font-cal text-4xl md:text-5xl"
-                  style={{ color: s.color, textShadow: `0 0 28px ${s.color}50` }}
-                  initial={{ scale: .82, opacity: 0 }}
-                  animate={statsInView ? { scale: 1, opacity: 1 } : {}}
+                  style={{ color: s.color }}
+                  initial={{ scale: .82, opacity: 0, textShadow: 'none' }}
+                  animate={statsInView ? {
+                    scale: 1, opacity: 1,
+                    textShadow: `0 0 24px ${s.color}70`,
+                  } : {}}
                   transition={{ delay: .22 + i * .14, type: 'spring', stiffness: 130 }}
                 >
                   {s.num}
@@ -151,8 +175,6 @@ export default function Manifiesto({ lang }) {
               </motion.div>
             ))}
           </div>
-
-          {/* línea decorativa inferior */}
           <div className="absolute bottom-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-b-coral/25 to-transparent" />
         </motion.div>
       </div>

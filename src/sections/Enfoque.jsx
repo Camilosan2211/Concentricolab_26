@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion'
 const tags_es = ['Diseño UX/UI', 'IA Generativa', 'Branding', 'Diseño Industrial', 'Métricas', 'Automatización', 'Data storytelling']
 const tags_en = ['UX/UI Design', 'Generative AI', 'Branding', 'Industrial Design', 'Metrics', 'Automation', 'Data storytelling']
 
+// Palabras que aparecen en coral
 const CORAL_ES = new Set(['núcleo', 'sistema,', 'solución', 'diseño,', 'IA', 'automatización.'])
 const CORAL_EN = new Set(['core', 'system,', 'solution', 'design,', 'AI', 'automation.'])
 
@@ -17,13 +18,7 @@ export default function Enfoque({ lang }) {
 
   const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
   const tags     = lang === 'es' ? tags_es : tags_en
-
-  // Dividimos por PALABRA (no caracter) para mantener word-wrap correcto.
-  // Dentro de cada palabra animamos caracter por caracter.
-  const words = text.split(' ')
-
-  // Índice global de caracter para calcular el delay
-  let globalCharIdx = 0
+  const words    = text.split(' ')
 
   return (
     <section id="enfoque" className="py-20 px-6 relative overflow-hidden">
@@ -49,62 +44,57 @@ export default function Enfoque({ lang }) {
           </span>
         </motion.div>
 
-        {/* Texto carácter por carácter — centrado y con word-wrap correcto */}
+        {/*
+          EFECTO: "Spotlight reveal" por palabra.
+          Cada palabra arranca invisible y con un ligero blur,
+          luego aparece y sube levemente al entrar en viewport.
+          Las palabras clave emergen en coral con un glow pulsante.
+          Mucho más visible que caracter-por-caracter y más
+          compatible con el word-wrap natural del texto largo.
+        */}
         <p
           ref={ref}
-          className="font-cal text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.22] tracking-[-0.5px] dark:text-white text-b-dark"
+          className="font-cal text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.22] tracking-[-0.5px] text-center max-w-[820px] w-full"
           aria-label={text}
-          style={{
-            textAlign: 'center',
-            width: '100%',
-            maxWidth: '820px',
-            /* Permitir que el texto fluya y se centre correctamente */
-            wordBreak: 'break-word',
-          }}
         >
-          {words.map((word, wi) => {
+          {words.map((word, i) => {
             const isCoral = coralSet.has(word)
-            const chars   = word.split('')
-            const wordStart = globalCharIdx
-            globalCharIdx  += word.length + 1 // +1 por el espacio
-
             return (
-              /* Cada palabra es un span que no rompe internamente pero sí entre palabras */
-              <span key={wi} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
-                {chars.map((ch, ci) => {
-                  const charDelay = (wordStart + ci) * 0.016
-                  return (
-                    <motion.span
-                      key={ci}
-                      aria-hidden="true"
-                      style={{ display: 'inline' }}
-                      initial={{ color: 'rgba(130,138,170,0.22)' }}
-                      animate={inView
-                        ? { color: isCoral ? '#FF6D4D' : 'inherit' }
-                        : { color: 'rgba(130,138,170,0.22)' }
-                      }
-                      transition={{ delay: charDelay, duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      {ch}
-                    </motion.span>
-                  )
-                })}
-                {/* Espacio entre palabras — visible y permite word-wrap */}
-                {wi < words.length - 1 && (
-                  <motion.span
-                    aria-hidden="true"
-                    style={{ display: 'inline' }}
-                    initial={{ color: 'rgba(130,138,170,0.22)' }}
-                    animate={inView
-                      ? { color: 'inherit' }
-                      : { color: 'rgba(130,138,170,0.22)' }
-                    }
-                    transition={{ delay: (wordStart + word.length) * 0.016, duration: 0.38 }}
-                  >
-                    {' '}
-                  </motion.span>
-                )}
-              </span>
+              <motion.span
+                key={i}
+                aria-hidden="true"
+                style={{
+                  display: 'inline-block',
+                  marginRight: '0.25em',
+                  // Si es palabra clave: glow pulsante en coral
+                  ...(isCoral && inView ? {
+                    textShadow: '0 0 28px rgba(255,109,77,0.55)',
+                  } : {}),
+                }}
+                initial={{
+                  opacity: 0,
+                  y: 22,
+                  filter: 'blur(8px)',
+                  color: isCoral ? '#FF6D4D' : 'inherit',
+                }}
+                animate={inView ? {
+                  opacity: 1,
+                  y: 0,
+                  filter: 'blur(0px)',
+                  color: isCoral ? '#FF6D4D' : 'inherit',
+                } : {
+                  opacity: 0,
+                  y: 22,
+                  filter: 'blur(8px)',
+                }}
+                transition={{
+                  delay: i * 0.055,
+                  duration: 0.55,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                {word}
+              </motion.span>
             )
           })}
         </p>
