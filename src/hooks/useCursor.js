@@ -1,12 +1,8 @@
 /**
- * useCursor — cursor híbrido: blend-mode + color de marca
- *
- * DOT: punto coral con mix-blend-mode:difference → invierte los
- *      colores debajo (efecto premium) pero con identidad de marca
- * RING: anillo azul semitransparente con lerp suave y glow sutil
- * HOVER: ring se expande levemente + dot se vuelve sólido blanco
- *        (blend-mode hace que se vea como "recorte" del fondo)
- * CLICK: ping rápido hacia afuera
+ * useCursor — cursor aware del modo claro/oscuro
+ * Dark: coral en dot y ring
+ * Light: azul eléctrico en dot y ring
+ * Glow mínimo en ambos modos
  */
 import { useEffect } from 'react'
 
@@ -21,44 +17,59 @@ export function useCursor() {
     let mx = 0, my = 0, rx = 0, ry = 0
     let visible = false, isHov = false
 
-    // ── DOT — pequeño, coral, con blend-mode ───────────────────
-    Object.assign(dot.style, {
-      position:      'fixed',
-      width:         '9px',
-      height:        '9px',
-      borderRadius:  '50%',
-      background:    '#FF6D4D',
-      boxShadow:     '0 0 8px 2px rgba(255,109,77,0.50)',
-      transform:     'translate(-50%,-50%)',
-      pointerEvents: 'none',
-      zIndex:        '99999',
-      mixBlendMode:  'difference',      // ← el efecto premium
-      transition:    'width 0.15s ease, height 0.15s ease, transform 0.12s ease, background 0.18s ease',
-      willChange:    'left, top',
-    })
+    // Colores según el modo actual
+    const colors = () => {
+      const isLight = document.documentElement.classList.contains('light')
+      return isLight
+        ? { main: '#5170FF', glow: 'rgba(81,112,255,0.18)', ringBorder: 'rgba(81,112,255,0.55)', ringBg: 'rgba(81,112,255,0.04)', hoverBorder: 'rgba(81,112,255,0.85)', hoverBg: 'rgba(81,112,255,0.08)', hoverGlow: 'rgba(81,112,255,0.22)' }
+        : { main: '#FF6D4D', glow: 'rgba(255,109,77,0.16)', ringBorder: 'rgba(255,109,77,0.50)', ringBg: 'rgba(255,109,77,0.04)', hoverBorder: 'rgba(255,109,77,0.85)', hoverBg: 'rgba(255,109,77,0.07)', hoverGlow: 'rgba(255,109,77,0.20)' }
+    }
 
-    // ── RING — azul, mediano, sin blend-mode ────────────────────
-    Object.assign(ring.style, {
-      position:      'fixed',
-      width:         '34px',
-      height:        '34px',
-      borderRadius:  '50%',
-      border:        '1.5px solid rgba(81,112,255,0.60)',
-      boxShadow:     '0 0 12px 1px rgba(81,112,255,0.20)',
-      transform:     'translate(-50%,-50%)',
-      pointerEvents: 'none',
-      zIndex:        '99998',
-      background:    'rgba(81,112,255,0.04)',
-      transition:    [
-        'width 0.25s cubic-bezier(.34,1.56,.64,1)',
-        'height 0.25s cubic-bezier(.34,1.56,.64,1)',
-        'border-color 0.2s ease',
-        'box-shadow 0.2s ease',
-        'background 0.2s ease',
-        'opacity 0.3s ease',
-      ].join(', '),
-      willChange:    'left, top',
+    const applyBase = () => {
+      const c = colors()
+      Object.assign(dot.style, {
+        position:      'fixed',
+        width:         '9px',
+        height:        '9px',
+        borderRadius:  '50%',
+        background:    c.main,
+        boxShadow:     `0 0 6px 1px ${c.glow}`,
+        transform:     'translate(-50%,-50%)',
+        pointerEvents: 'none',
+        zIndex:        '99999',
+        transition:    'width 0.15s ease, height 0.15s ease, transform 0.12s ease, background 0.20s ease, box-shadow 0.20s ease',
+        willChange:    'left, top',
+      })
+      Object.assign(ring.style, {
+        position:      'fixed',
+        width:         '34px',
+        height:        '34px',
+        borderRadius:  '50%',
+        border:        `1.5px solid ${c.ringBorder}`,
+        boxShadow:     `0 0 8px 1px ${c.glow}`,
+        background:    c.ringBg,
+        transform:     'translate(-50%,-50%)',
+        pointerEvents: 'none',
+        zIndex:        '99998',
+        transition:    [
+          'width 0.25s cubic-bezier(.34,1.56,.64,1)',
+          'height 0.25s cubic-bezier(.34,1.56,.64,1)',
+          'border-color 0.2s ease',
+          'box-shadow 0.2s ease',
+          'background 0.2s ease',
+          'opacity 0.3s ease',
+        ].join(', '),
+        willChange: 'left, top',
+      })
+    }
+
+    applyBase()
+
+    // Observar cambios de modo
+    const observer = new MutationObserver(() => {
+      if (!isHov) applyBase()
     })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
 
     // RAF lerp
     let raf
@@ -71,58 +82,46 @@ export function useCursor() {
     }
     loop()
 
-    // ── Move ────────────────────────────────────────────────────
     const onMove = (e) => {
       mx = e.clientX; my = e.clientY
       dot.style.left = mx + 'px'; dot.style.top = my + 'px'
       if (!visible) {
         visible = true
-        dot.style.opacity  = '1'
-        ring.style.opacity = '0.80'
+        dot.style.opacity = '1'; ring.style.opacity = '0.80'
       }
     }
 
-    // ── Hover sobre interactivos ────────────────────────────────
     const onOver = (e) => {
       if (!e.target.closest('a,button,[data-mag]')) return
       isHov = true
-      // Ring: más grande, más azul
-      ring.style.width       = '48px'
-      ring.style.height      = '48px'
-      ring.style.borderColor = 'rgba(81,112,255,0.85)'
-      ring.style.boxShadow   = '0 0 20px 3px rgba(81,112,255,0.30)'
-      ring.style.background  = 'rgba(81,112,255,0.07)'
-      // Dot: se achica (el blend-mode crea el recorte)
-      dot.style.width     = '14px'
-      dot.style.height    = '14px'
-      dot.style.background = '#ffffff'
-      dot.style.boxShadow  = 'none'
+      const c = colors()
+      ring.style.width       = '46px'
+      ring.style.height      = '46px'
+      ring.style.borderColor = c.hoverBorder
+      ring.style.boxShadow   = `0 0 14px 2px ${c.hoverGlow}`
+      ring.style.background  = c.hoverBg
+      dot.style.width        = '12px'
+      dot.style.height       = '12px'
     }
 
     const onOut = (e) => {
       if (!e.target.closest('a,button,[data-mag]')) return
       isHov = false
-      ring.style.width       = '34px'
-      ring.style.height      = '34px'
-      ring.style.borderColor = 'rgba(81,112,255,0.60)'
-      ring.style.boxShadow   = '0 0 12px 1px rgba(81,112,255,0.20)'
-      ring.style.background  = 'rgba(81,112,255,0.04)'
-      dot.style.width      = '9px'
-      dot.style.height     = '9px'
-      dot.style.background = '#FF6D4D'
-      dot.style.boxShadow  = '0 0 8px 2px rgba(255,109,77,0.50)'
+      applyBase()
+      ring.style.width  = '34px'
+      ring.style.height = '34px'
+      dot.style.width   = '9px'
+      dot.style.height  = '9px'
     }
 
-    // ── Click: ping ─────────────────────────────────────────────
     const onDown = () => {
-      const sz = isHov ? '62px' : '46px'
-      ring.style.width   = sz; ring.style.height  = sz
-      ring.style.opacity = '0.40'
+      const sz = isHov ? '58px' : '44px'
+      ring.style.width = sz; ring.style.height = sz; ring.style.opacity = '0.40'
       dot.style.transform = 'translate(-50%,-50%) scale(0.50)'
     }
     const onUp = () => {
-      ring.style.width   = isHov ? '48px' : '34px'
-      ring.style.height  = isHov ? '48px' : '34px'
+      ring.style.width  = isHov ? '46px' : '34px'
+      ring.style.height = isHov ? '46px' : '34px'
       ring.style.opacity = '0.80'
       dot.style.transform = 'translate(-50%,-50%) scale(1)'
     }
@@ -140,6 +139,7 @@ export function useCursor() {
 
     return () => {
       cancelAnimationFrame(raf)
+      observer.disconnect()
       document.removeEventListener('mousemove',  onMove)
       document.removeEventListener('mouseover',  onOver)
       document.removeEventListener('mouseout',   onOut)

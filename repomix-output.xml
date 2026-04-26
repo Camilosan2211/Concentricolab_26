@@ -3066,256 +3066,277 @@ export default function ScrollToTop() {
 
 <file path="src/components/ui/geometric.jsx">
 "use client";
-
 import React from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 function ElegantShape({
-  className,
-  delay = 0,
-  width = 400,
-  height = 100,
-  rotate = 0,
+  className, delay = 0, width = 400, height = 100, rotate = 0,
   darkGradient = "from-white/[0.08]",
-  lightGradient = "from-[#5170FF]/[0.12]",
+  lightColor = "rgba(81,112,255,0.52)",
+  lightGlow  = "rgba(81,112,255,0.28)",
   darkMode = true,
 }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
       animate={{ opacity: 1, y: 0, rotate }}
-      transition={{
-        duration: 2.4,
-        delay,
-        ease: [0.23, 0.86, 0.39, 0.96],
-        opacity: { duration: 1.2 },
-      }}
+      transition={{ duration: 2.4, delay, ease: [0.23, 0.86, 0.39, 0.96], opacity: { duration: 1.2 } }}
       className={cn("absolute", className)}
     >
       <motion.div
-<<<<<<< HEAD
-        animate={{ y: [0, 15, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ y: [0, 20, 0], x: [0, 6, 0] }}
+        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
         style={{ width, height }}
         className="relative"
       >
         {darkMode ? (
-          /* DARK — glass semitransparente sobre fondo oscuro */
-          <div
-            className={cn(
-              "absolute inset-0 rounded-full",
-              "bg-gradient-to-r to-transparent",
-              darkGradient,
-              "backdrop-blur-[2px] border-2 border-white/[0.15]",
-              "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
-              "after:absolute after:inset-0 after:rounded-full",
-              "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]"
-            )}
-          />
-        ) : (
-          /* LIGHT — shapes con color de marca, más opacos y con sombra suave */
-          <div
-            className={cn(
-              "absolute inset-0 rounded-full",
-              "bg-gradient-to-r to-transparent",
-              lightGradient,
-              "backdrop-blur-[6px]",
-              "after:absolute after:inset-0 after:rounded-full",
-              "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.55),transparent_65%)]"
-            )}
-            style={{
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7), 0 4px 24px rgba(81,112,255,0.10)',
-              border: '1.5px solid rgba(255,255,255,0.60)',
-            }}
-          />
-        )}
-=======
-        animate={{
-          y: [0, 24, 0],
-          x: [0, 6, 0],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
-        }}
-        style={{
-          width,
-          height,
-        }}
-        className="relative">
-        <div
-          className={cn(
+          <div className={cn(
             "absolute inset-0 rounded-full",
-            "bg-gradient-to-r to-transparent",
-            gradient,
+            "bg-gradient-to-r to-transparent", darkGradient,
             "backdrop-blur-[2px] border-2 border-white/[0.15]",
             "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
             "after:absolute after:inset-0 after:rounded-full",
-            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]"
+            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]",
           )} />
->>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
+        ) : (
+          /* LIGHT — formas sólidas con color de marca, glass y sombra fuerte */
+          <div
+            className="absolute inset-0 rounded-full backdrop-blur-[10px]"
+            style={{
+              background: `linear-gradient(135deg, ${lightColor} 0%, ${lightColor.replace(/[\d.]+\)$/, '0.28)')} 100%)`,
+              border: '1.5px solid rgba(255,255,255,0.75)',
+              boxShadow: [
+                `inset 0 2px 0 rgba(255,255,255,0.85)`,
+                `0 12px 40px ${lightGlow}`,
+                `0 4px 16px rgba(0,0,0,0.06)`,
+              ].join(', '),
+            }}
+          >
+            {/* Reflejo interno superior */}
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'radial-gradient(ellipse 80% 40% at 50% 15%, rgba(255,255,255,0.65), transparent 60%)',
+              }}
+            />
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
 }
 
 export default function GeometricBackground({ className, darkMode = true }) {
-  const bg     = darkMode ? "#0D0F1C" : "#EEF1FF"
-  const radial = darkMode
+  const bg       = darkMode ? "#0D0F1C" : "#EEF1FF"
+  const radial   = darkMode
     ? "bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05]"
-    : "bg-gradient-to-br from-blue-400/[0.06] via-transparent to-rose-400/[0.06]"
-  const fade   = darkMode
+    : "bg-gradient-to-br from-blue-400/[0.08] via-transparent to-rose-400/[0.08]"
+  const fadeClass = darkMode
     ? "from-[#0D0F1C] via-transparent to-[#0D0F1C]/80"
     : "from-[#EEF1FF] via-transparent to-[#EEF1FF]/80"
 
   return (
-<<<<<<< HEAD
     <div
       className={cn("fixed inset-0 w-full h-full z-[-1]", className)}
       style={{ backgroundColor: bg }}
     >
-      {/* Gradiente de ambiente */}
       <div className={cn("absolute inset-0 blur-3xl", radial)} />
 
-=======
-    <div className={cn("geometric-bg fixed inset-0 w-full h-full z-[-1]", className)}>
-      <div
-        className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
->>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
       <div className="absolute inset-0 overflow-hidden">
-        {/* Cápsula grande izquierda — cyan en dark, azul en light */}
-        <ElegantShape
-          delay={0.3}
-          width={600} height={140} rotate={12}
+        {/* Grande izq — azul */}
+        <ElegantShape delay={0.3} width={600} height={140} rotate={12}
           darkGradient="from-[#41EAFF]/[0.15]"
-          lightGradient="from-[#5170FF]/[0.18]"
-          darkMode={darkMode}
-          className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+          lightColor="rgba(81,112,255,0.55)" lightGlow="rgba(81,112,255,0.30)"
+          darkMode={darkMode} className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
         />
-
-        {/* Cápsula grande derecha — coral en ambos modos */}
-        <ElegantShape
-          delay={0.5}
-          width={500} height={120} rotate={-15}
+        {/* Grande der — coral */}
+        <ElegantShape delay={0.5} width={500} height={120} rotate={-15}
           darkGradient="from-[#FF6D4D]/[0.15]"
-          lightGradient="from-[#FF6D4D]/[0.16]"
-          darkMode={darkMode}
-          className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+          lightColor="rgba(255,109,77,0.52)" lightGlow="rgba(255,109,77,0.28)"
+          darkMode={darkMode} className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
         />
-
-        {/* Cápsula pequeña inferior izquierda — cyan en dark, cyan oscuro en light */}
-        <ElegantShape
-          delay={0.4}
-          width={300} height={80} rotate={-8}
+        {/* Pequeña inf izq — cyan */}
+        <ElegantShape delay={0.4} width={300} height={80} rotate={-8}
           darkGradient="from-[#41EAFF]/[0.15]"
-          lightGradient="from-[#41EAFF]/[0.20]"
-          darkMode={darkMode}
-          className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+          lightColor="rgba(65,234,255,0.50)" lightGlow="rgba(65,234,255,0.26)"
+          darkMode={darkMode} className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
         />
-
-        {/* Cápsula pequeña superior derecha — coral */}
-        <ElegantShape
-          delay={0.6}
-          width={200} height={60} rotate={20}
+        {/* Pequeña sup der — coral */}
+        <ElegantShape delay={0.6} width={200} height={60} rotate={20}
           darkGradient="from-[#FF6D4D]/[0.15]"
-          lightGradient="from-[#FF6D4D]/[0.18]"
-          darkMode={darkMode}
-          className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
+          lightColor="rgba(255,109,77,0.48)" lightGlow="rgba(255,109,77,0.24)"
+          darkMode={darkMode} className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
         />
-
-        {/* Cápsula mínima superior centro-izquierda — azul */}
-        <ElegantShape
-          delay={0.7}
-          width={150} height={40} rotate={-25}
-          darkGradient="from-[#41EAFF]/[0.15]"
-          lightGradient="from-[#828AFF]/[0.22]"
-          darkMode={darkMode}
-          className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+        {/* Mínima — purple */}
+        <ElegantShape delay={0.7} width={150} height={40} rotate={-25}
+          darkGradient="from-[#828AFF]/[0.15]"
+          lightColor="rgba(130,138,255,0.52)" lightGlow="rgba(130,138,255,0.26)"
+          darkMode={darkMode} className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
         />
       </div>
 
-      {/* Glows laterales de marca */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="hero-side-glow hero-side-glow-left" />
         <div className="hero-side-glow hero-side-glow-right" />
       </div>
 
-      {/* Fade top/bottom */}
-      <div
-<<<<<<< HEAD
-        className={cn(
-          "absolute inset-0 bg-gradient-to-t pointer-events-none",
-          fade
-        )}
-      />
-=======
-        className="geometric-fade absolute inset-0 pointer-events-none" />
->>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
+      <div className={cn("absolute inset-0 bg-gradient-to-t pointer-events-none", fadeClass)} />
     </div>
   );
 }
 </file>
 
 <file path="src/hooks/useCursor.js">
+/**
+ * useCursor — cursor aware del modo claro/oscuro
+ * Dark: coral en dot y ring
+ * Light: azul eléctrico en dot y ring
+ * Glow mínimo en ambos modos
+ */
 import { useEffect } from 'react'
 
 export function useCursor() {
   useEffect(() => {
     if (!window.matchMedia('(pointer:fine)').matches) return
-    const dot = document.querySelector('.cur-dot')
+
+    const dot  = document.querySelector('.cur-dot')
     const ring = document.querySelector('.cur-ring')
     if (!dot || !ring) return
-    let mx = 0,
-      my = 0,
-      rx = 0,
-      ry = 0,
-      vis = false
-    const mv = (e) => {
-      mx = e.clientX
-      my = e.clientY
-      dot.style.left = mx + 'px'
-      dot.style.top = my + 'px'
-      if (!vis) {
-        vis = true
-        dot.style.opacity = '1'
-        ring.style.opacity = '.55'
-      }
+
+    let mx = 0, my = 0, rx = 0, ry = 0
+    let visible = false, isHov = false
+
+    // Colores según el modo actual
+    const colors = () => {
+      const isLight = document.documentElement.classList.contains('light')
+      return isLight
+        ? { main: '#5170FF', glow: 'rgba(81,112,255,0.18)', ringBorder: 'rgba(81,112,255,0.55)', ringBg: 'rgba(81,112,255,0.04)', hoverBorder: 'rgba(81,112,255,0.85)', hoverBg: 'rgba(81,112,255,0.08)', hoverGlow: 'rgba(81,112,255,0.22)' }
+        : { main: '#FF6D4D', glow: 'rgba(255,109,77,0.16)', ringBorder: 'rgba(255,109,77,0.50)', ringBg: 'rgba(255,109,77,0.04)', hoverBorder: 'rgba(255,109,77,0.85)', hoverBg: 'rgba(255,109,77,0.07)', hoverGlow: 'rgba(255,109,77,0.20)' }
     }
+
+    const applyBase = () => {
+      const c = colors()
+      Object.assign(dot.style, {
+        position:      'fixed',
+        width:         '9px',
+        height:        '9px',
+        borderRadius:  '50%',
+        background:    c.main,
+        boxShadow:     `0 0 6px 1px ${c.glow}`,
+        transform:     'translate(-50%,-50%)',
+        pointerEvents: 'none',
+        zIndex:        '99999',
+        transition:    'width 0.15s ease, height 0.15s ease, transform 0.12s ease, background 0.20s ease, box-shadow 0.20s ease',
+        willChange:    'left, top',
+      })
+      Object.assign(ring.style, {
+        position:      'fixed',
+        width:         '34px',
+        height:        '34px',
+        borderRadius:  '50%',
+        border:        `1.5px solid ${c.ringBorder}`,
+        boxShadow:     `0 0 8px 1px ${c.glow}`,
+        background:    c.ringBg,
+        transform:     'translate(-50%,-50%)',
+        pointerEvents: 'none',
+        zIndex:        '99998',
+        transition:    [
+          'width 0.25s cubic-bezier(.34,1.56,.64,1)',
+          'height 0.25s cubic-bezier(.34,1.56,.64,1)',
+          'border-color 0.2s ease',
+          'box-shadow 0.2s ease',
+          'background 0.2s ease',
+          'opacity 0.3s ease',
+        ].join(', '),
+        willChange: 'left, top',
+      })
+    }
+
+    applyBase()
+
+    // Observar cambios de modo
+    const observer = new MutationObserver(() => {
+      if (!isHov) applyBase()
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+
+    // RAF lerp
     let raf
     const loop = () => {
-      rx += (mx - rx) * 0.1
-      ry += (my - ry) * 0.1
+      rx += (mx - rx) * 0.10
+      ry += (my - ry) * 0.10
       ring.style.left = rx + 'px'
-      ring.style.top = ry + 'px'
+      ring.style.top  = ry + 'px'
       raf = requestAnimationFrame(loop)
     }
     loop()
-    const ov = (e) => {
-      if (e.target.closest('a,button,[data-mag]')) ring.classList.add('hov', 'lnk')
+
+    const onMove = (e) => {
+      mx = e.clientX; my = e.clientY
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px'
+      if (!visible) {
+        visible = true
+        dot.style.opacity = '1'; ring.style.opacity = '0.80'
+      }
     }
-    const ou = (e) => {
-      if (e.target.closest('a,button,[data-mag]')) ring.classList.remove('hov', 'lnk')
+
+    const onOver = (e) => {
+      if (!e.target.closest('a,button,[data-mag]')) return
+      isHov = true
+      const c = colors()
+      ring.style.width       = '46px'
+      ring.style.height      = '46px'
+      ring.style.borderColor = c.hoverBorder
+      ring.style.boxShadow   = `0 0 14px 2px ${c.hoverGlow}`
+      ring.style.background  = c.hoverBg
+      dot.style.width        = '12px'
+      dot.style.height       = '12px'
     }
-    const od = () => {
-      dot.style.transform = 'translate(-50%,-50%) scale(.55)'
+
+    const onOut = (e) => {
+      if (!e.target.closest('a,button,[data-mag]')) return
+      isHov = false
+      applyBase()
+      ring.style.width  = '34px'
+      ring.style.height = '34px'
+      dot.style.width   = '9px'
+      dot.style.height  = '9px'
     }
-    const ou2 = () => {
+
+    const onDown = () => {
+      const sz = isHov ? '58px' : '44px'
+      ring.style.width = sz; ring.style.height = sz; ring.style.opacity = '0.40'
+      dot.style.transform = 'translate(-50%,-50%) scale(0.50)'
+    }
+    const onUp = () => {
+      ring.style.width  = isHov ? '46px' : '34px'
+      ring.style.height = isHov ? '46px' : '34px'
+      ring.style.opacity = '0.80'
       dot.style.transform = 'translate(-50%,-50%) scale(1)'
     }
-    document.addEventListener('mousemove', mv, { passive: true })
-    document.addEventListener('mouseover', ov)
-    document.addEventListener('mouseout', ou)
-    document.addEventListener('mousedown', od)
-    document.addEventListener('mouseup', ou2)
+
+    const onLeave = () => { dot.style.opacity = '0'; ring.style.opacity = '0'; visible = false }
+    const onEnter = () => { dot.style.opacity = '1'; ring.style.opacity = '0.80'; visible = true }
+
+    document.addEventListener('mousemove',  onMove, { passive: true })
+    document.addEventListener('mouseover',  onOver)
+    document.addEventListener('mouseout',   onOut)
+    document.addEventListener('mousedown',  onDown)
+    document.addEventListener('mouseup',    onUp)
+    document.addEventListener('mouseleave', onLeave)
+    document.addEventListener('mouseenter', onEnter)
+
     return () => {
       cancelAnimationFrame(raf)
-      document.removeEventListener('mousemove', mv)
-      document.removeEventListener('mouseover', ov)
-      document.removeEventListener('mouseout', ou)
-      document.removeEventListener('mousedown', od)
-      document.removeEventListener('mouseup', ou2)
+      observer.disconnect()
+      document.removeEventListener('mousemove',  onMove)
+      document.removeEventListener('mouseover',  onOver)
+      document.removeEventListener('mouseout',   onOut)
+      document.removeEventListener('mousedown',  onDown)
+      document.removeEventListener('mouseup',    onUp)
+      document.removeEventListener('mouseleave', onLeave)
+      document.removeEventListener('mouseenter', onEnter)
     }
   }, [])
 }
@@ -3906,201 +3927,62 @@ html.light .footer-brand-glow:hover {
 .hex-clip {
   clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
 }
+
 /* ================================================================
-   BLOQUE CSS — pegar al FINAL de src/index.css
-   Arregla el modo light en toda la web + mejoras globales
+   LIGHT MODE — bloque único definitivo
+   (reemplaza todos los bloques html.light anteriores)
    ================================================================ */
 
-
-/* ── 1. MODO LIGHT — correcciones globales ─────────────────────── */
-
-/* Secciones sin fondo explícito heredan el body (#F8F7F4) — OK.
-   Problema: las secciones dark-only se veían mal. Ajuste fino: */
-
-   html.light #enfoque,
-   html.light #proceso,
-   html.light #productos,
-   html.light #contenido,
-   html.light #stack,
-   html.light #connect {
-     background: transparent;
-   }
-   
-   /* El Ticker en modo light */
-   html.light .ticker-track {
-     color: rgba(10, 10, 24, 0.45);
-   }
-   
-   /* Glass en modo light — más visible y con sombra */
-   html.light .glass {
-     background: rgba(255, 255, 255, 0.72);
-     border: 1px solid rgba(81, 112, 255, 0.10);
-     box-shadow: 0 2px 20px rgba(81, 112, 255, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
-   }
-   
-   html.light .glass-blue {
-     background: rgba(81, 112, 255, 0.07);
-     border: 1px solid rgba(81, 112, 255, 0.16);
-   }
-   
-   /* Texto de etiquetas de sección */
-   html.light .section-label {
-     color: rgba(10, 10, 24, 0.38);
-   }
-   
-   
-   /* ── 2. SEPARADORES SUTILES ENTRE SECCIONES ─────────────────────
-   
-      Añade una línea difusa entre secciones para guiar el ojo.
-      Uso: <div className="section-divider" aria-hidden="true" />
-      Poner entre secciones en App.jsx (opcional).
-      ──────────────────────────────────────────────────────────────── */
-   .section-divider {
-     width: 100%;
-     height: 1px;
-     background: linear-gradient(
-       90deg,
-       transparent 0%,
-       rgba(81, 112, 255, 0.12) 30%,
-       rgba(255, 109, 77, 0.10) 70%,
-       transparent 100%
-     );
-     margin: 0 auto;
-     max-width: 1200px;
-     padding: 0 24px;
-   }
-   
-   html.light .section-divider {
-     background: linear-gradient(
-       90deg,
-       transparent 0%,
-       rgba(81, 112, 255, 0.10) 30%,
-       rgba(255, 109, 77, 0.08) 70%,
-       transparent 100%
-     );
-   }
-   
-   
-   /* ── 3. GLASS DARK — panel oscuro de isla visual ─────────────────
-      Para usar en secciones que quieran el tratamiento "dark island"
-      incluso en modo light (como LabStats o banners CTA).
-      ──────────────────────────────────────────────────────────────── */
-   .glass-dark {
-     background: rgba(5, 8, 40, 0.70);
-     border: 1px solid rgba(255, 255, 255, 0.07);
-     backdrop-filter: blur(20px);
-     -webkit-backdrop-filter: blur(20px);
-   }
-   
-   /* En modo light se mantiene oscuro (es intencional — contraste editorial) */
-   html.light .glass-dark {
-     background: rgba(10, 14, 50, 0.82);
-     border: 1px solid rgba(255, 255, 255, 0.09);
-   }
-   
-   
-   /* ── 4. MEJORA DEL HERO SHIMMER — modo light ─────────────────── */
-   html.light .hero-shimmer {
-     background: linear-gradient(
-       90deg,
-       #5170FF  0%,
-       #FF6D4D 40%,
-       #5170FF  80%
-     );
-     background-size: 220% auto;
-     -webkit-background-clip: text;
-     background-clip: text;
-     -webkit-text-fill-color: transparent;
-     animation: heroShimmer 5s ease-in-out infinite alternate;
-   }
-   
-   
-   /* ── 5. AJUSTE PADDING SECCIONES — ritmo visual más consistente ─
-   
-      Antes: py-28, py-24, py-20, py-16, py-14, py-12 mezclados.
-      Objetivo: escala de 4 valores claros (S/M/L/XL).
-      No tocar los archivos JSX — sobrescribir aquí.
-      ──────────────────────────────────────────────────────────────── */
-   
-   #productos  { padding-top: 80px;  padding-bottom: 80px;  }
-   #proceso    { padding-top: 64px;  padding-bottom: 64px;  }
-   #contenido  { padding-top: 56px;  padding-bottom: 56px;  }
-   #stack      { padding-top: 72px;  padding-bottom: 72px;  }
-   
-   @media (min-width: 768px) {
-     #productos { padding-top: 100px; padding-bottom: 100px; }
-     #proceso   { padding-top: 80px;  padding-bottom: 80px;  }
-     #contenido { padding-top: 72px;  padding-bottom: 72px;  }
-     #stack     { padding-top: 96px;  padding-bottom: 96px;  }
-   }
-   
-   
-   /* ── 6. NAVBAR — borde inferior en modo light ────────────────── */
-   html.light header {
-     border-bottom-color: rgba(81, 112, 255, 0.08) !important;
-   }
-   /* ================================================================
-   PEGAR AL FINAL de src/index.css
-   Corrige modo claro + variable del fondo de Manifiesto
-   ================================================================ */
-
-
-/* ── Variable de fondo Manifiesto ─────────────────────────────────
-   Semi-transparente para que los elementos flotantes sean visibles
-   ──────────────────────────────────────────────────────────────── */
+/* ── Variables ────────────────────────────────────────────────── */
 :root {
   --manifiesto-bg: rgba(0, 3, 31, 0.72);
 }
 html.light {
-  --manifiesto-bg: rgba(238, 241, 255, 0.72);
+  --manifiesto-bg: rgba(230, 235, 255, 0.80);
 }
 
-/* ================================================================
-   PEGAR AL FINAL de src/index.css
-   Ajustes de light mode para el GeometricBackground en modo claro
-   ================================================================ */
-
-/* Glows laterales — modo light más suaves */
-html.light .hero-side-glow-left  { opacity: 0.22; }
-html.light .hero-side-glow-right { opacity: 0.20; }
-
-/* Navbar en modo claro — fondo con el nuevo color base */
-html.light header {
-  background: rgba(238, 241, 255, 0.86) !important;
-  border-bottom-color: rgba(81, 112, 255, 0.10) !important;
-}
-
-/* Body en modo claro — fondo base alineado con el GeometricBackground */
+/* ── Body y fondo base ────────────────────────────────────────── */
 html.light body {
   background-color: #EEF1FF;
   color: #0A0A18;
 }
 
-/* Secciones — fondos semi-transparentes para que las cápsulas
-   geométricas de fondo se vean a través */
+/* ── Glows laterales del Hero ─────────────────────────────────── */
+html.light .hero-side-glow-left  { opacity: 0.22; }
+html.light .hero-side-glow-right { opacity: 0.20; }
+html.light .hero-blur-layer      { opacity: 0.10; }
+html.light .hero-blur-layer-2    { opacity: 0.08; }
+html.light .hero-brand-aurora    { opacity: 0.10; }
+
+/* ── Navbar ───────────────────────────────────────────────────── */
+html.light header {
+  background: rgba(238, 241, 255, 0.88) !important;
+  border-bottom-color: rgba(81, 112, 255, 0.10) !important;
+}
+
+/* ── Secciones semitransparentes — las cápsulas se ven detrás ── */
 html.light #enfoque,
 html.light #productos,
 html.light #proceso,
 html.light #contenido,
 html.light #stack,
 html.light #connect {
-  background: rgba(238, 241, 255, 0.65);
+  background: rgba(238, 241, 255, 0.60);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
 
 html.light #manifiesto {
-  background: rgba(230, 235, 255, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--manifiesto-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-/* Glass en modo claro */
+/* ── Glass ────────────────────────────────────────────────────── */
 html.light .glass {
-<<<<<<< HEAD
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.80);
   border: 1px solid rgba(81, 112, 255, 0.14);
-  box-shadow: 0 2px 20px rgba(81, 112, 255, 0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+  box-shadow: 0 2px 20px rgba(81, 112, 255, 0.07), inset 0 1px 0 rgba(255,255,255,0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
@@ -4110,99 +3992,25 @@ html.light .glass-blue {
   border-color: rgba(81, 112, 255, 0.20);
 }
 
-/* Cards del Manifiesto */
-=======
-  background: rgba(255, 255, 255, 0.86);
-  border-color: rgba(10, 10, 24, 0.10);
-  box-shadow: 0 4px 40px rgba(81, 112, 255, 0.055), 0 2px 10px rgba(0, 0, 0, 0.05);
-}
+/* ── Texto ────────────────────────────────────────────────────── */
+html.light h1, html.light h2, html.light h3 { color: #0A0A18; }
+html.light p { color: rgba(10, 10, 24, 0.58); }
+html.light .dark\:text-white        { color: #0A0A18; }
+html.light .dark\:text-white\/50,
+html.light .dark\:text-white\/45    { color: rgba(10, 10, 24, 0.55); }
+html.light .dark\:text-white\/30,
+html.light .dark\:text-white\/25    { color: rgba(10, 10, 24, 0.38); }
 
-html.light .glass-blue {
-  background: rgba(81, 112, 255, 0.10);
-  border-color: rgba(81, 112, 255, 0.20);
-}
-
-/* ── Navbar en modo light ─────────────────────────────────────────
-   Añadir directamente al Navbar.jsx ya entregado.
-   Este bloque es un respaldo CSS por si acaso.
-   ──────────────────────────────────────────────────────────────── */
-html.light header {
-  background: rgba(248, 247, 244, 0.82) !important;
-  border-bottom-color: rgba(81, 112, 255, 0.09) !important;
-}
-
-/* ── Secciones con fondo propio en modo light ────────────────────  */
-html.light #manifiesto {
-  background: var(--manifiesto-bg) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-html.light #manifiesto .rounded-2xl {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border-color: rgba(81, 112, 255, 0.10) !important;
-}
-
-/* Ticker en modo light */
-html.light .ticker-track,
-html.light [class*="ticker"] span {
-  color: rgba(10, 10, 24, 0.40);
-}
-html.light [class*="ticker"] .w-1 {
-  background-color: rgba(81, 112, 255, 0.45);
-}
-
-/* ── Texto en modo light — refuerzo ─────────────────────────────  */
-html.light h1, html.light h2, html.light h3 {
-  color: #0A0A18;
-}
-
-html.light p {
-  color: rgba(10, 10, 24, 0.55);
-}
-
-/* Etiquetas de sección */
-html.light .text-b-dark { color: #0A0A18; }
-
-/* ── Hero shimmer en modo light ─────────────────────────────────  */
-html.light .hero-shimmer {
-  background: linear-gradient(90deg, #5170FF 0%, #FF6D4D 40%, #5170FF 80%);
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: heroShimmer 5s ease-in-out infinite alternate;
-}
-
-/* ── Glows laterales del Hero en modo light ─────────────────────  */
-html.light .hero-side-glow-left  { opacity: 0.30; }
-html.light .hero-side-glow-right { opacity: 0.28; }
-
-/* ── Cards del Manifiesto en modo light ─────────────────────────  */
->>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
-html.light #manifiesto .rounded-2xl {
-  background: rgba(255, 255, 255, 0.82) !important;
-  border-color: rgba(81, 112, 255, 0.12) !important;
-  box-shadow: 0 2px 16px rgba(81, 112, 255, 0.06), inset 0 1px 0 rgba(255,255,255,0.95);
-}
-
-/* Panel de métricas integradas en Manifiesto */
-html.light #manifiesto .backdrop-blur-xl {
-  background: rgba(255, 255, 255, 0.80) !important;
-  border-color: rgba(81, 112, 255, 0.12) !important;
-  box-shadow: 0 4px 24px rgba(81, 112, 255, 0.08);
-}
-
-/* Ticker */
+/* ── Ticker ───────────────────────────────────────────────────── */
 html.light [class*="ticker"] span,
-html.light .ticker-track span { color: rgba(10, 10, 24, 0.42); }
+html.light .ticker-track span { color: rgba(10, 10, 24, 0.40); }
 
-/* Hero shimmer en light */
+/* ── Hero shimmer ─────────────────────────────────────────────── */
 html.light .hero-shimmer {
   background: linear-gradient(
     90deg,
-    #5170FF 0%, #828AFF 30%,
-    #FF6D4D 55%, #828AFF 75%,
+    #5170FF 0%, #828AFF 28%,
+    #FF6D4D 52%, #828AFF 74%,
     #5170FF 100%
   ) !important;
   background-size: 240% auto !important;
@@ -4212,22 +4020,32 @@ html.light .hero-shimmer {
   animation: heroShimmer 5s ease-in-out infinite alternate !important;
 }
 
-<<<<<<< HEAD
-/* Footer siempre oscuro */
-html.light footer { background: #09090D; color: #F5F5F0; }
+/* ── Manifiesto — cards ───────────────────────────────────────── */
+html.light #manifiesto .rounded-2xl {
+  background: rgba(255, 255, 255, 0.84) !important;
+  border-color: rgba(81, 112, 255, 0.12) !important;
+  box-shadow: 0 2px 16px rgba(81, 112, 255, 0.06);
+}
 
-/* Proceso — iconos */
+/* Panel de métricas */
+html.light #manifiesto .backdrop-blur-xl {
+  background: rgba(255, 255, 255, 0.80) !important;
+  border-color: rgba(81, 112, 255, 0.12) !important;
+  box-shadow: 0 4px 24px rgba(81, 112, 255, 0.08);
+}
+
+/* ── Proceso — iconos ─────────────────────────────────────────── */
 html.light #proceso .backdrop-blur-sm {
-  background: rgba(255, 255, 255, 0.88) !important;
+  background: rgba(255, 255, 255, 0.90) !important;
   border-color: rgba(81, 112, 255, 0.14) !important;
 }
 
-/* Stack — chips */
+/* ── Stack — chips ────────────────────────────────────────────── */
 html.light #stack .glass {
   background: rgba(255, 255, 255, 0.88) !important;
 }
 
-/* Connect — inputs */
+/* ── Connect — inputs ─────────────────────────────────────────── */
 html.light #connect input,
 html.light #connect textarea {
   background: rgba(238, 241, 255, 0.85) !important;
@@ -4237,32 +4055,273 @@ html.light #connect textarea {
 html.light #connect input::placeholder,
 html.light #connect textarea::placeholder {
   color: rgba(10, 10, 24, 0.36) !important;
-=======
-/* ── Footer en modo light ───────────────────────────────────────  */
+}
+
+/* ── Footer siempre oscuro ────────────────────────────────────── */
 html.light footer {
-  background: rgba(238, 241, 255, 0.90);
-  border-top-color: rgba(81, 112, 255, 0.10);
+  background: #09090D;
+  color: #F5F5F0;
+}
+/* ================================================================
+   PEGAR AL FINAL de src/index.css
+   Scrollbar personalizado + cursor sin clase CSS extra
+   ================================================================ */
+
+
+/* ── Scrollbar — Webkit (Chrome, Edge, Safari) ───────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-/* Geometric background para modo light */
-.geometric-bg {
-  background: #0D0F1C;
-}
-html.light .geometric-bg {
-  background: #F8F7F4;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.geometric-fade {
-  background: linear-gradient(to top, rgba(13, 15, 28, 0.78), transparent 45%, rgba(13, 15, 28, 0.54));
-}
-html.light .geometric-fade {
-  background: linear-gradient(to top, rgba(248, 247, 244, 0.86), transparent 45%, rgba(248, 247, 244, 0.58));
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(81, 112, 255, 0.55) 0%,
+    rgba(255, 109, 77, 0.45) 100%
+  );
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;   /* crea el efecto "flotante" dentro del track */
+  min-height: 40px;
 }
 
-/* ── Proceso: iconos en modo light ──────────────────────────────  */
-html.light #proceso .dark\:bg-\[rgba\(5\,8\,40\,0\.70\)\] {
-  background: rgba(255, 255, 255, 0.85) !important;
->>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(81, 112, 255, 0.80) 0%,
+    rgba(255, 109, 77, 0.70) 100%
+  );
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(
+    180deg,
+    #5170FF 0%,
+    #FF6D4D 100%
+  );
+  background-clip: padding-box;
+}
+
+/* ── Modo light: scrollbar más sutil ─────────────────────────── */
+html.light ::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(58, 92, 224, 0.40) 0%,
+    rgba(208, 72, 40, 0.35) 100%
+  );
+  background-clip: padding-box;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(58, 92, 224, 0.65) 0%,
+    rgba(208, 72, 40, 0.55) 100%
+  );
+  background-clip: padding-box;
+}
+
+/* ── Firefox scrollbar ───────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(81, 112, 255, 0.55) transparent;
+}
+
+html.light * {
+  scrollbar-color: rgba(58, 92, 224, 0.40) transparent;
+}
+
+/* ── Cursor — ocultar el nativo al usar el custom ────────────── */
+/* Se activa solo en dispositivos con pointer fino (mouse real) */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+/* ================================================================
+   LIGHT MODE — Glass cards definitivolo mas importante y reciente
+   Pegar al FINAL de src/index.css (reemplaza bloques html.light anteriores)
+   ================================================================ */
+
+/* ── Variables ─────────────────────────────────────────────────── */
+:root  { --manifiesto-bg: rgba(0, 3, 31, 0.72); }
+html.light { --manifiesto-bg: rgba(225, 230, 255, 0.68); }
+
+/* ── Body y fondo base ─────────────────────────────────────────── */
+html.light body {
+  background-color: #EEF1FF;
+  color: #0A0A18;
+}
+
+/* ── Cursor: ocultar nativo en mouse ───────────────────────────── */
+@media (pointer: fine) {
+  html.light *, html.light *::before, html.light *::after {
+    cursor: none !important;
+  }
+}
+
+/* ── Glows laterales ───────────────────────────────────────────── */
+html.light .hero-side-glow-left  { opacity: 0.28; }
+html.light .hero-side-glow-right { opacity: 0.24; }
+html.light .hero-blur-layer      { opacity: 0.10; }
+html.light .hero-blur-layer-2    { opacity: 0.08; }
+html.light .hero-brand-aurora    { opacity: 0.10; }
+
+/* ── Navbar ────────────────────────────────────────────────────── */
+html.light header {
+  background: rgba(238, 241, 255, 0.78) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border-bottom-color: rgba(81, 112, 255, 0.10) !important;
+}
+
+/* ── Secciones semitransparentes ───────────────────────────────── */
+html.light #enfoque,
+html.light #productos,
+html.light #proceso,
+html.light #contenido,
+html.light #stack,
+html.light #connect {
+  background: rgba(238, 241, 255, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+html.light #manifiesto {
+  background: var(--manifiesto-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ── GLASS — el fix principal de las tarjetas ──────────────────── */
+/*
+   Antes: bg-white/60 → fondo blanco sólido, sin transparencia real.
+   Ahora: blur fuerte + fondo semitransparente + borde cristal +
+   reflejo superior. Las cápsulas del fondo se ven a través.
+*/
+html.light .glass {
+  background: rgba(255, 255, 255, 0.52) !important;
+  border: 1px solid rgba(255, 255, 255, 0.82) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 4px 24px rgba(81, 112, 255, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+html.light .glass-blue {
+  background: rgba(81, 112, 255, 0.08) !important;
+  border-color: rgba(81, 112, 255, 0.22) !important;
+}
+
+/* ── Cards del Manifiesto (principios) ─────────────────────────── */
+html.light #manifiesto [class*="rounded-2xl"] {
+  background: rgba(255, 255, 255, 0.50) !important;
+  border: 1px solid rgba(255, 255, 255, 0.80) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 4px 20px rgba(81, 112, 255, 0.07) !important;
+}
+
+/* Panel métricas en Manifiesto */
+html.light #manifiesto .backdrop-blur-xl {
+  background: rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.80) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  box-shadow: 0 4px 24px rgba(81, 112, 255, 0.08) !important;
+}
+
+/* ── Cards de Productos ─────────────────────────────────────────── */
+html.light #productos [class*="glass"] {
+  background: rgba(255, 255, 255, 0.52) !important;
+  border: 1px solid rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+/* ── Proceso — panel y chip de iconos ──────────────────────────── */
+html.light #proceso [class*="glass"],
+html.light #proceso [class*="rounded-3xl"] {
+  background: rgba(255, 255, 255, 0.50) !important;
+  border: 1px solid rgba(255, 255, 255, 0.80) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+html.light #proceso .backdrop-blur-sm {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.88) !important;
+}
+
+/* ── Stack chips ────────────────────────────────────────────────── */
+html.light #stack .glass {
+  background: rgba(255, 255, 255, 0.58) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* ── Connect cards ──────────────────────────────────────────────── */
+html.light #connect .glass {
+  background: rgba(255, 255, 255, 0.52) !important;
+  border: 1px solid rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+html.light #connect input,
+html.light #connect textarea {
+  background: rgba(238, 241, 255, 0.70) !important;
+  border-color: rgba(81, 112, 255, 0.18) !important;
+  color: #0A0A18 !important;
+  backdrop-filter: blur(8px);
+}
+html.light #connect input::placeholder,
+html.light #connect textarea::placeholder {
+  color: rgba(10, 10, 24, 0.36) !important;
+}
+
+/* ── Texto ──────────────────────────────────────────────────────── */
+html.light h1, html.light h2, html.light h3 { color: #0A0A18; }
+html.light p { color: rgba(10, 10, 24, 0.58); }
+html.light .dark\:text-white        { color: #0A0A18 !important; }
+html.light .dark\:text-white\/50,
+html.light .dark\:text-white\/45    { color: rgba(10, 10, 24, 0.55) !important; }
+html.light .dark\:text-white\/30,
+html.light .dark\:text-white\/25    { color: rgba(10, 10, 24, 0.38) !important; }
+html.light .dark\:text-white\/40    { color: rgba(10, 10, 24, 0.45) !important; }
+
+/* ── Ticker ─────────────────────────────────────────────────────── */
+html.light [class*="ticker"] span,
+html.light .ticker-track span { color: rgba(10, 10, 24, 0.40); }
+
+/* ── Hero shimmer ───────────────────────────────────────────────── */
+html.light .hero-shimmer {
+  background: linear-gradient(
+    90deg,
+    #5170FF 0%, #828AFF 28%,
+    #FF6D4D 52%, #828AFF 74%,
+    #5170FF 100%
+  ) !important;
+  background-size: 240% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: heroShimmer 5s ease-in-out infinite alternate !important;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────── */
+html.light footer {
+  background: #09090D !important;
+  color: #F5F5F0 !important;
 }
 </file>
 
@@ -4564,6 +4623,7 @@ import { motion, useInView } from 'framer-motion'
 const tags_es = ['Diseño UX/UI', 'IA Generativa', 'Branding', 'Diseño Industrial', 'Métricas', 'Automatización', 'Data storytelling']
 const tags_en = ['UX/UI Design', 'Generative AI', 'Branding', 'Industrial Design', 'Metrics', 'Automation', 'Data storytelling']
 
+// Palabras que aparecen en coral
 const CORAL_ES = new Set(['núcleo', 'sistema,', 'solución', 'diseño,', 'IA', 'automatización.'])
 const CORAL_EN = new Set(['core', 'system,', 'solution', 'design,', 'AI', 'automation.'])
 
@@ -4577,13 +4637,7 @@ export default function Enfoque({ lang }) {
 
   const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
   const tags     = lang === 'es' ? tags_es : tags_en
-
-  // Dividimos por PALABRA (no caracter) para mantener word-wrap correcto.
-  // Dentro de cada palabra animamos caracter por caracter.
-  const words = text.split(' ')
-
-  // Índice global de caracter para calcular el delay
-  let globalCharIdx = 0
+  const words    = text.split(' ')
 
   return (
     <section id="enfoque" className="py-20 px-6 relative overflow-hidden">
@@ -4609,62 +4663,57 @@ export default function Enfoque({ lang }) {
           </span>
         </motion.div>
 
-        {/* Texto carácter por carácter — centrado y con word-wrap correcto */}
+        {/*
+          EFECTO: "Spotlight reveal" por palabra.
+          Cada palabra arranca invisible y con un ligero blur,
+          luego aparece y sube levemente al entrar en viewport.
+          Las palabras clave emergen en coral con un glow pulsante.
+          Mucho más visible que caracter-por-caracter y más
+          compatible con el word-wrap natural del texto largo.
+        */}
         <p
           ref={ref}
-          className="font-cal text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.22] tracking-[-0.5px] dark:text-white text-b-dark"
+          className="font-cal text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.22] tracking-[-0.5px] text-center max-w-[820px] w-full"
           aria-label={text}
-          style={{
-            textAlign: 'center',
-            width: '100%',
-            maxWidth: '820px',
-            /* Permitir que el texto fluya y se centre correctamente */
-            wordBreak: 'break-word',
-          }}
         >
-          {words.map((word, wi) => {
+          {words.map((word, i) => {
             const isCoral = coralSet.has(word)
-            const chars   = word.split('')
-            const wordStart = globalCharIdx
-            globalCharIdx  += word.length + 1 // +1 por el espacio
-
             return (
-              /* Cada palabra es un span que no rompe internamente pero sí entre palabras */
-              <span key={wi} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
-                {chars.map((ch, ci) => {
-                  const charDelay = (wordStart + ci) * 0.016
-                  return (
-                    <motion.span
-                      key={ci}
-                      aria-hidden="true"
-                      style={{ display: 'inline' }}
-                      initial={{ color: 'rgba(130,138,170,0.22)' }}
-                      animate={inView
-                        ? { color: isCoral ? '#FF6D4D' : 'inherit' }
-                        : { color: 'rgba(130,138,170,0.22)' }
-                      }
-                      transition={{ delay: charDelay, duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      {ch}
-                    </motion.span>
-                  )
-                })}
-                {/* Espacio entre palabras — visible y permite word-wrap */}
-                {wi < words.length - 1 && (
-                  <motion.span
-                    aria-hidden="true"
-                    style={{ display: 'inline' }}
-                    initial={{ color: 'rgba(130,138,170,0.22)' }}
-                    animate={inView
-                      ? { color: 'inherit' }
-                      : { color: 'rgba(130,138,170,0.22)' }
-                    }
-                    transition={{ delay: (wordStart + word.length) * 0.016, duration: 0.38 }}
-                  >
-                    {' '}
-                  </motion.span>
-                )}
-              </span>
+              <motion.span
+                key={i}
+                aria-hidden="true"
+                style={{
+                  display: 'inline-block',
+                  marginRight: '0.25em',
+                  // Si es palabra clave: glow pulsante en coral
+                  ...(isCoral && inView ? {
+                    textShadow: '0 0 28px rgba(255,109,77,0.55)',
+                  } : {}),
+                }}
+                initial={{
+                  opacity: 0,
+                  y: 22,
+                  filter: 'blur(8px)',
+                  color: isCoral ? '#FF6D4D' : 'inherit',
+                }}
+                animate={inView ? {
+                  opacity: 1,
+                  y: 0,
+                  filter: 'blur(0px)',
+                  color: isCoral ? '#FF6D4D' : 'inherit',
+                } : {
+                  opacity: 0,
+                  y: 22,
+                  filter: 'blur(8px)',
+                }}
+                transition={{
+                  delay: i * 0.055,
+                  duration: 0.55,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                {word}
+              </motion.span>
             )
           })}
         </p>
@@ -4700,36 +4749,39 @@ export default function Enfoque({ lang }) {
 import { motion } from 'framer-motion'
 
 const navLinks = [
-  { href: '#productos', es: 'Productos', en: 'Products' },
-  { href: '#enfoque', es: 'Enfoque', en: 'Focus' },
+  { href: '#productos',  es: 'Productos',  en: 'Products'  },
+  { href: '#enfoque',    es: 'Enfoque',    en: 'Focus'     },
   { href: '#manifiesto', es: 'Manifiesto', en: 'Manifesto' },
-  { href: '#proceso', es: 'Proceso', en: 'Process' },
-  { href: '#contenido', es: 'Contenido', en: 'Content' },
+  { href: '#proceso',    es: 'Proceso',    en: 'Process'   },
+  { href: '#contenido',  es: 'Contenido',  en: 'Content'   },
 ]
 const social = [
   { label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/concentriclab/' },
-  { label: 'YouTube', href: 'https://www.youtube.com/@ConcentricLab' },
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/' },
+  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab' },
 ]
 const products = [
   { label: 'Kit de Métricas', href: 'https://concentriclab.gumroad.com/l/metricasdigitales' },
-  { label: 'Ver todos →', href: 'https://concentriclab.gumroad.com' },
+  { label: 'Ver todos →',    href: 'https://concentriclab.gumroad.com' },
 ]
 
 export default function Footer({ lang }) {
-  const t = (es, en) => (lang === 'es' ? es : en)
+  const t    = (es, en) => (lang === 'es' ? es : en)
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative z-10 px-6 pb-8 pt-20 overflow-hidden">
+    /* Footer siempre oscuro en ambos modos */
+    <footer className="relative z-10 px-6 pb-8 pt-20 overflow-hidden bg-[#09090D]">
+
+      {/* Línea superior decorativa */}
       <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
-        style={{
-          background: 'linear-gradient(to right,transparent,rgba(81,112,255,.22),transparent)',
-        }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
+        style={{ background: 'linear-gradient(to right,transparent,rgba(81,112,255,.22),transparent)' }}
       />
 
       <div className="max-w-[1200px] mx-auto">
+
+        {/* ── CTA grande ──────────────────────────────────────── */}
         <motion.div
           className="flex flex-col items-center text-center gap-6 pb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -4737,10 +4789,10 @@ export default function Footer({ lang }) {
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/25 text-black/30">
+          <p className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/25">
             {t('¿Listo para construir?', 'Ready to build?')}
           </p>
-          <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl dark:text-white text-b-dark leading-tight tracking-[-1.5px]">
+          <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl text-white leading-tight tracking-[-1.5px]">
             {t('Hagamos algo', "Let's build something")}
             <br />
             <span className="text-grad">{t('que funcione.', 'that works.')}</span>
@@ -4753,75 +4805,70 @@ export default function Footer({ lang }) {
           </a>
         </motion.div>
 
-        {/* Superior: navegación, productos, social */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 border-t dark:border-white/5 border-black/6 pt-10 pb-8">
+        {/* ── Grid de links ────────────────────────────────────── */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 border-t border-white/[0.06] pt-10 pb-8">
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/25 text-black/30">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">
               {t('Navegación', 'Navigation')}
             </span>
             {navLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="dark:text-white/45 text-black/50 hover:dark:text-white hover:text-black text-sm transition-colors duration-200"
-              >
+              <a key={l.href} href={l.href}
+                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
                 {t(l.es, l.en)}
               </a>
             ))}
           </div>
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/25 text-black/30">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">
               {t('Productos', 'Products')}
             </span>
             {products.map((p) => (
-              <a
-                key={p.label}
-                href={p.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="dark:text-white/45 text-black/50 hover:dark:text-white hover:text-black text-sm transition-colors duration-200"
-              >
+              <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer"
+                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
                 {p.label}
               </a>
             ))}
           </div>
           <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/25 text-black/30">
-              Social
-            </span>
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">Social</span>
             {social.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="dark:text-white/45 text-black/50 hover:dark:text-white hover:text-black text-sm transition-colors duration-200"
-              >
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
                 {s.label}
               </a>
             ))}
           </div>
         </div>
 
-        {/* Inferior */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 border-t dark:border-white/5 border-black/6 pt-8">
-          <a href="#hero" className="inline-flex items-center gap-2 shrink-0 order-2 md:order-1 group">
+        {/* ── Barra inferior ────────────────────────────────────
+             Estructura: [Logo + nombre] [Copyright] [Tagline]
+             Igual en dark y light — siempre sobre fondo oscuro.
+        ────────────────────────────────────────────────────── */}
+        <div className="border-t border-white/[0.06] pt-7 grid grid-cols-3 items-center gap-4">
+
+          {/* Izquierda — logo un solo color blanco */}
+          <a href="#hero" className="flex items-center gap-2 group" aria-label="Concéntrico Lab">
             <img
               src="/assets/images/logo.png"
               alt=""
-              className="h-6 w-auto opacity-95 dark:brightness-0 dark:invert"
+              className="h-5 w-auto brightness-0 invert opacity-55 group-hover:opacity-90 transition-opacity duration-200"
             />
-            <span className="footer-brand-glow font-cal text-sm font-semibold tracking-tight dark:text-white text-b-dark hidden sm:inline">
-              Concéntrico Lab
+            <span className="font-cal text-[13px] tracking-tight text-white/55 group-hover:text-white/90 transition-colors duration-200 hidden sm:inline whitespace-nowrap">
+              CONCÉNTRICO LAB
             </span>
           </a>
-          <p className="text-[11px] md:text-xs dark:text-white/22 text-black/30 text-center order-1 md:order-2 md:flex-1 md:px-4">
-            © {year} ConcentricLab — {t('Bogotá D.C., Colombia', 'Bogotá D.C., Colombia')}
+
+          {/* Centro — copyright */}
+          <p className="text-[11px] text-white/30 text-center">
+            © {year} Concéntrico Lab. Bogotá, Colombia.
           </p>
-          <p className="text-[11px] md:text-xs dark:text-white/22 text-black/30 text-center md:text-right order-3 md:max-w-[280px]">
+
+          {/* Derecha — tagline */}
+          <p className="text-[11px] text-white/30 text-right italic hidden sm:block">
             {t('Construido con diseño, IA y mucho café.', 'Built with design, AI and a lot of coffee.')}
           </p>
         </div>
+
       </div>
     </footer>
   )
@@ -5143,16 +5190,16 @@ const principles = [
     en: { title: 'From the core outward',   body: 'The best solutions start from the center: from the user to the system, from the problem to the solution.' },
   },
   { num: '02', color: '#FF6D4D',
-    es: { title: 'Criterio sobre velocidad', body: 'Mover rápido sin pensar solo acumula deuda. El criterio convierte ideas en sistemas con sentido.' },
-    en: { title: 'Criterion over speed',     body: 'Moving fast without thinking accumulates debt. Criterion turns ideas into meaningful systems.' },
+    es: { title: 'Criterio sobre velocidad', body: 'Mover con intención produce sistemas mejores que mover rápido. El criterio transforma ideas en resultados duraderos.' },
+    en: { title: 'Criterion over speed',     body: 'Moving with intention produces better systems than moving fast. Criterion turns ideas into lasting results.' },
   },
   { num: '03', color: '#828AFF',
-    es: { title: 'Convergencia, no fragmentación', body: 'Diseño, IA y automatización convergen bajo una misma lógica — los resultados se multiplican.' },
-    en: { title: 'Convergence, not fragmentation', body: 'Design, AI and automation converge under the same logic — results multiply.' },
+    es: { title: 'Convergencia, no fragmentación', body: 'Diseño, IA y automatización bajo la misma lógica se potencian mutuamente — los resultados se multiplican.' },
+    en: { title: 'Convergence, not fragmentation', body: 'Design, AI and automation under the same logic amplify each other — results multiply.' },
   },
   { num: '04', color: '#41EAFF',
-    es: { title: 'Sistemas sobre piezas', body: 'Una pieza gráfica impresiona. Un sistema que funciona transforma. El lab construye lo segundo.' },
-    en: { title: 'Systems over pieces',   body: 'A great piece can impress. A system that works transforms. The lab builds the second.' },
+    es: { title: 'Sistemas sobre piezas', body: 'Una pieza gráfica impresiona. Un sistema que funciona transforma y escala. El lab construye lo segundo.' },
+    en: { title: 'Systems over pieces',   body: 'A great piece can impress. A system that works transforms and scales. The lab builds the second.' },
   },
 ]
 
@@ -5163,7 +5210,10 @@ const stats = [
 ]
 
 function Card({ p, lang, index }) {
-  const c = lang === 'es' ? p.es : p.en
+  const c       = lang === 'es' ? p.es : p.en
+  const numRef  = useRef()
+  const numView = useInView(numRef, { once: true, margin: '-40px' })
+
   return (
     <motion.div
       className="rounded-2xl p-5 flex flex-col gap-2.5 relative overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.04] bg-white/60 backdrop-blur-sm"
@@ -5173,13 +5223,35 @@ function Card({ p, lang, index }) {
       transition={{ duration: .75, ease: [.16, 1, .3, 1], delay: index * .08 }}
       whileHover={{ y: -4, transition: { duration: .22, ease: 'easeOut' } }}
     >
+      {/* Glow en hover */}
       <div
         className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none opacity-30 group-hover:opacity-70 group-hover:scale-150 transition-all duration-500"
         style={{ background: `radial-gradient(circle,${p.color}30 0%,transparent 70%)`, filter: 'blur(12px)' }}
       />
-      <span className="font-cal text-3xl" style={{ color: p.color, opacity: .18 }}>{p.num}</span>
+
+      {/* Numeral — mismo estilo que las métricas: color + glow */}
+      <motion.span
+        ref={numRef}
+        className="font-cal text-3xl font-bold"
+        style={{ color: p.color }}
+        initial={{ textShadow: 'none', opacity: 0.4 }}
+        animate={numView ? {
+          opacity: 1,
+          textShadow: [
+            `0 0 12px ${p.color}44`,
+            `0 0 28px ${p.color}88`,
+            `0 0 16px ${p.color}66`,
+          ],
+        } : {}}
+        transition={{ delay: index * 0.1 + 0.3, duration: 0.9, ease: [.16,1,.3,1] }}
+      >
+        {p.num}
+      </motion.span>
+
       <h3 className="font-cal text-[17px] dark:text-white text-b-dark leading-snug">{c.title}</h3>
       <p className="dark:text-white/45 text-black/55 leading-[1.65] text-[13px]">{c.body}</p>
+
+      {/* Línea inferior en hover */}
       <div
         className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
         style={{ background: `linear-gradient(to right,${p.color},transparent)` }}
@@ -5189,10 +5261,10 @@ function Card({ p, lang, index }) {
 }
 
 export default function Manifiesto({ lang }) {
-  const sec  = useRef()
+  const sec      = useRef()
   const statsRef = useRef()
   const { scrollYProgress } = useScroll({ target: sec, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40])
+  const y        = useTransform(scrollYProgress, [0, 1], [40, -40])
   const statsInView = useInView(statsRef, { once: true, margin: '-60px' })
   const t = (es, en) => lang === 'es' ? es : en
 
@@ -5201,10 +5273,7 @@ export default function Manifiesto({ lang }) {
       id="manifiesto"
       ref={sec}
       className="py-12 md:py-16 px-6 relative overflow-hidden"
-      style={{
-        /* Fondo semi-transparente → los elementos flotantes del hero se ven detrás */
-        background: 'var(--manifiesto-bg)',
-      }}
+      style={{ background: 'var(--manifiesto-bg)' }}
     >
       {/* Orbe parallax */}
       <motion.div
@@ -5216,13 +5285,14 @@ export default function Manifiesto({ lang }) {
       </motion.div>
 
       <div className="max-w-[1200px] mx-auto flex flex-col gap-8 md:gap-10 relative z-10">
+
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-3">
           <motion.p
             className="text-[11px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/40"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
           >
-            {t('Principios del lab', 'Lab principles')}
+            {t('En qué creemos', 'What we believe')}
           </motion.p>
           <motion.h2
             className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px] max-w-[520px]"
@@ -5231,18 +5301,18 @@ export default function Manifiesto({ lang }) {
             viewport={{ once: true }}
             transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .06 }}
           >
-            {t('El ', 'The ')}
-            <span className="text-grad">{t('manifiesto', 'manifesto')}</span>
-            {t(' que nos guía', ' that guides us')}
+            {t('La ', 'The ')}
+            <span className="text-grad">{t('filosofía', 'philosophy')}</span>
+            {t(' del lab', ' of the lab')}
           </motion.h2>
           <motion.p
-            className="dark:text-white/40 text-black/45 text-sm max-w-[400px] leading-[1.7]"
+            className="dark:text-white/40 text-black/45 text-sm max-w-[440px] leading-[1.7]"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
             viewport={{ once: true }} transition={{ delay: .12, duration: .7 }}
           >
             {t(
-              'No son valores de cartelera. Son restricciones que usamos para tomar mejores decisiones.',
-              'Not poster values. These are constraints we use to make better decisions.'
+              'Creemos que el diseño con criterio crea sistemas que perduran. Estos son los principios que guían cada decisión en el lab.',
+              'We believe design with purpose creates systems that last. These are the principles behind every decision in the lab.'
             )}
           </motion.p>
         </div>
@@ -5252,7 +5322,7 @@ export default function Manifiesto({ lang }) {
           {principles.map((p, i) => <Card key={p.num} p={p} lang={lang} index={i} />)}
         </div>
 
-        {/* ── Métricas integradas ───────────────────────────────── */}
+        {/* Métricas integradas */}
         <motion.div
           ref={statsRef}
           className="relative overflow-hidden rounded-2xl border dark:border-white/[0.07] border-black/[0.07] dark:bg-[rgba(5,8,40,0.55)] bg-white/55 backdrop-blur-xl"
@@ -5260,9 +5330,7 @@ export default function Manifiesto({ lang }) {
           animate={statsInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: .9, ease: [.16, 1, .3, 1] }}
         >
-          {/* línea decorativa superior */}
           <div className="absolute top-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-b-blue/30 to-transparent" />
-
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x dark:divide-white/[0.06] divide-black/[0.06] px-2 py-7">
             {stats.map((s, i) => (
               <motion.div
@@ -5274,9 +5342,12 @@ export default function Manifiesto({ lang }) {
               >
                 <motion.span
                   className="font-cal text-4xl md:text-5xl"
-                  style={{ color: s.color, textShadow: `0 0 28px ${s.color}50` }}
-                  initial={{ scale: .82, opacity: 0 }}
-                  animate={statsInView ? { scale: 1, opacity: 1 } : {}}
+                  style={{ color: s.color }}
+                  initial={{ scale: .82, opacity: 0, textShadow: 'none' }}
+                  animate={statsInView ? {
+                    scale: 1, opacity: 1,
+                    textShadow: `0 0 24px ${s.color}70`,
+                  } : {}}
                   transition={{ delay: .22 + i * .14, type: 'spring', stiffness: 130 }}
                 >
                   {s.num}
@@ -5287,8 +5358,6 @@ export default function Manifiesto({ lang }) {
               </motion.div>
             ))}
           </div>
-
-          {/* línea decorativa inferior */}
           <div className="absolute bottom-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-b-coral/25 to-transparent" />
         </motion.div>
       </div>
