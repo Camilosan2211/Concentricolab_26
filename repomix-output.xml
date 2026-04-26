@@ -80,6 +80,7 @@ src/sections/Productos.jsx
 src/sections/Stack.jsx
 src/sections/Ticker.jsx
 tailwind.config.js
+Untitled-1
 vercel.json
 vite.config.js
 </directory_structure>
@@ -2607,21 +2608,22 @@ import { useState, useEffect } from 'react'
 import { useLenis }   from './hooks/useLenis'
 import { useCursor }  from './hooks/useCursor'
 
-import ScrollToTop    from './components/ScrollToTop'
-import Navbar         from './components/Navbar'
-import GeometricBackground from './components/ui/geometric'
+import ScrollToTop          from './components/ScrollToTop'
+import Navbar               from './components/Navbar'
+import GeometricBackground  from './components/ui/geometric'
 
-import Hero           from './sections/Hero'
-import Ticker         from './sections/Ticker'
-import Enfoque        from './sections/Enfoque'
-import Manifiesto     from './sections/Manifiesto'
-import LabStats       from './sections/LabStats'
-import Productos      from './sections/Productos'
-import Proceso        from './sections/Proceso'
-import Contenido      from './sections/Contenido'
-import Stack          from './sections/Stack'
-import Connect        from './sections/Connect'
-import Footer         from './sections/Footer'
+import Hero       from './sections/Hero'
+import Ticker     from './sections/Ticker'
+import Enfoque    from './sections/Enfoque'
+import Manifiesto from './sections/Manifiesto'
+import Productos  from './sections/Productos'
+import Proceso    from './sections/Proceso'
+import Contenido  from './sections/Contenido'
+import Stack      from './sections/Stack'
+import Connect    from './sections/Connect'
+import Footer     from './sections/Footer'
+
+// LabStats eliminado — las métricas ya están integradas en Manifiesto.jsx
 
 export default function App() {
   const [lang, setLang] = useState('es')
@@ -2640,19 +2642,14 @@ export default function App() {
 
   return (
     <>
-      <GeometricBackground />
+      {/* Fondo geométrico — recibe darkMode para adaptar colores */}
+      <GeometricBackground darkMode={dark} />
 
-      {/* Progress bar */}
       <div id="pb" aria-hidden="true" />
-
-      {/* Cursor */}
       <div className="cur-dot"  style={{ opacity: 0 }} aria-hidden="true" />
       <div className="cur-ring" style={{ opacity: 0 }} aria-hidden="true" />
-
-      {/* Film grain overlay */}
       <div className="film-grain-overlay" aria-hidden="true" />
 
-      {/* Nav */}
       <Navbar lang={lang} setLang={setLang} dark={dark} setDark={setDark} />
 
       <main className="relative z-10">
@@ -2660,7 +2657,6 @@ export default function App() {
         <Ticker     />
         <Enfoque    lang={lang} />
         <Manifiesto lang={lang} />
-        <LabStats   lang={lang} />
         <Productos  lang={lang} />
         <Proceso    lang={lang} />
         <Contenido  lang={lang} />
@@ -3081,30 +3077,63 @@ function ElegantShape({
   width = 400,
   height = 100,
   rotate = 0,
-  gradient = "from-white/[0.08]"
+  darkGradient = "from-white/[0.08]",
+  lightGradient = "from-[#5170FF]/[0.12]",
+  darkMode = true,
 }) {
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        y: -150,
-        rotate: rotate - 15,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        rotate: rotate,
-      }}
+      initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
+      animate={{ opacity: 1, y: 0, rotate }}
       transition={{
         duration: 2.4,
         delay,
         ease: [0.23, 0.86, 0.39, 0.96],
         opacity: { duration: 1.2 },
       }}
-      className={cn("absolute", className)}>
+      className={cn("absolute", className)}
+    >
       <motion.div
+<<<<<<< HEAD
+        animate={{ y: [0, 15, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        style={{ width, height }}
+        className="relative"
+      >
+        {darkMode ? (
+          /* DARK — glass semitransparente sobre fondo oscuro */
+          <div
+            className={cn(
+              "absolute inset-0 rounded-full",
+              "bg-gradient-to-r to-transparent",
+              darkGradient,
+              "backdrop-blur-[2px] border-2 border-white/[0.15]",
+              "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
+              "after:absolute after:inset-0 after:rounded-full",
+              "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]"
+            )}
+          />
+        ) : (
+          /* LIGHT — shapes con color de marca, más opacos y con sombra suave */
+          <div
+            className={cn(
+              "absolute inset-0 rounded-full",
+              "bg-gradient-to-r to-transparent",
+              lightGradient,
+              "backdrop-blur-[6px]",
+              "after:absolute after:inset-0 after:rounded-full",
+              "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.55),transparent_65%)]"
+            )}
+            style={{
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7), 0 4px 24px rgba(81,112,255,0.10)',
+              border: '1.5px solid rgba(255,255,255,0.60)',
+            }}
+          />
+        )}
+=======
         animate={{
-          y: [0, 15, 0],
+          y: [0, 24, 0],
+          x: [0, 6, 0],
         }}
         transition={{
           duration: 12,
@@ -3126,68 +3155,104 @@ function ElegantShape({
             "after:absolute after:inset-0 after:rounded-full",
             "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]"
           )} />
+>>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
       </motion.div>
     </motion.div>
   );
 }
 
-export default function GeometricBackground({
-  className
-}) {
+export default function GeometricBackground({ className, darkMode = true }) {
+  const bg     = darkMode ? "#0D0F1C" : "#EEF1FF"
+  const radial = darkMode
+    ? "bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05]"
+    : "bg-gradient-to-br from-blue-400/[0.06] via-transparent to-rose-400/[0.06]"
+  const fade   = darkMode
+    ? "from-[#0D0F1C] via-transparent to-[#0D0F1C]/80"
+    : "from-[#EEF1FF] via-transparent to-[#EEF1FF]/80"
+
   return (
-    <div className={cn("fixed inset-0 w-full h-full bg-[#0D0F1C] z-[-1]", className)}>
+<<<<<<< HEAD
+    <div
+      className={cn("fixed inset-0 w-full h-full z-[-1]", className)}
+      style={{ backgroundColor: bg }}
+    >
+      {/* Gradiente de ambiente */}
+      <div className={cn("absolute inset-0 blur-3xl", radial)} />
+
+=======
+    <div className={cn("geometric-bg fixed inset-0 w-full h-full z-[-1]", className)}>
       <div
         className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
+>>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
       <div className="absolute inset-0 overflow-hidden">
+        {/* Cápsula grande izquierda — cyan en dark, azul en light */}
         <ElegantShape
           delay={0.3}
-          width={600}
-          height={140}
-          rotate={12}
-          gradient="from-[#41EAFF]/[0.15]"
-          className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]" />
+          width={600} height={140} rotate={12}
+          darkGradient="from-[#41EAFF]/[0.15]"
+          lightGradient="from-[#5170FF]/[0.18]"
+          darkMode={darkMode}
+          className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+        />
 
+        {/* Cápsula grande derecha — coral en ambos modos */}
         <ElegantShape
           delay={0.5}
-          width={500}
-          height={120}
-          rotate={-15}
-          gradient="from-[#FF6D4D]/[0.15]"
-          className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]" />
+          width={500} height={120} rotate={-15}
+          darkGradient="from-[#FF6D4D]/[0.15]"
+          lightGradient="from-[#FF6D4D]/[0.16]"
+          darkMode={darkMode}
+          className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+        />
 
+        {/* Cápsula pequeña inferior izquierda — cyan en dark, cyan oscuro en light */}
         <ElegantShape
           delay={0.4}
-          width={300}
-          height={80}
-          rotate={-8}
-          gradient="from-[#41EAFF]/[0.15]"
-          className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]" />
+          width={300} height={80} rotate={-8}
+          darkGradient="from-[#41EAFF]/[0.15]"
+          lightGradient="from-[#41EAFF]/[0.20]"
+          darkMode={darkMode}
+          className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+        />
 
+        {/* Cápsula pequeña superior derecha — coral */}
         <ElegantShape
           delay={0.6}
-          width={200}
-          height={60}
-          rotate={20}
-          gradient="from-[#FF6D4D]/[0.15]"
-          className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]" />
+          width={200} height={60} rotate={20}
+          darkGradient="from-[#FF6D4D]/[0.15]"
+          lightGradient="from-[#FF6D4D]/[0.18]"
+          darkMode={darkMode}
+          className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
+        />
 
+        {/* Cápsula mínima superior centro-izquierda — azul */}
         <ElegantShape
           delay={0.7}
-          width={150}
-          height={40}
-          rotate={-25}
-          gradient="from-[#41EAFF]/[0.15]"
-          className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]" />
+          width={150} height={40} rotate={-25}
+          darkGradient="from-[#41EAFF]/[0.15]"
+          lightGradient="from-[#828AFF]/[0.22]"
+          darkMode={darkMode}
+          className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+        />
       </div>
 
-      {/* Glows laterales conservados */}
+      {/* Glows laterales de marca */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="hero-side-glow hero-side-glow-left" />
         <div className="hero-side-glow hero-side-glow-right" />
       </div>
 
+      {/* Fade top/bottom */}
       <div
-        className="absolute inset-0 bg-gradient-to-t from-[#0D0F1C] via-transparent to-[#0D0F1C]/80 pointer-events-none" />
+<<<<<<< HEAD
+        className={cn(
+          "absolute inset-0 bg-gradient-to-t pointer-events-none",
+          fade
+        )}
+      />
+=======
+        className="geometric-fade absolute inset-0 pointer-events-none" />
+>>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
     </div>
   );
 }
@@ -3773,9 +3838,9 @@ html.light .hero-motion-switch {
 /* Modo light: reducir intensidad */
 html.light .hero-grid-lines       { opacity: 0.25; }
 html.light .hero-scan-line        { opacity: 0.18; }
-html.light .hero-side-glow-left   { opacity: 0.30; }
-html.light .hero-side-glow-right  { opacity: 0.28; }
-html.light .hero-center-orb       { opacity: 0.20; }
+html.light .hero-side-glow-left   { opacity: 0.30; background: radial-gradient(ellipse 100% 60% at 0% 42%, rgba(81,112,255,0.18) 0%, rgba(81,112,255,0.08) 40%, transparent 75%); }
+html.light .hero-side-glow-right  { opacity: 0.28; background: radial-gradient(ellipse 100% 60% at 100% 52%, rgba(255,109,77,0.18) 0%, rgba(255,109,77,0.09) 40%, transparent 75%); }
+html.light .hero-center-orb       { opacity: 0.24; background: radial-gradient(circle, rgba(81,112,255,0.10) 0%, rgba(81,112,255,0.02) 45%, transparent 72%); }
 
 /* Hero shimmer premium compartido (viewport-locked) */
 .hero-shimmer {
@@ -3990,36 +4055,71 @@ html.light {
   --manifiesto-bg: rgba(238, 241, 255, 0.72);
 }
 
+/* ================================================================
+   PEGAR AL FINAL de src/index.css
+   Ajustes de light mode para el GeometricBackground en modo claro
+   ================================================================ */
 
-/* ── MODO CLARO — reset general ───────────────────────────────────
+/* Glows laterales — modo light más suaves */
+html.light .hero-side-glow-left  { opacity: 0.22; }
+html.light .hero-side-glow-right { opacity: 0.20; }
 
-   Problema: las clases dark: no aplican nada en modo light,
-   y los fondos de sección heredan el body blanco, que con el
-   canvas de partículas se veía mal. Fijamos todos los fondos
-   explícitamente para modo light.
-   ──────────────────────────────────────────────────────────────── */
+/* Navbar en modo claro — fondo con el nuevo color base */
+html.light header {
+  background: rgba(238, 241, 255, 0.86) !important;
+  border-bottom-color: rgba(81, 112, 255, 0.10) !important;
+}
 
-/* Body en modo light: fondo blanco cálido, sin el canvas dark */
+/* Body en modo claro — fondo base alineado con el GeometricBackground */
 html.light body {
-  background-color: #F8F7F4;
+  background-color: #EEF1FF;
   color: #0A0A18;
 }
 
-/* El canvas de fondo es fijo — en modo light lo opacamos */
-html.light canvas[aria-hidden="true"] {
-  opacity: 0.22;
+/* Secciones — fondos semi-transparentes para que las cápsulas
+   geométricas de fondo se vean a través */
+html.light #enfoque,
+html.light #productos,
+html.light #proceso,
+html.light #contenido,
+html.light #stack,
+html.light #connect {
+  background: rgba(238, 241, 255, 0.65);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
-/* ── Glass en modo light ─────────────────────────────────────────  */
+html.light #manifiesto {
+  background: rgba(230, 235, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Glass en modo claro */
 html.light .glass {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(10, 10, 24, 0.08);
-  box-shadow: 0 2px 24px rgba(81, 112, 255, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+<<<<<<< HEAD
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(81, 112, 255, 0.14);
+  box-shadow: 0 2px 20px rgba(81, 112, 255, 0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 html.light .glass-blue {
   background: rgba(81, 112, 255, 0.08);
-  border-color: rgba(81, 112, 255, 0.18);
+  border-color: rgba(81, 112, 255, 0.20);
+}
+
+/* Cards del Manifiesto */
+=======
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(10, 10, 24, 0.10);
+  box-shadow: 0 4px 40px rgba(81, 112, 255, 0.055), 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+html.light .glass-blue {
+  background: rgba(81, 112, 255, 0.10);
+  border-color: rgba(81, 112, 255, 0.20);
 }
 
 /* ── Navbar en modo light ─────────────────────────────────────────
@@ -4036,6 +4136,11 @@ html.light #manifiesto {
   background: var(--manifiesto-bg) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+html.light #manifiesto .rounded-2xl {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(81, 112, 255, 0.10) !important;
 }
 
 /* Ticker en modo light */
@@ -4074,33 +4179,90 @@ html.light .hero-side-glow-left  { opacity: 0.30; }
 html.light .hero-side-glow-right { opacity: 0.28; }
 
 /* ── Cards del Manifiesto en modo light ─────────────────────────  */
+>>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
 html.light #manifiesto .rounded-2xl {
-  background: rgba(255, 255, 255, 0.72);
-  border-color: rgba(10, 10, 24, 0.07);
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(81, 112, 255, 0.12) !important;
+  box-shadow: 0 2px 16px rgba(81, 112, 255, 0.06), inset 0 1px 0 rgba(255,255,255,0.95);
 }
 
-/* ── Panel de stats en modo light ───────────────────────────────  */
-html.light #manifiesto > div > div > div:last-child {
-  background: rgba(255, 255, 255, 0.65);
-  border-color: rgba(10, 10, 24, 0.07);
+/* Panel de métricas integradas en Manifiesto */
+html.light #manifiesto .backdrop-blur-xl {
+  background: rgba(255, 255, 255, 0.80) !important;
+  border-color: rgba(81, 112, 255, 0.12) !important;
+  box-shadow: 0 4px 24px rgba(81, 112, 255, 0.08);
 }
 
-/* ── Scroll-to-top en modo light ────────────────────────────────  */
-html.light #scroll-to-top {
-  background: rgba(255, 255, 255, 0.82);
-  border-color: rgba(10, 10, 24, 0.10);
-  color: #0A0A18;
+/* Ticker */
+html.light [class*="ticker"] span,
+html.light .ticker-track span { color: rgba(10, 10, 24, 0.42); }
+
+/* Hero shimmer en light */
+html.light .hero-shimmer {
+  background: linear-gradient(
+    90deg,
+    #5170FF 0%, #828AFF 30%,
+    #FF6D4D 55%, #828AFF 75%,
+    #5170FF 100%
+  ) !important;
+  background-size: 240% auto !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: heroShimmer 5s ease-in-out infinite alternate !important;
 }
 
+<<<<<<< HEAD
+/* Footer siempre oscuro */
+html.light footer { background: #09090D; color: #F5F5F0; }
+
+/* Proceso — iconos */
+html.light #proceso .backdrop-blur-sm {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(81, 112, 255, 0.14) !important;
+}
+
+/* Stack — chips */
+html.light #stack .glass {
+  background: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* Connect — inputs */
+html.light #connect input,
+html.light #connect textarea {
+  background: rgba(238, 241, 255, 0.85) !important;
+  border-color: rgba(81, 112, 255, 0.18) !important;
+  color: #0A0A18 !important;
+}
+html.light #connect input::placeholder,
+html.light #connect textarea::placeholder {
+  color: rgba(10, 10, 24, 0.36) !important;
+=======
 /* ── Footer en modo light ───────────────────────────────────────  */
 html.light footer {
-  background: rgba(238, 241, 255, 0.85);
+  background: rgba(238, 241, 255, 0.90);
   border-top-color: rgba(81, 112, 255, 0.10);
+}
+
+/* Geometric background para modo light */
+.geometric-bg {
+  background: #0D0F1C;
+}
+html.light .geometric-bg {
+  background: #F8F7F4;
+}
+
+.geometric-fade {
+  background: linear-gradient(to top, rgba(13, 15, 28, 0.78), transparent 45%, rgba(13, 15, 28, 0.54));
+}
+html.light .geometric-fade {
+  background: linear-gradient(to top, rgba(248, 247, 244, 0.86), transparent 45%, rgba(248, 247, 244, 0.58));
 }
 
 /* ── Proceso: iconos en modo light ──────────────────────────────  */
 html.light #proceso .dark\:bg-\[rgba\(5\,8\,40\,0\.70\)\] {
   background: rgba(255, 255, 255, 0.85) !important;
+>>>>>>> d651d99eacd12f57fb8c58d3a2c0960f19000765
 }
 </file>
 
@@ -4402,14 +4564,12 @@ import { motion, useInView } from 'framer-motion'
 const tags_es = ['Diseño UX/UI', 'IA Generativa', 'Branding', 'Diseño Industrial', 'Métricas', 'Automatización', 'Data storytelling']
 const tags_en = ['UX/UI Design', 'Generative AI', 'Branding', 'Industrial Design', 'Metrics', 'Automation', 'Data storytelling']
 
-// Palabras clave que aparecen en coral
 const CORAL_ES = new Set(['núcleo', 'sistema,', 'solución', 'diseño,', 'IA', 'automatización.'])
 const CORAL_EN = new Set(['core', 'system,', 'solution', 'design,', 'AI', 'automation.'])
 
 export default function Enfoque({ lang }) {
   const ref    = useRef()
-  // margin negativo grande = se dispara cuando ya está bien visible en pantalla
-  const inView = useInView(ref, { once: true, margin: '-120px' })
+  const inView = useInView(ref, { once: true, margin: '-100px' })
 
   const text     = lang === 'es'
     ? 'Construimos desde el núcleo hacia afuera — del usuario al sistema, del problema a la solución — combinando diseño, IA y automatización.'
@@ -4418,29 +4578,15 @@ export default function Enfoque({ lang }) {
   const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
   const tags     = lang === 'es' ? tags_es : tags_en
 
-  // Dividimos en tokens: cada caracter es una unidad, los espacios también
-  const chars = text.split('')
+  // Dividimos por PALABRA (no caracter) para mantener word-wrap correcto.
+  // Dentro de cada palabra animamos caracter por caracter.
+  const words = text.split(' ')
 
-  // Función para determinar a qué palabra pertenece el char[i]
-  // Necesario para el color coral por palabra
-  const words      = text.split(' ')
-  const wordBounds = []
-  let cursor = 0
-  for (const w of words) {
-    wordBounds.push({ start: cursor, end: cursor + w.length - 1, word: w })
-    cursor += w.length + 1 // +1 por el espacio
-  }
-
-  const getColor = (charIndex, revealed) => {
-    if (!revealed) return 'rgba(130,138,170,0.22)' // gris fantasma antes de revelar
-    const wordEntry = wordBounds.find(wb => charIndex >= wb.start && charIndex <= wb.end)
-    const isCoral   = wordEntry && coralSet.has(wordEntry.word)
-    return isCoral ? '#FF6D4D' : 'inherit'  // inherit = blanco en dark, dark en light
-  }
+  // Índice global de caracter para calcular el delay
+  let globalCharIdx = 0
 
   return (
     <section id="enfoque" className="py-20 px-6 relative overflow-hidden">
-      {/* Orbe decorativo */}
       <div
         className="absolute top-[-60px] right-[-40px] w-[320px] h-[320px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(ellipse,rgba(81,112,255,.07) 0%,transparent 70%)', filter: 'blur(40px)' }}
@@ -4463,31 +4609,64 @@ export default function Enfoque({ lang }) {
           </span>
         </motion.div>
 
-        {/* Texto carácter por carácter */}
+        {/* Texto carácter por carácter — centrado y con word-wrap correcto */}
         <p
           ref={ref}
-          className="text-center font-cal text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.22] max-w-[800px] tracking-[-0.5px] dark:text-white text-b-dark"
+          className="font-cal text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.22] tracking-[-0.5px] dark:text-white text-b-dark"
           aria-label={text}
+          style={{
+            textAlign: 'center',
+            width: '100%',
+            maxWidth: '820px',
+            /* Permitir que el texto fluya y se centre correctamente */
+            wordBreak: 'break-word',
+          }}
         >
-          {chars.map((ch, i) => (
-            <motion.span
-              key={i}
-              aria-hidden="true"
-              style={{ display: 'inline' }}
-              initial={{ color: 'rgba(130,138,170,0.20)' }}
-              animate={inView
-                ? { color: getColor(i, true) }
-                : { color: 'rgba(130,138,170,0.20)' }
-              }
-              transition={{
-                delay:    i * 0.018,   // más rápido que antes: 18ms por char
-                duration: 0.40,
-                ease:     [0.16, 1, 0.3, 1],
-              }}
-            >
-              {ch === ' ' ? '\u00A0' : ch}
-            </motion.span>
-          ))}
+          {words.map((word, wi) => {
+            const isCoral = coralSet.has(word)
+            const chars   = word.split('')
+            const wordStart = globalCharIdx
+            globalCharIdx  += word.length + 1 // +1 por el espacio
+
+            return (
+              /* Cada palabra es un span que no rompe internamente pero sí entre palabras */
+              <span key={wi} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+                {chars.map((ch, ci) => {
+                  const charDelay = (wordStart + ci) * 0.016
+                  return (
+                    <motion.span
+                      key={ci}
+                      aria-hidden="true"
+                      style={{ display: 'inline' }}
+                      initial={{ color: 'rgba(130,138,170,0.22)' }}
+                      animate={inView
+                        ? { color: isCoral ? '#FF6D4D' : 'inherit' }
+                        : { color: 'rgba(130,138,170,0.22)' }
+                      }
+                      transition={{ delay: charDelay, duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      {ch}
+                    </motion.span>
+                  )
+                })}
+                {/* Espacio entre palabras — visible y permite word-wrap */}
+                {wi < words.length - 1 && (
+                  <motion.span
+                    aria-hidden="true"
+                    style={{ display: 'inline' }}
+                    initial={{ color: 'rgba(130,138,170,0.22)' }}
+                    animate={inView
+                      ? { color: 'inherit' }
+                      : { color: 'rgba(130,138,170,0.22)' }
+                    }
+                    transition={{ delay: (wordStart + word.length) * 0.016, duration: 0.38 }}
+                  >
+                    {' '}
+                  </motion.span>
+                )}
+              </span>
+            )
+          })}
         </p>
 
         {/* Tags */}
@@ -4848,7 +5027,7 @@ export default function Hero({ lang }) {
         {/* Scroll hint */}
         <motion.div
           variants={variants.item}
-          className="flex items-center gap-2 dark:text-white/25 text-black/30 text-xs font-medium mt-4"
+          className="flex items-center gap-2 dark:text-white/25 text-black/45 text-xs font-medium mt-4"
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
         >
@@ -5707,6 +5886,10 @@ export default {
   },
   plugins: [],
 }
+</file>
+
+<file path="Untitled-1">
+
 </file>
 
 <file path="vercel.json">
