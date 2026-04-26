@@ -4,14 +4,12 @@ import { motion, useInView } from 'framer-motion'
 const tags_es = ['Diseño UX/UI', 'IA Generativa', 'Branding', 'Diseño Industrial', 'Métricas', 'Automatización', 'Data storytelling']
 const tags_en = ['UX/UI Design', 'Generative AI', 'Branding', 'Industrial Design', 'Metrics', 'Automation', 'Data storytelling']
 
-// Palabras clave que aparecen en coral
 const CORAL_ES = new Set(['núcleo', 'sistema,', 'solución', 'diseño,', 'IA', 'automatización.'])
 const CORAL_EN = new Set(['core', 'system,', 'solution', 'design,', 'AI', 'automation.'])
 
 export default function Enfoque({ lang }) {
   const ref    = useRef()
-  // margin negativo grande = se dispara cuando ya está bien visible en pantalla
-  const inView = useInView(ref, { once: true, margin: '-120px' })
+  const inView = useInView(ref, { once: true, margin: '-100px' })
 
   const text     = lang === 'es'
     ? 'Construimos desde el núcleo hacia afuera — del usuario al sistema, del problema a la solución — combinando diseño, IA y automatización.'
@@ -20,29 +18,15 @@ export default function Enfoque({ lang }) {
   const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
   const tags     = lang === 'es' ? tags_es : tags_en
 
-  // Dividimos en tokens: cada caracter es una unidad, los espacios también
-  const chars = text.split('')
+  // Dividimos por PALABRA (no caracter) para mantener word-wrap correcto.
+  // Dentro de cada palabra animamos caracter por caracter.
+  const words = text.split(' ')
 
-  // Función para determinar a qué palabra pertenece el char[i]
-  // Necesario para el color coral por palabra
-  const words      = text.split(' ')
-  const wordBounds = []
-  let cursor = 0
-  for (const w of words) {
-    wordBounds.push({ start: cursor, end: cursor + w.length - 1, word: w })
-    cursor += w.length + 1 // +1 por el espacio
-  }
-
-  const getColor = (charIndex, revealed) => {
-    if (!revealed) return 'rgba(130,138,170,0.22)' // gris fantasma antes de revelar
-    const wordEntry = wordBounds.find(wb => charIndex >= wb.start && charIndex <= wb.end)
-    const isCoral   = wordEntry && coralSet.has(wordEntry.word)
-    return isCoral ? '#FF6D4D' : 'inherit'  // inherit = blanco en dark, dark en light
-  }
+  // Índice global de caracter para calcular el delay
+  let globalCharIdx = 0
 
   return (
     <section id="enfoque" className="py-20 px-6 relative overflow-hidden">
-      {/* Orbe decorativo */}
       <div
         className="absolute top-[-60px] right-[-40px] w-[320px] h-[320px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(ellipse,rgba(81,112,255,.07) 0%,transparent 70%)', filter: 'blur(40px)' }}
@@ -65,31 +49,64 @@ export default function Enfoque({ lang }) {
           </span>
         </motion.div>
 
-        {/* Texto carácter por carácter */}
+        {/* Texto carácter por carácter — centrado y con word-wrap correcto */}
         <p
           ref={ref}
-          className="text-center font-cal text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.22] max-w-[800px] tracking-[-0.5px] dark:text-white text-b-dark"
+          className="font-cal text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.22] tracking-[-0.5px] dark:text-white text-b-dark"
           aria-label={text}
+          style={{
+            textAlign: 'center',
+            width: '100%',
+            maxWidth: '820px',
+            /* Permitir que el texto fluya y se centre correctamente */
+            wordBreak: 'break-word',
+          }}
         >
-          {chars.map((ch, i) => (
-            <motion.span
-              key={i}
-              aria-hidden="true"
-              style={{ display: 'inline' }}
-              initial={{ color: 'rgba(130,138,170,0.20)' }}
-              animate={inView
-                ? { color: getColor(i, true) }
-                : { color: 'rgba(130,138,170,0.20)' }
-              }
-              transition={{
-                delay:    i * 0.018,   // más rápido que antes: 18ms por char
-                duration: 0.40,
-                ease:     [0.16, 1, 0.3, 1],
-              }}
-            >
-              {ch === ' ' ? '\u00A0' : ch}
-            </motion.span>
-          ))}
+          {words.map((word, wi) => {
+            const isCoral = coralSet.has(word)
+            const chars   = word.split('')
+            const wordStart = globalCharIdx
+            globalCharIdx  += word.length + 1 // +1 por el espacio
+
+            return (
+              /* Cada palabra es un span que no rompe internamente pero sí entre palabras */
+              <span key={wi} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+                {chars.map((ch, ci) => {
+                  const charDelay = (wordStart + ci) * 0.016
+                  return (
+                    <motion.span
+                      key={ci}
+                      aria-hidden="true"
+                      style={{ display: 'inline' }}
+                      initial={{ color: 'rgba(130,138,170,0.22)' }}
+                      animate={inView
+                        ? { color: isCoral ? '#FF6D4D' : 'inherit' }
+                        : { color: 'rgba(130,138,170,0.22)' }
+                      }
+                      transition={{ delay: charDelay, duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      {ch}
+                    </motion.span>
+                  )
+                })}
+                {/* Espacio entre palabras — visible y permite word-wrap */}
+                {wi < words.length - 1 && (
+                  <motion.span
+                    aria-hidden="true"
+                    style={{ display: 'inline' }}
+                    initial={{ color: 'rgba(130,138,170,0.22)' }}
+                    animate={inView
+                      ? { color: 'inherit' }
+                      : { color: 'rgba(130,138,170,0.22)' }
+                    }
+                    transition={{ delay: (wordStart + word.length) * 0.016, duration: 0.38 }}
+                  >
+                    {' '}
+                  </motion.span>
+                )}
+              </span>
+            )
+          })}
         </p>
 
         {/* Tags */}
