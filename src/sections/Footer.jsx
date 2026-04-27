@@ -18,14 +18,12 @@ const products = [
 ]
 
 export default function Footer({ lang }) {
-  const t    = (es, en) => (lang === 'es' ? es : en)
+  const t    = (es, en) => lang === 'es' ? es : en
   const year = new Date().getFullYear()
 
   return (
-    /* Footer siempre oscuro en ambos modos */
-    <footer className="relative z-10 px-6 pb-8 pt-20 overflow-hidden bg-[#09090D]">
-
-      {/* Línea superior decorativa */}
+    /* Footer siempre oscuro — bg hardcodeado, nunca hereda el modo */
+    <footer className="relative z-10 px-6 pb-8 pt-20 overflow-hidden" style={{ background: '#09090D', color: '#F5F5F0' }}>
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
         style={{ background: 'linear-gradient(to right,transparent,rgba(81,112,255,.22),transparent)' }}
@@ -33,7 +31,7 @@ export default function Footer({ lang }) {
 
       <div className="max-w-[1200px] mx-auto">
 
-        {/* ── CTA grande ──────────────────────────────────────── */}
+        {/* CTA grande — texto siempre blanco */}
         <motion.div
           className="flex flex-col items-center text-center gap-6 pb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -41,10 +39,10 @@ export default function Footer({ lang }) {
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/25">
+          <p style={{ color: 'rgba(255,255,255,0.28)' }} className="text-[12px] font-bold tracking-[0.12em] uppercase">
             {t('¿Listo para construir?', 'Ready to build?')}
           </p>
-          <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl text-white leading-tight tracking-[-1.5px]">
+          <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl leading-tight tracking-[-1.5px]" style={{ color: '#FFFFFF' }}>
             {t('Hagamos algo', "Let's build something")}
             <br />
             <span className="text-grad">{t('que funcione.', 'that works.')}</span>
@@ -57,66 +55,68 @@ export default function Footer({ lang }) {
           </a>
         </motion.div>
 
-        {/* ── Grid de links ────────────────────────────────────── */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 border-t border-white/[0.06] pt-10 pb-8">
+        {/* Grid de links */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase" style={{ color: 'rgba(255,255,255,0.28)' }}>
               {t('Navegación', 'Navigation')}
             </span>
-            {navLinks.map((l) => (
+            {navLinks.map(l => (
               <a key={l.href} href={l.href}
-                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
+                className="text-sm transition-colors duration-200 hover:text-white"
+                style={{ color: 'rgba(255,255,255,0.45)' }}>
                 {t(l.es, l.en)}
               </a>
             ))}
           </div>
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase" style={{ color: 'rgba(255,255,255,0.28)' }}>
               {t('Productos', 'Products')}
             </span>
-            {products.map((p) => (
+            {products.map(p => (
               <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer"
-                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
+                className="text-sm transition-colors duration-200 hover:text-white"
+                style={{ color: 'rgba(255,255,255,0.45)' }}>
                 {p.label}
               </a>
             ))}
           </div>
           <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">Social</span>
-            {social.map((s) => (
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase" style={{ color: 'rgba(255,255,255,0.28)' }}>
+              Social
+            </span>
+            {social.map(s => (
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
+                className="text-sm transition-colors duration-200 hover:text-white"
+                style={{ color: 'rgba(255,255,255,0.45)' }}>
                 {s.label}
               </a>
             ))}
           </div>
         </div>
 
-        {/* ── Barra inferior ────────────────────────────────────
-             Estructura: [Logo + nombre] [Copyright] [Tagline]
-             Igual en dark y light — siempre sobre fondo oscuro.
-        ────────────────────────────────────────────────────── */}
-        <div className="border-t border-white/[0.06] pt-7 grid grid-cols-3 items-center gap-4">
-
-          {/* Izquierda — logo un solo color blanco */}
-          <a href="#hero" className="flex items-center gap-2 group" aria-label="Concéntrico Lab">
+        {/* ── Barra inferior: Logo | Copyright | Tagline ── */}
+        <div
+          className="pt-7 grid grid-cols-3 items-center gap-4"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+        >
+          {/* Izquierda — solo logo, sin texto */}
+          <a href="#hero" className="flex items-center gap-0 group" aria-label="Concéntrico Lab">
             <img
               src="/assets/images/logo.png"
-              alt=""
-              className="h-5 w-auto brightness-0 invert opacity-55 group-hover:opacity-90 transition-opacity duration-200"
+              alt="Concéntrico Lab"
+              className="h-5 w-auto opacity-55 group-hover:opacity-90 transition-opacity duration-200"
+              style={{ filter: 'brightness(0) invert(1)' }}
             />
-            <span className="font-cal text-[13px] tracking-tight text-white/55 group-hover:text-white/90 transition-colors duration-200 hidden sm:inline whitespace-nowrap">
-              CONCÉNTRICO LAB
-            </span>
           </a>
 
           {/* Centro — copyright */}
-          <p className="text-[11px] text-white/30 text-center">
+          <p className="text-[11px] text-center" style={{ color: 'rgba(255,255,255,0.30)' }}>
             © {year} Concéntrico Lab. Bogotá, Colombia.
           </p>
 
           {/* Derecha — tagline */}
-          <p className="text-[11px] text-white/30 text-right italic hidden sm:block">
+          <p className="text-[11px] text-right italic hidden sm:block" style={{ color: 'rgba(255,255,255,0.30)' }}>
             {t('Construido con diseño, IA y mucho café.', 'Built with design, AI and a lot of coffee.')}
           </p>
         </div>

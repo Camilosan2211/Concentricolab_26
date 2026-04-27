@@ -14,13 +14,13 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
 
-  useEffect(()=>{
-    const fn = ()=> setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', fn, {passive:true})
-    return ()=> window.removeEventListener('scroll', fn)
-  },[])
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', fn, { passive: true })
+    return () => window.removeEventListener('scroll', fn)
+  }, [])
 
-  const t = (es,en) => lang==='es' ? es : en
+  const t = (es, en) => lang === 'es' ? es : en
 
   const toggleDark = () => {
     setDark(d => {
@@ -34,50 +34,63 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
       <header className={clsx(
         'fixed top-0 left-0 w-full z-50 flex flex-col items-center transition-all duration-400',
         scrolled
-          /* dark — más glass, menos opaco */
-          ? 'dark:bg-[rgba(0,3,31,.42)] bg-[rgba(255,255,255,.55)] backdrop-blur-2xl border-b dark:border-white/[0.06] border-black/[0.07] shadow-[0_2px_24px_rgba(0,0,0,.10)]'
-          : 'backdrop-blur-none'
+          ? [
+              'backdrop-blur-2xl border-b shadow-[0_2px_24px_rgba(0,0,0,.08)]',
+              // dark: azul muy oscuro semitransparente
+              'dark:bg-[rgba(0,3,31,0.42)] dark:border-white/[0.06]',
+              // light: fondo lavanda más transparente para ver las cápsulas
+              'bg-[rgba(220,225,255,0.38)] border-[rgba(81,112,255,0.12)]',
+            ]
+          : 'backdrop-blur-none',
       )}>
-        {/* Notch pill */}
+        {/* Notch */}
         <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-[60px] mb-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse"/>
+          <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
           <span className="text-white text-[11px] font-medium tracking-wide">
-            {t('Trabajando en nuevos proyectos ✦','Working on new projects ✦')}
+            {t('Trabajando en nuevos proyectos ✦', 'Working on new projects ✦')}
           </span>
         </div>
 
-        {/* Bar */}
         <div className="w-full max-w-[1200px] flex items-center justify-between px-6 lg:px-10 py-3">
           <a href="#hero" className="flex items-center gap-2">
-            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto"/>
+            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto" />
           </a>
 
-          {/* Desktop nav */}
+          {/* Desktop nav — texto legible en ambos modos */}
           <nav className="hidden md:flex items-center gap-7">
-            {navLinks.map(l=>(
+            {navLinks.map(l => (
               <a key={l.href} href={l.href}
-                className="text-sm dark:text-white/55 text-black/55 hover:dark:text-white hover:text-black font-medium transition-colors duration-200 relative group">
-                {t(l.es,l.en)}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300"/>
+                className="text-sm font-medium transition-colors duration-200 relative group dark:text-white/60 text-[#0A0A18]/70 hover:dark:text-white hover:text-[#0A0A18]">
+                {t(l.es, l.en)}
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300" />
               </a>
             ))}
           </nav>
 
-          {/* Controls */}
           <div className="flex items-center gap-2">
-            {/* Light/Dark toggle */}
+            {/* Theme toggle — con border explícito en light para visibilidad */}
             <button
               onClick={toggleDark}
               aria-label="Toggle theme"
-              className="glass w-9 h-9 rounded-full flex items-center justify-center dark:text-white/60 text-black/50 hover:dark:text-white hover:text-black transition-colors duration-200"
+              className={clsx(
+                'w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200',
+                'dark:bg-white/[0.07] dark:border dark:border-white/[0.10] dark:text-white/60 hover:dark:text-white',
+                'bg-white/60 border border-[rgba(81,112,255,0.30)] text-[#0A0A18]/65 hover:text-[#0A0A18]',
+                'backdrop-blur-sm',
+              )}
             >
-              {dark ? <Sun size={15}/> : <Moon size={15}/>}
+              {dark ? <Sun size={15} /> : <Moon size={15} />}
             </button>
 
             {/* Lang toggle */}
             <button
-              onClick={()=> setLang(l => l==='es'?'en':'es')}
-              className="glass dark:text-white/60 text-black/50 text-[13px] font-bold px-3.5 py-1.5 rounded-full hover:dark:text-white hover:text-black transition-all duration-200"
+              onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
+              className={clsx(
+                'text-[13px] font-bold px-3.5 py-1.5 rounded-full transition-all duration-200',
+                'dark:bg-white/[0.07] dark:border dark:border-white/[0.10] dark:text-white/60 hover:dark:text-white',
+                'bg-white/60 border border-[rgba(81,112,255,0.30)] text-[#0A0A18]/65 hover:text-[#0A0A18]',
+                'backdrop-blur-sm',
+              )}
             >
               {lang.toUpperCase()}
             </button>
@@ -85,15 +98,19 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
             {/* CTA */}
             <a href="#productos"
               className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(81,112,255,.45)] transition-all duration-200">
-              {t('Explorar','Explore')}
+              {t('Explorar', 'Explore')}
             </a>
 
             {/* Mobile menu */}
             <button
-              className="md:hidden glass w-9 h-9 rounded-full flex items-center justify-center dark:text-white/70 text-black/60"
-              onClick={()=>setOpen(o=>!o)}
+              className={clsx(
+                'md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200',
+                'dark:bg-white/[0.07] dark:border dark:border-white/[0.10] dark:text-white/70',
+                'bg-white/60 border border-[rgba(81,112,255,0.30)] text-[#0A0A18]/65',
+              )}
+              onClick={() => setOpen(o => !o)}
               aria-label="Menu">
-              {open ? <X size={16}/> : <Menu size={16}/>}
+              {open ? <X size={16} /> : <Menu size={16} />}
             </button>
           </div>
         </div>
@@ -103,26 +120,28 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-40 flex flex-col pt-28 px-6 pb-8 dark:bg-[rgba(0,3,31,.94)] bg-[rgba(248,247,244,.96)] backdrop-blur-2xl"
-            initial={{opacity:0,y:-16}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-16}}
-            transition={{duration:.25,ease:[.22,1,.36,1]}}>
+            className="fixed inset-0 z-40 flex flex-col pt-28 px-6 pb-8 dark:bg-[rgba(0,3,31,.94)] bg-[rgba(220,225,255,.92)] backdrop-blur-2xl"
+            initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: .25, ease: [.22, 1, .36, 1] }}>
             <nav className="flex flex-col gap-4">
-              {navLinks.map((l,i)=>(
+              {navLinks.map((l, i) => (
                 <motion.a key={l.href} href={l.href}
-                  className="font-cal text-3xl dark:text-white text-b-dark"
-                  onClick={()=>setOpen(false)}
-                  initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}}
-                  transition={{delay:i*.05,duration:.3}}>
-                  {t(l.es,l.en)}
+                  className="font-cal text-3xl dark:text-white text-[#0A0A18]"
+                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * .05, duration: .3 }}>
+                  {t(l.es, l.en)}
                 </motion.a>
               ))}
             </nav>
             <div className="mt-auto flex gap-3">
-              <button onClick={toggleDark} className="glass px-4 py-2 rounded-full text-sm dark:text-white/70 text-black/60">
+              <button onClick={toggleDark}
+                className="border border-[rgba(81,112,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm dark:text-white/70 text-[#0A0A18]/70">
                 {dark ? '☀ Claro' : '☾ Oscuro'}
               </button>
-              <button onClick={()=>setLang(l=>l==='es'?'en':'es')} className="glass px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-black/60">
-                {lang==='es'?'EN':'ES'}
+              <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
+                className="border border-[rgba(81,112,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-[#0A0A18]/70">
+                {lang === 'es' ? 'EN' : 'ES'}
               </button>
             </div>
           </motion.div>

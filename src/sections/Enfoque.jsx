@@ -4,13 +4,12 @@ import { motion, useInView } from 'framer-motion'
 const tags_es = ['Diseño UX/UI', 'IA Generativa', 'Branding', 'Diseño Industrial', 'Métricas', 'Automatización', 'Data storytelling']
 const tags_en = ['UX/UI Design', 'Generative AI', 'Branding', 'Industrial Design', 'Metrics', 'Automation', 'Data storytelling']
 
-// Palabras que aparecen en coral
 const CORAL_ES = new Set(['núcleo', 'sistema,', 'solución', 'diseño,', 'IA', 'automatización.'])
 const CORAL_EN = new Set(['core', 'system,', 'solution', 'design,', 'AI', 'automation.'])
 
 export default function Enfoque({ lang }) {
   const ref    = useRef()
-  const inView = useInView(ref, { once: true, margin: '-100px' })
+  const inView = useInView(ref, { once: true, margin: '-80px' })
 
   const text     = lang === 'es'
     ? 'Construimos desde el núcleo hacia afuera — del usuario al sistema, del problema a la solución — combinando diseño, IA y automatización.'
@@ -45,12 +44,11 @@ export default function Enfoque({ lang }) {
         </motion.div>
 
         {/*
-          EFECTO: "Spotlight reveal" por palabra.
-          Cada palabra arranca invisible y con un ligero blur,
-          luego aparece y sube levemente al entrar en viewport.
-          Las palabras clave emergen en coral con un glow pulsante.
-          Mucho más visible que caracter-por-caracter y más
-          compatible con el word-wrap natural del texto largo.
+          Animación: cada palabra arranca gris-fantasma (visible en ambos modos),
+          luego se revela: palabras normales → blanco en dark / dark en light,
+          palabras clave → coral con textShadow glow.
+          Se usa `style` directo para el color final para evitar que Tailwind
+          sobreescriba con clases dark:/text- que fallan en animación.
         */}
         <p
           ref={ref}
@@ -58,40 +56,41 @@ export default function Enfoque({ lang }) {
           aria-label={text}
         >
           {words.map((word, i) => {
-            const isCoral = coralSet.has(word)
+            const isCoral  = coralSet.has(word)
+            // Color final según modo — resuelto en el cliente vía clase CSS
+            // que se aplica al <span> padre, pero la animación lo sobreescribe.
+            // Usamos 'currentColor' como base para que herede el modo.
+            const finalColor = isCoral ? '#FF6D4D' : undefined  // undefined = hereda del CSS
+
             return (
               <motion.span
                 key={i}
                 aria-hidden="true"
-                style={{
-                  display: 'inline-block',
-                  marginRight: '0.25em',
-                  // Si es palabra clave: glow pulsante en coral
-                  ...(isCoral && inView ? {
-                    textShadow: '0 0 28px rgba(255,109,77,0.55)',
-                  } : {}),
-                }}
                 initial={{
                   opacity: 0,
-                  y: 22,
-                  filter: 'blur(8px)',
-                  color: isCoral ? '#FF6D4D' : 'inherit',
+                  y: 18,
+                  filter: 'blur(6px)',
+                  color: 'rgba(140, 148, 180, 0.38)',   // gris-azulado fantasma, visible en ambos modos
                 }}
                 animate={inView ? {
                   opacity: 1,
                   y: 0,
                   filter: 'blur(0px)',
-                  color: isCoral ? '#FF6D4D' : 'inherit',
+                  color: isCoral ? '#FF6D4D' : 'var(--enfoque-text)',
+                  ...(isCoral ? { textShadow: '0 0 22px rgba(255,109,77,0.45)' } : {}),
                 } : {
                   opacity: 0,
-                  y: 22,
-                  filter: 'blur(8px)',
+                  y: 18,
+                  filter: 'blur(6px)',
+                  color: 'rgba(140, 148, 180, 0.38)',
                 }}
                 transition={{
                   delay: i * 0.055,
-                  duration: 0.55,
+                  duration: 0.52,
                   ease: [0.16, 1, 0.3, 1],
+                  textShadow: { duration: 0.8, delay: i * 0.055 + 0.3 },
                 }}
+                style={{ display: 'inline-block', marginRight: '0.26em' }}
               >
                 {word}
               </motion.span>
