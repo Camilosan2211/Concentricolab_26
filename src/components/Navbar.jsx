@@ -31,20 +31,21 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
 
   return (
     <>
-      <header className={clsx(
+      <header 
+        className={clsx(
         'fixed top-0 left-0 w-full z-50 flex flex-col items-center transition-all duration-400',
-        scrolled
-          ? [
-              'backdrop-blur-xl border-b',
-              'dark:bg-[rgba(0,3,31,0.52)] dark:border-white/[0.06] dark:shadow-sm',
-              'bg-[rgba(248,247,244,0.88)] border-[rgba(81,112,255,0.15)] shadow-[0_2px_16px_rgba(0,0,0,.06)]',
-            ]
-          : [
-              // No scrolled: fondo claro/transparente
-              'dark:bg-transparent',
-              'bg-[rgba(248,247,244,0.4)]',
-            ],
-      )}>
+        scrolled && 'border-b',
+      )}
+      style={scrolled ? {
+        background: dark ? 'rgba(0, 3, 31, 0.52)' : 'rgba(248, 247, 244, 0.48)',
+        borderColor: dark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(81, 112, 255, 0.15)',
+        boxShadow: dark ? '0 2px 12px rgba(0, 0, 0, 0.2)' : '0 2px 16px rgba(0, 0, 0, 0.06)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+      } : {
+        background: dark ? 'transparent' : 'rgba(248, 247, 244, 0.4)',
+      }}
+      >
         {/* Notch */}
         <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-[60px] mb-1">
           <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
