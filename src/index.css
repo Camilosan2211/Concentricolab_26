@@ -615,9 +615,12 @@
    :root                 { --enfoque-text: #F5F5F0; }   /* dark: blanco cálido */
    html.light            { --enfoque-text: #0A0A18; }   /* light: casi negro   */
    
-   /* ── Variable fondo Manifiesto ────────────────────────────────── */
+   /* ── Variable fondo Manifiesto y secciones brand glass ─────────── */
    :root       { --manifiesto-bg: rgba(0, 3, 31, 0.72); }
-   html.light  { --manifiesto-bg: rgba(81, 112, 255, 0.14); }
+   html.light {
+     --manifiesto-bg: rgba(3, 6, 40, 0.9);
+     --section-brand-glass: rgba(3, 6, 40, 0.32);
+   }
    
    /* ── Body ────────────────────────────────────────────────────── */
    html.light body {
@@ -671,16 +674,17 @@
       que da dinamismo al scroll en modo claro.
       ──────────────────────────────────────────────────────────── */
    html.light #manifiesto {
-     background: rgba(10, 10, 24, 0.85);
+     background: rgba(3, 6, 40, 0.9);
      backdrop-filter: blur(8px);
      -webkit-backdrop-filter: blur(8px);
      color: #F5F5F0;
    }
    
    html.light #proceso {
-     background: rgba(10, 10, 24, 0.65);
-     backdrop-filter: blur(4px);
-     -webkit-backdrop-filter: blur(4px);
+     background: rgba(3, 6, 40, 0.9);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     color: #F5F5F0;
    }
    
    /* ── GLASS — semitransparente para ver el fondo ──────────────
@@ -708,34 +712,37 @@
    /* ── Cards del Manifiesto ───────────────────────────────────── */
    html.light #manifiesto [class*="rounded-2xl"],
    html.light #manifiesto .rounded-2xl {
-     background: rgba(255, 255, 255, 0.48) !important;
-     border: 1px solid rgba(255, 255, 255, 0.68) !important;
+     background: rgba(5, 8, 40, 0.55) !important;
+     border: 1px solid rgba(255, 255, 255, 0.07) !important;
      backdrop-filter: blur(10px) !important;
      -webkit-backdrop-filter: blur(10px) !important;
-     box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 4px 16px rgba(81,112,255,0.06) !important;
+     box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 4px 16px rgba(81,112,255,0.06) !important;
    }
    
-   /* Texto dentro de Manifiesto — blanco para contraste con fondo oscuro */
+   /* Texto dentro de Manifiesto — usa los colores claros como en modo oscuro */
    html.light #manifiesto h1,
    html.light #manifiesto h2,
-   html.light #manifiesto h3 {
-     color: #F5F5F0 !important;
-   }
+   html.light #manifiesto h3,
    html.light #manifiesto p,
-   html.light #manifiesto span {
-     color: rgba(245, 245, 240, 0.85) !important;
-   }
-   html.light #manifiesto .dark\:text-white {
+   html.light #manifiesto .dark\:text-white,
+   html.light #manifiesto .dark\:text-white\/45,
+   html.light #manifiesto .text-b-dark {
      color: #F5F5F0 !important;
    }
-   html.light #manifiesto .dark\:text-white\/45 {
-     color: rgba(245, 245, 240, 0.65) !important;
+   html.light #manifiesto .text-black\/40,
+   html.light #manifiesto .text-black\/45,
+   html.light #manifiesto .text-black\/50,
+   html.light #manifiesto .text-black\/55 {
+     color: rgba(245, 245, 240, 0.55) !important;
+   }
+   html.light #manifiesto .glow-number {
+     text-shadow: 0 0 14px currentColor, 0 0 28px currentColor;
    }
    
    /* Panel métricas */
    html.light #manifiesto .backdrop-blur-xl {
-     background: rgba(255, 255, 255, 0.52) !important;
-     border: 1px solid rgba(255, 255, 255, 0.64) !important;
+     background: rgba(5, 8, 40, 0.55) !important;
+     border: 1px solid rgba(255, 255, 255, 0.07) !important;
      backdrop-filter: blur(10px) !important;
      -webkit-backdrop-filter: blur(10px) !important;
    }
@@ -759,14 +766,32 @@
    /* ── Proceso ────────────────────────────────────────────────── */
    html.light #proceso [class*="glass"],
    html.light #proceso [class*="rounded-3xl"] {
-     background: rgba(255, 255, 255, 0.48) !important;
-     border: 1px solid rgba(255, 255, 255, 0.68) !important;
+     background: rgba(5, 8, 40, 0.55) !important;
+     border: 1px solid rgba(255, 255, 255, 0.07) !important;
      backdrop-filter: blur(10px) !important;
      -webkit-backdrop-filter: blur(10px) !important;
    }
    html.light #proceso .backdrop-blur-sm {
-     background: rgba(255, 255, 255, 0.68) !important;
-     border: 1px solid rgba(255, 255, 255, 0.82) !important;
+     background: rgba(5, 8, 40, 0.55) !important;
+     border: 1px solid rgba(255, 255, 255, 0.07) !important;
+   }
+   
+   /* Texto dentro de Proceso — usa los colores claros como en modo oscuro */
+   html.light #proceso h1,
+   html.light #proceso h2,
+   html.light #proceso h3,
+   html.light #proceso p,
+   html.light #proceso .dark\:text-white,
+   html.light #proceso .dark\:text-white\/45,
+   html.light #proceso .text-b-dark {
+     color: #F5F5F0 !important;
+   }
+   html.light #proceso .text-black\/35,
+   html.light #proceso .text-black\/40,
+   html.light #proceso .text-black\/45,
+   html.light #proceso .text-black\/50,
+   html.light #proceso .text-black\/55 {
+     color: rgba(245, 245, 240, 0.55) !important;
    }
    
    /* ── Stack chips ────────────────────────────────────────────── */
@@ -812,8 +837,26 @@
    html.light [class*="ticker"] span,
    html.light .ticker-track span { color: rgba(10, 10, 24, 0.40); }
    
-   /* ── Footer — siempre oscuro, inmune al light mode ──────────── */
-   html.light footer,
-   html.light footer * { /* todo dentro del footer mantiene su color inline */ }
-   /* El footer ya tiene style={{ background: '#09090D' }} inline — no necesita CSS */
+   /* ── Footer — mismo glass azul oscuro para modo claro ─────────── */
+   html.light footer {
+     background: rgba(3, 6, 40, 0.9) !important;
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+   }
+   html.light footer .dark\:text-white,
+   html.light footer .dark\:text-white\/55,
+   html.light footer .dark\:text-white\/50,
+   html.light footer .dark\:text-white\/45,
+   html.light footer .dark\:text-white\/40,
+   html.light footer .dark\:text-white\/30,
+   html.light footer .dark\:text-white\/28,
+   html.light footer .dark\:text-white\/25,
+   html.light footer .text-b-dark {
+     color: #F5F5F0 !important;
+   }
+   html.light footer .text-black\/35,
+   html.light footer .text-black\/40,
+   html.light footer .text-black\/50 {
+     color: rgba(245, 245, 240, 0.35) !important;
+   }
    

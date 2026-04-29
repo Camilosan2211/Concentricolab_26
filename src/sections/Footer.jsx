@@ -23,7 +23,7 @@ export default function Footer({ lang }) {
 
   return (
     /* Footer con fondo adaptativo al modo — transparencia coherente */
-    <footer className="relative z-10 px-6 pb-8 pt-20 overflow-hidden dark:bg-[linear-gradient(180deg,#00031F_0%,#020425_100%)] bg-[linear-gradient(180deg,rgba(238,241,255,0.5)_0%,rgba(81,112,255,0.12)_100%)]">
+    <footer className="relative z-10 px-6 pb-8 pt-20 overflow-hidden dark:bg-[linear-gradient(180deg,#00031F_0%,#020425_100%)] bg-[rgba(3,6,40,0.9)]">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
         style={{ background: 'linear-gradient(to right,transparent,rgba(81,112,255,.22),transparent)' }}

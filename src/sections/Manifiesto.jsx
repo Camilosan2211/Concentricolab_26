@@ -49,7 +49,7 @@ function Card({ p, lang, index }) {
       {/* Numeral — mismo estilo que las métricas: color + glow */}
       <motion.span
         ref={numRef}
-        className="font-cal text-3xl font-bold"
+        className="font-cal text-3xl font-bold glow-number"
         style={{ color: p.color }}
         initial={{ textShadow: 'none', opacity: 0.4 }}
         animate={numView ? {
@@ -158,7 +158,7 @@ export default function Manifiesto({ lang }) {
                 transition={{ delay: i * .14, duration: .7, ease: [.16, 1, .3, 1] }}
               >
                 <motion.span
-                  className="font-cal text-4xl md:text-5xl"
+                  className="font-cal text-4xl md:text-5xl glow-number"
                   style={{ color: s.color }}
                   initial={{ scale: .82, opacity: 0, textShadow: 'none' }}
                   animate={statsInView ? {
