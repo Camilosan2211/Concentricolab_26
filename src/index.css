@@ -15,6 +15,7 @@
     --cursor-dot: #FF6D4D;
     --cursor-ring: rgba(255, 109, 77, 0.45);
     --cursor-ring-hov: rgba(255, 109, 77, 0.32);
+    --enfoque-text: #0A0A18;
     --background:    oklch(1 0 0);
     --foreground:    oklch(0.145 0 0);
     --card:    oklch(1 0 0);
@@ -640,15 +641,20 @@
    html.light .hero-shimmer {
      background: linear-gradient(
        90deg,
-       #5170FF 0%, #828AFF 28%,
-       #FF6D4D 52%, #828AFF 74%,
+       #5170FF 0%,
+       #7A8CFF 20%,
+       #828AFF 35%,
+       #FF6D4D 50%,
+       #828AFF 65%,
+       #7A8CFF 80%,
        #5170FF 100%
      ) !important;
-     background-size: 240% auto !important;
+     background-size: 280% 100% !important;
      -webkit-background-clip: text !important;
      background-clip: text !important;
      -webkit-text-fill-color: transparent !important;
-     animation: heroShimmer 5s ease-in-out infinite alternate !important;
+     animation: heroShimmer 4.5s ease-in-out infinite alternate !important;
+     will-change: background-position !important;
    }
    
    /* ── Secciones — fondo semitransparente base ───────────────── */
@@ -665,13 +671,14 @@
       que da dinamismo al scroll en modo claro.
       ──────────────────────────────────────────────────────────── */
    html.light #manifiesto {
-     background: rgba(81, 112, 255, 0.16);
+     background: rgba(10, 10, 24, 0.85);
      backdrop-filter: blur(8px);
      -webkit-backdrop-filter: blur(8px);
+     color: #F5F5F0;
    }
    
    html.light #proceso {
-     background: rgba(81, 112, 255, 0.10);
+     background: rgba(10, 10, 24, 0.65);
      backdrop-filter: blur(4px);
      -webkit-backdrop-filter: blur(4px);
    }
@@ -681,46 +688,65 @@
       Ahora: 0.36 de opacidad → las cápsulas se ven a través.
       ──────────────────────────────────────────────────────────── */
    html.light .glass {
-     background: rgba(255, 255, 255, 0.36) !important;
-     border: 1px solid rgba(255, 255, 255, 0.70) !important;
+     background: rgba(255, 255, 255, 0.52) !important;
+     border: 1px solid rgba(81, 112, 255, 0.18) !important;
      box-shadow:
-       inset 0 1px 0 rgba(255, 255, 255, 0.88),
-       0 4px 20px rgba(81, 112, 255, 0.08),
-       0 1px 4px rgba(0, 0, 0, 0.04) !important;
-     backdrop-filter: blur(18px) !important;
-     -webkit-backdrop-filter: blur(18px) !important;
+       inset 0 1px 0 rgba(255, 255, 255, 0.72),
+       0 4px 16px rgba(81, 112, 255, 0.06),
+       0 1px 3px rgba(0, 0, 0, 0.03) !important;
+     backdrop-filter: blur(8px) !important;
+     -webkit-backdrop-filter: blur(8px) !important;
    }
    
    html.light .glass-blue {
-     background: rgba(81, 112, 255, 0.09) !important;
-     border-color: rgba(81, 112, 255, 0.22) !important;
+     background: rgba(81, 112, 255, 0.12) !important;
+     border-color: rgba(81, 112, 255, 0.28) !important;
+     backdrop-filter: blur(6px) !important;
+     -webkit-backdrop-filter: blur(6px) !important;
    }
    
    /* ── Cards del Manifiesto ───────────────────────────────────── */
    html.light #manifiesto [class*="rounded-2xl"],
    html.light #manifiesto .rounded-2xl {
-     background: rgba(255, 255, 255, 0.38) !important;
-     border: 1px solid rgba(255, 255, 255, 0.72) !important;
-     backdrop-filter: blur(16px) !important;
-     -webkit-backdrop-filter: blur(16px) !important;
-     box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 4px 18px rgba(81,112,255,0.08) !important;
+     background: rgba(255, 255, 255, 0.48) !important;
+     border: 1px solid rgba(255, 255, 255, 0.68) !important;
+     backdrop-filter: blur(10px) !important;
+     -webkit-backdrop-filter: blur(10px) !important;
+     box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 4px 16px rgba(81,112,255,0.06) !important;
+   }
+   
+   /* Texto dentro de Manifiesto — blanco para contraste con fondo oscuro */
+   html.light #manifiesto h1,
+   html.light #manifiesto h2,
+   html.light #manifiesto h3 {
+     color: #F5F5F0 !important;
+   }
+   html.light #manifiesto p,
+   html.light #manifiesto span {
+     color: rgba(245, 245, 240, 0.85) !important;
+   }
+   html.light #manifiesto .dark\:text-white {
+     color: #F5F5F0 !important;
+   }
+   html.light #manifiesto .dark\:text-white\/45 {
+     color: rgba(245, 245, 240, 0.65) !important;
    }
    
    /* Panel métricas */
    html.light #manifiesto .backdrop-blur-xl {
-     background: rgba(255, 255, 255, 0.42) !important;
-     border: 1px solid rgba(255, 255, 255, 0.70) !important;
-     backdrop-filter: blur(18px) !important;
-     -webkit-backdrop-filter: blur(18px) !important;
+     background: rgba(255, 255, 255, 0.52) !important;
+     border: 1px solid rgba(255, 255, 255, 0.64) !important;
+     backdrop-filter: blur(10px) !important;
+     -webkit-backdrop-filter: blur(10px) !important;
    }
    
    /* ── Cards Productos ────────────────────────────────────────── */
    html.light #productos .glass,
    html.light #productos [class*="glass"] {
-     background: rgba(255, 255, 255, 0.36) !important;
-     border: 1px solid rgba(255, 255, 255, 0.72) !important;
-     backdrop-filter: blur(18px) !important;
-     -webkit-backdrop-filter: blur(18px) !important;
+     background: rgba(255, 255, 255, 0.48) !important;
+     border: 1px solid rgba(255, 255, 255, 0.68) !important;
+     backdrop-filter: blur(10px) !important;
+     -webkit-backdrop-filter: blur(10px) !important;
    }
    
    /* Botón "Ver todos los productos" — texto legible en light */
@@ -733,10 +759,10 @@
    /* ── Proceso ────────────────────────────────────────────────── */
    html.light #proceso [class*="glass"],
    html.light #proceso [class*="rounded-3xl"] {
-     background: rgba(255, 255, 255, 0.38) !important;
-     border: 1px solid rgba(255, 255, 255, 0.72) !important;
-     backdrop-filter: blur(16px) !important;
-     -webkit-backdrop-filter: blur(16px) !important;
+     background: rgba(255, 255, 255, 0.48) !important;
+     border: 1px solid rgba(255, 255, 255, 0.68) !important;
+     backdrop-filter: blur(10px) !important;
+     -webkit-backdrop-filter: blur(10px) !important;
    }
    html.light #proceso .backdrop-blur-sm {
      background: rgba(255, 255, 255, 0.68) !important;
@@ -745,18 +771,18 @@
    
    /* ── Stack chips ────────────────────────────────────────────── */
    html.light #stack .glass {
-     background: rgba(255, 255, 255, 0.40) !important;
-     border: 1px solid rgba(255, 255, 255, 0.75) !important;
-     backdrop-filter: blur(14px) !important;
-     -webkit-backdrop-filter: blur(14px) !important;
+     background: rgba(255, 255, 255, 0.48) !important;
+     border: 1px solid rgba(255, 255, 255, 0.68) !important;
+     backdrop-filter: blur(10px) !important;
+     -webkit-backdrop-filter: blur(10px) !important;
    }
    
    /* ── Connect ────────────────────────────────────────────────── */
    html.light #connect .glass {
-     background: rgba(255, 255, 255, 0.36) !important;
-     border: 1px solid rgba(255, 255, 255, 0.72) !important;
-     backdrop-filter: blur(18px) !important;
-     -webkit-backdrop-filter: blur(18px) !important;
+     background: rgba(255, 255, 255, 0.48) !important;
+     border: 1px solid rgba(255, 255, 255, 0.68) !important;
+     backdrop-filter: blur(10px) !important;
+     -webkit-backdrop-filter: blur(10px) !important;
    }
    html.light #connect input,
    html.light #connect textarea {

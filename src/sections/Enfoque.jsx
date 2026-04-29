@@ -70,25 +70,29 @@ export default function Enfoque({ lang }) {
                   opacity: 0,
                   y: 18,
                   filter: 'blur(6px)',
-                  color: 'rgba(140, 148, 180, 0.38)',   // gris-azulado fantasma, visible en ambos modos
+                  color: 'rgba(140, 148, 180, 0.38)',
+                  scale: 1,
                 }}
                 animate={inView ? {
                   opacity: 1,
                   y: 0,
                   filter: 'blur(0px)',
                   color: isCoral ? '#FF6D4D' : 'var(--enfoque-text)',
-                  ...(isCoral ? { textShadow: '0 0 22px rgba(255,109,77,0.45)' } : {}),
+                  scale: isCoral ? [1, 1.06, 1] : 1,
+                  ...(isCoral ? { textShadow: ['0 0 8px rgba(255,109,77,0)', '0 0 22px rgba(255,109,77,0.45)', '0 0 8px rgba(255,109,77,0)'] } : {}),
                 } : {
                   opacity: 0,
                   y: 18,
                   filter: 'blur(6px)',
                   color: 'rgba(140, 148, 180, 0.38)',
+                  scale: 1,
                 }}
                 transition={{
                   delay: i * 0.055,
                   duration: 0.52,
                   ease: [0.16, 1, 0.3, 1],
-                  textShadow: { duration: 0.8, delay: i * 0.055 + 0.3 },
+                  scale: isCoral ? { delay: i * 0.055 + 0.3, duration: 1.8, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } : { duration: 0.52 },
+                  textShadow: isCoral ? { duration: 1.8, delay: i * 0.055 + 0.3, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } : { duration: 0.8, delay: i * 0.055 + 0.3 },
                 }}
                 style={{ display: 'inline-block', marginRight: '0.26em' }}
               >
