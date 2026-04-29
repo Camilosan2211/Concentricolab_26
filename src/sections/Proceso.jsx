@@ -29,8 +29,9 @@ export default function Proceso({ lang }) {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="proceso" className="relative z-10 py-16 px-6">
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
+    <section id="proceso" className="relative z-10 py-16 px-4">
+      <div className="max-w-[1400px] mx-auto my-12 rounded-[2.5rem] border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl px-6 md:px-8 py-10 md:py-12">
+        <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
         {/* Header */}
         <div className="text-center max-w-xl mx-auto flex flex-col gap-3">
@@ -53,7 +54,7 @@ export default function Proceso({ lang }) {
         {/* Panel */}
         <motion.div
           ref={ref}
-          className="relative glass rounded-3xl px-6 py-12 md:px-14 md:py-14 overflow-hidden"
+          className="relative rounded-3xl px-6 py-12 md:px-14 md:py-14 overflow-hidden"
           initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
@@ -182,6 +183,7 @@ export default function Proceso({ lang }) {
           </div>
         </motion.div>
       </div>
+    </div>
     </section>
   )
 }

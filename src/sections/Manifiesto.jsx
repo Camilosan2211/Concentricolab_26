@@ -49,7 +49,7 @@ function Card({ p, lang, index }) {
       {/* Numeral — mismo estilo que las métricas: color + glow */}
       <motion.span
         ref={numRef}
-        className="font-cal text-3xl font-bold"
+        className="font-cal text-3xl font-bold glow-number"
         style={{ color: p.color }}
         initial={{ textShadow: 'none', opacity: 0.4 }}
         animate={numView ? {
@@ -89,8 +89,7 @@ export default function Manifiesto({ lang }) {
     <section
       id="manifiesto"
       ref={sec}
-      className="py-12 md:py-16 px-6 relative overflow-hidden"
-      style={{ background: 'var(--manifiesto-bg)' }}
+      className="py-12 md:py-16 px-4 relative overflow-hidden bg-transparent"
     >
       {/* Orbe parallax */}
       <motion.div
@@ -101,7 +100,8 @@ export default function Manifiesto({ lang }) {
         <div className="w-full h-full rounded-full" style={{ background: 'radial-gradient(ellipse,rgba(81,112,255,.12) 0%,transparent 68%)', filter: 'blur(55px)' }} />
       </motion.div>
 
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-8 md:gap-10 relative z-10">
+      <div className="max-w-[1400px] mx-auto my-12 rounded-[2.5rem] border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl px-6 md:px-8 py-10 md:py-12">
+        <div className="max-w-[1200px] mx-auto flex flex-col gap-8 md:gap-10 relative z-10">
 
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-3">
@@ -158,7 +158,7 @@ export default function Manifiesto({ lang }) {
                 transition={{ delay: i * .14, duration: .7, ease: [.16, 1, .3, 1] }}
               >
                 <motion.span
-                  className="font-cal text-4xl md:text-5xl"
+                  className="font-cal text-4xl md:text-5xl glow-number"
                   style={{ color: s.color }}
                   initial={{ scale: .82, opacity: 0, textShadow: 'none' }}
                   animate={statsInView ? {
@@ -178,6 +178,7 @@ export default function Manifiesto({ lang }) {
           <div className="absolute bottom-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-b-coral/25 to-transparent" />
         </motion.div>
       </div>
+    </div>
     </section>
   )
 }
