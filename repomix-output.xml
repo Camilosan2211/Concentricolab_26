@@ -2715,13 +2715,13 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
 
-  useEffect(()=>{
-    const fn = ()=> setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', fn, {passive:true})
-    return ()=> window.removeEventListener('scroll', fn)
-  },[])
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', fn, { passive: true })
+    return () => window.removeEventListener('scroll', fn)
+  }, [])
 
-  const t = (es,en) => lang==='es' ? es : en
+  const t = (es, en) => lang === 'es' ? es : en
 
   const toggleDark = () => {
     setDark(d => {
@@ -2735,50 +2735,63 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
       <header className={clsx(
         'fixed top-0 left-0 w-full z-50 flex flex-col items-center transition-all duration-400',
         scrolled
-          /* dark — más glass, menos opaco */
-          ? 'dark:bg-[rgba(0,3,31,.42)] bg-[rgba(255,255,255,.55)] backdrop-blur-2xl border-b dark:border-white/[0.06] border-black/[0.07] shadow-[0_2px_24px_rgba(0,0,0,.10)]'
-          : 'backdrop-blur-none'
+          ? [
+              'backdrop-blur-2xl border-b shadow-[0_2px_24px_rgba(0,0,0,.08)]',
+              // dark: azul muy oscuro semitransparente
+              'dark:bg-[rgba(0,3,31,0.42)] dark:border-white/[0.06]',
+              // light: fondo lavanda más transparente para ver las cápsulas
+              'bg-[rgba(220,225,255,0.38)] border-[rgba(81,112,255,0.12)]',
+            ]
+          : 'backdrop-blur-none',
       )}>
-        {/* Notch pill */}
+        {/* Notch */}
         <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-[60px] mb-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse"/>
+          <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
           <span className="text-white text-[11px] font-medium tracking-wide">
-            {t('Trabajando en nuevos proyectos ✦','Working on new projects ✦')}
+            {t('Trabajando en nuevos proyectos ✦', 'Working on new projects ✦')}
           </span>
         </div>
 
-        {/* Bar */}
         <div className="w-full max-w-[1200px] flex items-center justify-between px-6 lg:px-10 py-3">
           <a href="#hero" className="flex items-center gap-2">
-            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto"/>
+            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto" />
           </a>
 
-          {/* Desktop nav */}
+          {/* Desktop nav — texto legible en ambos modos */}
           <nav className="hidden md:flex items-center gap-7">
-            {navLinks.map(l=>(
+            {navLinks.map(l => (
               <a key={l.href} href={l.href}
-                className="text-sm dark:text-white/55 text-black/55 hover:dark:text-white hover:text-black font-medium transition-colors duration-200 relative group">
-                {t(l.es,l.en)}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300"/>
+                className="text-sm font-medium transition-colors duration-200 relative group dark:text-white/60 text-[#0A0A18]/70 hover:dark:text-white hover:text-[#0A0A18]">
+                {t(l.es, l.en)}
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300" />
               </a>
             ))}
           </nav>
 
-          {/* Controls */}
           <div className="flex items-center gap-2">
-            {/* Light/Dark toggle */}
+            {/* Theme toggle — con border explícito en light para visibilidad */}
             <button
               onClick={toggleDark}
               aria-label="Toggle theme"
-              className="glass w-9 h-9 rounded-full flex items-center justify-center dark:text-white/60 text-black/50 hover:dark:text-white hover:text-black transition-colors duration-200"
+              className={clsx(
+                'w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200',
+                'dark:bg-white/[0.07] dark:border dark:border-white/[0.10] dark:text-white/60 hover:dark:text-white',
+                'bg-white/60 border border-[rgba(81,112,255,0.30)] text-[#0A0A18]/65 hover:text-[#0A0A18]',
+                'backdrop-blur-sm',
+              )}
             >
-              {dark ? <Sun size={15}/> : <Moon size={15}/>}
+              {dark ? <Sun size={15} /> : <Moon size={15} />}
             </button>
 
             {/* Lang toggle */}
             <button
-              onClick={()=> setLang(l => l==='es'?'en':'es')}
-              className="glass dark:text-white/60 text-black/50 text-[13px] font-bold px-3.5 py-1.5 rounded-full hover:dark:text-white hover:text-black transition-all duration-200"
+              onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
+              className={clsx(
+                'text-[13px] font-bold px-3.5 py-1.5 rounded-full transition-all duration-200',
+                'dark:bg-white/[0.07] dark:border dark:border-white/[0.10] dark:text-white/60 hover:dark:text-white',
+                'bg-white/60 border border-[rgba(81,112,255,0.30)] text-[#0A0A18]/65 hover:text-[#0A0A18]',
+                'backdrop-blur-sm',
+              )}
             >
               {lang.toUpperCase()}
             </button>
@@ -2786,15 +2799,19 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
             {/* CTA */}
             <a href="#productos"
               className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(81,112,255,.45)] transition-all duration-200">
-              {t('Explorar','Explore')}
+              {t('Explorar', 'Explore')}
             </a>
 
             {/* Mobile menu */}
             <button
-              className="md:hidden glass w-9 h-9 rounded-full flex items-center justify-center dark:text-white/70 text-black/60"
-              onClick={()=>setOpen(o=>!o)}
+              className={clsx(
+                'md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200',
+                'dark:bg-white/[0.07] dark:border dark:border-white/[0.10] dark:text-white/70',
+                'bg-white/60 border border-[rgba(81,112,255,0.30)] text-[#0A0A18]/65',
+              )}
+              onClick={() => setOpen(o => !o)}
               aria-label="Menu">
-              {open ? <X size={16}/> : <Menu size={16}/>}
+              {open ? <X size={16} /> : <Menu size={16} />}
             </button>
           </div>
         </div>
@@ -2804,26 +2821,28 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-40 flex flex-col pt-28 px-6 pb-8 dark:bg-[rgba(0,3,31,.94)] bg-[rgba(248,247,244,.96)] backdrop-blur-2xl"
-            initial={{opacity:0,y:-16}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-16}}
-            transition={{duration:.25,ease:[.22,1,.36,1]}}>
+            className="fixed inset-0 z-40 flex flex-col pt-28 px-6 pb-8 dark:bg-[rgba(0,3,31,.94)] bg-[rgba(220,225,255,.92)] backdrop-blur-2xl"
+            initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: .25, ease: [.22, 1, .36, 1] }}>
             <nav className="flex flex-col gap-4">
-              {navLinks.map((l,i)=>(
+              {navLinks.map((l, i) => (
                 <motion.a key={l.href} href={l.href}
-                  className="font-cal text-3xl dark:text-white text-b-dark"
-                  onClick={()=>setOpen(false)}
-                  initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}}
-                  transition={{delay:i*.05,duration:.3}}>
-                  {t(l.es,l.en)}
+                  className="font-cal text-3xl dark:text-white text-[#0A0A18]"
+                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * .05, duration: .3 }}>
+                  {t(l.es, l.en)}
                 </motion.a>
               ))}
             </nav>
             <div className="mt-auto flex gap-3">
-              <button onClick={toggleDark} className="glass px-4 py-2 rounded-full text-sm dark:text-white/70 text-black/60">
+              <button onClick={toggleDark}
+                className="border border-[rgba(81,112,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm dark:text-white/70 text-[#0A0A18]/70">
                 {dark ? '☀ Claro' : '☾ Oscuro'}
               </button>
-              <button onClick={()=>setLang(l=>l==='es'?'en':'es')} className="glass px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-black/60">
-                {lang==='es'?'EN':'ES'}
+              <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
+                className="border border-[rgba(81,112,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-[#0A0A18]/70">
+                {lang === 'es' ? 'EN' : 'ES'}
               </button>
             </div>
           </motion.div>
@@ -3407,11 +3426,7 @@ export function useLenis() {
     --sidebar-border:    oklch(0.922 0 0);
     --sidebar-ring:    oklch(0.708 0 0);
   }
-  html.light {
-    --cursor-dot: #5170FF;
-    --cursor-ring: rgba(81, 112, 255, 0.5);
-    --cursor-ring-hov: rgba(81, 112, 255, 0.35);
-  }
+  
   * { box-sizing: border-box; margin: 0; padding: 0;
     @apply border-border outline-ring/50; }
   html { scroll-behavior: auto;
@@ -3429,10 +3444,7 @@ export function useLenis() {
   }
 
   /* LIGHT */
-  html.light body {
-    background: #F8F7F4;
-    color: #0A0A18;
-  }
+ 
 
   ::selection { background: rgba(81,112,255,.3); color: #fff; }
   .theme {
@@ -3505,25 +3517,14 @@ export function useLenis() {
   }
 
   /* Glass — light */
-  html.light .glass {
-    background: rgba(255,255,255,0.65);
-    border: 1px solid rgba(81,112,255,0.12);
-  }
-  html.light .glass-blue {
-    background: rgba(81,112,255,0.06);
-    border: 1px solid rgba(81,112,255,0.15);
-  }
+
 
   /* Glow */
   .glow-blue  { box-shadow: 0 0 36px rgba(81,112,255,.3); }
   .glow-coral { box-shadow: 0 0 36px rgba(255,109,77,.25); }
 
   /* Surface light */
-  html.light .surface {
-    background: rgba(255,255,255,.9);
-    border: 1px solid rgba(81,112,255,.1);
-    box-shadow: 0 4px 32px rgba(81,112,255,.06);
-  }
+ 
   .surface { /* dark fallback */ }
 }
 
@@ -3576,10 +3577,7 @@ export function useLenis() {
   mix-blend-mode: soft-light;
   animation: filmGrainShift 9s steps(8) infinite;
 }
-html.light .film-grain-overlay {
-  opacity: 0.02;
-  mix-blend-mode: multiply;
-}
+
 @keyframes filmGrainShift {
   0% { transform: translate3d(0, 0, 0); }
   25% { transform: translate3d(-2.2%, 1.8%, 0); }
@@ -3598,11 +3596,7 @@ html.light .film-grain-overlay {
     radial-gradient(ellipse 68% 52% at 50% 45%, rgba(255,255,255,0.04) 0%, transparent 62%),
     radial-gradient(ellipse 120% 90% at 50% 50%, transparent 42%, rgba(0,0,0,0.34) 100%);
 }
-html.light .hero-vignette {
-  background:
-    radial-gradient(ellipse 68% 52% at 50% 45%, rgba(255,255,255,0.35) 0%, transparent 62%),
-    radial-gradient(ellipse 120% 90% at 50% 50%, transparent 46%, rgba(5,10,30,0.09) 100%);
-}
+
 .hero-brand-aurora {
   position: absolute;
   inset: -20% -10% auto -10%;
@@ -3625,13 +3619,7 @@ html.light .hero-vignette {
   animation-duration: 18s;
   animation-direction: alternate-reverse;
 }
-html.light .hero-brand-aurora {
-  opacity: 0.44;
-  filter: blur(54px);
-}
-html.light .hero-brand-aurora-2 {
-  opacity: 0.34;
-}
+
 @keyframes auroraDrift {
   0% { transform: translate3d(-1.2%, 0.6%, 0) scale(1); }
   50% { transform: translate3d(1.4%, -1%, 0) scale(1.04); }
@@ -3669,15 +3657,11 @@ html.light .hero-brand-aurora-2 {
   opacity: 0.08;
   background: radial-gradient(circle, rgba(130,138,255,0.5) 0%, rgba(130,138,255,0) 72%);
 }
-html.light .hero-blur-layer { opacity: 0.12; }
-html.light .hero-blur-layer-2 { opacity: 0.1; }
-html.light .hero-blur-layer-3 { opacity: 0.07; }
+
 .hero-motion-switch {
   border-color: rgba(255,255,255,.14);
 }
-html.light .hero-motion-switch {
-  border-color: rgba(10,10,24,.08);
-}
+
 .hero-mode-dynamic .hero-brand-aurora {
   opacity: 0.76;
   animation-duration: 8s;
@@ -3856,13 +3840,6 @@ html.light .hero-motion-switch {
   50%       { opacity: 1.0; transform: scale(1.05); }
 }
 
-/* Modo light: reducir intensidad */
-html.light .hero-grid-lines       { opacity: 0.25; }
-html.light .hero-scan-line        { opacity: 0.18; }
-html.light .hero-side-glow-left   { opacity: 0.30; background: radial-gradient(ellipse 100% 60% at 0% 42%, rgba(81,112,255,0.18) 0%, rgba(81,112,255,0.08) 40%, transparent 75%); }
-html.light .hero-side-glow-right  { opacity: 0.28; background: radial-gradient(ellipse 100% 60% at 100% 52%, rgba(255,109,77,0.18) 0%, rgba(255,109,77,0.09) 40%, transparent 75%); }
-html.light .hero-center-orb       { opacity: 0.24; background: radial-gradient(circle, rgba(81,112,255,0.10) 0%, rgba(81,112,255,0.02) 45%, transparent 72%); }
-
 /* Hero shimmer premium compartido (viewport-locked) */
 .hero-shimmer {
   color: var(--coral);
@@ -3919,9 +3896,6 @@ html.light .hero-center-orb       { opacity: 0.24; background: radial-gradient(c
 .footer-brand-glow:hover {
   animation: footer-brand-pulse 1.8s ease-in-out infinite;
 }
-html.light .footer-brand-glow:hover {
-  animation: footer-brand-pulse 1.8s ease-in-out infinite;
-}
 
 /* Hex shape for avatars / circles */
 .hex-clip {
@@ -3937,135 +3911,6 @@ html.light .footer-brand-glow:hover {
 :root {
   --manifiesto-bg: rgba(0, 3, 31, 0.72);
 }
-html.light {
-  --manifiesto-bg: rgba(230, 235, 255, 0.80);
-}
-
-/* ── Body y fondo base ────────────────────────────────────────── */
-html.light body {
-  background-color: #EEF1FF;
-  color: #0A0A18;
-}
-
-/* ── Glows laterales del Hero ─────────────────────────────────── */
-html.light .hero-side-glow-left  { opacity: 0.22; }
-html.light .hero-side-glow-right { opacity: 0.20; }
-html.light .hero-blur-layer      { opacity: 0.10; }
-html.light .hero-blur-layer-2    { opacity: 0.08; }
-html.light .hero-brand-aurora    { opacity: 0.10; }
-
-/* ── Navbar ───────────────────────────────────────────────────── */
-html.light header {
-  background: rgba(238, 241, 255, 0.88) !important;
-  border-bottom-color: rgba(81, 112, 255, 0.10) !important;
-}
-
-/* ── Secciones semitransparentes — las cápsulas se ven detrás ── */
-html.light #enfoque,
-html.light #productos,
-html.light #proceso,
-html.light #contenido,
-html.light #stack,
-html.light #connect {
-  background: rgba(238, 241, 255, 0.60);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-
-html.light #manifiesto {
-  background: var(--manifiesto-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* ── Glass ────────────────────────────────────────────────────── */
-html.light .glass {
-  background: rgba(255, 255, 255, 0.80);
-  border: 1px solid rgba(81, 112, 255, 0.14);
-  box-shadow: 0 2px 20px rgba(81, 112, 255, 0.07), inset 0 1px 0 rgba(255,255,255,0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-html.light .glass-blue {
-  background: rgba(81, 112, 255, 0.08);
-  border-color: rgba(81, 112, 255, 0.20);
-}
-
-/* ── Texto ────────────────────────────────────────────────────── */
-html.light h1, html.light h2, html.light h3 { color: #0A0A18; }
-html.light p { color: rgba(10, 10, 24, 0.58); }
-html.light .dark\:text-white        { color: #0A0A18; }
-html.light .dark\:text-white\/50,
-html.light .dark\:text-white\/45    { color: rgba(10, 10, 24, 0.55); }
-html.light .dark\:text-white\/30,
-html.light .dark\:text-white\/25    { color: rgba(10, 10, 24, 0.38); }
-
-/* ── Ticker ───────────────────────────────────────────────────── */
-html.light [class*="ticker"] span,
-html.light .ticker-track span { color: rgba(10, 10, 24, 0.40); }
-
-/* ── Hero shimmer ─────────────────────────────────────────────── */
-html.light .hero-shimmer {
-  background: linear-gradient(
-    90deg,
-    #5170FF 0%, #828AFF 28%,
-    #FF6D4D 52%, #828AFF 74%,
-    #5170FF 100%
-  ) !important;
-  background-size: 240% auto !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  animation: heroShimmer 5s ease-in-out infinite alternate !important;
-}
-
-/* ── Manifiesto — cards ───────────────────────────────────────── */
-html.light #manifiesto .rounded-2xl {
-  background: rgba(255, 255, 255, 0.84) !important;
-  border-color: rgba(81, 112, 255, 0.12) !important;
-  box-shadow: 0 2px 16px rgba(81, 112, 255, 0.06);
-}
-
-/* Panel de métricas */
-html.light #manifiesto .backdrop-blur-xl {
-  background: rgba(255, 255, 255, 0.80) !important;
-  border-color: rgba(81, 112, 255, 0.12) !important;
-  box-shadow: 0 4px 24px rgba(81, 112, 255, 0.08);
-}
-
-/* ── Proceso — iconos ─────────────────────────────────────────── */
-html.light #proceso .backdrop-blur-sm {
-  background: rgba(255, 255, 255, 0.90) !important;
-  border-color: rgba(81, 112, 255, 0.14) !important;
-}
-
-/* ── Stack — chips ────────────────────────────────────────────── */
-html.light #stack .glass {
-  background: rgba(255, 255, 255, 0.88) !important;
-}
-
-/* ── Connect — inputs ─────────────────────────────────────────── */
-html.light #connect input,
-html.light #connect textarea {
-  background: rgba(238, 241, 255, 0.85) !important;
-  border-color: rgba(81, 112, 255, 0.18) !important;
-  color: #0A0A18 !important;
-}
-html.light #connect input::placeholder,
-html.light #connect textarea::placeholder {
-  color: rgba(10, 10, 24, 0.36) !important;
-}
-
-/* ── Footer siempre oscuro ────────────────────────────────────── */
-html.light footer {
-  background: #09090D;
-  color: #F5F5F0;
-}
-/* ================================================================
-   PEGAR AL FINAL de src/index.css
-   Scrollbar personalizado + cursor sin clase CSS extra
-   ================================================================ */
 
 
 /* ── Scrollbar — Webkit (Chrome, Edge, Safari) ───────────────── */
@@ -4108,24 +3953,7 @@ html.light footer {
   background-clip: padding-box;
 }
 
-/* ── Modo light: scrollbar más sutil ─────────────────────────── */
-html.light ::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    rgba(58, 92, 224, 0.40) 0%,
-    rgba(208, 72, 40, 0.35) 100%
-  );
-  background-clip: padding-box;
-}
 
-html.light ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(58, 92, 224, 0.65) 0%,
-    rgba(208, 72, 40, 0.55) 100%
-  );
-  background-clip: padding-box;
-}
 
 /* ── Firefox scrollbar ───────────────────────────────────────── */
 * {
@@ -4133,9 +3961,7 @@ html.light ::-webkit-scrollbar-thumb:hover {
   scrollbar-color: rgba(81, 112, 255, 0.55) transparent;
 }
 
-html.light * {
-  scrollbar-color: rgba(58, 92, 224, 0.40) transparent;
-}
+
 
 /* ── Cursor — ocultar el nativo al usar el custom ────────────── */
 /* Se activa solo en dispositivos con pointer fino (mouse real) */
@@ -4152,177 +3978,196 @@ html.light * {
 
 /* ── Variables ─────────────────────────────────────────────────── */
 :root  { --manifiesto-bg: rgba(0, 3, 31, 0.72); }
-html.light { --manifiesto-bg: rgba(225, 230, 255, 0.68); }
 
-/* ── Body y fondo base ─────────────────────────────────────────── */
-html.light body {
-  background-color: #EEF1FF;
-  color: #0A0A18;
-}
+/* ================================================================
+   LIGHT MODE — bloque ÚNICO y DEFINITIVO
+   Borrar TODOS los bloques html.light previos en index.css
+   y pegar solo este al final.
+   ================================================================ */
 
-/* ── Cursor: ocultar nativo en mouse ───────────────────────────── */
-@media (pointer: fine) {
-  html.light *, html.light *::before, html.light *::after {
-    cursor: none !important;
-  }
-}
-
-/* ── Glows laterales ───────────────────────────────────────────── */
-html.light .hero-side-glow-left  { opacity: 0.28; }
-html.light .hero-side-glow-right { opacity: 0.24; }
-html.light .hero-blur-layer      { opacity: 0.10; }
-html.light .hero-blur-layer-2    { opacity: 0.08; }
-html.light .hero-brand-aurora    { opacity: 0.10; }
-
-/* ── Navbar ────────────────────────────────────────────────────── */
-html.light header {
-  background: rgba(238, 241, 255, 0.78) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-  border-bottom-color: rgba(81, 112, 255, 0.10) !important;
-}
-
-/* ── Secciones semitransparentes ───────────────────────────────── */
-html.light #enfoque,
-html.light #productos,
-html.light #proceso,
-html.light #contenido,
-html.light #stack,
-html.light #connect {
-  background: rgba(238, 241, 255, 0.45);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-html.light #manifiesto {
-  background: var(--manifiesto-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-/* ── GLASS — el fix principal de las tarjetas ──────────────────── */
-/*
-   Antes: bg-white/60 → fondo blanco sólido, sin transparencia real.
-   Ahora: blur fuerte + fondo semitransparente + borde cristal +
-   reflejo superior. Las cápsulas del fondo se ven a través.
-*/
-html.light .glass {
-  background: rgba(255, 255, 255, 0.52) !important;
-  border: 1px solid rgba(255, 255, 255, 0.82) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    0 4px 24px rgba(81, 112, 255, 0.08),
-    0 1px 4px rgba(0, 0, 0, 0.04) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-}
-
-html.light .glass-blue {
-  background: rgba(81, 112, 255, 0.08) !important;
-  border-color: rgba(81, 112, 255, 0.22) !important;
-}
-
-/* ── Cards del Manifiesto (principios) ─────────────────────────── */
-html.light #manifiesto [class*="rounded-2xl"] {
-  background: rgba(255, 255, 255, 0.50) !important;
-  border: 1px solid rgba(255, 255, 255, 0.80) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    0 4px 20px rgba(81, 112, 255, 0.07) !important;
-}
-
-/* Panel métricas en Manifiesto */
-html.light #manifiesto .backdrop-blur-xl {
-  background: rgba(255, 255, 255, 0.55) !important;
-  border: 1px solid rgba(255, 255, 255, 0.80) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-  box-shadow: 0 4px 24px rgba(81, 112, 255, 0.08) !important;
-}
-
-/* ── Cards de Productos ─────────────────────────────────────────── */
-html.light #productos [class*="glass"] {
-  background: rgba(255, 255, 255, 0.52) !important;
-  border: 1px solid rgba(255, 255, 255, 0.82) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-}
-
-/* ── Proceso — panel y chip de iconos ──────────────────────────── */
-html.light #proceso [class*="glass"],
-html.light #proceso [class*="rounded-3xl"] {
-  background: rgba(255, 255, 255, 0.50) !important;
-  border: 1px solid rgba(255, 255, 255, 0.80) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-}
-html.light #proceso .backdrop-blur-sm {
-  background: rgba(255, 255, 255, 0.78) !important;
-  border: 1px solid rgba(255, 255, 255, 0.88) !important;
-}
-
-/* ── Stack chips ────────────────────────────────────────────────── */
-html.light #stack .glass {
-  background: rgba(255, 255, 255, 0.58) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-}
-
-/* ── Connect cards ──────────────────────────────────────────────── */
-html.light #connect .glass {
-  background: rgba(255, 255, 255, 0.52) !important;
-  border: 1px solid rgba(255, 255, 255, 0.82) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-}
-html.light #connect input,
-html.light #connect textarea {
-  background: rgba(238, 241, 255, 0.70) !important;
-  border-color: rgba(81, 112, 255, 0.18) !important;
-  color: #0A0A18 !important;
-  backdrop-filter: blur(8px);
-}
-html.light #connect input::placeholder,
-html.light #connect textarea::placeholder {
-  color: rgba(10, 10, 24, 0.36) !important;
-}
-
-/* ── Texto ──────────────────────────────────────────────────────── */
-html.light h1, html.light h2, html.light h3 { color: #0A0A18; }
-html.light p { color: rgba(10, 10, 24, 0.58); }
-html.light .dark\:text-white        { color: #0A0A18 !important; }
-html.light .dark\:text-white\/50,
-html.light .dark\:text-white\/45    { color: rgba(10, 10, 24, 0.55) !important; }
-html.light .dark\:text-white\/30,
-html.light .dark\:text-white\/25    { color: rgba(10, 10, 24, 0.38) !important; }
-html.light .dark\:text-white\/40    { color: rgba(10, 10, 24, 0.45) !important; }
-
-/* ── Ticker ─────────────────────────────────────────────────────── */
-html.light [class*="ticker"] span,
-html.light .ticker-track span { color: rgba(10, 10, 24, 0.40); }
-
-/* ── Hero shimmer ───────────────────────────────────────────────── */
-html.light .hero-shimmer {
-  background: linear-gradient(
-    90deg,
-    #5170FF 0%, #828AFF 28%,
-    #FF6D4D 52%, #828AFF 74%,
-    #5170FF 100%
-  ) !important;
-  background-size: 240% auto !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  animation: heroShimmer 5s ease-in-out infinite alternate !important;
-}
-
-/* ── Footer ─────────────────────────────────────────────────────── */
-html.light footer {
-  background: #09090D !important;
-  color: #F5F5F0 !important;
-}
+/* ── CSS custom property para color de texto en Enfoque ─────────
+   La animación de Framer Motion usa 'var(--enfoque-text)'
+   para saber el color final en cada modo.
+   ──────────────────────────────────────────────────────────────── */
+   :root                 { --enfoque-text: #F5F5F0; }   /* dark: blanco cálido */
+   html.light            { --enfoque-text: #0A0A18; }   /* light: casi negro   */
+   
+   /* ── Variable fondo Manifiesto ────────────────────────────────── */
+   :root       { --manifiesto-bg: rgba(0, 3, 31, 0.72); }
+   html.light  { --manifiesto-bg: rgba(81, 112, 255, 0.14); }
+   
+   /* ── Body ────────────────────────────────────────────────────── */
+   html.light body {
+     background-color: #EEF1FF;
+     color: #0A0A18;
+   }
+   
+   /* ── Cursor nativo oculto (mouse) ───────────────────────────── */
+   @media (pointer: fine) {
+     html.light *, html.light *::before, html.light *::after { cursor: none !important; }
+   }
+   
+   /* ── Glows laterales del Hero ──────────────────────────────── */
+   html.light .hero-side-glow-left  { opacity: 0.28; }
+   html.light .hero-side-glow-right { opacity: 0.24; }
+   html.light .hero-blur-layer      { opacity: 0.10; }
+   html.light .hero-blur-layer-2    { opacity: 0.08; }
+   html.light .hero-brand-aurora    { opacity: 0.10; }
+   
+   /* ── Hero shimmer ───────────────────────────────────────────── */
+   html.light .hero-shimmer {
+     background: linear-gradient(
+       90deg,
+       #5170FF 0%, #828AFF 28%,
+       #FF6D4D 52%, #828AFF 74%,
+       #5170FF 100%
+     ) !important;
+     background-size: 240% auto !important;
+     -webkit-background-clip: text !important;
+     background-clip: text !important;
+     -webkit-text-fill-color: transparent !important;
+     animation: heroShimmer 5s ease-in-out infinite alternate !important;
+   }
+   
+   /* ── Secciones — fondo semitransparente base ───────────────── */
+   html.light #enfoque,
+   html.light #productos,
+   html.light #contenido,
+   html.light #stack,
+   html.light #connect {
+     background: rgba(238, 241, 255, 0.35);
+   }
+   
+   /* ── Secciones con tinte azul de marca (manifiesto + proceso) ─
+      Crea el ritmo de "sección azulada / sección neutra"
+      que da dinamismo al scroll en modo claro.
+      ──────────────────────────────────────────────────────────── */
+   html.light #manifiesto {
+     background: rgba(81, 112, 255, 0.16);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+   }
+   
+   html.light #proceso {
+     background: rgba(81, 112, 255, 0.10);
+     backdrop-filter: blur(4px);
+     -webkit-backdrop-filter: blur(4px);
+   }
+   
+   /* ── GLASS — semitransparente para ver el fondo ──────────────
+      Antes: bg-white/60 → sólido.
+      Ahora: 0.36 de opacidad → las cápsulas se ven a través.
+      ──────────────────────────────────────────────────────────── */
+   html.light .glass {
+     background: rgba(255, 255, 255, 0.36) !important;
+     border: 1px solid rgba(255, 255, 255, 0.70) !important;
+     box-shadow:
+       inset 0 1px 0 rgba(255, 255, 255, 0.88),
+       0 4px 20px rgba(81, 112, 255, 0.08),
+       0 1px 4px rgba(0, 0, 0, 0.04) !important;
+     backdrop-filter: blur(18px) !important;
+     -webkit-backdrop-filter: blur(18px) !important;
+   }
+   
+   html.light .glass-blue {
+     background: rgba(81, 112, 255, 0.09) !important;
+     border-color: rgba(81, 112, 255, 0.22) !important;
+   }
+   
+   /* ── Cards del Manifiesto ───────────────────────────────────── */
+   html.light #manifiesto [class*="rounded-2xl"],
+   html.light #manifiesto .rounded-2xl {
+     background: rgba(255, 255, 255, 0.38) !important;
+     border: 1px solid rgba(255, 255, 255, 0.72) !important;
+     backdrop-filter: blur(16px) !important;
+     -webkit-backdrop-filter: blur(16px) !important;
+     box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 4px 18px rgba(81,112,255,0.08) !important;
+   }
+   
+   /* Panel métricas */
+   html.light #manifiesto .backdrop-blur-xl {
+     background: rgba(255, 255, 255, 0.42) !important;
+     border: 1px solid rgba(255, 255, 255, 0.70) !important;
+     backdrop-filter: blur(18px) !important;
+     -webkit-backdrop-filter: blur(18px) !important;
+   }
+   
+   /* ── Cards Productos ────────────────────────────────────────── */
+   html.light #productos .glass,
+   html.light #productos [class*="glass"] {
+     background: rgba(255, 255, 255, 0.36) !important;
+     border: 1px solid rgba(255, 255, 255, 0.72) !important;
+     backdrop-filter: blur(18px) !important;
+     -webkit-backdrop-filter: blur(18px) !important;
+   }
+   
+   /* Botón "Ver todos los productos" — texto legible en light */
+   html.light #productos a.glass,
+   html.light #productos a[class*="glass"] {
+     color: #0A0A18 !important;
+     border-color: rgba(10, 10, 24, 0.15) !important;
+   }
+   
+   /* ── Proceso ────────────────────────────────────────────────── */
+   html.light #proceso [class*="glass"],
+   html.light #proceso [class*="rounded-3xl"] {
+     background: rgba(255, 255, 255, 0.38) !important;
+     border: 1px solid rgba(255, 255, 255, 0.72) !important;
+     backdrop-filter: blur(16px) !important;
+     -webkit-backdrop-filter: blur(16px) !important;
+   }
+   html.light #proceso .backdrop-blur-sm {
+     background: rgba(255, 255, 255, 0.68) !important;
+     border: 1px solid rgba(255, 255, 255, 0.82) !important;
+   }
+   
+   /* ── Stack chips ────────────────────────────────────────────── */
+   html.light #stack .glass {
+     background: rgba(255, 255, 255, 0.40) !important;
+     border: 1px solid rgba(255, 255, 255, 0.75) !important;
+     backdrop-filter: blur(14px) !important;
+     -webkit-backdrop-filter: blur(14px) !important;
+   }
+   
+   /* ── Connect ────────────────────────────────────────────────── */
+   html.light #connect .glass {
+     background: rgba(255, 255, 255, 0.36) !important;
+     border: 1px solid rgba(255, 255, 255, 0.72) !important;
+     backdrop-filter: blur(18px) !important;
+     -webkit-backdrop-filter: blur(18px) !important;
+   }
+   html.light #connect input,
+   html.light #connect textarea {
+     background: rgba(238, 241, 255, 0.65) !important;
+     border-color: rgba(81, 112, 255, 0.18) !important;
+     color: #0A0A18 !important;
+   }
+   html.light #connect input::placeholder,
+   html.light #connect textarea::placeholder {
+     color: rgba(10, 10, 24, 0.36) !important;
+   }
+   
+   /* ── Texto general ──────────────────────────────────────────── */
+   html.light h1, html.light h2, html.light h3 { color: #0A0A18; }
+   html.light p  { color: rgba(10, 10, 24, 0.58); }
+   
+   /* Tailwind dark: overrides → light equivalents */
+   html.light .dark\:text-white        { color: #0A0A18 !important; }
+   html.light .dark\:text-white\/55    { color: rgba(10,10,24,0.65) !important; }
+   html.light .dark\:text-white\/50,
+   html.light .dark\:text-white\/45    { color: rgba(10,10,24,0.55) !important; }
+   html.light .dark\:text-white\/40    { color: rgba(10,10,24,0.48) !important; }
+   html.light .dark\:text-white\/30,
+   html.light .dark\:text-white\/25    { color: rgba(10,10,24,0.38) !important; }
+   
+   /* ── Ticker ─────────────────────────────────────────────────── */
+   html.light [class*="ticker"] span,
+   html.light .ticker-track span { color: rgba(10, 10, 24, 0.40); }
+   
+   /* ── Footer — siempre oscuro, inmune al light mode ──────────── */
+   html.light footer,
+   html.light footer * { /* todo dentro del footer mantiene su color inline */ }
+   /* El footer ya tiene style={{ background: '#09090D' }} inline — no necesita CSS */
 </file>
 
 <file path="src/lib/utils.js">
@@ -4623,13 +4468,12 @@ import { motion, useInView } from 'framer-motion'
 const tags_es = ['Diseño UX/UI', 'IA Generativa', 'Branding', 'Diseño Industrial', 'Métricas', 'Automatización', 'Data storytelling']
 const tags_en = ['UX/UI Design', 'Generative AI', 'Branding', 'Industrial Design', 'Metrics', 'Automation', 'Data storytelling']
 
-// Palabras que aparecen en coral
 const CORAL_ES = new Set(['núcleo', 'sistema,', 'solución', 'diseño,', 'IA', 'automatización.'])
 const CORAL_EN = new Set(['core', 'system,', 'solution', 'design,', 'AI', 'automation.'])
 
 export default function Enfoque({ lang }) {
   const ref    = useRef()
-  const inView = useInView(ref, { once: true, margin: '-100px' })
+  const inView = useInView(ref, { once: true, margin: '-80px' })
 
   const text     = lang === 'es'
     ? 'Construimos desde el núcleo hacia afuera — del usuario al sistema, del problema a la solución — combinando diseño, IA y automatización.'
@@ -4664,12 +4508,11 @@ export default function Enfoque({ lang }) {
         </motion.div>
 
         {/*
-          EFECTO: "Spotlight reveal" por palabra.
-          Cada palabra arranca invisible y con un ligero blur,
-          luego aparece y sube levemente al entrar en viewport.
-          Las palabras clave emergen en coral con un glow pulsante.
-          Mucho más visible que caracter-por-caracter y más
-          compatible con el word-wrap natural del texto largo.
+          Animación: cada palabra arranca gris-fantasma (visible en ambos modos),
+          luego se revela: palabras normales → blanco en dark / dark en light,
+          palabras clave → coral con textShadow glow.
+          Se usa `style` directo para el color final para evitar que Tailwind
+          sobreescriba con clases dark:/text- que fallan en animación.
         */}
         <p
           ref={ref}
@@ -4677,40 +4520,41 @@ export default function Enfoque({ lang }) {
           aria-label={text}
         >
           {words.map((word, i) => {
-            const isCoral = coralSet.has(word)
+            const isCoral  = coralSet.has(word)
+            // Color final según modo — resuelto en el cliente vía clase CSS
+            // que se aplica al <span> padre, pero la animación lo sobreescribe.
+            // Usamos 'currentColor' como base para que herede el modo.
+            const finalColor = isCoral ? '#FF6D4D' : undefined  // undefined = hereda del CSS
+
             return (
               <motion.span
                 key={i}
                 aria-hidden="true"
-                style={{
-                  display: 'inline-block',
-                  marginRight: '0.25em',
-                  // Si es palabra clave: glow pulsante en coral
-                  ...(isCoral && inView ? {
-                    textShadow: '0 0 28px rgba(255,109,77,0.55)',
-                  } : {}),
-                }}
                 initial={{
                   opacity: 0,
-                  y: 22,
-                  filter: 'blur(8px)',
-                  color: isCoral ? '#FF6D4D' : 'inherit',
+                  y: 18,
+                  filter: 'blur(6px)',
+                  color: 'rgba(140, 148, 180, 0.38)',   // gris-azulado fantasma, visible en ambos modos
                 }}
                 animate={inView ? {
                   opacity: 1,
                   y: 0,
                   filter: 'blur(0px)',
-                  color: isCoral ? '#FF6D4D' : 'inherit',
+                  color: isCoral ? '#FF6D4D' : 'var(--enfoque-text)',
+                  ...(isCoral ? { textShadow: '0 0 22px rgba(255,109,77,0.45)' } : {}),
                 } : {
                   opacity: 0,
-                  y: 22,
-                  filter: 'blur(8px)',
+                  y: 18,
+                  filter: 'blur(6px)',
+                  color: 'rgba(140, 148, 180, 0.38)',
                 }}
                 transition={{
                   delay: i * 0.055,
-                  duration: 0.55,
+                  duration: 0.52,
                   ease: [0.16, 1, 0.3, 1],
+                  textShadow: { duration: 0.8, delay: i * 0.055 + 0.3 },
                 }}
+                style={{ display: 'inline-block', marginRight: '0.26em' }}
               >
                 {word}
               </motion.span>
@@ -4766,14 +4610,12 @@ const products = [
 ]
 
 export default function Footer({ lang }) {
-  const t    = (es, en) => (lang === 'es' ? es : en)
+  const t    = (es, en) => lang === 'es' ? es : en
   const year = new Date().getFullYear()
 
   return (
-    /* Footer siempre oscuro en ambos modos */
-    <footer className="relative z-10 px-6 pb-8 pt-20 overflow-hidden bg-[#09090D]">
-
-      {/* Línea superior decorativa */}
+    /* Footer siempre oscuro — bg hardcodeado, nunca hereda el modo */
+    <footer className="relative z-10 px-6 pb-8 pt-20 overflow-hidden" style={{ background: '#09090D', color: '#F5F5F0' }}>
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
         style={{ background: 'linear-gradient(to right,transparent,rgba(81,112,255,.22),transparent)' }}
@@ -4781,7 +4623,7 @@ export default function Footer({ lang }) {
 
       <div className="max-w-[1200px] mx-auto">
 
-        {/* ── CTA grande ──────────────────────────────────────── */}
+        {/* CTA grande — texto siempre blanco */}
         <motion.div
           className="flex flex-col items-center text-center gap-6 pb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -4789,10 +4631,10 @@ export default function Footer({ lang }) {
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="text-[12px] font-bold tracking-[0.12em] uppercase text-white/25">
+          <p style={{ color: 'rgba(255,255,255,0.28)' }} className="text-[12px] font-bold tracking-[0.12em] uppercase">
             {t('¿Listo para construir?', 'Ready to build?')}
           </p>
-          <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl text-white leading-tight tracking-[-1.5px]">
+          <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl leading-tight tracking-[-1.5px]" style={{ color: '#FFFFFF' }}>
             {t('Hagamos algo', "Let's build something")}
             <br />
             <span className="text-grad">{t('que funcione.', 'that works.')}</span>
@@ -4805,66 +4647,68 @@ export default function Footer({ lang }) {
           </a>
         </motion.div>
 
-        {/* ── Grid de links ────────────────────────────────────── */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 border-t border-white/[0.06] pt-10 pb-8">
+        {/* Grid de links */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase" style={{ color: 'rgba(255,255,255,0.28)' }}>
               {t('Navegación', 'Navigation')}
             </span>
-            {navLinks.map((l) => (
+            {navLinks.map(l => (
               <a key={l.href} href={l.href}
-                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
+                className="text-sm transition-colors duration-200 hover:text-white"
+                style={{ color: 'rgba(255,255,255,0.45)' }}>
                 {t(l.es, l.en)}
               </a>
             ))}
           </div>
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase" style={{ color: 'rgba(255,255,255,0.28)' }}>
               {t('Productos', 'Products')}
             </span>
-            {products.map((p) => (
+            {products.map(p => (
               <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer"
-                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
+                className="text-sm transition-colors duration-200 hover:text-white"
+                style={{ color: 'rgba(255,255,255,0.45)' }}>
                 {p.label}
               </a>
             ))}
           </div>
           <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-white/25">Social</span>
-            {social.map((s) => (
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase" style={{ color: 'rgba(255,255,255,0.28)' }}>
+              Social
+            </span>
+            {social.map(s => (
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                className="text-white/45 hover:text-white text-sm transition-colors duration-200">
+                className="text-sm transition-colors duration-200 hover:text-white"
+                style={{ color: 'rgba(255,255,255,0.45)' }}>
                 {s.label}
               </a>
             ))}
           </div>
         </div>
 
-        {/* ── Barra inferior ────────────────────────────────────
-             Estructura: [Logo + nombre] [Copyright] [Tagline]
-             Igual en dark y light — siempre sobre fondo oscuro.
-        ────────────────────────────────────────────────────── */}
-        <div className="border-t border-white/[0.06] pt-7 grid grid-cols-3 items-center gap-4">
-
-          {/* Izquierda — logo un solo color blanco */}
-          <a href="#hero" className="flex items-center gap-2 group" aria-label="Concéntrico Lab">
+        {/* ── Barra inferior: Logo | Copyright | Tagline ── */}
+        <div
+          className="pt-7 grid grid-cols-3 items-center gap-4"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+        >
+          {/* Izquierda — solo logo, sin texto */}
+          <a href="#hero" className="flex items-center gap-0 group" aria-label="Concéntrico Lab">
             <img
               src="/assets/images/logo.png"
-              alt=""
-              className="h-5 w-auto brightness-0 invert opacity-55 group-hover:opacity-90 transition-opacity duration-200"
+              alt="Concéntrico Lab"
+              className="h-5 w-auto opacity-55 group-hover:opacity-90 transition-opacity duration-200"
+              style={{ filter: 'brightness(0) invert(1)' }}
             />
-            <span className="font-cal text-[13px] tracking-tight text-white/55 group-hover:text-white/90 transition-colors duration-200 hidden sm:inline whitespace-nowrap">
-              CONCÉNTRICO LAB
-            </span>
           </a>
 
           {/* Centro — copyright */}
-          <p className="text-[11px] text-white/30 text-center">
+          <p className="text-[11px] text-center" style={{ color: 'rgba(255,255,255,0.30)' }}>
             © {year} Concéntrico Lab. Bogotá, Colombia.
           </p>
 
           {/* Derecha — tagline */}
-          <p className="text-[11px] text-white/30 text-right italic hidden sm:block">
+          <p className="text-[11px] text-right italic hidden sm:block" style={{ color: 'rgba(255,255,255,0.30)' }}>
             {t('Construido con diseño, IA y mucho café.', 'Built with design, AI and a lot of coffee.')}
           </p>
         </div>
