@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion'
 
 const navLinks = [
-  { href: '#productos',  es: 'Productos',  en: 'Products'  },
-  { href: '#enfoque',    es: 'Enfoque',    en: 'Focus'     },
-  { href: '#manifiesto', es: 'Manifiesto', en: 'Manifesto' },
-  { href: '#proceso',    es: 'Proceso',    en: 'Process'   },
-  { href: '#contenido',  es: 'Contenido',  en: 'Content'   },
+  { href: '#enfoque',    es: 'Enfoque',        en: 'Focus'         },
+  { href: '#principios', es: 'Principios',     en: 'Lab principles' },
+  { href: '#productos',  es: 'Productos',      en: 'Products'      },
+  { href: '#contenido',  es: 'Contenido',      en: 'Content'        },
+  { href: '#proceso',    es: 'Proceso',        en: 'Process'       },
 ]
 const social = [
   { label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
@@ -40,7 +40,7 @@ export default function Footer({ lang }) {
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/28 text-black/35">
+          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/75 text-black/60">
             {t('¿Listo para construir?', 'Ready to build?')}
           </p>
           <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl leading-tight tracking-[-1.5px] dark:text-white text-b-dark">
@@ -57,31 +57,31 @@ export default function Footer({ lang }) {
         </motion.div>
 
         {/* Grid de links */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8 border-t dark:border-white/6 border-black/8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8 border-t dark:border-white/10 border-black/12">
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/28 text-black/35">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/45 text-black/45">
               {t('Navegación', 'Navigation')}
             </span>
             {navLinks.map(l => (
               <a key={l.href} href={l.href}
-                className="text-sm transition-colors duration-200 dark:text-white/45 dark:hover:text-white text-black/50 hover:text-black">
+                className="text-sm transition-colors duration-200 dark:text-white/55 dark:hover:text-white text-black/50 hover:text-black">
                 {t(l.es, l.en)}
               </a>
             ))}
           </div>
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/28 text-black/35">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/45 text-black/45">
               {t('Productos', 'Products')}
             </span>
             {products.map(p => (
               <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer"
-                className="text-sm transition-colors duration-200 dark:text-white/45 dark:hover:text-white text-black/50 hover:text-black">
+                className="text-sm transition-colors duration-200 dark:text-white/55 dark:hover:text-white text-black/50 hover:text-black">
                 {p.label}
               </a>
             ))}
           </div>
           <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/28 text-black/35">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/45 text-black/45">
               Social
             </span>
             {social.map(s => (
@@ -94,7 +94,7 @@ export default function Footer({ lang }) {
         </div>
 
         {/* ── Barra inferior: Logo | Copyright | Tagline ── */}
-        <div className="pt-7 grid grid-cols-3 items-center gap-4 border-t dark:border-white/6 border-black/8">
+        <div className="pt-7 grid grid-cols-3 items-center gap-4 border-t dark:border-white/10 border-black/12">
           {/* Izquierda — logo */}
           <a href="#hero" className="flex items-center gap-0 group" aria-label="Concéntrico Lab">
             <img

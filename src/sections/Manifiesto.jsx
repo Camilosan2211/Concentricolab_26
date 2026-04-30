@@ -87,7 +87,7 @@ export default function Manifiesto({ lang }) {
 
   return (
     <section
-      id="manifiesto"
+      id="principios"
       ref={sec}
       className="py-12 md:py-16 px-4 relative overflow-hidden bg-transparent"
     >
@@ -106,10 +106,10 @@ export default function Manifiesto({ lang }) {
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-3">
           <motion.p
-            className="text-[11px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/40"
+            className="text-[11px] font-bold tracking-[.12em] uppercase dark:text-white/40 text-black/45"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
           >
-            {t('En qué creemos', 'What we believe')}
+            {t('Diseño, sistemas y criterio', 'What we believe')}
           </motion.p>
           <motion.h2
             className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px] max-w-[520px]"
@@ -118,9 +118,8 @@ export default function Manifiesto({ lang }) {
             viewport={{ once: true }}
             transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .06 }}
           >
-            {t('La ', 'The ')}
-            <span className="text-grad">{t('filosofía', 'philosophy')}</span>
-            {t(' del lab', ' of the lab')}
+            {t('Principios ', 'Lab ')}
+            <span className="text-grad">{t('del lab', 'principles')}</span>
           </motion.h2>
           <motion.p
             className="dark:text-white/40 text-black/45 text-sm max-w-[440px] leading-[1.7]"
@@ -128,8 +127,8 @@ export default function Manifiesto({ lang }) {
             viewport={{ once: true }} transition={{ delay: .12, duration: .7 }}
           >
             {t(
-              'Creemos que el diseño con criterio crea sistemas que perduran. Estos son los principios que guían cada decisión en el lab.',
-              'We believe design with purpose creates systems that last. These are the principles behind every decision in the lab.'
+              'Aquí están los principios, los enfoques y las métricas que usamos para diseñar sistemas y ejecutar soluciones con rigor.',
+              'These are the principles, approaches, and metrics we use to design systems and execute solutions with rigor.'
             )}
           </motion.p>
         </div>
