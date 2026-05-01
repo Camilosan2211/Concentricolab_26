@@ -165,7 +165,7 @@ export default function Connect({ lang }) {
             </button>
 
             <div className="mt-auto">
-              <p className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/28 text-black/35 mb-3">
+              <p className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/75 text-black/60 mb-3">
                 {t('Redes', 'Social')}
               </p>
               <div className="grid grid-cols-3 gap-2.5">

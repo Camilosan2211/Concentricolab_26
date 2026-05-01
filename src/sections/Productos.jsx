@@ -237,15 +237,15 @@ export default function Productos({ lang }) {
               className="text-[12px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/35"
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             >
-              {t('Productos digitales', 'Digital products')}
+              {t('Contenido y herramientas', 'Content & tools')}
             </motion.p>
             <motion.h2
               className="font-cal text-4xl md:text-5xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .08 }}
             >
-              {t('Insights & ', 'Insights & ')}
-              <span className="text-grad">{t('Solutions', 'Solutions')}</span>
+              {t('Contenido y ', 'Content & ')}
+              <span className="text-grad">{t('herramientas', 'tools')}</span>
             </motion.h2>
           </div>
 

@@ -1,6 +1,6 @@
 /**
  * LabStats — "Dark glass island" section
- * Actúa como ruptura visual entre Manifiesto y Productos.
+ * Actúa como ruptura visual entre Principios y Productos.
  * En modo dark: panel oscuro con glass y glow interior.
  * En modo light: panel blanco con sombra y borde suave.
  */
