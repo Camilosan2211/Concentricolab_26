@@ -23,7 +23,7 @@ export default function Enfoque({ lang }) {
     <section id="enfoque" className="py-20 px-6 relative overflow-hidden">
       <div
         className="absolute top-[-60px] right-[-40px] w-[320px] h-[320px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse,rgba(81,112,255,.07) 0%,transparent 70%)', filter: 'blur(40px)' }}
+        style={{ background: 'radial-gradient(ellipse,rgba(77,102,255,.07) 0%,transparent 70%)', filter: 'blur(40px)' }}
         aria-hidden="true"
       />
 

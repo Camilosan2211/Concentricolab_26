@@ -179,7 +179,7 @@ export default function Hero({ lang }) {
         <motion.div variants={variants.item} className="flex flex-wrap items-center gap-4 justify-center">
           <a
             href="#enfoque"
-            className="group relative inline-flex items-center gap-2.5 glass dark:text-white text-black text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(81,112,255,.22)]"
+            className="group relative inline-flex items-center gap-2.5 glass dark:text-white text-black text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(77,102,255,.22)]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral" />
             {t('Conoce el enfoque', 'Learn the approach')}
@@ -187,7 +187,7 @@ export default function Hero({ lang }) {
           </a>
           <a
             href="#enfoque"
-            className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(81,112,255,.5)] transition-all duration-300"
+            className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
           >
             {t('Explorar', 'Explore')}
           </a>

@@ -11,7 +11,7 @@ function KineticSpheres({ darkMode, count = 180 }) {
     const seeds = []
     const colors = new Float32Array(count * 3)
     const palette = [
-      new THREE.Color('#5170FF'),
+      new THREE.Color('#4D66FF'),
       new THREE.Color('#828AFF'),
       new THREE.Color('#41EAFF'),
       new THREE.Color('#FF6D4D'),
@@ -120,12 +120,12 @@ function FloatingAccent({ darkMode }) {
   )
 }
 const SHAPE_DATA = [
-  { type: 'box',          color: '#5170FF', emissive: '#3050CC', x: -3.8, y:  1.6, z: -1.2, scale: 0.18, speed: 0.28, phase: 0.0  },
+  { type: 'box',          color: '#4D66FF', emissive: '#3050CC', x: -3.8, y:  1.6, z: -1.2, scale: 0.18, speed: 0.28, phase: 0.0  },
   { type: 'octahedron',   color: '#FF6D4D', emissive: '#CC4020', x:  3.2, y: -1.1, z: -0.9, scale: 0.22, speed: 0.21, phase: 1.1  },
   { type: 'cone',         color: '#41EAFF', emissive: '#20B8CC', x: -1.4, y: -2.4, z: -1.5, scale: 0.17, speed: 0.33, phase: 2.2  },
   { type: 'box',          color: '#828AFF', emissive: '#5060CC', x:  2.6, y:  2.2, z: -2.0, scale: 0.14, speed: 0.18, phase: 3.3  },
   { type: 'octahedron',   color: '#FF6D4D', emissive: '#AA3A1C', x: -4.4, y: -0.6, z: -1.8, scale: 0.19, speed: 0.24, phase: 0.7  },
-  { type: 'cone',         color: '#5170FF', emissive: '#3050CC', x:  4.1, y:  0.8, z: -1.4, scale: 0.15, speed: 0.30, phase: 1.8  },
+  { type: 'cone',         color: '#4D66FF', emissive: '#3050CC', x:  4.1, y:  0.8, z: -1.4, scale: 0.15, speed: 0.30, phase: 1.8  },
   { type: 'box',          color: '#41EAFF', emissive: '#18A0B8', x:  0.4, y:  2.9, z: -2.4, scale: 0.12, speed: 0.22, phase: 4.1  },
   { type: 'octahedron',   color: '#828AFF', emissive: '#5060AA', x: -2.2, y:  0.3, z: -2.1, scale: 0.21, speed: 0.16, phase: 2.9  },
 ]
@@ -187,7 +187,7 @@ export default function ParticleField({ darkMode = true }) {
         style={{ background: 'transparent' }}
       >
         <ambientLight intensity={0.34} />
-        <pointLight position={[3, 4, 3]} color="#5170FF" intensity={1.05} />
+        <pointLight position={[3, 4, 3]} color="#4D66FF" intensity={1.05} />
         <pointLight position={[-3, -2, 3]} color="#FF6D4D" intensity={0.62} />
         <pointLight position={[0, 3, -3]} color="#41EAFF" intensity={0.36} />
         <KineticSpheres darkMode={darkMode} count={180} />

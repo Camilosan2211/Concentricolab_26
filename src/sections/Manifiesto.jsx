@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 
 const principles = [
-  { num: '01', color: '#5170FF',
+  { num: '01', color: '#4D66FF',
     es: { title: 'Del núcleo hacia afuera', body: 'Las mejores soluciones parten del centro: del usuario al sistema, del problema a la solución.' },
     en: { title: 'From the core outward',   body: 'The best solutions start from the center: from the user to the system, from the problem to the solution.' },
   },
@@ -21,7 +21,7 @@ const principles = [
 ]
 
 const stats = [
-  { num: '+40h', color: '#5170FF', es: 'Ahorradas por automatización en un proyecto típico',   en: 'Saved through automation in a typical project' },
+  { num: '+40h', color: '#4D66FF', es: 'Ahorradas por automatización en un proyecto típico',   en: 'Saved through automation in a typical project' },
   { num: '6+',   color: '#FF6D4D', es: 'Disciplinas convergiendo en cada entrega',               en: 'Disciplines converging in every delivery' },
   { num: '3×',   color: '#41EAFF', es: 'Más rápido que un flujo de trabajo tradicional',         en: 'Faster than a traditional workflow' },
 ]
@@ -33,7 +33,7 @@ function Card({ p, lang, index }) {
 
   return (
     <motion.div
-      className="rounded-2xl p-5 flex flex-col gap-2.5 relative overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.04] bg-white/60 backdrop-blur-sm"
+      className="rounded-card p-5 flex flex-col gap-2.5 relative overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.04] bg-white/60 backdrop-blur-sm"
       initial={{ opacity: 0, y: 36 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
@@ -66,7 +66,7 @@ function Card({ p, lang, index }) {
       </motion.span>
 
       <h3 className="font-cal text-[17px] dark:text-white text-b-dark leading-snug">{c.title}</h3>
-      <p className="dark:text-white/45 text-black/55 leading-[1.65] text-[13px]">{c.body}</p>
+      <p className="dark:text-white/50 text-black/55 leading-[1.65] text-[13px]">{c.body}</p>
 
       {/* Línea inferior en hover */}
       <div
@@ -97,10 +97,10 @@ export default function Manifiesto({ lang }) {
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] rounded-full pointer-events-none"
         aria-hidden="true"
       >
-        <div className="w-full h-full rounded-full" style={{ background: 'radial-gradient(ellipse,rgba(81,112,255,.12) 0%,transparent 68%)', filter: 'blur(55px)' }} />
+        <div className="w-full h-full rounded-full" style={{ background: 'radial-gradient(ellipse,rgba(77,102,255,.12) 0%,transparent 68%)', filter: 'blur(55px)' }} />
       </motion.div>
 
-      <div className="max-w-[1400px] mx-auto my-12 rounded-[2.5rem] border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl px-6 md:px-8 py-10 md:py-12">
+      <div className="section-premium">
         <div className="max-w-[1200px] mx-auto flex flex-col gap-8 md:gap-10 relative z-10">
 
         {/* Header */}
@@ -141,7 +141,7 @@ export default function Manifiesto({ lang }) {
         {/* Métricas integradas */}
         <motion.div
           ref={statsRef}
-          className="relative overflow-hidden rounded-2xl border dark:border-white/[0.07] border-black/[0.07] dark:bg-[rgba(5,8,40,0.55)] bg-white/55 backdrop-blur-xl"
+          className="relative overflow-hidden rounded-card border dark:border-white/[0.07] border-black/[0.07] dark:bg-b-deep/55 bg-white/55 backdrop-blur-xl"
           initial={{ opacity: 0, y: 32 }}
           animate={statsInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: .9, ease: [.16, 1, .3, 1] }}
@@ -168,7 +168,7 @@ export default function Manifiesto({ lang }) {
                 >
                   {s.num}
                 </motion.span>
-                <p className="dark:text-white/45 text-black/50 text-[12px] leading-[1.55] max-w-[155px]">
+                <p className="dark:text-white/50 text-black/50 text-[12px] leading-[1.55] max-w-[155px]">
                   {lang === 'es' ? s.es : s.en}
                 </p>
               </motion.div>

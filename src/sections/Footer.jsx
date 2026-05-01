@@ -26,10 +26,10 @@ export default function Footer({ lang }) {
     <footer className="relative z-10 px-4 pb-8 pt-20 mb-8 overflow-hidden bg-transparent">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
-        style={{ background: 'linear-gradient(to right,transparent,rgba(81,112,255,.22),transparent)' }}
+        style={{ background: 'linear-gradient(to right,transparent,rgba(77,102,255,.22),transparent)' }}
       />
 
-      <div className="max-w-[1400px] mx-auto my-12 rounded-[2.5rem] border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl px-6 md:px-8 py-10 md:py-12">
+      <div className="section-premium">
         <div className="max-w-[1200px] mx-auto">
 
         {/* CTA grande — adaptativo al modo */}
@@ -50,7 +50,7 @@ export default function Footer({ lang }) {
           </h2>
           <a
             href="#connect"
-            className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-8 py-4 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(81,112,255,.55)] transition-all duration-300 mt-2"
+            className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-8 py-4 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(77,102,255,.55)] transition-all duration-300 mt-2"
           >
             {t('Conectar con el lab', 'Connect with the lab')}
           </a>
@@ -59,7 +59,7 @@ export default function Footer({ lang }) {
         {/* Grid de links */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8 border-t dark:border-white/10 border-black/12">
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/45 text-black/45">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
               {t('Navegación', 'Navigation')}
             </span>
             {navLinks.map(l => (
@@ -70,7 +70,7 @@ export default function Footer({ lang }) {
             ))}
           </div>
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/45 text-black/45">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
               {t('Productos', 'Products')}
             </span>
             {products.map(p => (
@@ -81,12 +81,12 @@ export default function Footer({ lang }) {
             ))}
           </div>
           <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/45 text-black/45">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
               Social
             </span>
             {social.map(s => (
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                className="text-sm transition-colors duration-200 dark:text-white/45 dark:hover:text-white text-black/50 hover:text-black">
+                className="text-sm transition-colors duration-200 dark:text-white/50 dark:hover:text-white text-black/50 hover:text-black">
                 {s.label}
               </a>
             ))}

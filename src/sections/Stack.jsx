@@ -90,7 +90,7 @@ export default function Stack({ lang }) {
               whileHover={{
                 y: -6,
                 scale: 1.07,
-                borderColor: 'rgba(81,112,255,.3)',
+                borderColor: 'rgba(77,102,255,.3)',
                 transition: { duration: 0.22, ease: 'easeOut' },
               }}
             >

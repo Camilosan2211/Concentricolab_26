@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 function ElegantShape({
   className, delay = 0, width = 400, height = 100, rotate = 0,
   darkGradient = "from-white/[0.08]",
-  lightColor = "rgba(81,112,255,0.52)",
-  lightGlow  = "rgba(81,112,255,0.28)",
+  lightColor = "rgba(77,102,255,0.52)",
+  lightGlow  = "rgba(77,102,255,0.28)",
   darkMode = true,
 }) {
   return (
@@ -80,7 +80,7 @@ export default function GeometricBackground({ className, darkMode = true }) {
         {/* Grande izq — azul */}
         <ElegantShape delay={0.3} width={600} height={140} rotate={12}
           darkGradient="from-[#41EAFF]/[0.15]"
-          lightColor="rgba(81,112,255,0.55)" lightGlow="rgba(81,112,255,0.30)"
+          lightColor="rgba(77,102,255,0.55)" lightGlow="rgba(77,102,255,0.30)"
           darkMode={darkMode} className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
         />
         {/* Grande der — coral */}

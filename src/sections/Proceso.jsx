@@ -5,7 +5,7 @@ import { Search, PenTool, Boxes } from 'lucide-react'
 const steps = [
   {
     Icon: Search,
-    color: '#5170FF',
+    color: '#4D66FF',
     es: { title: 'Diagnóstico', desc: 'Mapeamos problema, contexto y métricas para alinear criterio antes de diseñar.' },
     en: { title: 'Diagnosis',   desc: 'We map the problem, context and metrics to align criteria before designing.' },
   },
@@ -30,7 +30,7 @@ export default function Proceso({ lang }) {
 
   return (
     <section id="proceso" className="relative z-10 py-16 px-4">
-      <div className="max-w-[1400px] mx-auto my-12 rounded-[2.5rem] border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl px-6 md:px-8 py-10 md:py-12">
+      <div className="section-premium">
         <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
         {/* Header */}
@@ -54,7 +54,7 @@ export default function Proceso({ lang }) {
         {/* Panel */}
         <motion.div
           ref={ref}
-          className="relative rounded-3xl px-6 py-12 md:px-14 md:py-14 overflow-hidden"
+          className="relative rounded-card px-6 py-12 md:px-14 md:py-14 overflow-hidden"
           initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
@@ -62,7 +62,7 @@ export default function Proceso({ lang }) {
           {/* Glow interior sutil */}
           <div
             className="absolute inset-0 pointer-events-none opacity-50"
-            style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(81,112,255,.06) 0%, transparent 70%)' }}
+            style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(77,102,255,.06) 0%, transparent 70%)' }}
           />
 
           {/* ── Conector animado (desktop) ──
@@ -87,7 +87,7 @@ export default function Proceso({ lang }) {
             {/* Línea base */}
             <motion.div
               className="absolute inset-0 rounded-full origin-left"
-              style={{ background: 'linear-gradient(90deg, #5170FF, #FF6D4D, #828AFF)' }}
+              style={{ background: 'linear-gradient(90deg, #4D66FF, #FF6D4D, #828AFF)' }}
               initial={{ scaleX: 0 }}
               animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
@@ -148,7 +148,7 @@ export default function Proceso({ lang }) {
 
                   {/* Icono — con fondo glass y sin z-index relativo para no cortar la línea */}
                   <motion.div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center border dark:border-white/10 border-black/8 dark:bg-[rgba(5,8,40,0.70)] bg-white/80 backdrop-blur-sm"
+                    className="w-14 h-14 rounded-card flex items-center justify-center border dark:border-white/10 border-black/8 dark:bg-b-deep/70 bg-white/80 backdrop-blur-sm"
                     style={{ boxShadow: `0 8px 28px ${step.color}28` }}
                     whileHover={{ scale: 1.08, transition: { duration: .2, ease: 'easeOut' } }}
                     animate={inView ? {
@@ -166,7 +166,7 @@ export default function Proceso({ lang }) {
                   {/* Texto */}
                   <div className="flex flex-col gap-2 max-w-[260px]">
                     <h3 className="font-cal text-xl dark:text-white text-b-dark">{c.title}</h3>
-                    <p className="dark:text-white/45 text-black/50 text-sm leading-[1.65]">{c.desc}</p>
+                    <p className="dark:text-white/50 text-black/50 text-sm leading-[1.65]">{c.desc}</p>
                   </div>
 
                   {/* Conector vertical mobile */}

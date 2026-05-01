@@ -5,10 +5,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        'b-blue':    '#5170FF',
+        'b-blue':    '#4D66FF',
         'b-blue-lt': '#828AFF',
         'b-coral':   '#FF6D4D',
         'b-cyan':    '#41EAFF',
+        'b-deep':    '#050828',
         'b-dark':    '#00031F',
         'b-dark2':   '#020425',
         'b-light':   '#F8F7F4',
@@ -48,9 +49,10 @@ export default {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        notch: "60px",
+        section: "2.5rem",
+        card: "1.5rem",
+        action: "0.75rem",
       },
       fontFamily: {
         cal:  ['"Cal Sans"', 'sans-serif'],

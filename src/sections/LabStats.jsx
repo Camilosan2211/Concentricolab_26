@@ -10,7 +10,7 @@ import { motion, useInView } from 'framer-motion'
 const stats = [
   {
     num: '+40h',
-    color: '#5170FF',
+    color: '#4D66FF',
     es: 'Ahorradas por automatización en un proyecto típico',
     en: 'Saved through automation in a typical project',
   },
@@ -38,18 +38,18 @@ export default function LabStats({ lang }) {
       <div className="max-w-[1200px] mx-auto">
         <motion.div
           ref={ref}
-          className="relative overflow-hidden rounded-3xl"
+          className="relative overflow-hidden rounded-card"
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: .9, ease: [.16, 1, .3, 1] }}
         >
           {/* Fondo del panel */}
-          <div className="absolute inset-0 dark:bg-[rgba(5,8,40,0.72)] bg-white/80 dark:backdrop-blur-2xl backdrop-blur-xl dark:border dark:border-white/[0.07] border border-black/[0.07] rounded-3xl" />
+          <div className="absolute inset-0 dark:bg-b-deep/72 bg-white/80 dark:backdrop-blur-2xl backdrop-blur-xl dark:border dark:border-white/[0.07] border border-black/[0.07] rounded-card" />
 
           {/* Glow interior */}
           <div
-            className="absolute inset-0 pointer-events-none rounded-3xl"
-            style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(81,112,255,.07) 0%, transparent 75%)' }}
+            className="absolute inset-0 pointer-events-none rounded-card"
+            style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(77,102,255,.07) 0%, transparent 75%)' }}
           />
 
           {/* Línea superior de acento */}
@@ -74,7 +74,7 @@ export default function LabStats({ lang }) {
                 >
                   {s.num}
                 </motion.span>
-                <p className="dark:text-white/45 text-black/50 text-[13px] leading-[1.6] max-w-[160px]">
+                <p className="dark:text-white/50 text-black/50 text-[13px] leading-[1.6] max-w-[160px]">
                   {lang === 'es' ? s.es : s.en}
                 </p>
               </motion.div>

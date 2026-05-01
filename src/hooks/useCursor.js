@@ -21,7 +21,7 @@ export function useCursor() {
     const colors = () => {
       const isLight = document.documentElement.classList.contains('light')
       return isLight
-        ? { main: '#5170FF', glow: 'rgba(81,112,255,0.18)', ringBorder: 'rgba(81,112,255,0.55)', ringBg: 'rgba(81,112,255,0.04)', hoverBorder: 'rgba(81,112,255,0.85)', hoverBg: 'rgba(81,112,255,0.08)', hoverGlow: 'rgba(81,112,255,0.22)' }
+        ? { main: '#4D66FF', glow: 'rgba(77,102,255,0.18)', ringBorder: 'rgba(77,102,255,0.55)', ringBg: 'rgba(77,102,255,0.04)', hoverBorder: 'rgba(77,102,255,0.85)', hoverBg: 'rgba(77,102,255,0.08)', hoverGlow: 'rgba(77,102,255,0.22)' }
         : { main: '#FF6D4D', glow: 'rgba(255,109,77,0.16)', ringBorder: 'rgba(255,109,77,0.50)', ringBg: 'rgba(255,109,77,0.04)', hoverBorder: 'rgba(255,109,77,0.85)', hoverBg: 'rgba(255,109,77,0.07)', hoverGlow: 'rgba(255,109,77,0.20)' }
     }
 

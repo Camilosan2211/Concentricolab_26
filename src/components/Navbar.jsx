@@ -38,7 +38,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
       )}
       style={scrolled ? {
         background: dark ? 'rgba(0, 3, 31, 0.52)' : 'rgba(248, 247, 244, 0.48)',
-        borderColor: dark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(81, 112, 255, 0.15)',
+        borderColor: dark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(77, 102, 255, 0.15)',
         boxShadow: dark ? '0 2px 12px rgba(0, 0, 0, 0.2)' : '0 2px 16px rgba(0, 0, 0, 0.06)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
@@ -47,7 +47,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
       }}
       >
         {/* Notch */}
-        <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-[60px] mb-1">
+        <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-notch mb-1">
           <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
           <span className="text-white text-[11px] font-medium tracking-wide">
             {t('Trabajando en nuevos proyectos ✦', 'Working on new projects ✦')}
@@ -87,7 +87,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
               className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
-                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(81, 112, 255, 0.25)',
+                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
               }}
               onMouseEnter={(e) => {
@@ -108,7 +108,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
               className="text-[13px] font-bold px-3.5 py-1.5 rounded-full transition-all duration-200 backdrop-blur-sm"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
-                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(81, 112, 255, 0.25)',
+                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
               }}
               onMouseEnter={(e) => {
@@ -125,7 +125,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
 
             {/* CTA */}
             <a href="#productos"
-              className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(81,112,255,.45)] transition-all duration-200">
+              className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(77,102,255,.45)] transition-all duration-200">
               {t('Explorar', 'Explore')}
             </a>
 
@@ -134,7 +134,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
               className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
-                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(81, 112, 255, 0.25)',
+                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
               }}
               onClick={() => setOpen(o => !o)}
@@ -165,11 +165,11 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
             </nav>
             <div className="mt-auto flex gap-3">
               <button onClick={toggleDark}
-                className="border border-[rgba(81,112,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm dark:text-white/70 text-[#0A0A18]/70">
+                className="border border-[rgba(77,102,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm dark:text-white/70 text-[#0A0A18]/70">
                 {dark ? '☀ Claro' : '☾ Oscuro'}
               </button>
               <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
-                className="border border-[rgba(81,112,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-[#0A0A18]/70">
+                className="border border-[rgba(77,102,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-[#0A0A18]/70">
                 {lang === 'es' ? 'EN' : 'ES'}
               </button>
             </div>

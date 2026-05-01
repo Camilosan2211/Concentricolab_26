@@ -78,7 +78,7 @@ export default function Connect({ lang }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:items-stretch">
           <motion.div
-            className="glass rounded-3xl p-8 md:p-10 flex flex-col gap-6 h-full min-h-[340px]"
+            className="glass rounded-card p-8 md:p-10 flex flex-col gap-6 h-full min-h-[340px]"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -92,7 +92,7 @@ export default function Connect({ lang }) {
               <h3 className="font-cal text-2xl dark:text-white text-b-dark leading-snug mt-1">
                 {t('Recursos gratis, directo a tu bandeja.', 'Free resources, straight to your inbox.')}
               </h3>
-              <p className="dark:text-white/45 text-black/50 text-sm leading-[1.7] mt-1">
+              <p className="dark:text-white/50 text-black/50 text-sm leading-[1.7] mt-1">
                 {t(
                   'Templates, automatizaciones y recursos de diseño — todo lo que construimos, primero para ti.',
                   'Templates, automations and design resources — everything we build, first for you.'
@@ -106,12 +106,12 @@ export default function Connect({ lang }) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('tu@email.com', 'your@email.com')}
                 required
-                className="w-full glass dark:border-white/10 border-black/8 focus:border-b-blue/50 dark:text-white text-b-dark placeholder:dark:text-white/30 placeholder:text-black/30 text-sm px-5 py-3.5 rounded-2xl outline-none bg-transparent transition-colors duration-200"
+                className="w-full glass dark:border-white/10 border-black/8 focus:border-b-blue/50 dark:text-white text-b-dark placeholder:dark:text-white/30 placeholder:text-black/30 text-sm px-5 py-3.5 rounded-action outline-none bg-transparent transition-colors duration-200"
               />
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-2xl glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-action glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
               >
                 <Send size={14} />
                 {status === 'loading'
@@ -129,7 +129,7 @@ export default function Connect({ lang }) {
           </motion.div>
 
           <motion.div
-            className="glass rounded-3xl p-8 md:p-10 flex flex-col gap-6 h-full min-h-[340px]"
+            className="glass rounded-card p-8 md:p-10 flex flex-col gap-6 h-full min-h-[340px]"
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -142,14 +142,14 @@ export default function Connect({ lang }) {
               <h3 className="font-cal text-2xl dark:text-white text-b-dark leading-snug">
                 {t('¿Tienes algo en mente?', 'Got something in mind?')}
               </h3>
-              <p className="dark:text-white/45 text-black/50 text-sm leading-[1.7]">
+              <p className="dark:text-white/50 text-black/50 text-sm leading-[1.7]">
                 {t('Cuéntanos de qué se trata.', "Tell us what it's about.")}
               </p>
             </div>
 
             <button
               onClick={copyEmail}
-              className="group glass flex items-center gap-3 px-5 py-3.5 rounded-2xl border dark:border-b-blue/20 border-b-blue/15 hover:dark:border-b-blue/40 hover:border-b-blue/30 transition-all duration-200 text-left w-full"
+              className="group glass flex items-center gap-3 px-5 py-3.5 rounded-action border dark:border-b-blue/20 border-b-blue/15 hover:dark:border-b-blue/40 hover:border-b-blue/30 transition-all duration-200 text-left w-full"
               data-mag="true"
             >
               <Mail size={15} className="text-b-blue flex-shrink-0" />
