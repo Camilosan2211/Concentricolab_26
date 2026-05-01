@@ -4,6 +4,18 @@
 
 ---
 
+## ESTADO DE IMPLEMENTACIÓN (a partir de mayo 2026)
+
+✅ **RESUELTO** — E-02 (WCAG AA `b-blue`) — `#5170FF` → `#4D66FF` aplicado en config y componentes  
+✅ **RESUELTO** — E-03 (WCAG AA texto glass cards) — `dark:text-white/45` → `dark:text-white/50` en todas las secciones  
+✅ **PARCIAL** — E-01 (rounded tokens) — tokens `notch`, `card`, `section`, `action` creados en `tailwind.config.js` (Bloque 1 implementado)  
+✅ **RESUELTO** — W-01 (surface-deep token) — `b-deep: '#050828'` agregado a config y reemplazado en LabStats, Manifiesto, Proceso  
+✅ **PARCIAL** — W-02 (section-container-premium) — patrón `.section-premium` creado en `index.css` y aplicado en secciones premium  
+⏳ **PENDIENTE** — W-05 (light mode documentado) — sistema CSS de dark/light mode aún en uso de defaults de Tailwind  
+⏳ **PENDIENTE** — Bloques 3-6 del PLAN DE ACCIÓN — actualizar DESIGN.md con componentes documentados y Do's/Don'ts mejorados  
+
+---
+
 ## PARTE 1 — FINDINGS (Errores, Advertencias, Sugerencias)
 
 ### ERRORES (bloqueantes — afectan funcionalidad y compliance)
@@ -33,11 +45,13 @@ El sistema real de radios en el UI es: `full (9999px)` → `[2.5rem] (40px)` →
 
 ---
 
-**E-02** `severity: error` · `path: components.button-primary`
+**E-02** `severity: error` · `path: components.button-primary` · **✅ RESUELTO**
 **El color de fondo del botón primario falla WCAG AA**
 
 `#5170FF` como fondo con texto blanco produce un ratio de contraste de **4.11:1** (requiere mínimo 4.5:1).
-El fix es **`#4D66FF`** — visualmente casi idéntico, ratio **4.51:1**. Distancia cromática desde el original: solo 10.8 unidades en RGB.
+El fix fue **`#4D66FF`** — visualmente casi idéntico, ratio **4.51:1**. Distancia cromática desde el original: solo 10.8 unidades en RGB.
+
+**Estado:** Aplicado en `tailwind.config.js` (`'b-blue': '#4D66FF'`) y en todos los componentes de botones, navbar, newsletter y CTA.
 
 ```
 #5170FF + white → 4.11:1  ❌ FAIL AA
@@ -49,13 +63,13 @@ Esto afecta: botón hero, navbar CTA, botón de newsletter, footer CTA.
 
 ---
 
-**E-03** `severity: error` · `path: components.glass-card (body text)`
+**E-03** `severity: error` · `path: components.glass-card (body text)` · **✅ RESUELTO**
 **Texto muted `white/45` sobre fondo dark falla WCAG AA**
 
 `dark:text-white/45` (≈ `#737373` rendered) sobre `rgba(5,8,40,…)` glass → **4.23:1** — falla por poco.
-Este patrón se usa en *todas* las descripciones de cards (Productos, Connect, Manifiesto, Proceso).
+Este patrón se usaba en *todas* las descripciones de cards (Productos, Connect, Manifiesto, Proceso).
 
-Fix: subir a `dark:text-white/50` → ratio ≈ 4.7:1. Un solo cambio en toda la codebase.
+**Estado:** Actualizado a `dark:text-white/50` → ratio ≈ 4.7:1 en todas las secciones y componentes glass.
 
 ---
 
@@ -63,18 +77,18 @@ Fix: subir a `dark:text-white/50` → ratio ≈ 4.7:1. Un solo cambio en toda la
 
 ---
 
-**W-01** `severity: warning` · `path: colors`
+**W-01** `severity: warning` · `path: colors` · **✅ PARCIAL (surface-deep resuelto)**
 **5 valores de color en código sin token en DESIGN.md**
 
-| Color en código | Uso | Nombre sugerido |
-|---|---|---|
-| `#FF9B7A` | Stop de gradiente `.text-grad-coral` | `accent-lt` |
-| `rgba(5,8,40,x)` ≈ `#050828` | Fondo de LabStats, stats panel, Proceso inner | `surface-deep` |
-| `rgba(0,3,31,0.52)` | Navbar scrolled backdrop dark | `surface-dark-alpha` |
-| `rgba(220,225,255,0.92)` ≈ `#DCE1FF` | Mobile drawer backdrop light | `surface-drawer-light` |
-| `blue-950` (Tailwind) | Manifiesto, Proceso, Footer containers | `surface-section` |
+| Color en código | Uso | Nombre sugerido | Estado |
+|---|---|---|---|
+| `#FF9B7A` | Stop de gradiente `.text-grad-coral` | `accent-lt` | ⏳ Pendiente |
+| `rgba(5,8,40,x)` ≈ `#050828` | Fondo de LabStats, stats panel, Proceso inner | `surface-deep` | ✅ `b-deep: '#050828'` en config |
+| `rgba(0,3,31,0.52)` | Navbar scrolled backdrop dark | `surface-dark-alpha` | ⏳ Pendiente |
+| `rgba(220,225,255,0.92)` ≈ `#DCE1FF` | Mobile drawer backdrop light | `surface-drawer-light` | ⏳ Pendiente |
+| `blue-950` (Tailwind) | Manifiesto, Proceso, Footer containers | `surface-section` | ✅ Reemplazado con clase `.section-premium` |
 
-El más importante para documentar es `#050828` / `surface-deep` — aparece en 4 componentes distintos hardcoded como `rgba(5,8,40,...)` y debería ser un token formal.
+El token `#050828` (`b-deep`) ya está implementado en `tailwind.config.js` y reemplazado en todos los hardcodes de LabStats, Manifiesto y Proceso.
 
 ---
 
@@ -91,7 +105,7 @@ Estos patrones aparecen en múltiples archivos pero no tienen entrada en `compon
 | `principle-card` | `Manifiesto.jsx` | Variante del glass card con hover específico |
 | `stats-island` | `LabStats.jsx` | Panel de métricas con accent lines top/bottom |
 
-El `section-container-premium` es el caso más urgente: `max-w-[1400px] rounded-[2.5rem] border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl` — aparece en 3 secciones copiado textualmente. Sin token documentado, cualquier cambio visual se hace manualmente en 3 lugares.
+El `section-container-premium` era el caso más urgente: aparecía en 3 secciones copiado textualmente. **Estado:** Extraído a clase `.section-premium` en `index.css` y aplicado en Manifiesto, Proceso y Footer. El patrón ahora tiene un punto único de control.
 
 ---
 
