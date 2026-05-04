@@ -1,5 +1,5 @@
 /**
- * Productos.jsx — "Insights & Solutions" carousel
+ * Productos.jsx — "Recursos del lab" carousel
  *
  * Arquitectura:
  * - Contenedor overflow:hidden (wrapper visible)
@@ -10,7 +10,7 @@
  * - 4ª tarjeta asoma ~20% al fondo (gap right en el wrapper)
  * - Dots clicables sincronizados con el índice activo
  */
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, useMotionValue, animate } from 'framer-motion'
 import { ExternalLink, ShoppingBag, Zap, Layers, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef, useState, useCallback, useEffect } from 'react'
 
@@ -53,7 +53,6 @@ function ProductCard({ prod, lang, index, isDragging }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: index * .1 }}
-      // Solo hover si no está siendo arrastrado
       whileHover={isDragging ? {} : { y: -6, scale: 1.012, transition: { duration: .24, ease: 'easeOut' } }}
     >
       {/* Thumbnail */}
@@ -173,10 +172,10 @@ function YouTubeCard({ lang, isDragging }) {
 // ── Componente principal ────────────────────────────────────────
 export default function Productos({ lang }) {
   const t        = (es, en) => lang === 'es' ? es : en
-  const CARD_W   = 340                // ancho de cada tarjeta en px
-  const GAP      = 24                 // gap entre tarjetas en px
-  const STEP     = CARD_W + GAP       // paso de desplazamiento
-  const TOTAL    = products.length + 1 // 3 + YouTube
+  const CARD_W   = 340
+  const GAP      = 24
+  const STEP     = CARD_W + GAP
+  const TOTAL    = products.length + 1
 
   const containerRef  = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -185,13 +184,10 @@ export default function Productos({ lang }) {
 
   const x = useMotionValue(0)
 
-  // Calcula el constraint máximo según el ancho real del contenedor
   useEffect(() => {
     const update = () => {
       if (!containerRef.current) return
-      const visible = containerRef.current.offsetWidth
-      // Queremos que la 4ª tarjeta asome un 20%: la pista tiene TOTAL cards
-      // y queremos mostrar visible px por vez.
+      const visible    = containerRef.current.offsetWidth
       const trackWidth = TOTAL * STEP - GAP
       const maxLeft    = -(trackWidth - visible + GAP * 0.5)
       setMaxDrag(Math.min(0, maxLeft))
@@ -201,7 +197,6 @@ export default function Productos({ lang }) {
     return () => window.removeEventListener('resize', update)
   }, [TOTAL, STEP])
 
-  // Snap al índice exacto
   const snapTo = useCallback((index) => {
     const clamped = Math.max(0, Math.min(index, TOTAL - 1))
     setActiveIndex(clamped)
@@ -213,10 +208,8 @@ export default function Productos({ lang }) {
     const vel       = info.velocity.x
     const offset    = info.offset.x
     const threshold = STEP / 3
-
     let next = activeIndex
     if (Math.abs(vel) > 500) {
-      // Swipe rápido — seguir la dirección de la velocidad
       next = vel < 0 ? activeIndex + 1 : activeIndex - 1
     } else if (Math.abs(offset) > threshold) {
       next = offset < 0 ? activeIndex + 1 : activeIndex - 1
@@ -227,29 +220,29 @@ export default function Productos({ lang }) {
   const handleArrow = (dir) => snapTo(activeIndex + dir)
 
   return (
-    <section id="productos" className="relative z-10 py-24 px-4 md:px-8">
+    <section id="productos recursos" className="relative z-10 py-24 px-4 md:px-8">
       <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
-        {/* ── Encabezado con flechas a la derecha ──────────────── */}
+        {/* Encabezado con flechas a la derecha */}
         <div className="flex items-end justify-between gap-4">
           <div className="flex flex-col gap-3 max-w-2xl">
             <motion.p
               className="text-[12px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/35"
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             >
-              {t('Contenido y herramientas', 'Content & tools')}
+              {t('Recursos del lab', 'Lab resources')}
             </motion.p>
             <motion.h2
               className="font-cal text-4xl md:text-5xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .08 }}
             >
-              {t('Contenido y ', 'Content & ')}
+              {t('Recursos y ', 'Resources & ')}
               <span className="text-grad">{t('herramientas', 'tools')}</span>
             </motion.h2>
           </div>
 
-          {/* Flechas — fuera del carrusel, en el encabezado */}
+          {/* Flechas */}
           <div className="flex items-center gap-2 shrink-0 pb-1">
             <button type="button" onClick={() => handleArrow(-1)}
               disabled={activeIndex === 0}
@@ -266,11 +259,10 @@ export default function Productos({ lang }) {
           </div>
         </div>
 
-        {/* ── Carrusel draggable ───────────────────────────────── */}
+        {/* Carrusel draggable */}
         <div
           ref={containerRef}
           className="relative overflow-hidden"
-          // Evita que los clicks en links se activen al soltar el drag
           style={{ touchAction: 'pan-y' }}
         >
           <motion.div
@@ -278,11 +270,10 @@ export default function Productos({ lang }) {
             style={{ x }}
             drag="x"
             dragConstraints={{ left: maxDrag, right: 0 }}
-            dragElastic={0.08}           // rebote suave en los bordes
-            dragMomentum={true}          // momentum natural post-drag
+            dragElastic={0.08}
+            dragMomentum={true}
             onDragStart={() => setIsDragging(true)}
             onDragEnd={handleDragEnd}
-            // Sincroniza el activeIndex mientras se arrastra
             onDrag={(_, info) => {
               const rawIndex = -info.point.x / STEP
               const clamped  = Math.round(Math.max(0, Math.min(rawIndex, TOTAL - 1)))
@@ -296,7 +287,7 @@ export default function Productos({ lang }) {
           </motion.div>
         </div>
 
-        {/* ── Dots clicables ────────────────────────────────────── */}
+        {/* Dots clicables */}
         <div className="flex justify-center items-center gap-2">
           {Array.from({ length: TOTAL }, (_, i) => (
             <button
@@ -312,12 +303,12 @@ export default function Productos({ lang }) {
           ))}
         </div>
 
-        {/* ── CTA ver todos ─────────────────────────────────────── */}
+        {/* CTA ver todos */}
         <motion.div className="flex justify-center"
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: .3 }}>
           <a href="https://concentriclab.gumroad.com" target="_blank" rel="noopener noreferrer"
             className="glass inline-flex items-center gap-2.5 dark:text-white/60 text-black/65 hover:dark:text-white hover:text-black text-sm font-semibold px-6 py-3 rounded-full border dark:border-white/8 border-black/10 hover:dark:border-white/16 hover:border-black/18 transition-all duration-300">
-            {t('Ver todos los productos', 'View all products')}
+            {t('Ver todos los recursos', 'View all resources')}
             <ExternalLink size={13} />
           </a>
         </motion.div>

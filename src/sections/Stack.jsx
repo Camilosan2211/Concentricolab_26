@@ -1,56 +1,24 @@
 import { motion } from 'framer-motion'
 
 const tools = [
-  { name: 'Figma', src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
-  { name: 'Notion', src: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png' },
-  { name: 'Illustrator', src: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg' },
-  { name: 'ChatGPT', src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
-  { name: 'Claude', src: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg' },
+  { name: 'Figma',        src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
+  { name: 'Notion',       src: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png' },
+  { name: 'Illustrator',  src: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg' },
+  { name: 'ChatGPT',      src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
+  { name: 'Claude',       src: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg' },
   {
     name: 'Perplexity',
     src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/perplexity.svg',
     bg: '#ffffff',
     pad: 6,
   },
-  { name: 'Make', src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/make.svg', bg: '#6D00CC', pad: 7 },
-  {
-    name: 'n8n',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/n8n.svg',
-    bg: '#EA4B71',
-    pad: 6,
-  },
-  {
-    name: 'Canva',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/canva.svg',
-    bg: '#00C4CC',
-    pad: 6,
-  },
-  {
-    name: 'Framer',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg',
-    bg: '#0055FF',
-    pad: 6,
-  },
-  {
-    name: 'Vercel',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/vercel.svg',
-    bg: '#ffffff',
-    invertIcon: true,
-    pad: 7,
-  },
-  {
-    name: 'GitHub',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg',
-    bg: '#ffffff',
-    invertIcon: true,
-    pad: 6,
-  },
-  {
-    name: 'ElevenLabs',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/elevenlabs.svg',
-    bg: '#000000',
-    pad: 6,
-  },
+  { name: 'Make',         src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/make.svg', bg: '#6D00CC', pad: 7 },
+  { name: 'n8n',          src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/n8n.svg', bg: '#EA4B71', pad: 6 },
+  { name: 'Canva',        src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/canva.svg', bg: '#00C4CC', pad: 6 },
+  { name: 'Framer',       src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg', bg: '#0055FF', pad: 6 },
+  { name: 'ElevenLabs',   src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/elevenlabs.svg', bg: '#000000', pad: 6 },
+  // { name: 'Vercel', ... },  // herramienta interna dev — no mostrar al visitante
+  // { name: 'GitHub', ... },  // herramienta interna dev — no mostrar al visitante
 ]
 
 export default function Stack({ lang }) {
@@ -65,11 +33,11 @@ export default function Stack({ lang }) {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35">
-            {lang === 'es' ? 'Las herramientas del lab' : "The lab's tools"}
+            {lang === 'es' ? 'Potenciado por' : 'Powered by'}
           </p>
           <h2 className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark">
-            {lang === 'es' ? 'Stack que ' : 'Stack that '}
-            <span className="text-grad">{lang === 'es' ? 'usamos' : 'we use'}</span>
+            {lang === 'es' ? 'Las mejores ' : 'Best in class '}
+            <span className="text-grad">{lang === 'es' ? 'herramientas' : 'tools'}</span>
           </h2>
         </motion.div>
         <motion.div

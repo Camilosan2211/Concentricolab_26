@@ -1,19 +1,19 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
-const tags_es = ['Diseño UX/UI', 'IA Generativa', 'Branding', 'Diseño Industrial', 'Métricas', 'Automatización', 'Data storytelling']
-const tags_en = ['UX/UI Design', 'Generative AI', 'Branding', 'Industrial Design', 'Metrics', 'Automation', 'Data storytelling']
+const tags_es = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Video', 'Branding', 'Automatización', 'Sistemas visuales']
+const tags_en = ['Design', 'Product & form', 'Digital experience', 'Video', 'Branding', 'Automation', 'Visual systems']
 
-const CORAL_ES = new Set(['núcleo', 'sistema,', 'solución', 'diseño,', 'IA', 'automatización.'])
-const CORAL_EN = new Set(['core', 'system,', 'solution', 'design,', 'AI', 'automation.'])
+const CORAL_ES = new Set(['núcleo', 'forma', 'pantalla', 'diseño,', 'productos,'])
+const CORAL_EN = new Set(['core', 'form', 'screen', 'design,', 'products,'])
 
 export default function Enfoque({ lang }) {
   const ref    = useRef()
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
-  const text     = lang === 'es'
-    ? 'Construimos desde el núcleo hacia afuera — del usuario al sistema, del problema a la solución — combinando diseño, IA y automatización.'
-    : 'We build from the core outward — from the user to the system, from the problem to the solution — combining design, AI and automation.'
+  const text = lang === 'es'
+    ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — integrando diseño, producto, automatización e inteligencia artificial en piezas digitales que funcionan y comunican.'
+    : 'We build from the core outward — from form to system, from object to screen — integrating design, product, automation and artificial intelligence into digital pieces that work and communicate.'
 
   const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
   const tags     = lang === 'es' ? tags_es : tags_en
@@ -47,8 +47,6 @@ export default function Enfoque({ lang }) {
           Animación: cada palabra arranca gris-fantasma (visible en ambos modos),
           luego se revela: palabras normales → blanco en dark / dark en light,
           palabras clave → coral con textShadow glow.
-          Se usa `style` directo para el color final para evitar que Tailwind
-          sobreescriba con clases dark:/text- que fallan en animación.
         */}
         <p
           ref={ref}
@@ -56,11 +54,7 @@ export default function Enfoque({ lang }) {
           aria-label={text}
         >
           {words.map((word, i) => {
-            const isCoral  = coralSet.has(word)
-            // Color final según modo — resuelto en el cliente vía clase CSS
-            // que se aplica al <span> padre, pero la animación lo sobreescribe.
-            // Usamos 'currentColor' como base para que herede el modo.
-            const finalColor = isCoral ? '#FF6D4D' : undefined  // undefined = hereda del CSS
+            const isCoral = coralSet.has(word)
 
             return (
               <motion.span

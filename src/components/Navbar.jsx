@@ -4,10 +4,10 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navLinks = [
-  { href:'#enfoque',    es:'Enfoque',        en:'Focus'         },
-  { href:'#principios', es:'Principios',     en:'Lab principles' },
-  { href:'#productos',  es:'Productos',      en:'Products'      },
-  { href:'#contenido',  es:'Contenido',      en:'Content'        },
+  { href:'#capacidades', es:'Capacidades', en:'Capabilities' },
+  { href:'#enfoque',     es:'Enfoque',    en:'Focus'      },
+  { href:'#principios',  es:'Principios', en:'Principles' },
+  { href:'#connect',     es:'Contacto',   en:'Contact'    },
 ]
 
 export default function Navbar({ lang, setLang, dark, setDark }) {
@@ -46,7 +46,6 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
         background: dark ? 'transparent' : 'rgba(248, 247, 244, 0.4)',
       }}
       >
-        {/* Notch */}
         <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-notch mb-1">
           <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
           <span className="text-white text-[11px] font-medium tracking-wide">
@@ -59,20 +58,13 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
             <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto dark:brightness-100 brightness-75" />
           </a>
 
-          {/* Desktop nav — texto legible en ambos modos */}
           <nav className="hidden md:flex items-center gap-7">
             {navLinks.map(l => (
               <a key={l.href} href={l.href}
                 className="text-sm font-medium transition-colors duration-200 relative group"
-                style={{
-                  color: dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)',
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)'
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.color = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)'
-                }}>
+                style={{ color: dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}
+                onMouseEnter={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)' }}
+                onMouseLeave={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}>
                 {t(l.es, l.en)}
                 <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300" />
               </a>
@@ -80,72 +72,44 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            {/* Theme toggle — con border explícito en light para visibilidad */}
-            <button
-              onClick={toggleDark}
-              aria-label="Toggle theme"
+            <button onClick={toggleDark} aria-label="Toggle theme"
               className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
                 border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)'
-                e.currentTarget.style.background = dark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.85)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)'
-                e.currentTarget.style.background = dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)'
-              }}
-            >
+              }}>
               {dark ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
-            {/* Lang toggle */}
-            <button
-              onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
+            <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
               className="text-[13px] font-bold px-3.5 py-1.5 rounded-full transition-all duration-200 backdrop-blur-sm"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
                 border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)'
-                e.currentTarget.style.background = dark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.85)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)'
-                e.currentTarget.style.background = dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)'
-              }}
-            >
+              }}>
               {lang.toUpperCase()}
             </button>
 
-            {/* CTA */}
-            <a href="#productos"
+            <a href="#capacidades"
               className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(77,102,255,.45)] transition-all duration-200">
               {t('Explorar', 'Explore')}
             </a>
 
-            {/* Mobile menu */}
-            <button
-              className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"
+            <button className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
                 border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
               }}
-              onClick={() => setOpen(o => !o)}
-              aria-label="Menu">
+              onClick={() => setOpen(o => !o)} aria-label="Menu">
               {open ? <X size={16} /> : <Menu size={16} />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile drawer */}
       <AnimatePresence>
         {open && (
           <motion.div

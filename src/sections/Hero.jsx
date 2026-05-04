@@ -122,7 +122,7 @@ export default function Hero({ lang }) {
           </span>
         </motion.div>
 
-        {/* Headline — 3 renglones */}
+        {/* Headline — 3 renglones sin cambios */}
         <motion.h1
           variants={variants.item}
           className="font-cal text-4xl sm:text-5xl md:text-6xl xl:text-[72px] leading-[1.08] tracking-[-1.5px] dark:text-white text-b-dark"
@@ -164,14 +164,14 @@ export default function Hero({ lang }) {
           </motion.span>
         </motion.h1>
 
-        {/* Subtítulo */}
+        {/* Subtítulo — reposicionamiento producto + marca + experiencia digital */}
         <motion.p
           variants={variants.item}
           className="dark:text-white/50 text-black/55 text-base md:text-lg max-w-[520px] leading-[1.75]"
         >
           {t(
-            'Diseño, branding, IA y automatización — convergiendo en sistemas y experiencias que funcionan desde el núcleo.',
-            'Design, branding, AI and automation — converging into systems and experiences that work from the core.'
+            'Desde la forma y el objeto hasta su experiencia digital — creando sistemas visuales y piezas que comunican, posicionan y funcionan.',
+            'From form and object to digital experience — creating visual systems and pieces that communicate, position and work.'
           )}
         </motion.p>
 
@@ -182,14 +182,14 @@ export default function Hero({ lang }) {
             className="group relative inline-flex items-center gap-2.5 glass dark:text-white text-black text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(77,102,255,.22)]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral" />
-            {t('Conoce el enfoque', 'Learn the approach')}
+            {t('Nuestro enfoque', 'Our approach')}
             <ArrowDown size={14} className="group-hover:translate-y-1 transition-transform duration-300" />
           </a>
           <a
-            href="#enfoque"
+            href="#capacidades"
             className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
           >
-            {t('Explorar', 'Explore')}
+            {t('Explorar el lab', 'Explore the lab')}
           </a>
         </motion.div>
 

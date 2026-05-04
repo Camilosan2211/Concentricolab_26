@@ -6,20 +6,20 @@ const steps = [
   {
     Icon: Search,
     color: '#4D66FF',
-    es: { title: 'Diagnóstico', desc: 'Mapeamos problema, contexto y métricas para alinear criterio antes de diseñar.' },
-    en: { title: 'Diagnosis',   desc: 'We map the problem, context and metrics to align criteria before designing.' },
+    es: { title: 'Entendemos', desc: 'Analizamos el producto, espacio o marca — su forma, contexto y cómo se percibe en el mundo real.' },
+    en: { title: 'We understand', desc: 'We analyze the product, space or brand — its form, context and how it is perceived in the real world.' },
   },
   {
     Icon: PenTool,
     color: '#FF6D4D',
-    es: { title: 'Diseño', desc: 'UX, marca y prototipos con iteración corta — siempre anclados al usuario.' },
-    en: { title: 'Design', desc: 'UX, brand and prototypes with tight iteration — always user-anchored.' },
+    es: { title: 'Traducimos', desc: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.' },
+    en: { title: 'We translate', desc: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.' },
   },
   {
     Icon: Boxes,
     color: '#828AFF',
-    es: { title: 'Sistema', desc: 'Entregamos piezas conectadas: componentes, automatización y documentación viva.' },
-    en: { title: 'System',  desc: 'We deliver connected pieces: components, automation and living documentation.' },
+    es: { title: 'Entregamos', desc: 'Piezas listas para comunicar y posicionar — en los formatos acordados, listas para publicar o producir.' },
+    en: { title: 'We deliver', desc: 'Pieces ready to communicate and position — in agreed formats, ready to publish or produce.' },
   },
 ]
 
@@ -39,14 +39,14 @@ export default function Proceso({ lang }) {
             className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
           >
-            {t('Cómo trabajamos', 'How we work')}
+            {t('Así funciona', 'How it works')}
           </motion.p>
           <motion.h2
             className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark leading-tight"
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           >
-            {t('Proceso en ', 'Process in ')}
+            {t('Simple como ', 'As simple as ')}
             <span className="text-grad">{t('3 pasos', '3 steps')}</span>
           </motion.h2>
         </div>
@@ -65,20 +65,13 @@ export default function Proceso({ lang }) {
             style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(77,102,255,.06) 0%, transparent 70%)' }}
           />
 
-          {/* ── Conector animado (desktop) ──
-              Se dibuja DEBAJO de los iconos — z-0.
-              Los iconos tienen z-10.
-              La línea va de nodo a nodo, entre el borde
-              izquierdo del icono 1 y el borde derecho del icono 3.
-          ── */}
+          {/* Conector animado (desktop) */}
           <div
             className="hidden md:block absolute pointer-events-none"
             style={{
-              /* Centrada verticalmente con los iconos: iconos son w-14 h-14 (56px).
-                 El panel tiene pt-12 (48px). Centro = 48+28 = 76px desde el top del panel */
-              top: 'calc(48px + 28px)',   /* pt-14 (56px) + la mitad del icono (28px) */
-              left:  'calc(33.33% / 2)',  /* centro de la primera columna de 3 */
-              right: 'calc(33.33% / 2)',  /* centro de la tercera columna */
+              top: 'calc(48px + 28px)',
+              left:  'calc(33.33% / 2)',
+              right: 'calc(33.33% / 2)',
               height: '2px',
               zIndex: 0,
             }}
@@ -92,7 +85,7 @@ export default function Proceso({ lang }) {
               animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             />
-            {/* Shimmer que recorre la línea */}
+            {/* Shimmer */}
             <motion.div
               className="absolute inset-0 rounded-full overflow-hidden"
               initial={{ opacity: 0 }}
@@ -107,7 +100,7 @@ export default function Proceso({ lang }) {
               />
             </motion.div>
 
-            {/* Puntos en los nodos de conexión */}
+            {/* Puntos en los nodos */}
             {[0, 50, 100].map((pct, i) => (
               <motion.div
                 key={i}
@@ -125,7 +118,7 @@ export default function Proceso({ lang }) {
             ))}
           </div>
 
-          {/* Steps grid — z-10 para estar por encima de la línea */}
+          {/* Steps grid */}
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
             {steps.map((step, i) => {
               const Icon = step.Icon
@@ -146,7 +139,7 @@ export default function Proceso({ lang }) {
                     0{i + 1}
                   </span>
 
-                  {/* Icono — con fondo glass y sin z-index relativo para no cortar la línea */}
+                  {/* Icono */}
                   <motion.div
                     className="w-14 h-14 rounded-card flex items-center justify-center border dark:border-white/10 border-black/8 dark:bg-b-deep/70 bg-white/80 backdrop-blur-sm"
                     style={{ boxShadow: `0 8px 28px ${step.color}28` }}
