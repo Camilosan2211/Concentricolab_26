@@ -71,6 +71,7 @@ src/hooks/useLenis.js
 src/index.css
 src/lib/utils.js
 src/main.jsx
+src/sections/Capacidades.jsx
 src/sections/Connect.jsx
 src/sections/Enfoque.jsx
 src/sections/Footer.jsx
@@ -511,28 +512,6 @@ Applied to a `<span>` wrapping the key phrase within a larger headline. Never ap
 [33m9845d2f[m AJUSTES TEXTOS claude sabado noche
 [33md651d99[m Ajustes de diseño en Codespaces
 [33m9161e46[m ajustes clause madrugada 25 de abril
-</file>
-
-<file path="index.html">
-<!DOCTYPE html>
-<html lang="es-CO" class="dark">
-  <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Concéntrico Lab — Diseño, IA y automatización · LATAM</title>
-    <meta name="description" content="Laboratorio digital desde Bogotá. Diseño, branding, IA y automatización — sistemas y experiencias para founders y builders en LATAM."/>
-    <meta property="og:image" content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
-    <link rel="icon" href="/assets/images/favicon.png"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/cal-sans/index.css" rel="stylesheet"/>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
 </file>
 
 <file path="jsconfig.json">
@@ -2981,6 +2960,247 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 )
 </file>
 
+<file path="src/sections/Capacidades.jsx">
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { Layers, Box, Monitor, Play, Zap, MessageSquare } from 'lucide-react'
+
+const items = [
+  {
+    id: '01',
+    Icon: Layers,
+    color: '#5170FF',
+    span: 2,
+    es: {
+      title: 'Diseño',
+      body: 'Sistemas visuales, identidad y UI que conectan lo físico con lo digital — desde la pieza gráfica hasta la interfaz.',
+    },
+    en: {
+      title: 'Design',
+      body: 'Visual systems, identity and UI that connect the physical with the digital — from graphic piece to interface.',
+    },
+  },
+  {
+    id: '02',
+    Icon: Box,
+    color: '#FF6D4D',
+    span: 1,
+    es: {
+      title: 'Producto & forma',
+      body: 'Exploración de objeto, espacio, packaging y materialidad como base de la experiencia de marca.',
+    },
+    en: {
+      title: 'Product & form',
+      body: 'Exploration of object, space, packaging and materiality as the foundation of brand experience.',
+    },
+  },
+  {
+    id: '03',
+    Icon: Monitor,
+    color: '#41EAFF',
+    span: 1,
+    es: {
+      title: 'UX/UI & experiencia digital',
+      body: 'Interfaces y flujos que extienden la experiencia del producto en entornos digitales.',
+    },
+    en: {
+      title: 'UX/UI & digital experience',
+      body: 'Interfaces and flows that extend the product experience into digital environments.',
+    },
+  },
+  {
+    id: '04',
+    Icon: Play,
+    color: '#828AFF',
+    span: 1,
+    es: {
+      title: 'Video & contenido',
+      body: 'Narrativa visual para comunicar producto, espacio o marca — reels, animaciones y piezas en movimiento.',
+    },
+    en: {
+      title: 'Video & content',
+      body: 'Visual narrative to communicate product, space or brand — reels, animations and motion pieces.',
+    },
+  },
+  {
+    id: '05',
+    Icon: Zap,
+    color: '#9F6EFF',
+    span: 1,
+    es: {
+      title: 'Automatización & IA',
+      body: 'Sistemas que optimizan procesos creativos, escalan ejecución y reducen trabajo repetitivo.',
+    },
+    en: {
+      title: 'Automation & AI',
+      body: 'Systems that optimize creative processes, scale execution and reduce repetitive work.',
+    },
+  },
+  {
+    id: '06',
+    Icon: MessageSquare,
+    color: '#FF6D4D',
+    span: 1,
+    es: {
+      title: 'Consultoría',
+      body: 'Dirección estratégica para alinear producto, marca y experiencia — sprints enfocados, criterio aplicado.',
+    },
+    en: {
+      title: 'Consulting',
+      body: 'Strategic direction to align product, brand and experience — focused sprints, applied criteria.',
+    },
+  },
+]
+
+function CapCard({ item, lang, index }) {
+  const c      = lang === 'es' ? item.es : item.en
+  const Icon   = item.Icon
+  const colCls = item.span === 2 ? 'md:col-span-2' : 'md:col-span-1'
+
+  return (
+    <motion.div
+      className={`relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm ${colCls}`}
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+      whileHover={{ y: -5, transition: { duration: 0.22, ease: 'easeOut' } }}
+    >
+      {/* Línea accent superior — siempre visible */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px]"
+        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
+      />
+
+      {/* Glow de fondo — se intensifica en hover */}
+      <div
+        className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none opacity-20 group-hover:opacity-50 group-hover:scale-125 transition-all duration-500"
+        style={{
+          background: `radial-gradient(circle, ${item.color}40 0%, transparent 70%)`,
+          filter: 'blur(24px)',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Contenido */}
+      <div className={`relative z-10 p-6 md:p-8 flex flex-col gap-4 ${item.span === 2 ? 'md:flex-row md:gap-10 md:items-center' : ''}`}>
+
+        {/* Icono */}
+        <div className="flex-shrink-0">
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center"
+            style={{
+              background: `${item.color}18`,
+              border: `1px solid ${item.color}30`,
+            }}
+          >
+            <Icon size={22} style={{ color: item.color }} strokeWidth={1.75} />
+          </div>
+        </div>
+
+        {/* Texto */}
+        <div className="flex flex-col gap-2">
+          <div>
+            <span
+              className="text-[10px] font-bold tracking-[0.12em] uppercase block mb-1"
+              style={{ color: item.color, opacity: 0.7 }}
+            >
+              {item.id}
+            </span>
+            <h3 className="font-cal text-xl md:text-2xl dark:text-white text-b-dark leading-snug">
+              {c.title}
+            </h3>
+          </div>
+          <p className="dark:text-white/50 text-black/55 text-sm leading-[1.7]">
+            {c.body}
+          </p>
+        </div>
+      </div>
+
+      {/* Línea inferior animada en hover */}
+      <div
+        className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
+        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
+      />
+    </motion.div>
+  )
+}
+
+export default function Capacidades({ lang }) {
+  const ref    = useRef()
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const t      = (es, en) => lang === 'es' ? es : en
+
+  return (
+    <section id="capacidades" className="py-16 md:py-20 px-4 relative overflow-hidden">
+
+      {/* Orbe de fondo */}
+      <div
+        className="absolute top-[-80px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse, rgba(81,112,255,0.08) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-10 relative z-10">
+
+        {/* Header */}
+        <div className="flex flex-col items-center text-center gap-3">
+          <motion.p
+            className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            {t('Lo que producimos', 'What we produce')}
+          </motion.p>
+          <motion.h2
+            className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
+          >
+            {t('Capacidades ', 'Lab ')}
+            <span className="text-grad">{t('del lab', 'capabilities')}</span>
+          </motion.h2>
+          <motion.p
+            className="dark:text-white/40 text-black/45 text-sm max-w-[480px] leading-[1.7]"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.12, duration: 0.7 }}
+          >
+            {t(
+              'Disciplinas que convergen en piezas digitales ejecutables — de lo físico a lo digital.',
+              'Disciplines converging into executable digital pieces — from physical to digital.',
+            )}
+          </motion.p>
+        </div>
+
+        {/*
+          Bento grid:
+          Desktop 3 cols:
+            Fila 1: [Diseño col-span-2] [Producto & forma col-span-1]
+            Fila 2: [UX/UI] [Video] [Automatización] cada col-span-1
+          La última card (Consultoría) completa el grid visualmente
+        */}
+        <div
+          ref={ref}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+        >
+          {items.map((item, i) => (
+            <CapCard key={item.id} item={item} lang={lang} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+</file>
+
 <file path="Untitled-1">
 
 </file>
@@ -3467,6 +3687,28 @@ Después de estos 3 pasos, el DESIGN.md y el código estarán al 95% de sincron�
 **Estado post 3 pasos:** ~95% sincronizado
 </file>
 
+<file path="index.html">
+<!DOCTYPE html>
+<html lang="es-CO" class="dark">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Concéntrico Lab — Producto, marca y experiencia</title>
+    <meta name="description" content="Diseño en la intersección entre producto, marca y experiencia digital. Desde la forma y el objeto hasta su experiencia en pantalla."/>
+    <meta property="og:image" content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
+    <link rel="icon" href="/assets/images/favicon.png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/cal-sans/index.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+</file>
+
 <file path="package.json">
 {
   "name": "concentrico-lab",
@@ -3632,130 +3874,6 @@ export default defineConfig({
     },
   },
 })
-</file>
-
-<file path="src/sections/Stack.jsx">
-import { motion } from 'framer-motion'
-
-const tools = [
-  { name: 'Figma', src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
-  { name: 'Notion', src: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png' },
-  { name: 'Illustrator', src: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg' },
-  { name: 'ChatGPT', src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
-  { name: 'Claude', src: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg' },
-  {
-    name: 'Perplexity',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/perplexity.svg',
-    bg: '#ffffff',
-    pad: 6,
-  },
-  { name: 'Make', src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/make.svg', bg: '#6D00CC', pad: 7 },
-  {
-    name: 'n8n',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/n8n.svg',
-    bg: '#EA4B71',
-    pad: 6,
-  },
-  {
-    name: 'Canva',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/canva.svg',
-    bg: '#00C4CC',
-    pad: 6,
-  },
-  {
-    name: 'Framer',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg',
-    bg: '#0055FF',
-    pad: 6,
-  },
-  {
-    name: 'Vercel',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/vercel.svg',
-    bg: '#ffffff',
-    invertIcon: true,
-    pad: 7,
-  },
-  {
-    name: 'GitHub',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg',
-    bg: '#ffffff',
-    invertIcon: true,
-    pad: 6,
-  },
-  {
-    name: 'ElevenLabs',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/elevenlabs.svg',
-    bg: '#000000',
-    pad: 6,
-  },
-]
-
-export default function Stack({ lang }) {
-  return (
-    <section id="stack" className="relative z-10 py-24 px-6">
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-12">
-        <motion.div
-          className="text-center flex flex-col gap-3"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35">
-            {lang === 'es' ? 'Las herramientas del lab' : "The lab's tools"}
-          </p>
-          <h2 className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark">
-            {lang === 'es' ? 'Stack que ' : 'Stack that '}
-            <span className="text-grad">{lang === 'es' ? 'usamos' : 'we use'}</span>
-          </h2>
-        </motion.div>
-        <motion.div
-          className="flex flex-wrap justify-center gap-4"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-40px' }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
-        >
-          {tools.map((tool, i) => (
-            <motion.div
-              key={i}
-              className="group glass flex flex-col items-center gap-2.5 px-5 py-4 rounded-2xl border dark:border-white/6 border-black/6 cursor-default"
-              variants={{
-                hidden: { opacity: 0, scale: 0.82 },
-                show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } },
-              }}
-              whileHover={{
-                y: -6,
-                scale: 1.07,
-                borderColor: 'rgba(77,102,255,.3)',
-                transition: { duration: 0.22, ease: 'easeOut' },
-              }}
-            >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
-                style={{
-                  background: tool.bg || 'rgba(120,120,180,.08)',
-                  padding: `${tool.pad ?? 7}px`,
-                }}
-              >
-                <img
-                  src={tool.src}
-                  alt={tool.name}
-                  className="w-full h-full object-contain"
-                  style={tool.invertIcon ? { filter: 'invert(1)' } : undefined}
-                  loading="lazy"
-                />
-              </div>
-              <span className="text-[12px] font-medium dark:text-white/50 text-black/50 group-hover:dark:text-white/80 group-hover:text-black/80 transition-colors duration-200">
-                {tool.name}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  )
-}
 </file>
 
 <file path="tailwind.config.js">
@@ -4027,389 +4145,93 @@ export default function ParticleField({ darkMode = true }) {
 }
 </file>
 
-<file path="src/sections/Connect.jsx">
-import { useState } from 'react'
+<file path="src/sections/Stack.jsx">
 import { motion } from 'framer-motion'
-import { Mail, Instagram, Linkedin, Youtube, Send, Copy, Check } from 'lucide-react'
 
-const EMAIL = 'concentriclabco@gmail.com'
-
-const socialGrid = [
-  { Icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
-  { Icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/concentriclab/' },
-  { Icon: Youtube, label: 'YouTube', href: 'https://www.youtube.com/@ConcentricLab' },
+const tools = [
+  { name: 'Figma',        src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
+  { name: 'Notion',       src: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png' },
+  { name: 'Illustrator',  src: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg' },
+  { name: 'ChatGPT',      src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
+  { name: 'Claude',       src: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg' },
+  {
+    name: 'Perplexity',
+    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/perplexity.svg',
+    bg: '#ffffff',
+    pad: 6,
+  },
+  { name: 'Make',         src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/make.svg', bg: '#6D00CC', pad: 7 },
+  { name: 'n8n',          src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/n8n.svg', bg: '#EA4B71', pad: 6 },
+  { name: 'Canva',        src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/canva.svg', bg: '#00C4CC', pad: 6 },
+  { name: 'Framer',       src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg', bg: '#0055FF', pad: 6 },
+  { name: 'ElevenLabs',   src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/elevenlabs.svg', bg: '#000000', pad: 6 },
+  // { name: 'Vercel', ... },  // herramienta interna dev — no mostrar al visitante
+  // { name: 'GitHub', ... },  // herramienta interna dev — no mostrar al visitante
 ]
 
-export default function Connect({ lang }) {
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState('idle')
-  const [copied, setCopied] = useState(false)
-  const t = (es, en) => (lang === 'es' ? es : en)
-
-  const submit = async (e) => {
-    e.preventDefault()
-    setStatus('loading')
-    try {
-      const res = await fetch('https://formspree.io/f/xreoreqr', {
-        method: 'POST',
-        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-      const data = await res.json()
-      if (data.ok) {
-        setStatus('ok')
-        setEmail('')
-      } else throw new Error()
-    } catch {
-      setStatus('error')
-    }
-    setTimeout(() => setStatus('idle'), 4000)
-  }
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText(EMAIL).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    })
-  }
-
+export default function Stack({ lang }) {
   return (
-    <section id="connect" className="relative z-10 py-24 px-6 overflow-hidden">
-      <div
-        className="absolute bottom-[-80px] right-[-40px] w-[380px] h-[380px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle,rgba(255,109,77,.07) 0%,transparent 70%)',
-          filter: 'blur(60px)',
-        }}
-        aria-hidden="true"
-      />
-
+    <section id="stack" className="relative z-10 py-24 px-6">
       <div className="max-w-[1200px] mx-auto flex flex-col gap-12">
-        <div className="flex flex-col items-center text-center gap-4">
-          <motion.p
-            className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            {t('Hablemos', "Let's talk")}
-          </motion.p>
-          <motion.h2
-            className="font-cal text-4xl md:text-5xl lg:text-6xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-          >
-            {t('Conéctate con ', 'Connect with ')}
-            <span className="text-grad">{t('el lab', 'the lab')}</span>
-          </motion.h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:items-stretch">
-          <motion.div
-            className="glass rounded-card p-8 md:p-10 flex flex-col gap-6 h-full min-h-[340px]"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-b-blue">
-                <Mail size={15} />
-                <span className="text-[12px] font-bold tracking-[0.07em] uppercase text-b-blue">Newsletter</span>
-              </div>
-              <h3 className="font-cal text-2xl dark:text-white text-b-dark leading-snug mt-1">
-                {t('Recursos gratis, directo a tu bandeja.', 'Free resources, straight to your inbox.')}
-              </h3>
-              <p className="dark:text-white/50 text-black/50 text-sm leading-[1.7] mt-1">
-                {t(
-                  'Templates, automatizaciones y recursos de diseño — todo lo que construimos, primero para ti.',
-                  'Templates, automations and design resources — everything we build, first for you.'
-                )}
-              </p>
-            </div>
-            <form onSubmit={submit} className="flex flex-col gap-3 mt-auto">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t('tu@email.com', 'your@email.com')}
-                required
-                className="w-full glass dark:border-white/10 border-black/8 focus:border-b-blue/50 dark:text-white text-b-dark placeholder:dark:text-white/30 placeholder:text-black/30 text-sm px-5 py-3.5 rounded-action outline-none bg-transparent transition-colors duration-200"
-              />
-              <button
-                type="submit"
-                disabled={status === 'loading'}
-                className="inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-action glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
-              >
-                <Send size={14} />
-                {status === 'loading'
-                  ? t('Enviando…', 'Sending…')
-                  : status === 'ok'
-                    ? t('¡Listo! ✓', 'Done! ✓')
-                    : status === 'error'
-                      ? t('Intenta de nuevo', 'Try again')
-                      : t('Suscribirme', 'Subscribe')}
-              </button>
-              <p className="dark:text-white/25 text-black/35 text-xs text-center">
-                {t('Sin spam. Date de baja cuando quieras.', 'No spam. Unsubscribe anytime.')}
-              </p>
-            </form>
-          </motion.div>
-
-          <motion.div
-            className="glass rounded-card p-8 md:p-10 flex flex-col gap-6 h-full min-h-[340px]"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          >
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[12px] font-bold tracking-[0.07em] uppercase text-b-coral">
-                {t('Contacto directo', 'Direct contact')}
-              </span>
-              <h3 className="font-cal text-2xl dark:text-white text-b-dark leading-snug">
-                {t('¿Tienes algo en mente?', 'Got something in mind?')}
-              </h3>
-              <p className="dark:text-white/50 text-black/50 text-sm leading-[1.7]">
-                {t('Cuéntanos de qué se trata.', "Tell us what it's about.")}
-              </p>
-            </div>
-
-            <button
-              onClick={copyEmail}
-              className="group glass flex items-center gap-3 px-5 py-3.5 rounded-action border dark:border-b-blue/20 border-b-blue/15 hover:dark:border-b-blue/40 hover:border-b-blue/30 transition-all duration-200 text-left w-full"
-              data-mag="true"
-            >
-              <Mail size={15} className="text-b-blue flex-shrink-0" />
-              <span className="text-sm font-medium dark:text-white text-b-dark flex-1 truncate">{EMAIL}</span>
-              {copied ? (
-                <Check size={14} className="text-b-blue flex-shrink-0" />
-              ) : (
-                <Copy
-                  size={14}
-                  className="dark:text-white/30 text-black/30 group-hover:dark:text-white/60 group-hover:text-black/60 transition-colors flex-shrink-0"
-                />
-              )}
-            </button>
-
-            <div className="mt-auto">
-              <p className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/75 text-black/60 mb-3">
-                {t('Redes', 'Social')}
-              </p>
-              <div className="grid grid-cols-3 gap-2.5">
-                {socialGrid.map(({ Icon, label, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center gap-2 glass rounded-2xl py-3 px-2 border dark:border-white/8 border-black/8 hover:dark:border-b-blue/30 hover:border-b-blue/25 hover:dark:bg-b-blue/6 hover:bg-b-blue/5 transition-all duration-200"
-                  >
-                    <Icon size={18} className="text-b-blue dark:text-b-blue-lt opacity-90" />
-                    <span className="text-[10px] font-semibold dark:text-white/55 text-black/50 text-center leading-tight">
-                      {label}
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  )
-}
-</file>
-
-<file path="src/sections/Proceso.jsx">
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { Search, PenTool, Boxes } from 'lucide-react'
-
-const steps = [
-  {
-    Icon: Search,
-    color: '#4D66FF',
-    es: { title: 'Diagnóstico', desc: 'Mapeamos problema, contexto y métricas para alinear criterio antes de diseñar.' },
-    en: { title: 'Diagnosis',   desc: 'We map the problem, context and metrics to align criteria before designing.' },
-  },
-  {
-    Icon: PenTool,
-    color: '#FF6D4D',
-    es: { title: 'Diseño', desc: 'UX, marca y prototipos con iteración corta — siempre anclados al usuario.' },
-    en: { title: 'Design', desc: 'UX, brand and prototypes with tight iteration — always user-anchored.' },
-  },
-  {
-    Icon: Boxes,
-    color: '#828AFF',
-    es: { title: 'Sistema', desc: 'Entregamos piezas conectadas: componentes, automatización y documentación viva.' },
-    en: { title: 'System',  desc: 'We deliver connected pieces: components, automation and living documentation.' },
-  },
-]
-
-export default function Proceso({ lang }) {
-  const t      = (es, en) => lang === 'es' ? es : en
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-
-  return (
-    <section id="proceso" className="relative z-10 py-16 px-4">
-      <div className="section-premium">
-        <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
-
-        {/* Header */}
-        <div className="text-center max-w-xl mx-auto flex flex-col gap-3">
-          <motion.p
-            className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-          >
-            {t('Cómo trabajamos', 'How we work')}
-          </motion.p>
-          <motion.h2
-            className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark leading-tight"
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {t('Proceso en ', 'Process in ')}
-            <span className="text-grad">{t('3 pasos', '3 steps')}</span>
-          </motion.h2>
-        </div>
-
-        {/* Panel */}
         <motion.div
-          ref={ref}
-          className="relative rounded-card px-6 py-12 md:px-14 md:py-14 overflow-hidden"
-          initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center flex flex-col gap-3"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
-          {/* Glow interior sutil */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-50"
-            style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(77,102,255,.06) 0%, transparent 70%)' }}
-          />
-
-          {/* ── Conector animado (desktop) ──
-              Se dibuja DEBAJO de los iconos — z-0.
-              Los iconos tienen z-10.
-              La línea va de nodo a nodo, entre el borde
-              izquierdo del icono 1 y el borde derecho del icono 3.
-          ── */}
-          <div
-            className="hidden md:block absolute pointer-events-none"
-            style={{
-              /* Centrada verticalmente con los iconos: iconos son w-14 h-14 (56px).
-                 El panel tiene pt-12 (48px). Centro = 48+28 = 76px desde el top del panel */
-              top: 'calc(48px + 28px)',   /* pt-14 (56px) + la mitad del icono (28px) */
-              left:  'calc(33.33% / 2)',  /* centro de la primera columna de 3 */
-              right: 'calc(33.33% / 2)',  /* centro de la tercera columna */
-              height: '2px',
-              zIndex: 0,
-            }}
-            aria-hidden
-          >
-            {/* Línea base */}
+          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35">
+            {lang === 'es' ? 'Potenciado por' : 'Powered by'}
+          </p>
+          <h2 className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark">
+            {lang === 'es' ? 'Las mejores ' : 'Best in class '}
+            <span className="text-grad">{lang === 'es' ? 'herramientas' : 'tools'}</span>
+          </h2>
+        </motion.div>
+        <motion.div
+          className="flex flex-wrap justify-center gap-4"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-40px' }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
+        >
+          {tools.map((tool, i) => (
             <motion.div
-              className="absolute inset-0 rounded-full origin-left"
-              style={{ background: 'linear-gradient(90deg, #4D66FF, #FF6D4D, #828AFF)' }}
-              initial={{ scaleX: 0 }}
-              animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-            />
-            {/* Shimmer que recorre la línea */}
-            <motion.div
-              className="absolute inset-0 rounded-full overflow-hidden"
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ delay: 1.8, duration: 0.3 }}
+              key={i}
+              className="group glass flex flex-col items-center gap-2.5 px-5 py-4 rounded-2xl border dark:border-white/6 border-black/6 cursor-default"
+              variants={{
+                hidden: { opacity: 0, scale: 0.82 },
+                show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } },
+              }}
+              whileHover={{
+                y: -6,
+                scale: 1.07,
+                borderColor: 'rgba(77,102,255,.3)',
+                transition: { duration: 0.22, ease: 'easeOut' },
+              }}
             >
-              <motion.div
-                className="absolute top-0 h-full w-[30%] rounded-full"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent)' }}
-                animate={inView ? { x: ['-100%', '400%'] } : {}}
-                transition={{ duration: 2.6, repeat: Infinity, ease: 'linear', repeatDelay: 1.0, delay: 1.8 }}
-              />
-            </motion.div>
-
-            {/* Puntos en los nodos de conexión */}
-            {[0, 50, 100].map((pct, i) => (
-              <motion.div
-                key={i}
-                className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
                 style={{
-                  left: `${pct}%`,
-                  transform: 'translate(-50%, -50%)',
-                  background: [steps[0].color, steps[1].color, steps[2].color][i],
-                  boxShadow: `0 0 8px ${[steps[0].color, steps[1].color, steps[2].color][i]}`,
+                  background: tool.bg || 'rgba(120,120,180,.08)',
+                  padding: `${tool.pad ?? 7}px`,
                 }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={inView ? { scale: 1, opacity: 1 } : {}}
-                transition={{ delay: 0.4 + i * 0.35, type: 'spring', stiffness: 200 }}
-              />
-            ))}
-          </div>
-
-          {/* Steps grid — z-10 para estar por encima de la línea */}
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
-            {steps.map((step, i) => {
-              const Icon = step.Icon
-              const c    = lang === 'es' ? step.es : step.en
-              return (
-                <motion.div
-                  key={step.es.title}
-                  className="flex flex-col items-center text-center gap-4"
-                  initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.15 + i * 0.14, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  {/* Número de paso */}
-                  <span
-                    className="font-cal text-[11px] font-bold tracking-[.12em] uppercase mb-[-6px]"
-                    style={{ color: step.color, opacity: .6 }}
-                  >
-                    0{i + 1}
-                  </span>
-
-                  {/* Icono — con fondo glass y sin z-index relativo para no cortar la línea */}
-                  <motion.div
-                    className="w-14 h-14 rounded-card flex items-center justify-center border dark:border-white/10 border-black/8 dark:bg-b-deep/70 bg-white/80 backdrop-blur-sm"
-                    style={{ boxShadow: `0 8px 28px ${step.color}28` }}
-                    whileHover={{ scale: 1.08, transition: { duration: .2, ease: 'easeOut' } }}
-                    animate={inView ? {
-                      boxShadow: [
-                        `0 8px 28px ${step.color}28`,
-                        `0 8px 40px ${step.color}55`,
-                        `0 8px 28px ${step.color}28`,
-                      ]
-                    } : {}}
-                    transition={{ delay: 1.2 + i * .25, duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    <Icon size={24} style={{ color: step.color }} strokeWidth={1.75} />
-                  </motion.div>
-
-                  {/* Texto */}
-                  <div className="flex flex-col gap-2 max-w-[260px]">
-                    <h3 className="font-cal text-xl dark:text-white text-b-dark">{c.title}</h3>
-                    <p className="dark:text-white/50 text-black/50 text-sm leading-[1.65]">{c.desc}</p>
-                  </div>
-
-                  {/* Conector vertical mobile */}
-                  {i < steps.length - 1 && (
-                    <div
-                      className="md:hidden w-px h-8 rounded-full mt-1"
-                      style={{ background: `linear-gradient(180deg, ${step.color}55, ${steps[i + 1].color}55)` }}
-                      aria-hidden
-                    />
-                  )}
-                </motion.div>
-              )
-            })}
-          </div>
+              >
+                <img
+                  src={tool.src}
+                  alt={tool.name}
+                  className="w-full h-full object-contain"
+                  style={tool.invertIcon ? { filter: 'invert(1)' } : undefined}
+                  loading="lazy"
+                />
+              </div>
+              <span className="text-[12px] font-medium dark:text-white/50 text-black/50 group-hover:dark:text-white/80 group-hover:text-black/80 transition-colors duration-200">
+                {tool.name}
+              </span>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
-    </div>
     </section>
   )
 }
@@ -4610,6 +4432,254 @@ export function useCursor() {
 }
 </file>
 
+<file path="src/sections/Connect.jsx">
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Mail, Instagram, Linkedin, Youtube, Send } from 'lucide-react'
+
+const EMAIL = 'concentriclabco@gmail.com'
+
+const socialGrid = [
+  { Icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
+  { Icon: Linkedin,  label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/' },
+  { Icon: Youtube,   label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab' },
+]
+
+export default function Connect({ lang }) {
+  const [email, setEmail]         = useState('')
+  const [status, setStatus]       = useState('idle')
+  const [formData, setFormData]   = useState({ nombre: '', email: '', tipo: '', mensaje: '' })
+  const [formStatus, setFormStatus] = useState('idle')
+
+  const t = (es, en) => (lang === 'es' ? es : en)
+
+  // Newsletter submit
+  const submitNewsletter = async (e) => {
+    e.preventDefault()
+    setStatus('loading')
+    try {
+      const res = await fetch('https://formspree.io/f/xreoreqr', {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+      if (data.ok) { setStatus('ok'); setEmail('') } else throw new Error()
+    } catch { setStatus('error') }
+    setTimeout(() => setStatus('idle'), 4000)
+  }
+
+  // Project form submit
+  const submitProject = async (e) => {
+    e.preventDefault()
+    setFormStatus('loading')
+    try {
+      const res = await fetch('https://formspree.io/f/xreoreqr', {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      const data = await res.json()
+      if (data.ok) {
+        setFormStatus('ok')
+        setFormData({ nombre: '', email: '', tipo: '', mensaje: '' })
+      } else throw new Error()
+    } catch { setFormStatus('error') }
+    setTimeout(() => setFormStatus('idle'), 5000)
+  }
+
+  const inputCls = "w-full glass dark:border-white/10 border-black/8 focus:border-b-blue/50 dark:text-white text-b-dark placeholder:dark:text-white/30 placeholder:text-black/30 text-sm px-5 py-3.5 rounded-action outline-none bg-transparent transition-colors duration-200"
+
+  return (
+    <section id="connect" className="relative z-10 py-24 px-6 overflow-hidden">
+      <div
+        className="absolute bottom-[-80px] right-[-40px] w-[380px] h-[380px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle,rgba(255,109,77,.07) 0%,transparent 70%)', filter: 'blur(60px)' }}
+        aria-hidden="true"
+      />
+
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-12">
+        <div className="flex flex-col items-center text-center gap-4">
+          <motion.p
+            className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+          >
+            {t('Hablemos', "Let's talk")}
+          </motion.p>
+          <motion.h2
+            className="font-cal text-4xl md:text-5xl lg:text-6xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+          >
+            {t('Proyectos donde producto, ', 'Projects where product, ')}
+            <span className="text-grad">{t('marca y experiencia se encuentran', 'brand and experience meet')}</span>
+          </motion.h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:items-stretch">
+
+          {/* Card izquierda — Newsletter */}
+          <motion.div
+            className="glass rounded-card p-8 md:p-10 flex flex-col gap-6 h-full min-h-[340px]"
+            initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-b-blue">
+                <Mail size={15} />
+                <span className="text-[12px] font-bold tracking-[0.07em] uppercase text-b-blue">Newsletter</span>
+              </div>
+              <h3 className="font-cal text-2xl dark:text-white text-b-dark leading-snug mt-1">
+                {t('Recursos gratis, directo a tu bandeja.', 'Free resources, straight to your inbox.')}
+              </h3>
+              <p className="dark:text-white/50 text-black/50 text-sm leading-[1.7] mt-1">
+                {t(
+                  'Templates, automatizaciones y recursos de diseño — todo lo que construimos, primero para ti.',
+                  'Templates, automations and design resources — everything we build, first for you.'
+                )}
+              </p>
+            </div>
+            <form onSubmit={submitNewsletter} className="flex flex-col gap-3 mt-auto">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={t('tu@email.com', 'your@email.com')}
+                required
+                className={inputCls}
+              />
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-action glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
+              >
+                <Send size={14} />
+                {status === 'loading' ? t('Enviando…', 'Sending…')
+                  : status === 'ok'   ? t('¡Listo! ✓', 'Done! ✓')
+                  : status === 'error' ? t('Intenta de nuevo', 'Try again')
+                  : t('Suscribirme', 'Subscribe')}
+              </button>
+              <p className="dark:text-white/25 text-black/35 text-xs text-center">
+                {t('Sin spam. Date de baja cuando quieras.', 'No spam. Unsubscribe anytime.')}
+              </p>
+            </form>
+          </motion.div>
+
+          {/* Card derecha — Formulario de proyecto */}
+          <motion.div
+            className="glass rounded-card p-8 md:p-10 flex flex-col gap-5 h-full min-h-[340px]"
+            initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+          >
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[12px] font-bold tracking-[0.07em] uppercase text-b-coral">
+                {t('Contacto directo', 'Direct contact')}
+              </span>
+              <h3 className="font-cal text-2xl dark:text-white text-b-dark leading-snug">
+                {t('¿Tienes algo en mente?', 'Got something in mind?')}
+              </h3>
+              <p className="dark:text-white/50 text-black/50 text-sm leading-[1.7]">
+                {t(
+                  'Cuéntanos sobre tu producto, marca, espacio o idea.',
+                  'Tell us about your product, brand, space or idea.'
+                )}
+              </p>
+            </div>
+
+            {formStatus === 'ok' ? (
+              <div className="flex-1 flex flex-col items-center justify-center gap-3 text-center">
+                <span className="text-3xl">✓</span>
+                <p className="font-cal text-xl dark:text-white text-b-dark">
+                  {t('¡Mensaje recibido!', 'Message received!')}
+                </p>
+                <p className="dark:text-white/50 text-black/50 text-sm">
+                  {t('Te respondemos pronto.', "We'll get back to you soon.")}
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={submitProject} className="flex flex-col gap-3 flex-1">
+                <input
+                  type="text"
+                  value={formData.nombre}
+                  onChange={(e) => setFormData(d => ({ ...d, nombre: e.target.value }))}
+                  placeholder={t('Nombre', 'Name')}
+                  required
+                  className={inputCls}
+                />
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(d => ({ ...d, email: e.target.value }))}
+                  placeholder={t('tu@email.com', 'your@email.com')}
+                  required
+                  className={inputCls}
+                />
+                <select
+                  value={formData.tipo}
+                  onChange={(e) => setFormData(d => ({ ...d, tipo: e.target.value }))}
+                  required
+                  className={`${inputCls} dark:bg-[#00031F] bg-white/80 cursor-pointer`}
+                >
+                  <option value="" disabled>{t('¿Qué necesitas?', 'What do you need?')}</option>
+                  <option value="diseno">{t('Diseño & identidad', 'Design & identity')}</option>
+                  <option value="producto">{t('Producto & forma / 3D', 'Product & form / 3D')}</option>
+                  <option value="uxui">{t('UX/UI & experiencia digital', 'UX/UI & digital experience')}</option>
+                  <option value="video">{t('Video & contenido', 'Video & content')}</option>
+                  <option value="automatizacion">{t('Automatización & IA', 'Automation & AI')}</option>
+                  <option value="consultoria">{t('Consultoría', 'Consulting')}</option>
+                  <option value="otro">{t('Otro', 'Other')}</option>
+                </select>
+                <textarea
+                  value={formData.mensaje}
+                  onChange={(e) => setFormData(d => ({ ...d, mensaje: e.target.value }))}
+                  rows={3}
+                  placeholder={t('Cuéntanos brevemente el proyecto...', 'Tell us briefly about the project...')}
+                  className={`${inputCls} resize-none`}
+                />
+                <button
+                  type="submit"
+                  disabled={formStatus === 'loading'}
+                  className="inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-action glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 mt-auto"
+                >
+                  <Send size={14} />
+                  {formStatus === 'loading' ? t('Enviando…', 'Sending…')
+                    : formStatus === 'error' ? t('Intenta de nuevo', 'Try again')
+                    : t('Enviar solicitud →', 'Send request →')}
+                </button>
+              </form>
+            )}
+
+            {/* Redes — pequeñas, debajo */}
+            <div className="pt-2 border-t dark:border-white/8 border-black/6">
+              <p className="text-[10px] font-bold tracking-[0.1em] uppercase dark:text-white/30 text-black/35 mb-2">
+                {t('También en', 'Also on')}
+              </p>
+              <div className="flex gap-2">
+                {socialGrid.map(({ Icon, label, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 glass rounded-full py-1.5 px-3 border dark:border-white/8 border-black/8 hover:dark:border-b-blue/30 hover:border-b-blue/25 transition-all duration-200"
+                  >
+                    <Icon size={12} className="text-b-blue dark:text-b-blue-lt" />
+                    <span className="text-[10px] font-semibold dark:text-white/50 text-black/45">{label}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}
+</file>
+
 <file path="src/sections/LabStats.jsx">
 /**
  * LabStats — "Dark glass island" section
@@ -4700,6 +4770,314 @@ export default function LabStats({ lang }) {
       </div>
     </section>
   )
+}
+</file>
+
+<file path="src/sections/Proceso.jsx">
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
+import { Search, PenTool, Boxes } from 'lucide-react'
+
+const steps = [
+  {
+    Icon: Search,
+    color: '#4D66FF',
+    es: { title: 'Entendemos', desc: 'Analizamos el producto, espacio o marca — su forma, contexto y cómo se percibe en el mundo real.' },
+    en: { title: 'We understand', desc: 'We analyze the product, space or brand — its form, context and how it is perceived in the real world.' },
+  },
+  {
+    Icon: PenTool,
+    color: '#FF6D4D',
+    es: { title: 'Traducimos', desc: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.' },
+    en: { title: 'We translate', desc: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.' },
+  },
+  {
+    Icon: Boxes,
+    color: '#828AFF',
+    es: { title: 'Entregamos', desc: 'Piezas listas para comunicar y posicionar — en los formatos acordados, listas para publicar o producir.' },
+    en: { title: 'We deliver', desc: 'Pieces ready to communicate and position — in agreed formats, ready to publish or produce.' },
+  },
+]
+
+export default function Proceso({ lang }) {
+  const t      = (es, en) => lang === 'es' ? es : en
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  return (
+    <section id="proceso" className="relative z-10 py-16 px-4">
+      <div className="section-premium">
+        <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
+
+        {/* Header */}
+        <div className="text-center max-w-xl mx-auto flex flex-col gap-3">
+          <motion.p
+            className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+          >
+            {t('Así funciona', 'How it works')}
+          </motion.p>
+          <motion.h2
+            className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark leading-tight"
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {t('Simple como ', 'As simple as ')}
+            <span className="text-grad">{t('3 pasos', '3 steps')}</span>
+          </motion.h2>
+        </div>
+
+        {/* Panel */}
+        <motion.div
+          ref={ref}
+          className="relative rounded-card px-6 py-12 md:px-14 md:py-14 overflow-hidden"
+          initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {/* Glow interior sutil */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-50"
+            style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(77,102,255,.06) 0%, transparent 70%)' }}
+          />
+
+          {/* Conector animado (desktop) */}
+          <div
+            className="hidden md:block absolute pointer-events-none"
+            style={{
+              top: 'calc(48px + 28px)',
+              left:  'calc(33.33% / 2)',
+              right: 'calc(33.33% / 2)',
+              height: '2px',
+              zIndex: 0,
+            }}
+            aria-hidden
+          >
+            {/* Línea base */}
+            <motion.div
+              className="absolute inset-0 rounded-full origin-left"
+              style={{ background: 'linear-gradient(90deg, #4D66FF, #FF6D4D, #828AFF)' }}
+              initial={{ scaleX: 0 }}
+              animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            />
+            {/* Shimmer */}
+            <motion.div
+              className="absolute inset-0 rounded-full overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 1.8, duration: 0.3 }}
+            >
+              <motion.div
+                className="absolute top-0 h-full w-[30%] rounded-full"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent)' }}
+                animate={inView ? { x: ['-100%', '400%'] } : {}}
+                transition={{ duration: 2.6, repeat: Infinity, ease: 'linear', repeatDelay: 1.0, delay: 1.8 }}
+              />
+            </motion.div>
+
+            {/* Puntos en los nodos */}
+            {[0, 50, 100].map((pct, i) => (
+              <motion.div
+                key={i}
+                className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
+                style={{
+                  left: `${pct}%`,
+                  transform: 'translate(-50%, -50%)',
+                  background: [steps[0].color, steps[1].color, steps[2].color][i],
+                  boxShadow: `0 0 8px ${[steps[0].color, steps[1].color, steps[2].color][i]}`,
+                }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={inView ? { scale: 1, opacity: 1 } : {}}
+                transition={{ delay: 0.4 + i * 0.35, type: 'spring', stiffness: 200 }}
+              />
+            ))}
+          </div>
+
+          {/* Steps grid */}
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+            {steps.map((step, i) => {
+              const Icon = step.Icon
+              const c    = lang === 'es' ? step.es : step.en
+              return (
+                <motion.div
+                  key={step.es.title}
+                  className="flex flex-col items-center text-center gap-4"
+                  initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.15 + i * 0.14, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {/* Número de paso */}
+                  <span
+                    className="font-cal text-[11px] font-bold tracking-[.12em] uppercase mb-[-6px]"
+                    style={{ color: step.color, opacity: .6 }}
+                  >
+                    0{i + 1}
+                  </span>
+
+                  {/* Icono */}
+                  <motion.div
+                    className="w-14 h-14 rounded-card flex items-center justify-center border dark:border-white/10 border-black/8 dark:bg-b-deep/70 bg-white/80 backdrop-blur-sm"
+                    style={{ boxShadow: `0 8px 28px ${step.color}28` }}
+                    whileHover={{ scale: 1.08, transition: { duration: .2, ease: 'easeOut' } }}
+                    animate={inView ? {
+                      boxShadow: [
+                        `0 8px 28px ${step.color}28`,
+                        `0 8px 40px ${step.color}55`,
+                        `0 8px 28px ${step.color}28`,
+                      ]
+                    } : {}}
+                    transition={{ delay: 1.2 + i * .25, duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    <Icon size={24} style={{ color: step.color }} strokeWidth={1.75} />
+                  </motion.div>
+
+                  {/* Texto */}
+                  <div className="flex flex-col gap-2 max-w-[260px]">
+                    <h3 className="font-cal text-xl dark:text-white text-b-dark">{c.title}</h3>
+                    <p className="dark:text-white/50 text-black/50 text-sm leading-[1.65]">{c.desc}</p>
+                  </div>
+
+                  {/* Conector vertical mobile */}
+                  {i < steps.length - 1 && (
+                    <div
+                      className="md:hidden w-px h-8 rounded-full mt-1"
+                      style={{ background: `linear-gradient(180deg, ${step.color}55, ${steps[i + 1].color}55)` }}
+                      aria-hidden
+                    />
+                  )}
+                </motion.div>
+              )
+            })}
+          </div>
+        </motion.div>
+      </div>
+    </div>
+    </section>
+  )
+}
+</file>
+
+<file path="src/components/ui/geometric.jsx">
+"use client";
+import React from "react";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
+
+function ElegantShape({
+  className, delay = 0, width = 400, height = 100, rotate = 0,
+  darkGradient = "from-white/[0.08]",
+  lightColor = "rgba(77,102,255,0.52)",
+  lightGlow  = "rgba(77,102,255,0.28)",
+  darkMode = true,
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
+      animate={{ opacity: 1, y: 0, rotate }}
+      transition={{ duration: 2.4, delay, ease: [0.23, 0.86, 0.39, 0.96], opacity: { duration: 1.2 } }}
+      className={cn("absolute", className)}
+    >
+      <motion.div
+        animate={{ y: [0, 20, 0], x: [0, 6, 0] }}
+        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+        style={{ width, height }}
+        className="relative"
+      >
+        {darkMode ? (
+          <div className={cn(
+            "absolute inset-0 rounded-full",
+            "bg-gradient-to-r to-transparent", darkGradient,
+            "backdrop-blur-[2px] border-2 border-white/[0.15]",
+            "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
+            "after:absolute after:inset-0 after:rounded-full",
+            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]",
+          )} />
+        ) : (
+          /* LIGHT — formas sólidas con color de marca, glass y sombra fuerte */
+          <div
+            className="absolute inset-0 rounded-full backdrop-blur-[10px]"
+            style={{
+              background: `linear-gradient(135deg, ${lightColor} 0%, ${lightColor.replace(/[\d.]+\)$/, '0.28)')} 100%)`,
+              border: '1.5px solid rgba(255,255,255,0.75)',
+              boxShadow: [
+                `inset 0 2px 0 rgba(255,255,255,0.85)`,
+                `0 12px 40px ${lightGlow}`,
+                `0 4px 16px rgba(0,0,0,0.06)`,
+              ].join(', '),
+            }}
+          >
+            {/* Reflejo interno superior */}
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'radial-gradient(ellipse 80% 40% at 50% 15%, rgba(255,255,255,0.65), transparent 60%)',
+              }}
+            />
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export default function GeometricBackground({ className, darkMode = true }) {
+  const bg       = darkMode ? "#0D0F1C" : "#EEF1FF"
+  const radial   = darkMode
+    ? "bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05]"
+    : "bg-gradient-to-br from-blue-400/[0.08] via-transparent to-rose-400/[0.08]"
+  const fadeClass = darkMode
+    ? "from-[#0D0F1C] via-transparent to-[#0D0F1C]/80"
+    : "from-[#EEF1FF] via-transparent to-[#EEF1FF]/80"
+
+  return (
+    <div
+      className={cn("fixed inset-0 w-full h-full z-[-1]", className)}
+      style={{ backgroundColor: bg }}
+    >
+      <div className={cn("absolute inset-0 blur-3xl", radial)} />
+
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Grande izq — azul */}
+        <ElegantShape delay={0.3} width={600} height={140} rotate={12}
+          darkGradient="from-[#41EAFF]/[0.15]"
+          lightColor="rgba(77,102,255,0.55)" lightGlow="rgba(77,102,255,0.30)"
+          darkMode={darkMode} className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+        />
+        {/* Grande der — coral */}
+        <ElegantShape delay={0.5} width={500} height={120} rotate={-15}
+          darkGradient="from-[#FF6D4D]/[0.15]"
+          lightColor="rgba(255,109,77,0.52)" lightGlow="rgba(255,109,77,0.28)"
+          darkMode={darkMode} className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+        />
+        {/* Pequeña inf izq — cyan */}
+        <ElegantShape delay={0.4} width={300} height={80} rotate={-8}
+          darkGradient="from-[#41EAFF]/[0.15]"
+          lightColor="rgba(65,234,255,0.50)" lightGlow="rgba(65,234,255,0.26)"
+          darkMode={darkMode} className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+        />
+        {/* Pequeña sup der — coral */}
+        <ElegantShape delay={0.6} width={200} height={60} rotate={20}
+          darkGradient="from-[#FF6D4D]/[0.15]"
+          lightColor="rgba(255,109,77,0.48)" lightGlow="rgba(255,109,77,0.24)"
+          darkMode={darkMode} className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
+        />
+        {/* Mínima — purple */}
+        <ElegantShape delay={0.7} width={150} height={40} rotate={-25}
+          darkGradient="from-[#828AFF]/[0.15]"
+          lightColor="rgba(130,138,255,0.52)" lightGlow="rgba(130,138,255,0.26)"
+          darkMode={darkMode} className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+        />
+      </div>
+
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="hero-side-glow hero-side-glow-left" />
+        <div className="hero-side-glow hero-side-glow-right" />
+      </div>
+
+      <div className={cn("absolute inset-0 bg-gradient-to-t pointer-events-none", fadeClass)} />
+    </div>
+  );
 }
 </file>
 
@@ -4828,7 +5206,7 @@ export default function Hero({ lang }) {
           </span>
         </motion.div>
 
-        {/* Headline — 3 renglones */}
+        {/* Headline — 3 renglones sin cambios */}
         <motion.h1
           variants={variants.item}
           className="font-cal text-4xl sm:text-5xl md:text-6xl xl:text-[72px] leading-[1.08] tracking-[-1.5px] dark:text-white text-b-dark"
@@ -4870,14 +5248,14 @@ export default function Hero({ lang }) {
           </motion.span>
         </motion.h1>
 
-        {/* Subtítulo */}
+        {/* Subtítulo — reposicionamiento producto + marca + experiencia digital */}
         <motion.p
           variants={variants.item}
           className="dark:text-white/50 text-black/55 text-base md:text-lg max-w-[520px] leading-[1.75]"
         >
           {t(
-            'Diseño, branding, IA y automatización — convergiendo en sistemas y experiencias que funcionan desde el núcleo.',
-            'Design, branding, AI and automation — converging into systems and experiences that work from the core.'
+            'Desde la forma y el objeto hasta su experiencia digital — creando sistemas visuales y piezas que comunican, posicionan y funcionan.',
+            'From form and object to digital experience — creating visual systems and pieces that communicate, position and work.'
           )}
         </motion.p>
 
@@ -4888,14 +5266,14 @@ export default function Hero({ lang }) {
             className="group relative inline-flex items-center gap-2.5 glass dark:text-white text-black text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(77,102,255,.22)]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral" />
-            {t('Conoce el enfoque', 'Learn the approach')}
+            {t('Nuestro enfoque', 'Our approach')}
             <ArrowDown size={14} className="group-hover:translate-y-1 transition-transform duration-300" />
           </a>
           <a
-            href="#enfoque"
+            href="#capacidades"
             className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
           >
-            {t('Explorar', 'Explore')}
+            {t('Explorar el lab', 'Explore the lab')}
           </a>
         </motion.div>
 
@@ -4924,17 +5302,16 @@ import ScrollToTop          from './components/ScrollToTop'
 import Navbar               from './components/Navbar'
 import GeometricBackground  from './components/ui/geometric'
 
-import Hero       from './sections/Hero'
-import Ticker     from './sections/Ticker'
-import Enfoque    from './sections/Enfoque'
-import Manifiesto from './sections/Manifiesto'
-import Productos  from './sections/Productos'
-import Proceso    from './sections/Proceso'
-import Stack      from './sections/Stack'
-import Connect    from './sections/Connect'
-import Footer     from './sections/Footer'
-
-// LabStats eliminado — las métricas ya están integradas en Manifiesto.jsx
+import Hero        from './sections/Hero'
+import Ticker      from './sections/Ticker'
+import Capacidades from './sections/Capacidades'
+import Enfoque     from './sections/Enfoque'
+import Manifiesto  from './sections/Manifiesto'
+import Productos   from './sections/Productos'
+import Proceso     from './sections/Proceso'
+import Stack       from './sections/Stack'
+import Connect     from './sections/Connect'
+import Footer      from './sections/Footer'
 
 export default function App() {
   const [lang, setLang] = useState('es')
@@ -4953,7 +5330,6 @@ export default function App() {
 
   return (
     <>
-      {/* Fondo geométrico — recibe darkMode para adaptar colores */}
       <GeometricBackground darkMode={dark} />
 
       <div id="pb" aria-hidden="true" />
@@ -4964,14 +5340,15 @@ export default function App() {
       <Navbar lang={lang} setLang={setLang} dark={dark} setDark={setDark} />
 
       <main className="relative z-10">
-        <Hero       lang={lang} />
-        <Ticker     />
-        <Enfoque    lang={lang} />
-        <Manifiesto lang={lang} />
-        <Productos  lang={lang} />
-        <Proceso    lang={lang} />
-        <Stack      lang={lang} />
-        <Connect    lang={lang} />
+        <Hero        lang={lang} />
+        <Ticker      />
+        <Capacidades lang={lang} />
+        <Enfoque     lang={lang} />
+        <Manifiesto  lang={lang} />
+        <Productos   lang={lang} />
+        <Proceso     lang={lang} />
+        <Stack       lang={lang} />
+        <Connect     lang={lang} />
       </main>
 
       <Footer lang={lang} />
@@ -4981,132 +5358,9 @@ export default function App() {
 }
 </file>
 
-<file path="src/components/ui/geometric.jsx">
-"use client";
-import React from "react";
-import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
-
-function ElegantShape({
-  className, delay = 0, width = 400, height = 100, rotate = 0,
-  darkGradient = "from-white/[0.08]",
-  lightColor = "rgba(77,102,255,0.52)",
-  lightGlow  = "rgba(77,102,255,0.28)",
-  darkMode = true,
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
-      animate={{ opacity: 1, y: 0, rotate }}
-      transition={{ duration: 2.4, delay, ease: [0.23, 0.86, 0.39, 0.96], opacity: { duration: 1.2 } }}
-      className={cn("absolute", className)}
-    >
-      <motion.div
-        animate={{ y: [0, 20, 0], x: [0, 6, 0] }}
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-        style={{ width, height }}
-        className="relative"
-      >
-        {darkMode ? (
-          <div className={cn(
-            "absolute inset-0 rounded-full",
-            "bg-gradient-to-r to-transparent", darkGradient,
-            "backdrop-blur-[2px] border-2 border-white/[0.15]",
-            "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
-            "after:absolute after:inset-0 after:rounded-full",
-            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]",
-          )} />
-        ) : (
-          /* LIGHT — formas sólidas con color de marca, glass y sombra fuerte */
-          <div
-            className="absolute inset-0 rounded-full backdrop-blur-[10px]"
-            style={{
-              background: `linear-gradient(135deg, ${lightColor} 0%, ${lightColor.replace(/[\d.]+\)$/, '0.28)')} 100%)`,
-              border: '1.5px solid rgba(255,255,255,0.75)',
-              boxShadow: [
-                `inset 0 2px 0 rgba(255,255,255,0.85)`,
-                `0 12px 40px ${lightGlow}`,
-                `0 4px 16px rgba(0,0,0,0.06)`,
-              ].join(', '),
-            }}
-          >
-            {/* Reflejo interno superior */}
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: 'radial-gradient(ellipse 80% 40% at 50% 15%, rgba(255,255,255,0.65), transparent 60%)',
-              }}
-            />
-          </div>
-        )}
-      </motion.div>
-    </motion.div>
-  );
-}
-
-export default function GeometricBackground({ className, darkMode = true }) {
-  const bg       = darkMode ? "#0D0F1C" : "#EEF1FF"
-  const radial   = darkMode
-    ? "bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05]"
-    : "bg-gradient-to-br from-blue-400/[0.08] via-transparent to-rose-400/[0.08]"
-  const fadeClass = darkMode
-    ? "from-[#0D0F1C] via-transparent to-[#0D0F1C]/80"
-    : "from-[#EEF1FF] via-transparent to-[#EEF1FF]/80"
-
-  return (
-    <div
-      className={cn("fixed inset-0 w-full h-full z-[-1]", className)}
-      style={{ backgroundColor: bg }}
-    >
-      <div className={cn("absolute inset-0 blur-3xl", radial)} />
-
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Grande izq — azul */}
-        <ElegantShape delay={0.3} width={600} height={140} rotate={12}
-          darkGradient="from-[#41EAFF]/[0.15]"
-          lightColor="rgba(77,102,255,0.55)" lightGlow="rgba(77,102,255,0.30)"
-          darkMode={darkMode} className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
-        />
-        {/* Grande der — coral */}
-        <ElegantShape delay={0.5} width={500} height={120} rotate={-15}
-          darkGradient="from-[#FF6D4D]/[0.15]"
-          lightColor="rgba(255,109,77,0.52)" lightGlow="rgba(255,109,77,0.28)"
-          darkMode={darkMode} className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
-        />
-        {/* Pequeña inf izq — cyan */}
-        <ElegantShape delay={0.4} width={300} height={80} rotate={-8}
-          darkGradient="from-[#41EAFF]/[0.15]"
-          lightColor="rgba(65,234,255,0.50)" lightGlow="rgba(65,234,255,0.26)"
-          darkMode={darkMode} className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
-        />
-        {/* Pequeña sup der — coral */}
-        <ElegantShape delay={0.6} width={200} height={60} rotate={20}
-          darkGradient="from-[#FF6D4D]/[0.15]"
-          lightColor="rgba(255,109,77,0.48)" lightGlow="rgba(255,109,77,0.24)"
-          darkMode={darkMode} className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
-        />
-        {/* Mínima — purple */}
-        <ElegantShape delay={0.7} width={150} height={40} rotate={-25}
-          darkGradient="from-[#828AFF]/[0.15]"
-          lightColor="rgba(130,138,255,0.52)" lightGlow="rgba(130,138,255,0.26)"
-          darkMode={darkMode} className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
-        />
-      </div>
-
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="hero-side-glow hero-side-glow-left" />
-        <div className="hero-side-glow hero-side-glow-right" />
-      </div>
-
-      <div className={cn("absolute inset-0 bg-gradient-to-t pointer-events-none", fadeClass)} />
-    </div>
-  );
-}
-</file>
-
 <file path="src/sections/Productos.jsx">
 /**
- * Productos.jsx — "Insights & Solutions" carousel
+ * Productos.jsx — "Recursos del lab" carousel
  *
  * Arquitectura:
  * - Contenedor overflow:hidden (wrapper visible)
@@ -5117,7 +5371,7 @@ export default function GeometricBackground({ className, darkMode = true }) {
  * - 4ª tarjeta asoma ~20% al fondo (gap right en el wrapper)
  * - Dots clicables sincronizados con el índice activo
  */
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, useMotionValue, animate } from 'framer-motion'
 import { ExternalLink, ShoppingBag, Zap, Layers, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef, useState, useCallback, useEffect } from 'react'
 
@@ -5160,7 +5414,6 @@ function ProductCard({ prod, lang, index, isDragging }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: index * .1 }}
-      // Solo hover si no está siendo arrastrado
       whileHover={isDragging ? {} : { y: -6, scale: 1.012, transition: { duration: .24, ease: 'easeOut' } }}
     >
       {/* Thumbnail */}
@@ -5280,10 +5533,10 @@ function YouTubeCard({ lang, isDragging }) {
 // ── Componente principal ────────────────────────────────────────
 export default function Productos({ lang }) {
   const t        = (es, en) => lang === 'es' ? es : en
-  const CARD_W   = 340                // ancho de cada tarjeta en px
-  const GAP      = 24                 // gap entre tarjetas en px
-  const STEP     = CARD_W + GAP       // paso de desplazamiento
-  const TOTAL    = products.length + 1 // 3 + YouTube
+  const CARD_W   = 340
+  const GAP      = 24
+  const STEP     = CARD_W + GAP
+  const TOTAL    = products.length + 1
 
   const containerRef  = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -5292,13 +5545,10 @@ export default function Productos({ lang }) {
 
   const x = useMotionValue(0)
 
-  // Calcula el constraint máximo según el ancho real del contenedor
   useEffect(() => {
     const update = () => {
       if (!containerRef.current) return
-      const visible = containerRef.current.offsetWidth
-      // Queremos que la 4ª tarjeta asome un 20%: la pista tiene TOTAL cards
-      // y queremos mostrar visible px por vez.
+      const visible    = containerRef.current.offsetWidth
       const trackWidth = TOTAL * STEP - GAP
       const maxLeft    = -(trackWidth - visible + GAP * 0.5)
       setMaxDrag(Math.min(0, maxLeft))
@@ -5308,7 +5558,6 @@ export default function Productos({ lang }) {
     return () => window.removeEventListener('resize', update)
   }, [TOTAL, STEP])
 
-  // Snap al índice exacto
   const snapTo = useCallback((index) => {
     const clamped = Math.max(0, Math.min(index, TOTAL - 1))
     setActiveIndex(clamped)
@@ -5320,10 +5569,8 @@ export default function Productos({ lang }) {
     const vel       = info.velocity.x
     const offset    = info.offset.x
     const threshold = STEP / 3
-
     let next = activeIndex
     if (Math.abs(vel) > 500) {
-      // Swipe rápido — seguir la dirección de la velocidad
       next = vel < 0 ? activeIndex + 1 : activeIndex - 1
     } else if (Math.abs(offset) > threshold) {
       next = offset < 0 ? activeIndex + 1 : activeIndex - 1
@@ -5334,29 +5581,29 @@ export default function Productos({ lang }) {
   const handleArrow = (dir) => snapTo(activeIndex + dir)
 
   return (
-    <section id="productos" className="relative z-10 py-24 px-4 md:px-8">
+    <section id="productos recursos" className="relative z-10 py-24 px-4 md:px-8">
       <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
-        {/* ── Encabezado con flechas a la derecha ──────────────── */}
+        {/* Encabezado con flechas a la derecha */}
         <div className="flex items-end justify-between gap-4">
           <div className="flex flex-col gap-3 max-w-2xl">
             <motion.p
               className="text-[12px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/35"
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             >
-              {t('Contenido y herramientas', 'Content & tools')}
+              {t('Recursos del lab', 'Lab resources')}
             </motion.p>
             <motion.h2
               className="font-cal text-4xl md:text-5xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .08 }}
             >
-              {t('Contenido y ', 'Content & ')}
+              {t('Recursos y ', 'Resources & ')}
               <span className="text-grad">{t('herramientas', 'tools')}</span>
             </motion.h2>
           </div>
 
-          {/* Flechas — fuera del carrusel, en el encabezado */}
+          {/* Flechas */}
           <div className="flex items-center gap-2 shrink-0 pb-1">
             <button type="button" onClick={() => handleArrow(-1)}
               disabled={activeIndex === 0}
@@ -5373,11 +5620,10 @@ export default function Productos({ lang }) {
           </div>
         </div>
 
-        {/* ── Carrusel draggable ───────────────────────────────── */}
+        {/* Carrusel draggable */}
         <div
           ref={containerRef}
           className="relative overflow-hidden"
-          // Evita que los clicks en links se activen al soltar el drag
           style={{ touchAction: 'pan-y' }}
         >
           <motion.div
@@ -5385,11 +5631,10 @@ export default function Productos({ lang }) {
             style={{ x }}
             drag="x"
             dragConstraints={{ left: maxDrag, right: 0 }}
-            dragElastic={0.08}           // rebote suave en los bordes
-            dragMomentum={true}          // momentum natural post-drag
+            dragElastic={0.08}
+            dragMomentum={true}
             onDragStart={() => setIsDragging(true)}
             onDragEnd={handleDragEnd}
-            // Sincroniza el activeIndex mientras se arrastra
             onDrag={(_, info) => {
               const rawIndex = -info.point.x / STEP
               const clamped  = Math.round(Math.max(0, Math.min(rawIndex, TOTAL - 1)))
@@ -5403,7 +5648,7 @@ export default function Productos({ lang }) {
           </motion.div>
         </div>
 
-        {/* ── Dots clicables ────────────────────────────────────── */}
+        {/* Dots clicables */}
         <div className="flex justify-center items-center gap-2">
           {Array.from({ length: TOTAL }, (_, i) => (
             <button
@@ -5419,12 +5664,12 @@ export default function Productos({ lang }) {
           ))}
         </div>
 
-        {/* ── CTA ver todos ─────────────────────────────────────── */}
+        {/* CTA ver todos */}
         <motion.div className="flex justify-center"
           initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: .3 }}>
           <a href="https://concentriclab.gumroad.com" target="_blank" rel="noopener noreferrer"
             className="glass inline-flex items-center gap-2.5 dark:text-white/60 text-black/65 hover:dark:text-white hover:text-black text-sm font-semibold px-6 py-3 rounded-full border dark:border-white/8 border-black/10 hover:dark:border-white/16 hover:border-black/18 transition-all duration-300">
-            {t('Ver todos los productos', 'View all products')}
+            {t('Ver todos los recursos', 'View all resources')}
             <ExternalLink size={13} />
           </a>
         </motion.div>
@@ -5442,10 +5687,10 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navLinks = [
-  { href:'#enfoque',    es:'Enfoque',        en:'Focus'         },
-  { href:'#principios', es:'Principios',     en:'Lab principles' },
-  { href:'#productos',  es:'Productos',      en:'Products'      },
-  { href:'#contenido',  es:'Contenido',      en:'Content'        },
+  { href:'#capacidades', es:'Capacidades', en:'Capabilities' },
+  { href:'#enfoque',     es:'Enfoque',    en:'Focus'      },
+  { href:'#principios',  es:'Principios', en:'Principles' },
+  { href:'#connect',     es:'Contacto',   en:'Contact'    },
 ]
 
 export default function Navbar({ lang, setLang, dark, setDark }) {
@@ -5484,7 +5729,6 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
         background: dark ? 'transparent' : 'rgba(248, 247, 244, 0.4)',
       }}
       >
-        {/* Notch */}
         <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-notch mb-1">
           <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
           <span className="text-white text-[11px] font-medium tracking-wide">
@@ -5497,20 +5741,13 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
             <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto dark:brightness-100 brightness-75" />
           </a>
 
-          {/* Desktop nav — texto legible en ambos modos */}
           <nav className="hidden md:flex items-center gap-7">
             {navLinks.map(l => (
               <a key={l.href} href={l.href}
                 className="text-sm font-medium transition-colors duration-200 relative group"
-                style={{
-                  color: dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)',
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)'
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.color = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)'
-                }}>
+                style={{ color: dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}
+                onMouseEnter={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)' }}
+                onMouseLeave={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}>
                 {t(l.es, l.en)}
                 <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300" />
               </a>
@@ -5518,72 +5755,44 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            {/* Theme toggle — con border explícito en light para visibilidad */}
-            <button
-              onClick={toggleDark}
-              aria-label="Toggle theme"
+            <button onClick={toggleDark} aria-label="Toggle theme"
               className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
                 border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)'
-                e.currentTarget.style.background = dark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.85)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)'
-                e.currentTarget.style.background = dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)'
-              }}
-            >
+              }}>
               {dark ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
-            {/* Lang toggle */}
-            <button
-              onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
+            <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
               className="text-[13px] font-bold px-3.5 py-1.5 rounded-full transition-all duration-200 backdrop-blur-sm"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
                 border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)'
-                e.currentTarget.style.background = dark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.85)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)'
-                e.currentTarget.style.background = dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)'
-              }}
-            >
+              }}>
               {lang.toUpperCase()}
             </button>
 
-            {/* CTA */}
-            <a href="#productos"
+            <a href="#capacidades"
               className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(77,102,255,.45)] transition-all duration-200">
               {t('Explorar', 'Explore')}
             </a>
 
-            {/* Mobile menu */}
-            <button
-              className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"
+            <button className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"
               style={{
                 background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
                 border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
                 color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
               }}
-              onClick={() => setOpen(o => !o)}
-              aria-label="Menu">
+              onClick={() => setOpen(o => !o)} aria-label="Menu">
               {open ? <X size={16} /> : <Menu size={16} />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile drawer */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -5623,19 +5832,19 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
-const tags_es = ['Diseño UX/UI', 'IA Generativa', 'Branding', 'Diseño Industrial', 'Métricas', 'Automatización', 'Data storytelling']
-const tags_en = ['UX/UI Design', 'Generative AI', 'Branding', 'Industrial Design', 'Metrics', 'Automation', 'Data storytelling']
+const tags_es = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Video', 'Branding', 'Automatización', 'Sistemas visuales']
+const tags_en = ['Design', 'Product & form', 'Digital experience', 'Video', 'Branding', 'Automation', 'Visual systems']
 
-const CORAL_ES = new Set(['núcleo', 'sistema,', 'solución', 'diseño,', 'IA', 'automatización.'])
-const CORAL_EN = new Set(['core', 'system,', 'solution', 'design,', 'AI', 'automation.'])
+const CORAL_ES = new Set(['núcleo', 'forma', 'pantalla', 'diseño,', 'productos,'])
+const CORAL_EN = new Set(['core', 'form', 'screen', 'design,', 'products,'])
 
 export default function Enfoque({ lang }) {
   const ref    = useRef()
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
-  const text     = lang === 'es'
-    ? 'Construimos desde el núcleo hacia afuera — del usuario al sistema, del problema a la solución — combinando diseño, IA y automatización.'
-    : 'We build from the core outward — from the user to the system, from the problem to the solution — combining design, AI and automation.'
+  const text = lang === 'es'
+    ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — integrando diseño, producto, automatización e inteligencia artificial en piezas digitales que funcionan y comunican.'
+    : 'We build from the core outward — from form to system, from object to screen — integrating design, product, automation and artificial intelligence into digital pieces that work and communicate.'
 
   const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
   const tags     = lang === 'es' ? tags_es : tags_en
@@ -5669,8 +5878,6 @@ export default function Enfoque({ lang }) {
           Animación: cada palabra arranca gris-fantasma (visible en ambos modos),
           luego se revela: palabras normales → blanco en dark / dark en light,
           palabras clave → coral con textShadow glow.
-          Se usa `style` directo para el color final para evitar que Tailwind
-          sobreescriba con clases dark:/text- que fallan en animación.
         */}
         <p
           ref={ref}
@@ -5678,11 +5885,7 @@ export default function Enfoque({ lang }) {
           aria-label={text}
         >
           {words.map((word, i) => {
-            const isCoral  = coralSet.has(word)
-            // Color final según modo — resuelto en el cliente vía clase CSS
-            // que se aplica al <span> padre, pero la animación lo sobreescribe.
-            // Usamos 'currentColor' como base para que herede el modo.
-            const finalColor = isCoral ? '#FF6D4D' : undefined  // undefined = hereda del CSS
+            const isCoral = coralSet.has(word)
 
             return (
               <motion.span
@@ -5941,11 +6144,12 @@ export default function Manifiesto({ lang }) {
 import { motion } from 'framer-motion'
 
 const navLinks = [
-  { href: '#enfoque',    es: 'Enfoque',        en: 'Focus'         },
-  { href: '#principios', es: 'Principios',     en: 'Lab principles' },
-  { href: '#productos',  es: 'Productos',      en: 'Products'      },
-  { href: '#contenido',  es: 'Contenido',      en: 'Content'        },
-  { href: '#proceso',    es: 'Proceso',        en: 'Process'       },
+  { href: '#enfoque',     es: 'Enfoque',     en: 'Focus'      },
+  { href: '#principios',  es: 'Principios',  en: 'Principles' },
+  { href: '#capacidades', es: 'Capacidades', en: 'Capabilities'},
+  { href: '#recursos',    es: 'Recursos',    en: 'Resources'  },
+  { href: '#proceso',     es: 'Proceso',     en: 'Process'    },
+  { href: '#connect',     es: 'Contacto',    en: 'Contact'    },
 ]
 const social = [
   { label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
@@ -5954,7 +6158,7 @@ const social = [
 ]
 const products = [
   { label: 'Kit de Métricas', href: 'https://concentriclab.gumroad.com/l/metricasdigitales' },
-  { label: 'Ver todos →',    href: 'https://concentriclab.gumroad.com' },
+  { label: 'Ver todos →',     href: 'https://concentriclab.gumroad.com' },
 ]
 
 export default function Footer({ lang }) {
@@ -5962,7 +6166,6 @@ export default function Footer({ lang }) {
   const year = new Date().getFullYear()
 
   return (
-    /* Footer con fondo adaptativo al modo — transparencia coherente */
     <footer className="relative z-10 px-4 pb-8 pt-20 mb-8 overflow-hidden bg-transparent">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
@@ -5972,7 +6175,7 @@ export default function Footer({ lang }) {
       <div className="section-premium">
         <div className="max-w-[1200px] mx-auto">
 
-        {/* CTA grande — adaptativo al modo */}
+        {/* CTA grande */}
         <motion.div
           className="flex flex-col items-center text-center gap-6 pb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -5981,18 +6184,18 @@ export default function Footer({ lang }) {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/75 text-black/60">
-            {t('¿Listo para construir?', 'Ready to build?')}
+            {t('¿Qué estás construyendo?', 'What are you building?')}
           </p>
           <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl leading-tight tracking-[-1.5px] dark:text-white text-b-dark">
-            {t('Hagamos algo', "Let's build something")}
+            {t('Cuéntanos', 'Tell us')}
             <br />
-            <span className="text-grad">{t('que funcione.', 'that works.')}</span>
+            <span className="text-grad">{t('qué necesitas.', 'what you need.')}</span>
           </h2>
           <a
             href="#connect"
             className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-8 py-4 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(77,102,255,.55)] transition-all duration-300 mt-2"
           >
-            {t('Conectar con el lab', 'Connect with the lab')}
+            {t('Escribirnos', 'Get in touch')}
           </a>
         </motion.div>
 
@@ -6011,7 +6214,7 @@ export default function Footer({ lang }) {
           </div>
           <div className="flex flex-col gap-3">
             <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
-              {t('Productos', 'Products')}
+              {t('Recursos', 'Resources')}
             </span>
             {products.map(p => (
               <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer"
@@ -6033,9 +6236,8 @@ export default function Footer({ lang }) {
           </div>
         </div>
 
-        {/* ── Barra inferior: Logo | Copyright | Tagline ── */}
+        {/* Barra inferior */}
         <div className="pt-7 grid grid-cols-3 items-center gap-4 border-t dark:border-white/10 border-black/12">
-          {/* Izquierda — logo */}
           <a href="#hero" className="flex items-center gap-0 group" aria-label="Concéntrico Lab">
             <img
               src="/assets/images/logo.png"
@@ -6043,13 +6245,9 @@ export default function Footer({ lang }) {
               className="h-5 w-auto opacity-55 group-hover:opacity-90 transition-opacity duration-200 dark:brightness-0 dark:invert"
             />
           </a>
-
-          {/* Centro — copyright */}
           <p className="text-[11px] text-center dark:text-white/30 text-black/35">
             © {year} Concéntrico Lab. Bogotá, Colombia.
           </p>
-
-          {/* Derecha — tagline */}
           <p className="text-[11px] text-right italic hidden sm:block dark:text-white/30 text-black/35">
             {t('Construido con diseño, IA y mucho café.', 'Built with design, AI and a lot of coffee.')}
           </p>

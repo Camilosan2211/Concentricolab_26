@@ -84,14 +84,14 @@ export default function Connect({ lang }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:items-stretch">
 
-          {/* Card izquierda — Newsletter */}
+          {/* Card izquierda — Newsletter & Socials */}
           <motion.div
-            className="glass rounded-card p-8 md:p-10 flex flex-col gap-6 h-full min-h-[340px]"
+            className="glass rounded-card p-8 md:p-10 flex flex-col h-full min-h-[340px]"
             initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 mb-6">
               <div className="flex items-center gap-2 text-b-blue">
                 <Mail size={15} />
                 <span className="text-[12px] font-bold tracking-[0.07em] uppercase text-b-blue">Newsletter</span>
@@ -106,7 +106,8 @@ export default function Connect({ lang }) {
                 )}
               </p>
             </div>
-            <form onSubmit={submitNewsletter} className="flex flex-col gap-3 mt-auto">
+            
+            <form onSubmit={submitNewsletter} className="flex flex-col gap-3">
               <input
                 type="email"
                 value={email}
@@ -126,20 +127,34 @@ export default function Connect({ lang }) {
                   : status === 'error' ? t('Intenta de nuevo', 'Try again')
                   : t('Suscribirme', 'Subscribe')}
               </button>
-              <p className="dark:text-white/25 text-black/35 text-xs text-center">
-                {t('Sin spam. Date de baja cuando quieras.', 'No spam. Unsubscribe anytime.')}
-              </p>
             </form>
+
+            {/* Redes Movidas Aquí */}
+            <div className="mt-auto pt-8">
+              <div className="pt-5 border-t dark:border-white/8 border-black/6">
+                <p className="text-[10px] font-bold tracking-[0.1em] uppercase dark:text-white/40 text-black/40 mb-3">
+                  {t('También en', 'Also on')}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {socialGrid.map(({ Icon, label, href }) => (
+                    <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 glass rounded-full py-1.5 px-3 border dark:border-white/8 border-black/8 hover:dark:border-b-blue/30 hover:border-b-blue/25 transition-all duration-200">
+                      <Icon size={12} className="text-b-blue dark:text-b-blue-lt" />
+                      <span className="text-[10px] font-semibold dark:text-white/50 text-black/45">{label}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
           </motion.div>
 
           {/* Card derecha — Formulario de proyecto */}
           <motion.div
-            className="glass rounded-card p-8 md:p-10 flex flex-col gap-5 h-full min-h-[340px]"
+            className="glass rounded-card p-8 md:p-10 flex flex-col h-full min-h-[340px]"
             initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           >
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 mb-6">
               <span className="text-[12px] font-bold tracking-[0.07em] uppercase text-b-coral">
                 {t('Contacto directo', 'Direct contact')}
               </span>
@@ -155,7 +170,7 @@ export default function Connect({ lang }) {
             </div>
 
             {formStatus === 'ok' ? (
-              <div className="flex-1 flex flex-col items-center justify-center gap-3 text-center">
+              <div className="flex-1 flex flex-col items-center justify-center gap-3 text-center mb-4">
                 <span className="text-3xl">✓</span>
                 <p className="font-cal text-xl dark:text-white text-b-dark">
                   {t('¡Mensaje recibido!', 'Message received!')}
@@ -166,48 +181,60 @@ export default function Connect({ lang }) {
               </div>
             ) : (
               <form onSubmit={submitProject} className="flex flex-col gap-3 flex-1">
-                <input
-                  type="text"
-                  value={formData.nombre}
-                  onChange={(e) => setFormData(d => ({ ...d, nombre: e.target.value }))}
-                  placeholder={t('Nombre', 'Name')}
-                  required
-                  className={inputCls}
-                />
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData(d => ({ ...d, email: e.target.value }))}
-                  placeholder={t('tu@email.com', 'your@email.com')}
-                  required
-                  className={inputCls}
-                />
-                <select
-                  value={formData.tipo}
-                  onChange={(e) => setFormData(d => ({ ...d, tipo: e.target.value }))}
-                  required
-                  className={`${inputCls} dark:bg-[#00031F] bg-white/80 cursor-pointer`}
-                >
-                  <option value="" disabled>{t('¿Qué necesitas?', 'What do you need?')}</option>
-                  <option value="diseno">{t('Diseño & identidad', 'Design & identity')}</option>
-                  <option value="producto">{t('Producto & forma / 3D', 'Product & form / 3D')}</option>
-                  <option value="uxui">{t('UX/UI & experiencia digital', 'UX/UI & digital experience')}</option>
-                  <option value="video">{t('Video & contenido', 'Video & content')}</option>
-                  <option value="automatizacion">{t('Automatización & IA', 'Automation & AI')}</option>
-                  <option value="consultoria">{t('Consultoría', 'Consulting')}</option>
-                  <option value="otro">{t('Otro', 'Other')}</option>
-                </select>
+                <div className="flex gap-3">
+                  <input
+                    type="text"
+                    value={formData.nombre}
+                    onChange={(e) => setFormData(d => ({ ...d, nombre: e.target.value }))}
+                    placeholder={t('Nombre', 'Name')}
+                    required
+                    className={inputCls}
+                  />
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData(d => ({ ...d, email: e.target.value }))}
+                    placeholder={t('Email', 'Email')}
+                    required
+                    className={inputCls}
+                  />
+                </div>
+                
+                {/* Select Rediseñado */}
+                <div className="relative">
+                  <select
+                    value={formData.tipo}
+                    onChange={(e) => setFormData(d => ({ ...d, tipo: e.target.value }))}
+                    required
+                    className={`${inputCls} appearance-none cursor-pointer pr-10`}
+                  >
+                    <option value="" disabled className="dark:bg-b-dark bg-b-light">{t('¿De qué trata tu proyecto?', 'What is your project about?')}</option>
+                    <option value="producto" className="dark:bg-b-dark bg-b-light">{t('Producto & Empaque', 'Product & Packaging')}</option>
+                    <option value="marca" className="dark:bg-b-dark bg-b-light">{t('Identidad de Marca', 'Brand Identity')}</option>
+                    <option value="experiencia" className="dark:bg-b-dark bg-b-light">{t('Experiencia Digital (UX/UI)', 'Digital Experience (UX/UI)')}</option>
+                    <option value="video" className="dark:bg-b-dark bg-b-light">{t('Video & Contenido', 'Video & Content')}</option>
+                    <option value="otro" className="dark:bg-b-dark bg-b-light">{t('Otro', 'Other')}</option>
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none dark:text-white/40 text-black/40">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+
                 <textarea
                   value={formData.mensaje}
                   onChange={(e) => setFormData(d => ({ ...d, mensaje: e.target.value }))}
                   rows={3}
-                  placeholder={t('Cuéntanos brevemente el proyecto...', 'Tell us briefly about the project...')}
+                  placeholder={t('Cuéntanos brevemente...', 'Tell us briefly...')}
                   className={`${inputCls} resize-none`}
                 />
+                
+                {/* Botón anclado abajo gracias al mt-auto */}
                 <button
                   type="submit"
                   disabled={formStatus === 'loading'}
-                  className="inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-action glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60 mt-auto"
+                  className="mt-auto inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-action glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
                 >
                   <Send size={14} />
                   {formStatus === 'loading' ? t('Enviando…', 'Sending…')
@@ -216,27 +243,6 @@ export default function Connect({ lang }) {
                 </button>
               </form>
             )}
-
-            {/* Redes — pequeñas, debajo */}
-            <div className="pt-2 border-t dark:border-white/8 border-black/6">
-              <p className="text-[10px] font-bold tracking-[0.1em] uppercase dark:text-white/30 text-black/35 mb-2">
-                {t('También en', 'Also on')}
-              </p>
-              <div className="flex gap-2">
-                {socialGrid.map(({ Icon, label, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 glass rounded-full py-1.5 px-3 border dark:border-white/8 border-black/8 hover:dark:border-b-blue/30 hover:border-b-blue/25 transition-all duration-200"
-                  >
-                    <Icon size={12} className="text-b-blue dark:text-b-blue-lt" />
-                    <span className="text-[10px] font-semibold dark:text-white/50 text-black/45">{label}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
           </motion.div>
         </div>
       </div>

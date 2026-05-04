@@ -6,8 +6,8 @@ const items = [
   {
     id: '01',
     Icon: Layers,
-    color: '#5170FF',
-    span: 2,
+    color: '#4D66FF',
+    span: 1, // Cambiado de 2 a 1 para mantener el grid perfecto de 3x2
     es: {
       title: 'Diseño',
       body: 'Sistemas visuales, identidad y UI que conectan lo físico con lo digital — desde la pieza gráfica hasta la interfaz.',
@@ -90,13 +90,12 @@ const items = [
 ]
 
 function CapCard({ item, lang, index }) {
-  const c      = lang === 'es' ? item.es : item.en
-  const Icon   = item.Icon
-  const colCls = item.span === 2 ? 'md:col-span-2' : 'md:col-span-1'
+  const c = lang === 'es' ? item.es : item.en
+  const Icon = item.Icon
 
   return (
     <motion.div
-      className={`relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm ${colCls}`}
+      className="relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm md:col-span-1"
       initial={{ opacity: 0, y: 36 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
@@ -120,8 +119,7 @@ function CapCard({ item, lang, index }) {
       />
 
       {/* Contenido */}
-      <div className={`relative z-10 p-6 md:p-8 flex flex-col gap-4 ${item.span === 2 ? 'md:flex-row md:gap-10 md:items-center' : ''}`}>
-
+      <div className="relative z-10 p-6 md:p-8 flex flex-col gap-4 h-full">
         {/* Icono */}
         <div className="flex-shrink-0">
           <div
@@ -136,7 +134,7 @@ function CapCard({ item, lang, index }) {
         </div>
 
         {/* Texto */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 flex-1">
           <div>
             <span
               className="text-[10px] font-bold tracking-[0.12em] uppercase block mb-1"
@@ -170,19 +168,17 @@ export default function Capacidades({ lang }) {
 
   return (
     <section id="capacidades" className="py-16 md:py-20 px-4 relative overflow-hidden">
-
       {/* Orbe de fondo */}
       <div
         className="absolute top-[-80px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse, rgba(81,112,255,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(77,102,255,0.08) 0%, transparent 70%)',
           filter: 'blur(60px)',
         }}
         aria-hidden="true"
       />
 
       <div className="max-w-[1200px] mx-auto flex flex-col gap-10 relative z-10">
-
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-3">
           <motion.p
@@ -211,19 +207,13 @@ export default function Capacidades({ lang }) {
             transition={{ delay: 0.12, duration: 0.7 }}
           >
             {t(
-              'Disciplinas que convergen en piezas digitales ejecutables — de lo físico a lo digital.',
-              'Disciplines converging into executable digital pieces — from physical to digital.',
+              'Transversalidad aplicada. Disciplinas que convergen para dar forma, posicionar y hacer escalable cualquier producto o marca.',
+              'Applied transversality. Disciplines that converge to shape, position, and scale any product or brand.'
             )}
           </motion.p>
         </div>
 
-        {/*
-          Bento grid:
-          Desktop 3 cols:
-            Fila 1: [Diseño col-span-2] [Producto & forma col-span-1]
-            Fila 2: [UX/UI] [Video] [Automatización] cada col-span-1
-          La última card (Consultoría) completa el grid visualmente
-        */}
+        {/* Bento grid: 6 items simétricos (2 filas x 3 columnas) */}
         <div
           ref={ref}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
