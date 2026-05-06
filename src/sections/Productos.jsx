@@ -10,7 +10,7 @@
  * - 4ª tarjeta asoma ~20% al fondo (gap right en el wrapper)
  * - Dots clicables sincronizados con el índice activo
  */
-import { motion, useMotionValue, animate } from 'framer-motion'
+import { motion, useMotionValue, animate } from 'motion/react'
 import { ExternalLink, ShoppingBag, Zap, Layers, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef, useState, useCallback, useEffect } from 'react'
 

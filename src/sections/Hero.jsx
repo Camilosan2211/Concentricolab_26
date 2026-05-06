@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { ArrowDown } from 'lucide-react'
 import HeroGrid from '../components/HeroGrid'
 

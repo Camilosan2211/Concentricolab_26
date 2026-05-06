@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import { Layers, Box, Monitor, Play, Zap, MessageSquare } from 'lucide-react'
 
 const items = [

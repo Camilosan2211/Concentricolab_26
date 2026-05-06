@@ -3,11 +3,11 @@
  *
  * Narrativa en 3 momentos:
  * ─────────────────────────────────────────────────────────────────
- * [1] LLEGADA — Imagen de fondo (imagen_dinamico.jpeg) + título poético
+ * [1] LLEGADA — Imagen de fondo (imagen_dinamico.webp) + título poético
  *     centrado + 8 palabras flotantes con parallax al mouse.
  *     El usuario siente curiosidad antes de leer.
  *
- * [2] SCROLL — El video (video_dinamico.mp4) se expande dramáticamente
+ * [2] SCROLL — El video (video_dinamico.MP4) se expande dramáticamente
  *     mientras el título se abre hacia los lados y las palabras
  *     flotantes se disuelven. El gesto comunica apertura y profundidad.
  *
@@ -17,12 +17,12 @@
  *
  * Assets que debes colocar en /public/assets/images/:
  * ────────────────────────────────────────────────────
- *   imagen_dinamico.jpeg  → fondo panorámico (ver MEDIA_GUIDE abajo)
- *   video_dinamico.mp4    → video central 16:9, sujeto en 40% central
+ *   imagen_dinamico.webp  → fondo panorámico (ver MEDIA_GUIDE abajo)
+ *   video_dinamico.MP4    → video central 16:9, sujeto en 40% central
  *
  * MEDIA_GUIDE (especificaciones de los assets):
  *   Background (bgImageSrc):
- *     - Formato: JPEG, mínimo 1920×1080 px
+ *     - Formato: WebP (o JPEG fallback), mínimo 1920×1080 px
  *     - Contenido: flat lay de herramientas de diseño / workspace
  *       cenital con fondo oscuro. Tonos: navy + coral + neutros cálidos.
  *     - Términos de búsqueda: "dark flatlay design tools overhead"
@@ -40,15 +40,14 @@
  */
 
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import ScrollExpandMedia from '../components/ScrollExpandMedia'
 
 /* ── Assets ──────────────────────────────────────────────────────────
    Coloca tus archivos en /public/assets/images/ y actualiza estas rutas.
    En Vite, /public/ se sirve directamente en la raíz.              */
-const BG_SRC    = '/assets/images/imagen_dinamico.jpeg'
-const VIDEO_SRC = '/assets/images/video_dinamico.mp4'
-const POSTER_SRC = '/assets/images/video_dinamico_poster.jpeg' // frame del video para precarga
+const BG_SRC    = '/assets/images/imagen_dinamico.webp'
+const VIDEO_SRC = '/assets/images/video_dinamico.MP4'
 
 /* ── Tags de disciplina ──────────────────────────────────────────── */
 const TAGS_ES = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Video', 'Branding', 'Automatización', 'Sistemas visuales']
@@ -223,7 +222,6 @@ export default function Enfoque({ lang }) {
       <ScrollExpandMedia
         mediaType="video"
         mediaSrc={VIDEO_SRC}
-        posterSrc={POSTER_SRC}
         bgImageSrc={BG_SRC}
         title={t('Del objeto a la pantalla.', 'From object to screen.')}
         date={t('Desde el núcleo', 'From the core')}

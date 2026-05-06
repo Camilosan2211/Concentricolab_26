@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Mail, Instagram, Linkedin, Youtube, Send } from 'lucide-react'
 
 const EMAIL = 'concentriclabco@gmail.com'

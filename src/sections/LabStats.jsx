@@ -5,7 +5,7 @@
  * En modo light: panel blanco con sombra y borde suave.
  */
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 
 const stats = [
   {

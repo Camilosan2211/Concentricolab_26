@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, useInView } from 'framer-motion'
+import { motion, useScroll, useTransform, useInView } from 'motion/react'
 
 const principles = [
   { num: '01', color: '#4D66FF',

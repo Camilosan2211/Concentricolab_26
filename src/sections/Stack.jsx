@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 const tools = [
   { name: 'Figma',        src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
