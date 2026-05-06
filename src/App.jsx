@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import { useLenis }   from './hooks/useLenis'
 import { useCursor }  from './hooks/useCursor'
 
@@ -57,6 +58,7 @@ export default function App() {
 
       <Footer lang={lang} />
       <ScrollToTop />
+      <Analytics />
     </>
   )
 }
