@@ -53,7 +53,6 @@ function FloatingWord({ item, mouseX, mouseY, scrollProgress }) {
 const ScrollExpandMedia = ({
   mediaType   = 'video',
   mediaSrc,
-  posterSrc,
   bgImageSrc,
   title,
   date,
@@ -259,16 +258,18 @@ const ScrollExpandMedia = ({
             />
           </motion.div>
 
-          {/* ── Palabras flotantes ────────────────────────────────── */}
-          {FLOAT_WORDS.map((item, i) => (
-            <FloatingWord
-              key={i}
-              item={item}
-              mouseX={mouseX}
-              mouseY={mouseY}
-              scrollProgress={scrollProgress}
-            />
-          ))}
+          {/* ── Palabras flotantes (z-15 para estar sobre el contenedor z-10) ── */}
+          <div style={{ position: 'absolute', inset: 0, zIndex: 15, pointerEvents: 'none' }}>
+            {FLOAT_WORDS.map((item, i) => (
+              <FloatingWord
+                key={i}
+                item={item}
+                mouseX={mouseX}
+                mouseY={mouseY}
+                scrollProgress={scrollProgress}
+              />
+            ))}
+          </div>
 
           {/* ── Contenedor principal ──────────────────────────────── */}
           <div
@@ -331,10 +332,11 @@ const ScrollExpandMedia = ({
                     />
                   </div>
                 ) : (
-                  <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: 'none' }}>
+                  <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                     {mediaSrc && !mediaError ? (
                       <video
                         src={mediaSrc}
+                        type="video/mp4"
                         autoPlay muted loop playsInline preload="auto"
                         controls={false}
                         style={{
@@ -439,11 +441,11 @@ const ScrollExpandMedia = ({
               </div>
             </div>
 
-            {/* ── Título que se abre hacia los lados ─────────────── */}
+            {/* ── Título que se abre hacia los lados (z-20 para estar sobre todo) ── */}
             <div
               style={{
                 position: 'relative',
-                zIndex: 10,
+                zIndex: 20,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -467,6 +469,7 @@ const ScrollExpandMedia = ({
                   transition: 'none',
                   willChange: 'transform',
                   userSelect: 'none',
+                  textShadow: '0 2px 20px rgba(0,0,0,0.5)',
                 }}
               >
                 {firstWord}
@@ -483,6 +486,7 @@ const ScrollExpandMedia = ({
                   transition: 'none',
                   willChange: 'transform',
                   userSelect: 'none',
+                  textShadow: '0 2px 20px rgba(0,0,0,0.5)',
                 }}
               >
                 {restTitle}

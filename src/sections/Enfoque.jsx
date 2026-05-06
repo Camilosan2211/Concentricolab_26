@@ -7,7 +7,7 @@
  *     centrado + 8 palabras flotantes con parallax al mouse.
  *     El usuario siente curiosidad antes de leer.
  *
- * [2] SCROLL — El video (video_dinamico.MP4) se expande dramáticamente
+ * [2] SCROLL — El video (video_dinamico.mp4) se expande dramáticamente
  *     mientras el título se abre hacia los lados y las palabras
  *     flotantes se disuelven. El gesto comunica apertura y profundidad.
  *
@@ -47,7 +47,7 @@ import ScrollExpandMedia from '../components/ScrollExpandMedia'
    Coloca tus archivos en /public/assets/images/ y actualiza estas rutas.
    En Vite, /public/ se sirve directamente en la raíz.              */
 const BG_SRC    = '/assets/images/imagen_dinamico.webp'
-const VIDEO_SRC = '/assets/images/video_dinamico.MP4'
+const VIDEO_SRC = '/assets/images/video_dinamico.mp4'
 
 /* ── Tags de disciplina ──────────────────────────────────────────── */
 const TAGS_ES = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Video', 'Branding', 'Automatización', 'Sistemas visuales']
