@@ -18,7 +18,7 @@
  * Assets que debes colocar en /public/assets/images/:
  * ────────────────────────────────────────────────────
  *   imagen_dinamico.webp  → fondo panorámico (ver MEDIA_GUIDE abajo)
- *   video_dinamico.MP4    → video central 16:9, sujeto en 40% central
+ *   video_dinamico.mp4    → video central 16:9, sujeto en 40% central
  *
  * MEDIA_GUIDE (especificaciones de los assets):
  *   Background (bgImageSrc):

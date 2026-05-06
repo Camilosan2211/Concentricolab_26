@@ -1,23 +1,20 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'motion/react'
 
-/* ── Palabras flotantes — disciplinas del lab ─────────────────────
-   Posicionadas en el espacio negativo alrededor del video inicial
-   (que mide 300×400 px centrado). Desaparecen al expandir.
-   xPct / yPct: offset desde el centro, en porcentaje del viewport.
-   factor: intensidad del parallax (mayor = más movimiento).        */
+/* ── Palabras flotantes — estilo glass blanco unificado ──────────────
+   Más grandes que antes, todas con el mismo estilo glass white.       */
 const FLOAT_WORDS = [
-  { word: 'Diseño',         xPct: -38, yPct: -28, factor: 0.018, color: 'rgba(130,138,255,0.72)', size: '13px', weight: '500' },
-  { word: 'Forma',          xPct:  36, yPct: -32, factor: 0.026, color: 'rgba(255,109,77,0.65)',  size: '12px', weight: '400' },
-  { word: 'Sistema',        xPct: -44, yPct:  30, factor: 0.013, color: 'rgba(245,245,240,0.28)', size: '14px', weight: '400' },
-  { word: 'UX/UI',          xPct:  42, yPct:  28, factor: 0.022, color: 'rgba(77,102,255,0.65)',  size: '12px', weight: '600' },
-  { word: 'Branding',       xPct: -18, yPct: -46, factor: 0.015, color: 'rgba(245,245,240,0.20)', size: '11px', weight: '400' },
-  { word: 'Automatización', xPct:  16, yPct:  48, factor: 0.020, color: 'rgba(65,234,255,0.50)',  size: '11px', weight: '400' },
-  { word: 'Motion',         xPct:  48, yPct:  -8, factor: 0.017, color: 'rgba(130,138,255,0.45)', size: '12px', weight: '400' },
-  { word: 'Producto',       xPct: -46, yPct:   6, factor: 0.021, color: 'rgba(255,109,77,0.45)',  size: '13px', weight: '400' },
+  { word: 'Diseño',         xPct: -35, yPct: -25, factor: 0.018 },
+  { word: 'Forma',          xPct:  35, yPct: -30, factor: 0.026 },
+  { word: 'Sistema',        xPct: -40, yPct:  28, factor: 0.013 },
+  { word: 'UX/UI',          xPct:  40, yPct:  25, factor: 0.022 },
+  { word: 'Branding',       xPct: -16, yPct: -42, factor: 0.015 },
+  { word: 'Automatización', xPct:  16, yPct:  44, factor: 0.020 },
+  { word: 'Motion',         xPct:  46, yPct:  -6, factor: 0.017 },
+  { word: 'Producto',       xPct: -44, yPct:   5, factor: 0.021 },
 ]
 
-/* ── FloatingWord — palabra individual con parallax ──────────────── */
+/* ── FloatingWord — palabra con efecto glass uniforme ──────────────── */
 function FloatingWord({ item, mouseX, mouseY, scrollProgress }) {
   const opacity = Math.max(0, 1 - scrollProgress * 2.8)
   const tx = mouseX * item.factor * -1
@@ -34,14 +31,20 @@ function FloatingWord({ item, mouseX, mouseY, scrollProgress }) {
         opacity,
         transition: 'opacity 0.3s ease, transform 0.05s linear',
         fontFamily: "'Cal Sans', 'Inter', sans-serif",
-        fontSize:   item.size,
-        fontWeight: item.weight,
-        color:      item.color,
+        fontSize:   '18px',
+        fontWeight: '500',
+        color: 'rgba(245, 245, 240, 0.85)',
         letterSpacing: '0.04em',
         pointerEvents: 'none',
         userSelect: 'none',
         whiteSpace: 'nowrap',
         willChange: 'transform, opacity',
+        background: 'rgba(255, 255, 255, 0.06)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        borderRadius: '8px',
+        padding: '6px 14px',
+        border: '1px solid rgba(255, 255, 255, 0.10)',
       }}
     >
       {item.word}
@@ -49,7 +52,7 @@ function FloatingWord({ item, mouseX, mouseY, scrollProgress }) {
   )
 }
 
-/* ── Componente principal ─────────────────────────────────────────── */
+/* ── Componente principal — alineado con el template de referencia ─── */
 const ScrollExpandMedia = ({
   mediaType   = 'video',
   mediaSrc,
@@ -60,10 +63,10 @@ const ScrollExpandMedia = ({
   textBlend   = false,
   children,
 }) => {
-  /* State for render-driven values */
   const [scrollProgress,     setScrollProgress]     = useState(0)
   const [showContent,        setShowContent]        = useState(false)
   const [mediaFullyExpanded, setMediaFullyExpanded] = useState(false)
+  const [touchStartY,        setTouchStartY]        = useState(0)
   const [isMobile,           setIsMobile]           = useState(false)
   const [mouseX,             setMouseX]             = useState(0)
   const [mouseY,             setMouseY]             = useState(0)
@@ -72,26 +75,11 @@ const ScrollExpandMedia = ({
 
   const sectionRef = useRef(null)
 
-  /* ── Refs for event handlers (avoids stale closures) ───────────── */
-  const progressRef     = useRef(0)
-  const expandedRef     = useRef(false)
-  const touchStartYRef  = useRef(0)
-
-  /* Keep refs in sync with state */
-  useEffect(() => { progressRef.current = scrollProgress }, [scrollProgress])
-  useEffect(() => { expandedRef.current = mediaFullyExpanded }, [mediaFullyExpanded])
-
-  /* ── Lenis helpers ─────────────────────────────────────────────── */
-  const pauseLenis  = useCallback(() => { try { window.__lenis?.stop()  } catch(e) {} }, [])
-  const resumeLenis = useCallback(() => { try { window.__lenis?.start() } catch(e) {} }, [])
-
   /* ── Reset al cambiar mediaType ────────────────────────────────── */
   useEffect(() => {
     setScrollProgress(0)
     setShowContent(false)
     setMediaFullyExpanded(false)
-    progressRef.current = 0
-    expandedRef.current = false
   }, [mediaType])
 
   /* ── Mouse parallax ────────────────────────────────────────────── */
@@ -104,73 +92,65 @@ const ScrollExpandMedia = ({
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
-  /* ── Scroll capture (wheel + touch) — single mount effect ─────── */
+  /* ── Scroll capture — exact match con referencia ───────────────── */
   useEffect(() => {
-    /* Advance progress and check thresholds */
-    const advance = (newProgress) => {
-      setScrollProgress(newProgress)
-
-      if (newProgress >= 1) {
-        setMediaFullyExpanded(true)
-        setShowContent(true)
-        expandedRef.current = true
-        resumeLenis()
-      } else if (newProgress < 0.75) {
-        setShowContent(false)
-      }
-    }
-
     const handleWheel = (e) => {
-      if (expandedRef.current && e.deltaY < 0 && window.scrollY <= 5) {
-        expandedRef.current = false
+      if (mediaFullyExpanded && e.deltaY < 0 && window.scrollY <= 5) {
         setMediaFullyExpanded(false)
-        resumeLenis()
         e.preventDefault()
-        return
-      }
-
-      if (!expandedRef.current) {
+      } else if (!mediaFullyExpanded) {
         e.preventDefault()
-        pauseLenis()
-
         const delta = e.deltaY * 0.0009
-        const newProgress = Math.min(Math.max(progressRef.current + delta, 0), 1)
-        advance(newProgress)
+        const newProgress = Math.min(Math.max(scrollProgress + delta, 0), 1)
+        setScrollProgress(newProgress)
+
+        if (newProgress >= 1) {
+          setMediaFullyExpanded(true)
+          setShowContent(true)
+        } else if (newProgress < 0.75) {
+          setShowContent(false)
+        }
       }
     }
 
     const handleTouchStart = (e) => {
-      touchStartYRef.current = e.touches[0].clientY
+      setTouchStartY(e.touches[0].clientY)
     }
 
     const handleTouchMove = (e) => {
-      if (!touchStartYRef.current) return
+      if (!touchStartY) return
+
       const touchY = e.touches[0].clientY
-      const deltaY = touchStartYRef.current - touchY
+      const deltaY = touchStartY - touchY
 
-      if (expandedRef.current && deltaY < -20 && window.scrollY <= 5) {
-        expandedRef.current = false
+      if (mediaFullyExpanded && deltaY < -20 && window.scrollY <= 5) {
         setMediaFullyExpanded(false)
-        resumeLenis()
         e.preventDefault()
-        return
-      }
-
-      if (!expandedRef.current) {
+      } else if (!mediaFullyExpanded) {
         e.preventDefault()
-        pauseLenis()
-
         const factor = deltaY < 0 ? 0.008 : 0.005
-        const newProgress = Math.min(Math.max(progressRef.current + deltaY * factor, 0), 1)
-        advance(newProgress)
+        const newProgress = Math.min(Math.max(scrollProgress + deltaY * factor, 0), 1)
+        setScrollProgress(newProgress)
+
+        if (newProgress >= 1) {
+          setMediaFullyExpanded(true)
+          setShowContent(true)
+        } else if (newProgress < 0.75) {
+          setShowContent(false)
+        }
+
+        setTouchStartY(touchY)
       }
-      touchStartYRef.current = touchY
     }
 
-    const handleTouchEnd = () => { touchStartYRef.current = 0 }
+    const handleTouchEnd = () => {
+      setTouchStartY(0)
+    }
 
     const handleScroll = () => {
-      if (!expandedRef.current) window.scrollTo(0, 0)
+      if (!mediaFullyExpanded) {
+        window.scrollTo(0, 0)
+      }
     }
 
     window.addEventListener('wheel',      handleWheel,      { passive: false })
@@ -185,9 +165,8 @@ const ScrollExpandMedia = ({
       window.removeEventListener('touchstart', handleTouchStart)
       window.removeEventListener('touchmove',  handleTouchMove)
       window.removeEventListener('touchend',   handleTouchEnd)
-      resumeLenis()
     }
-  }, [pauseLenis, resumeLenis])
+  }, [scrollProgress, mediaFullyExpanded, touchStartY])
 
   /* ── Responsive ────────────────────────────────────────────────── */
   useEffect(() => {
@@ -197,16 +176,13 @@ const ScrollExpandMedia = ({
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  /* ── Sizing math ───────────────────────────────────────────────── */
+  /* ── Sizing math — valores exactos del referente ───────────────── */
   const mediaW = 300 + scrollProgress * (isMobile ? 650 : 1250)
   const mediaH = 400 + scrollProgress * (isMobile ? 200 : 400)
-  const textTX = scrollProgress * (isMobile ? 160 : 140)
+  const textTX = scrollProgress * (isMobile ? 180 : 150)
 
   const firstWord  = title ? title.split(' ')[0] : ''
   const restTitle  = title ? title.split(' ').slice(1).join(' ') : ''
-  const borderR    = 24 - scrollProgress * 20
-  const glowBlue   = `0 0 ${40 + scrollProgress * 80}px rgba(77,102,255,${0.12 + scrollProgress * 0.18})`
-  const glowCorpo  = `0 ${20 + scrollProgress * 30}px ${60 + scrollProgress * 80}px rgba(0,0,0,${0.3 + scrollProgress * 0.25})`
 
   return (
     <div
@@ -214,19 +190,15 @@ const ScrollExpandMedia = ({
       className="overflow-x-hidden"
       style={{ background: 'transparent' }}
     >
-      <section
-        className="relative flex flex-col items-center justify-start min-h-[100dvh]"
-        style={{ overflow: 'hidden' }}
-      >
+      <section className="relative flex flex-col items-center justify-start min-h-[100dvh]">
         <div className="relative w-full flex flex-col items-center min-h-[100dvh]">
 
-          {/* ── Fondo panorámico ─────────────────────────────────── */}
+          {/* ── Fondo panorámico (bgImageSrc) — overlay ligero como referencia ── */}
           <motion.div
-            className="absolute inset-0 h-full"
-            style={{ zIndex: 0 }}
+            className="absolute inset-0 z-0 h-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 - scrollProgress }}
-            transition={{ duration: 0.08 }}
+            transition={{ duration: 0.1 }}
           >
             {bgImageSrc && !bgError ? (
               <img
@@ -234,9 +206,12 @@ const ScrollExpandMedia = ({
                 alt=""
                 role="presentation"
                 loading="eager"
-                className="w-screen h-screen object-cover object-center"
+                className="w-screen h-screen"
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                }}
                 onError={() => setBgError(true)}
-                style={{ filter: 'brightness(0.82) contrast(1.05)' }}
               />
             ) : (
               <div
@@ -246,19 +221,11 @@ const ScrollExpandMedia = ({
                 }}
               />
             )}
-            <div className="absolute inset-0" style={{ background: 'rgba(0,3,31,0.38)' }} />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `
-                  radial-gradient(ellipse 60% 45% at 30% 55%, rgba(77,102,255,0.18) 0%, transparent 65%),
-                  radial-gradient(ellipse 50% 40% at 72% 42%, rgba(255,109,77,0.13) 0%, transparent 60%)
-                `,
-              }}
-            />
+            {/* Overlay sutil como referencia (bg-black/10) */}
+            <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.10)' }} />
           </motion.div>
 
-          {/* ── Palabras flotantes (z-15 para estar sobre el contenedor z-10) ── */}
+          {/* ── Palabras flotantes (glass blanco unificado) ─────────────────── */}
           <div style={{ position: 'absolute', inset: 0, zIndex: 15, pointerEvents: 'none' }}>
             {FLOAT_WORDS.map((item, i) => (
               <FloatingWord
@@ -271,245 +238,162 @@ const ScrollExpandMedia = ({
             ))}
           </div>
 
-          {/* ── Contenedor principal ──────────────────────────────── */}
-          <div
-            className="container mx-auto flex flex-col items-center justify-center"
-            style={{ position: 'relative', zIndex: 10 }}
-          >
+          {/* ── Contenedor principal — estructura exacta del referente ──────── */}
+          <div className="container mx-auto flex flex-col items-center justify-start relative z-10">
+            <div className="flex flex-col items-center justify-center w-full h-[100dvh] relative">
 
-            {/* ── Media expandible ────────────────────────────────── */}
-            <div
-              style={{
-                position:  'absolute',
-                zIndex:    0,
-                top:       '50%',
-                left:      '50%',
-                transform: 'translate(-50%, -50%)',
-                width:     `${mediaW}px`,
-                height:    `${mediaH}px`,
-                maxWidth:  '95vw',
-                maxHeight: '85vh',
-                boxShadow: `${glowBlue}, ${glowCorpo}`,
-                borderRadius: `${borderR}px`,
-                overflow:  'hidden',
-                transition: 'none',
-                willChange: 'width, height, box-shadow',
-              }}
-            >
-              {/* Overlay de marca */}
+              {/* ── Media expandible ─────────────────────────────────────────── */}
               <div
+                className="absolute z-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-none rounded-2xl"
                 style={{
-                  position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none',
-                  opacity: Math.max(0, 1 - scrollProgress * 2.2),
-                  background: `
-                    radial-gradient(ellipse 55% 40% at 35% 60%, rgba(77,102,255,0.32) 0%, transparent 60%),
-                    radial-gradient(ellipse 45% 35% at 68% 38%, rgba(255,109,77,0.22) 0%, transparent 55%)
-                  `,
-                  mixBlendMode: 'screen',
+                  width:     `${mediaW}px`,
+                  height:    `${mediaH}px`,
+                  maxWidth:  '95vw',
+                  maxHeight: '85vh',
+                  boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
+                  overflow:  'hidden',
                 }}
-              />
-
-              {mediaType === 'video' ? (
-                mediaSrc?.includes('youtube.com') ? (
-                  <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: 'none' }}>
-                    <iframe
-                      title="Enfoque media"
-                      width="100%" height="100%"
-                      src={
-                        mediaSrc.includes('embed')
-                          ? `${mediaSrc}${mediaSrc.includes('?') ? '&' : '?'}autoplay=1&mute=1&loop=1&controls=0&rel=0&modestbranding=1`
-                          : `${mediaSrc.replace('watch?v=', 'embed/')}?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=${mediaSrc.split('v=')[1]}`
-                      }
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{ borderRadius: `${borderR}px` }}
-                    />
-                    <motion.div
-                      style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.25)', zIndex: 2 }}
-                      initial={{ opacity: 0.65 }}
-                      animate={{ opacity: 0.45 - scrollProgress * 0.25 }}
-                    />
-                  </div>
+              >
+                {mediaType === 'video' ? (
+                  mediaSrc?.includes('youtube.com') ? (
+                    <div className="relative w-full h-full pointer-events-none">
+                      <iframe
+                        title="Enfoque media"
+                        width="100%" height="100%"
+                        src={
+                          mediaSrc.includes('embed')
+                            ? `${mediaSrc}${mediaSrc.includes('?') ? '&' : '?'}autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&disablekb=1&modestbranding=1`
+                            : `${mediaSrc.replace('watch?v=', 'embed/')}?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&disablekb=1&modestbranding=1&playlist=${mediaSrc.split('v=')[1]}`
+                        }
+                        className="w-full h-full rounded-xl"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                      <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }} />
+                      <motion.div
+                        className="absolute inset-0 bg-black/30 rounded-xl"
+                        initial={{ opacity: 0.7 }}
+                        animate={{ opacity: 0.5 - scrollProgress * 0.3 }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="relative w-full h-full pointer-events-none">
+                      {mediaSrc && !mediaError ? (
+                        <video
+                          src={mediaSrc}
+                          type="video/mp4"
+                          autoPlay muted loop playsInline preload="auto"
+                          className="w-full h-full object-cover rounded-xl"
+                          controls={false}
+                          disablePictureInPicture
+                          disableRemotePlayback
+                          onError={() => setMediaError(true)}
+                        />
+                      ) : (
+                        <div
+                          className="w-full h-full rounded-xl"
+                          style={{
+                            background: 'linear-gradient(135deg, #050828 0%, #0D1340 50%, #1A0A28 100%)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontFamily: "'Cal Sans', sans-serif",
+                              fontSize: '48px', color: 'rgba(255,255,255,0.08)',
+                            }}
+                          >
+                            CL
+                          </span>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 z-10" style={{ pointerEvents: 'none' }} />
+                      <motion.div
+                        className="absolute inset-0 bg-black/30 rounded-xl"
+                        initial={{ opacity: 0.7 }}
+                        animate={{ opacity: 0.5 - scrollProgress * 0.3 }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    </div>
+                  )
                 ) : (
-                  <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                  <div className="relative w-full h-full">
                     {mediaSrc && !mediaError ? (
-                      <video
+                      <img
                         src={mediaSrc}
-                        type="video/mp4"
-                        autoPlay muted loop playsInline preload="auto"
-                        controls={false}
-                        style={{
-                          width: '100%', height: '100%',
-                          objectFit: 'cover', objectPosition: 'center',
-                          display: 'block',
-                        }}
+                        alt={title || 'Concéntrico Lab'}
+                        loading="lazy"
+                        className="w-full h-full object-cover rounded-xl"
                         onError={() => setMediaError(true)}
                       />
                     ) : (
-                      <div
-                        style={{
-                          width: '100%', height: '100%',
-                          background: 'linear-gradient(135deg, #050828 0%, #0D1340 50%, #1A0A28 100%)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontFamily: "'Cal Sans', sans-serif",
-                            fontSize: '48px', color: 'rgba(255,255,255,0.08)',
-                          }}
-                        >
-                          CL
-                        </span>
-                      </div>
+                      <div className="w-full h-full rounded-xl" style={{ background: 'linear-gradient(135deg, #050828, #0D1340)' }} />
                     )}
                     <motion.div
-                      style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.30)', zIndex: 2 }}
-                      initial={{ opacity: 0.65 }}
-                      animate={{ opacity: 0.48 - scrollProgress * 0.28 }}
+                      className="absolute inset-0 bg-black/50 rounded-xl"
+                      initial={{ opacity: 0.7 }}
+                      animate={{ opacity: 0.7 - scrollProgress * 0.3 }}
+                      transition={{ duration: 0.2 }}
                     />
                   </div>
-                )
-              ) : (
-                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                  {mediaSrc && !mediaError ? (
-                    <img
-                      src={mediaSrc}
-                      alt={title || 'Concéntrico Lab'}
-                      loading="lazy"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
-                      onError={() => setMediaError(true)}
-                    />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #050828, #0D1340)' }} />
+                )}
+
+                {/* ── Date / scroll hint ───────────────────────────────────── */}
+                <div className="flex flex-col items-center text-center relative z-10 mt-4 transition-none">
+                  {date && (
+                    <p
+                      className="text-2xl text-blue-200"
+                      style={{ transform: `translateX(-${textTX}vw)` }}
+                    >
+                      {date}
+                    </p>
                   )}
-                  <motion.div
-                    style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)' }}
-                    initial={{ opacity: 0.65 }}
-                    animate={{ opacity: 0.65 - scrollProgress * 0.30 }}
-                  />
+                  {scrollToExpand && (
+                    <p
+                      className="text-blue-200 font-medium text-center"
+                      style={{ transform: `translateX(${textTX}vw)` }}
+                    >
+                      {scrollToExpand}
+                    </p>
+                  )}
                 </div>
-              )}
-
-              {/* ── Textos que se separan lateralmente ─────────────── */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '-2.5rem',
-                  left: 0, right: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '4px',
-                  zIndex: 5,
-                }}
-              >
-                {date && (
-                  <p
-                    style={{
-                      transform:  `translateX(-${textTX}vw)`,
-                      fontFamily: "'Cal Sans', sans-serif",
-                      fontSize:   '11px',
-                      fontWeight: '500',
-                      letterSpacing: '0.10em',
-                      textTransform: 'uppercase',
-                      color: 'rgba(130,138,255,0.70)',
-                      transition: 'none',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {date}
-                  </p>
-                )}
-                {scrollToExpand && (
-                  <p
-                    style={{
-                      transform:  `translateX(${textTX}vw)`,
-                      fontFamily: "'Inter', sans-serif",
-                      fontSize:   '10px',
-                      fontWeight: '500',
-                      letterSpacing: '0.08em',
-                      color: 'rgba(255,109,77,0.60)',
-                      transition: 'none',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {scrollToExpand}
-                  </p>
-                )}
               </div>
-            </div>
 
-            {/* ── Título que se abre hacia los lados (z-20 para estar sobre todo) ── */}
-            <div
-              style={{
-                position: 'relative',
-                zIndex: 20,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                gap: isMobile ? '8px' : '16px',
-                width: '100%',
-                mixBlendMode: textBlend ? 'difference' : 'normal',
-                pointerEvents: 'none',
-              }}
+              {/* ── Título que se abre hacia los lados ───────────────────────── */}
+              <div
+                className={`flex items-center justify-center text-center gap-4 w-full relative z-10 transition-none flex-col ${
+                  textBlend ? 'mix-blend-difference' : 'mix-blend-normal'
+                }`}
+              >
+                <motion.h2
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-blue-200 transition-none"
+                  style={{ transform: `translateX(-${textTX}vw)` }}
+                >
+                  {firstWord}
+                </motion.h2>
+                <motion.h2
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-blue-200 transition-none"
+                  style={{ transform: `translateX(${textTX}vw)` }}
+                >
+                  {restTitle}
+                </motion.h2>
+              </div>
+
+            </div>{/* end viewport-height div */}
+
+            {/* ── Contenido revelado tras expansión completa ────────────────── */}
+            <motion.section
+              className="flex flex-col w-full px-8 py-10 md:px-16 lg:py-20"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: showContent ? 1 : 0 }}
+              transition={{ duration: 0.7 }}
             >
-              <h2
-                style={{
-                  transform:  `translateX(-${textTX}vw)`,
-                  fontFamily: "'Cal Sans', sans-serif",
-                  fontSize:   isMobile ? '2.5rem' : '4rem',
-                  fontWeight: '400',
-                  lineHeight:  1.05,
-                  letterSpacing: '-0.02em',
-                  color: '#F5F5F0',
-                  transition: 'none',
-                  willChange: 'transform',
-                  userSelect: 'none',
-                  textShadow: '0 2px 20px rgba(0,0,0,0.5)',
-                }}
-              >
-                {firstWord}
-              </h2>
-              <h2
-                style={{
-                  transform:  `translateX(${textTX}vw)`,
-                  fontFamily: "'Cal Sans', sans-serif",
-                  fontSize:   isMobile ? '2.5rem' : '4rem',
-                  fontWeight: '400',
-                  lineHeight:  1.05,
-                  letterSpacing: '-0.02em',
-                  color: '#F5F5F0',
-                  transition: 'none',
-                  willChange: 'transform',
-                  userSelect: 'none',
-                  textShadow: '0 2px 20px rgba(0,0,0,0.5)',
-                }}
-              >
-                {restTitle}
-              </h2>
-            </div>
+              {children}
+            </motion.section>
 
           </div>{/* end container */}
-
-          {/* ── Contenido revelado tras expansión completa ────────── */}
-          <motion.section
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              padding: isMobile ? '2.5rem 1.5rem' : '4rem 4rem',
-            }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {children}
-          </motion.section>
-
         </div>
       </section>
     </div>
