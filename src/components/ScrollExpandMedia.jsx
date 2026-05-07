@@ -73,17 +73,15 @@ const ScrollExpandMedia = ({
   const wordsOpacity = useTransform(progress, [0, 0.35], [1, 0])
   const bgOpacity = useTransform(progress, [0.5, 0.9], [1, 0.3])
 
-  /* ── Video sizing — bordes extra redondeados (flat/cute) ──────── */
+  /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
   const mediaW = useTransform(progress, [0, 1], [300, isMobile ? 900 : 1500])
-  const mediaH = useTransform(progress, [0, 1], [400, isMobile ? 560 : 800])
+  const mediaH = useTransform(progress, [0, 1], [400, isMobile ? 500 : 700])
   const borderR = useTransform(progress, [0, 1], [32, 16])
 
   /* ── Opacidades ───────────────────────────────────────────────── */
-  const titleOpacity = useTransform(progress, [0, 0.5], [1, 0.15])
-  const subtitleOpacity = useTransform(progress, [0, 0.3], [1, 0])
-  const paragraphOpacity = useTransform(progress, [0.55, 0.85], [0, 1])
+  const textX = useTransform(progress, [0, 1], [0, isMobile ? -60 : -50])
+  const contentOpacity = useTransform(progress, [0.65, 0.95], [0, 1])
 
-  /* ── Responsive ────────────────────────────────────────────────── */
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
     check()
@@ -91,7 +89,6 @@ const ScrollExpandMedia = ({
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  /* ── Mouse parallax ────────────────────────────────────────────── */
   useEffect(() => {
     const onMove = (e) => {
       setMouseX(e.clientX - window.innerWidth  / 2)
@@ -101,16 +98,14 @@ const ScrollExpandMedia = ({
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
-  /* ── Parse title: first word(s) + accent word(s) with text-grad ── */
   const words = title ? title.split(' ') : []
-  /* Split: all but last → normal, last → accent/gradient */
-  const normalPart = words.slice(0, -1).join(' ')
-  const accentPart = words.slice(-1).join(' ')
+  const lastWord = words.length > 0 ? words[words.length - 1] : ''
+  const leadingWords = words.slice(0, -1).join(' ')
 
   return (
     <div ref={sectionRef} className="relative overflow-hidden rounded-section border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl">
 
-      {/* ── Fondo de la tarjeta ──────────────────────────────────── */}
+      {/* ── Fondo ────────────────────────────────────────────────── */}
       <motion.div className="absolute inset-0 z-0 rounded-section overflow-hidden" style={{ opacity: bgOpacity }}>
         {bgImageSrc && !bgError ? (
           <img
@@ -134,32 +129,42 @@ const ScrollExpandMedia = ({
         ))}
       </motion.div>
 
-      {/* ── Contenido principal ──────────────────────────────────── */}
-      <div className="relative z-10 px-4 md:px-6 py-6 md:py-8">
+      {/* ── Header ───────────────────────────────────────────────── */}
+      <div className="relative z-10 pt-8 md:pt-10 px-6 md:px-8">
+        <div className="flex flex-col items-center text-center gap-3">
+          {subtitle && (
+            <motion.p
+              className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/40 text-black/45"
+              style={{ opacity: useTransform(progress, [0, 0.3], [1, 0]) }}
+            >
+              {subtitle}
+            </motion.p>
+          )}
+          <div className="flex items-center justify-center gap-4 flex-wrap mix-blend-normal">
+            <motion.h2
+              className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+              style={{ x: textX }}
+            >
+              {leadingWords}{leadingWords ? ' ' : ''}
+              <span className="text-grad">{lastWord}</span>
+            </motion.h2>
+          </div>
+        </div>
+      </div>
 
-        {/* Subtitle */}
-        {subtitle && (
-          <motion.p
-            className="text-[11px] font-bold tracking-[0.12em] uppercase text-center dark:text-white/40 text-black/45 mb-4"
-            style={{ opacity: subtitleOpacity }}
-          >
-            {subtitle}
-          </motion.p>
-        )}
-
-        {/* ── Video container (con overlays) ─────────────────────── */}
+      {/* ── Media ────────────────────────────────────────────────── */}
+      <div className="relative z-10 flex items-center justify-center w-full px-4 md:px-6 py-6 md:py-8" style={{ minHeight: '45vh' }}>
         <motion.div
-          className="overflow-hidden relative mx-auto"
+          className="overflow-hidden relative"
           style={{
             width: mediaW,
             height: mediaH,
             maxWidth: '95vw',
-            maxHeight: '85vh',
+            maxHeight: '80vh',
             borderRadius: borderR,
             boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
           }}
         >
-          {/* Video */}
           {mediaType === 'video' ? (
             mediaSrc?.includes('youtube.com') ? (
               <div className="relative w-full h-full pointer-events-none">
@@ -192,13 +197,7 @@ const ScrollExpandMedia = ({
                     <span style={{ fontFamily: "'Cal Sans', sans-serif", fontSize: '48px', color: 'rgba(255,255,255,0.08)' }}>CL</span>
                   </div>
                 )}
-                {/* Gradiente oscuro global para legibilidad de overlays */}
-                <motion.div
-                  className="absolute inset-0"
-                  style={{
-                    background: 'linear-gradient(to bottom, rgba(0,3,31,0.45) 0%, rgba(0,3,31,0.05) 30%, rgba(0,3,31,0.05) 60%, rgba(0,3,31,0.65) 100%)',
-                  }}
-                />
+                <motion.div className="absolute inset-0 bg-black/30" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.2]) }} />
               </div>
             )
           ) : (
@@ -208,50 +207,30 @@ const ScrollExpandMedia = ({
               ) : (
                 <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, #050828, #0D1340)' }} />
               )}
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: 'linear-gradient(to bottom, rgba(0,3,31,0.45) 0%, rgba(0,3,31,0.05) 30%, rgba(0,3,31,0.05) 60%, rgba(0,3,31,0.65) 100%)',
-                }}
-              />
+              <motion.div className="absolute inset-0 bg-black/50" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.4]) }} />
             </div>
           )}
 
-          {/* ── Título superpuesto (tercio superior) ─────────────── */}
+          {/* ── Fade inferior del video → se difumina con el fondo ── */}
           <motion.div
-            className="absolute top-0 left-0 right-0 z-10 flex flex-col items-center justify-center text-center px-6"
+            className="pointer-events-none absolute bottom-0 left-0 right-0"
             style={{
-              top: '8%',
-              opacity: titleOpacity,
+              height: '140px',
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,3,31,0.15) 30%, rgba(0,3,31,0.35) 70%, rgba(0,3,31,0.55) 100%)',
+              borderBottomLeftRadius: borderR,
+              borderBottomRightRadius: borderR,
             }}
-          >
-            <h2 className="font-cal text-3xl md:text-4xl xl:text-[42px] leading-tight tracking-[-0.5px]" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.6)' }}>
-              <span className="dark:text-white text-white">{normalPart} </span>
-              <span className="text-grad">{accentPart}</span>
-            </h2>
-          </motion.div>
-
-          {/* ── Párrafo superpuesto (tercio inferior) ────────────── */}
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 z-10 px-8 md:px-12 pb-6 md:pb-8"
-            style={{ opacity: paragraphOpacity }}
-          >
-            {/* Fade superior del párrafo para mezclar con el video */}
-            <div
-              className="absolute top-0 left-0 right-0 h-16 pointer-events-none"
-              style={{
-                background: 'linear-gradient(to bottom, transparent 0%, rgba(0,3,31,0.3) 50%, rgba(0,3,31,0.5) 100%)',
-                borderRadius: '0 0 32px 32px',
-              }}
-            />
-            {/* Contenido de children se renderiza aquí */}
-            <div className="relative z-10">
-              {children}
-            </div>
-          </motion.div>
-
+          />
         </motion.div>
       </div>
+
+      {/* ── Contenido revelado ───────────────────────────────────── */}
+      <motion.div
+        className="relative z-10 px-6 md:px-8 pb-8 md:pb-10"
+        style={{ opacity: contentOpacity }}
+      >
+        {children}
+      </motion.div>
     </div>
   )
 }
