@@ -665,14 +665,39 @@
      will-change: background-position !important;
    }
    
-   /* ── Secciones — fondo semitransparente base ───────────────── */
-   html.light #enfoque,
-   html.light #productos,
-   html.light #contenido,
-   html.light #stack,
-   html.light #connect {
-     background: rgba(238, 241, 255, 0.35);
-   }
+    /* ── Secciones — fondo semitransparente base ───────────────── */
+    html.light #enfoque,
+    html.light #productos,
+    html.light #contenido,
+    html.light #stack,
+    html.light #connect {
+      background: rgba(238, 241, 255, 0.35);
+    }
+
+    /* ── Enfoque card — macrotarjeta en light mode ──────────────── */
+    html.light #enfoque [class*="rounded-section"] {
+      background: rgba(3, 6, 40, 0.88) !important;
+      border-color: rgba(77, 102, 255, 0.15) !important;
+    }
+    html.light #enfoque .dark\:text-white\/40 {
+      color: rgba(245, 245, 240, 0.45) !important;
+    }
+    html.light #enfoque .dark\:text-white\/30 {
+      color: rgba(245, 245, 240, 0.35) !important;
+    }
+    html.light #enfoque .dark\:text-white\/80 {
+      color: rgba(245, 245, 240, 0.85) !important;
+    }
+    html.light #enfoque .dark\:bg-white\/10 {
+      background: rgba(245, 245, 240, 0.12) !important;
+    }
+    html.light #enfoque .text-b-dark {
+      color: #F5F5F0 !important;
+    }
+    html.light #enfoque .glass-blue {
+      background: rgba(77, 102, 255, 0.15) !important;
+      border-color: rgba(77, 102, 255, 0.25) !important;
+    }
    
    /* ── Secciones con tinte azul de marca (principios + proceso) ─
       Crea el ritmo de "sección azulada / sección neutra"
