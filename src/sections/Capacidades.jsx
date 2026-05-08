@@ -7,14 +7,14 @@ const items = [
     id: '01',
     Icon: Layers,
     color: '#4D66FF',
-    span: 1, // Cambiado de 2 a 1 para mantener el grid perfecto de 3x2
+    span: 1,
     es: {
-      title: 'Diseño',
-      body: 'Sistemas visuales, identidad y UI que conectan lo físico con lo digital — desde la pieza gráfica hasta la interfaz.',
+      title: 'Sistemas & marca',
+      body: 'Identidad, estructura y lenguaje para construir marcas coherentes — desde lo visual hasta cómo funciona.',
     },
     en: {
-      title: 'Design',
-      body: 'Visual systems, identity and UI that connect the physical with the digital — from graphic piece to interface.',
+      title: 'Systems & brand',
+      body: 'Identity, structure and language to build coherent brands — from the visual to how it works.',
     },
   },
   {
@@ -24,11 +24,11 @@ const items = [
     span: 1,
     es: {
       title: 'Producto & forma',
-      body: 'Exploración de objeto, espacio, packaging y materialidad como base de la experiencia de marca.',
+      body: 'Exploración de forma, objeto y espacio como parte de una experiencia bien construida — cuando necesita existir más allá de la pantalla.',
     },
     en: {
       title: 'Product & form',
-      body: 'Exploration of object, space, packaging and materiality as the foundation of brand experience.',
+      body: 'Exploration of form, object and space as part of a well-built experience — when it needs to exist beyond the screen.',
     },
   },
   {
@@ -38,11 +38,11 @@ const items = [
     span: 1,
     es: {
       title: 'UX/UI & experiencia digital',
-      body: 'Interfaces y flujos que extienden la experiencia del producto en entornos digitales.',
+      body: 'Interfaces, flujos y experiencias digitales para apps, productos y entornos web — claras, útiles y coherentes con la marca.',
     },
     en: {
       title: 'UX/UI & digital experience',
-      body: 'Interfaces and flows that extend the product experience into digital environments.',
+      body: 'Interfaces, flows and digital experiences for apps, products and web environments — clear, useful and consistent with the brand.',
     },
   },
   {
@@ -52,11 +52,11 @@ const items = [
     span: 1,
     es: {
       title: 'Video & contenido',
-      body: 'Narrativa visual para comunicar producto, espacio o marca — reels, animaciones y piezas en movimiento.',
+      body: 'Edición y narrativa visual a partir de assets, plantillas y referencias — reels, animaciones y piezas de marca listas para publicar.',
     },
     en: {
       title: 'Video & content',
-      body: 'Visual narrative to communicate product, space or brand — reels, animations and motion pieces.',
+      body: 'Editing and visual narrative from assets, templates and references — reels, animations and brand pieces ready to publish.',
     },
   },
   {
@@ -66,11 +66,11 @@ const items = [
     span: 1,
     es: {
       title: 'Automatización & IA',
-      body: 'Sistemas que optimizan procesos creativos, escalan ejecución y reducen trabajo repetitivo.',
+      body: 'Sistemas que conectan herramientas, escalan procesos y aplican inteligencia para liberar tiempo y capacidad operativa.',
     },
     en: {
       title: 'Automation & AI',
-      body: 'Systems that optimize creative processes, scale execution and reduce repetitive work.',
+      body: 'Systems that connect tools, scale processes and apply intelligence to free up time and operational capacity.',
     },
   },
   {
@@ -80,11 +80,11 @@ const items = [
     span: 1,
     es: {
       title: 'Consultoría',
-      body: 'Dirección estratégica para alinear producto, marca y experiencia — sprints enfocados, criterio aplicado.',
+      body: 'Acompañamiento estratégico para alinear marca, producto y negocio — con foco, claridad y criterio en cada decisión.',
     },
     en: {
       title: 'Consulting',
-      body: 'Strategic direction to align product, brand and experience — focused sprints, applied criteria.',
+      body: 'Strategic support to align brand, product and business — with focus, clarity and criteria in every decision.',
     },
   },
 ]
@@ -102,13 +102,13 @@ function CapCard({ item, lang, index }) {
       transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
       whileHover={{ y: -5, transition: { duration: 0.22, ease: 'easeOut' } }}
     >
-      {/* Línea accent superior — siempre visible */}
+      {/* Línea accent superior */}
       <div
         className="absolute top-0 left-0 right-0 h-[2px]"
         style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
       />
 
-      {/* Glow de fondo — se intensifica en hover */}
+      {/* Glow de fondo */}
       <div
         className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none opacity-20 group-hover:opacity-50 group-hover:scale-125 transition-all duration-500"
         style={{
@@ -152,7 +152,7 @@ function CapCard({ item, lang, index }) {
         </div>
       </div>
 
-      {/* Línea inferior animada en hover */}
+      {/* Línea inferior animada */}
       <div
         className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
         style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
@@ -200,20 +200,20 @@ export default function Capacidades({ lang }) {
             <span className="text-grad">{t('del lab', 'capabilities')}</span>
           </motion.h2>
           <motion.p
-            className="dark:text-white/40 text-black/45 text-sm max-w-[480px] leading-[1.7]"
+            className="dark:text-white/40 text-black/45 text-sm max-w-[500px] leading-[1.7]"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.12, duration: 0.7 }}
           >
             {t(
-              'Transversalidad aplicada. Disciplinas que convergen para dar forma, posicionar y hacer escalable cualquier producto o marca.',
-              'Applied transversality. Disciplines that converge to shape, position, and scale any product or brand.'
+              'Capacidades que convergen para construir, ordenar y escalar marcas, productos y sistemas.',
+              'Capabilities that converge to build, organize and scale brands, products and systems.'
             )}
           </motion.p>
         </div>
 
-        {/* Bento grid: 6 items simétricos (2 filas x 3 columnas) */}
+        {/* Grid: 2 filas x 3 columnas */}
         <div
           ref={ref}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"

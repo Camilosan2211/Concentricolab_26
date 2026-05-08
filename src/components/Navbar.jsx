@@ -92,9 +92,9 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
               {lang.toUpperCase()}
             </button>
 
-            <a href="#capacidades"
+            <a href="#connect"
               className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(77,102,255,.45)] transition-all duration-200">
-              {t('Explorar', 'Explore')}
+              {t('Contáctenos', 'Contact us')}
             </a>
 
             <button className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"

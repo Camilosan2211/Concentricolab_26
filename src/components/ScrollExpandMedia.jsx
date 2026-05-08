@@ -1,52 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'motion/react'
 
-/* ── Palabras flotantes — glass blanco, cercanas al centro ───────── */
-const FLOAT_WORDS = [
-  { word: 'Diseño',         xPct: -32, yPct: -18, factor: 0.018 },
-  { word: 'Forma',          xPct:  32, yPct: -20, factor: 0.026 },
-  { word: 'Sistema',        xPct: -36, yPct:  22, factor: 0.013 },
-  { word: 'UX/UI',          xPct:  36, yPct:  20, factor: 0.022 },
-  { word: 'Branding',       xPct: -14, yPct: -34, factor: 0.015 },
-  { word: 'Automatización', xPct:  14, yPct:  36, factor: 0.020 },
-  { word: 'Motion',         xPct:  42, yPct:  -4, factor: 0.017 },
-  { word: 'Producto',       xPct: -40, yPct:   6, factor: 0.021 },
-]
-
-function FloatingWord({ item, mouseX, mouseY }) {
-  const tx = mouseX * item.factor * -1
-  const ty = mouseY * item.factor * -1
-
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        left:      `calc(50% + ${item.xPct}vw)`,
-        top:       `calc(50% + ${item.yPct}vh)`,
-        transform: `translate(-50%, -50%) translate(${tx}px, ${ty}px)`,
-        transition: 'transform 0.05s linear',
-        fontFamily: "'Cal Sans', 'Inter', sans-serif",
-        fontSize:   '16px',
-        fontWeight: '500',
-        color: 'rgba(245, 245, 240, 0.80)',
-        letterSpacing: '0.03em',
-        pointerEvents: 'none',
-        userSelect: 'none',
-        whiteSpace: 'nowrap',
-        background: 'rgba(255, 255, 255, 0.05)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderRadius: '10px',
-        padding: '6px 14px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-      }}
-    >
-      {item.word}
-    </div>
-  )
-}
-
 /* ── Componente principal ────────────────────────────────────────── */
 const ScrollExpandMedia = ({
   mediaType   = 'video',
@@ -58,8 +12,6 @@ const ScrollExpandMedia = ({
 }) => {
   const sectionRef = useRef(null)
   const [isMobile, setIsMobile] = useState(false)
-  const [mouseX, setMouseX] = useState(0)
-  const [mouseY, setMouseY] = useState(0)
   const [bgError, setBgError] = useState(false)
   const [mediaError, setMediaError] = useState(false)
 
@@ -70,7 +22,6 @@ const ScrollExpandMedia = ({
   })
 
   const progress = useTransform(scrollYProgress, [0, 1], [0, 1])
-  const wordsOpacity = useTransform(progress, [0, 0.35], [1, 0])
   const bgOpacity = useTransform(progress, [0.5, 0.9], [1, 0.3])
 
   /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
@@ -79,7 +30,6 @@ const ScrollExpandMedia = ({
   const borderR = useTransform(progress, [0, 1], [32, 16])
 
   /* ── Opacidades ───────────────────────────────────────────────── */
-  const textX = useTransform(progress, [0, 1], [0, isMobile ? -60 : -50])
   const contentOpacity = useTransform(progress, [0.65, 0.95], [0, 1])
 
   useEffect(() => {
@@ -87,15 +37,6 @@ const ScrollExpandMedia = ({
     check()
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
-  }, [])
-
-  useEffect(() => {
-    const onMove = (e) => {
-      setMouseX(e.clientX - window.innerWidth  / 2)
-      setMouseY(e.clientY - window.innerHeight / 2)
-    }
-    window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
   const words = title ? title.split(' ') : []
@@ -122,13 +63,6 @@ const ScrollExpandMedia = ({
         <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.10)' }} />
       </motion.div>
 
-      {/* ── Palabras flotantes ───────────────────────────────────── */}
-      <motion.div style={{ position: 'absolute', inset: 0, zIndex: 15, pointerEvents: 'none', opacity: wordsOpacity }}>
-        {FLOAT_WORDS.map((item, i) => (
-          <FloatingWord key={i} item={item} mouseX={mouseX} mouseY={mouseY} />
-        ))}
-      </motion.div>
-
       {/* ── Header ───────────────────────────────────────────────── */}
       <div className="relative z-10 pt-8 md:pt-10 px-6 md:px-8">
         <div className="flex flex-col items-center text-center gap-3">
@@ -140,15 +74,10 @@ const ScrollExpandMedia = ({
               {subtitle}
             </motion.p>
           )}
-          <div className="flex items-center justify-center gap-4 flex-wrap mix-blend-normal">
-            <motion.h2
-              className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
-              style={{ x: textX }}
-            >
-              {leadingWords}{leadingWords ? ' ' : ''}
-              <span className="text-grad">{lastWord}</span>
-            </motion.h2>
-          </div>
+          <h2 className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px] text-center">
+            {leadingWords}{leadingWords ? ' ' : ''}
+            <span className="text-grad">{lastWord}</span>
+          </h2>
         </div>
       </div>
 

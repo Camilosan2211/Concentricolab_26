@@ -59,7 +59,7 @@ public/assets/images/logo.png
 public/assets/images/og-image.png
 public/assets/images/producto-1.avif
 public/assets/images/README_ASSETS.txt
-public/assets/images/video_dinamico.MP4
+public/assets/images/video_dinamico.mp4
 README.md
 repomix-output.txt
 src/App.jsx
@@ -2901,594 +2901,6 @@ export default function HeroGrid() {
 }
 </file>
 
-<file path="src/components/ScrollExpandMedia.jsx">
-/**
- * ScrollExpandMedia.jsx
- * Adaptación completa para Vite + React (sin Next.js, sin TypeScript).
- *
- * Mejoras respecto al componente original de 21st.dev:
- * ─────────────────────────────────────────────────────
- * 1. Sin `next/image` → usa <img> / <video> nativos con error-handling
- * 2. Sin TypeScript → JSX puro
- * 3. Lenis-aware → pausa/reanuda window.__lenis durante la captura de scroll
- * 4. Palabras flotantes con efecto parallax al mover el mouse
- * 5. Capa de overlay de marca (aurora glow) que desaparece al expandir
- * 6. Transición suave superior/inferior al fondo de la web
- * 7. Soporte dark/light mode con los tokens del design system
- * 8. Z-index calibrado: background z-0, media z-10, words z-20, navbar z-50
- */
-
-import { useEffect, useRef, useState, useCallback } from 'react'
-import { motion } from 'framer-motion'
-
-/* ── Palabras flotantes — disciplinas del lab ─────────────────────
-   Posicionadas en el espacio negativo alrededor del video inicial
-   (que mide 300×400 px centrado). Desaparecen al expandir.
-   xPct / yPct: offset desde el centro, en porcentaje del viewport.
-   factor: intensidad del parallax (mayor = más movimiento).        */
-const FLOAT_WORDS = [
-  { word: 'Diseño',         xPct: -38, yPct: -28, factor: 0.018, color: 'rgba(130,138,255,0.72)', size: '13px', weight: '500' },
-  { word: 'Forma',          xPct:  36, yPct: -32, factor: 0.026, color: 'rgba(255,109,77,0.65)',  size: '12px', weight: '400' },
-  { word: 'Sistema',        xPct: -44, yPct:  30, factor: 0.013, color: 'rgba(245,245,240,0.28)', size: '14px', weight: '400' },
-  { word: 'UX/UI',          xPct:  42, yPct:  28, factor: 0.022, color: 'rgba(77,102,255,0.65)',  size: '12px', weight: '600' },
-  { word: 'Branding',       xPct: -18, yPct: -46, factor: 0.015, color: 'rgba(245,245,240,0.20)', size: '11px', weight: '400' },
-  { word: 'Automatización', xPct:  16, yPct:  48, factor: 0.020, color: 'rgba(65,234,255,0.50)',  size: '11px', weight: '400' },
-  { word: 'Motion',         xPct:  48, yPct:  -8, factor: 0.017, color: 'rgba(130,138,255,0.45)', size: '12px', weight: '400' },
-  { word: 'Producto',       xPct: -46, yPct:   6, factor: 0.021, color: 'rgba(255,109,77,0.45)',  size: '13px', weight: '400' },
-]
-
-/* ── FloatingWord — palabra individual con parallax ──────────────── */
-function FloatingWord({ item, mouseX, mouseY, scrollProgress }) {
-  const opacity = Math.max(0, 1 - scrollProgress * 2.8)
-
-  // El parallax mueve la palabra en dirección contraria al mouse
-  const tx = mouseX * item.factor * -1
-  const ty = mouseY * item.factor * -1
-
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        /* Centro del viewport como punto de referencia,
-           luego offset en % del viewport */
-        left:      `calc(50% + ${item.xPct}vw)`,
-        top:       `calc(50% + ${item.yPct}vh)`,
-        transform: `translate(-50%, -50%) translate(${tx}px, ${ty}px)`,
-        opacity,
-        transition: 'opacity 0.3s ease, transform 0.05s linear',
-        fontFamily: "'Cal Sans', 'Inter', sans-serif",
-        fontSize:   item.size,
-        fontWeight: item.weight,
-        color:      item.color,
-        letterSpacing: '0.04em',
-        pointerEvents: 'none',
-        userSelect: 'none',
-        whiteSpace: 'nowrap',
-        willChange: 'transform, opacity',
-      }}
-    >
-      {item.word}
-    </div>
-  )
-}
-
-/* ── Componente principal ─────────────────────────────────────────── */
-const ScrollExpandMedia = ({
-  mediaType   = 'video',
-  mediaSrc,
-  posterSrc,
-  bgImageSrc,
-  title,
-  date,
-  scrollToExpand,
-  textBlend   = false,
-  children,
-}) => {
-  const [scrollProgress,     setScrollProgress]     = useState(0)
-  const [showContent,        setShowContent]        = useState(false)
-  const [mediaFullyExpanded, setMediaFullyExpanded] = useState(false)
-  const [touchStartY,        setTouchStartY]        = useState(0)
-  const [isMobile,           setIsMobile]           = useState(false)
-  const [mouseX,             setMouseX]             = useState(0)
-  const [mouseY,             setMouseY]             = useState(0)
-  const [bgError,            setBgError]            = useState(false)
-  const [mediaError,         setMediaError]         = useState(false)
-
-  const sectionRef = useRef(null)
-
-  // ── Lenis helpers ─────────────────────────────────────────────────
-  const pauseLenis  = useCallback(() => { try { window.__lenis?.stop()  } catch(e) {} }, [])
-  const resumeLenis = useCallback(() => { try { window.__lenis?.start() } catch(e) {} }, [])
-
-  // ── Reset al cambiar mediaType ────────────────────────────────────
-  useEffect(() => {
-    setScrollProgress(0)
-    setShowContent(false)
-    setMediaFullyExpanded(false)
-  }, [mediaType])
-
-  // ── Mouse parallax ────────────────────────────────────────────────
-  useEffect(() => {
-    const onMove = (e) => {
-      // Offset desde el centro de la ventana, en px
-      setMouseX(e.clientX - window.innerWidth  / 2)
-      setMouseY(e.clientY - window.innerHeight / 2)
-    }
-    window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  // ── Scroll capture (wheel + touch) ────────────────────────────────
-  useEffect(() => {
-    const handleWheel = (e) => {
-      // Colapsar si totalmente expandido + scroll hacia arriba en top
-      if (mediaFullyExpanded && e.deltaY < 0 && window.scrollY <= 5) {
-        setMediaFullyExpanded(false)
-        resumeLenis()
-        e.preventDefault()
-        return
-      }
-
-      if (!mediaFullyExpanded) {
-        e.preventDefault()
-        pauseLenis()
-
-        const delta       = e.deltaY * 0.0009
-        const newProgress = Math.min(Math.max(scrollProgress + delta, 0), 1)
-        setScrollProgress(newProgress)
-
-        if (newProgress >= 1) {
-          setMediaFullyExpanded(true)
-          setShowContent(true)
-          resumeLenis()
-        } else if (newProgress < 0.75) {
-          setShowContent(false)
-        }
-      }
-    }
-
-    const handleTouchStart = (e) => {
-      setTouchStartY(e.touches[0].clientY)
-    }
-
-    const handleTouchMove = (e) => {
-      if (!touchStartY) return
-      const touchY = e.touches[0].clientY
-      const deltaY = touchStartY - touchY
-
-      if (mediaFullyExpanded && deltaY < -20 && window.scrollY <= 5) {
-        setMediaFullyExpanded(false)
-        resumeLenis()
-        e.preventDefault()
-        return
-      }
-
-      if (!mediaFullyExpanded) {
-        e.preventDefault()
-        pauseLenis()
-
-        const factor      = deltaY < 0 ? 0.008 : 0.005
-        const newProgress = Math.min(Math.max(scrollProgress + deltaY * factor, 0), 1)
-        setScrollProgress(newProgress)
-
-        if (newProgress >= 1) {
-          setMediaFullyExpanded(true)
-          setShowContent(true)
-          resumeLenis()
-        } else if (newProgress < 0.75) {
-          setShowContent(false)
-        }
-        setTouchStartY(touchY)
-      }
-    }
-
-    const handleTouchEnd = () => setTouchStartY(0)
-
-    const handleScroll = () => {
-      if (!mediaFullyExpanded) window.scrollTo(0, 0)
-    }
-
-    window.addEventListener('wheel',      handleWheel,      { passive: false })
-    window.addEventListener('scroll',     handleScroll)
-    window.addEventListener('touchstart', handleTouchStart, { passive: false })
-    window.addEventListener('touchmove',  handleTouchMove,  { passive: false })
-    window.addEventListener('touchend',   handleTouchEnd)
-
-    return () => {
-      window.removeEventListener('wheel',      handleWheel)
-      window.removeEventListener('scroll',     handleScroll)
-      window.removeEventListener('touchstart', handleTouchStart)
-      window.removeEventListener('touchmove',  handleTouchMove)
-      window.removeEventListener('touchend',   handleTouchEnd)
-      resumeLenis() // siempre reanudar al desmontar
-    }
-  }, [scrollProgress, mediaFullyExpanded, touchStartY, pauseLenis, resumeLenis])
-
-  // ── Responsive ────────────────────────────────────────────────────
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  // ── Sizing math ───────────────────────────────────────────────────
-  // Inicia portrait 3:4 (300×400), expande a landscape ~16:9
-  const mediaW = 300 + scrollProgress * (isMobile ? 650 : 1250)
-  const mediaH = 400 + scrollProgress * (isMobile ? 200 : 400)
-  const textTX = scrollProgress * (isMobile ? 160 : 140)
-
-  const firstWord  = title ? title.split(' ')[0] : ''
-  const restTitle  = title ? title.split(' ').slice(1).join(' ') : ''
-
-  // ── Border radius: redondo al inicio, casi plano al expandir ──────
-  const borderR = 24 - scrollProgress * 20 // 24px → 4px
-
-  // ── Box shadow con glow de marca que se intensifica ───────────────
-  const glowBlue  = `0 0 ${40 + scrollProgress * 80}px rgba(77,102,255,${0.12 + scrollProgress * 0.18})`
-  const glowCorpo = `0 ${20 + scrollProgress * 30}px ${60 + scrollProgress * 80}px rgba(0,0,0,${0.3 + scrollProgress * 0.25})`
-
-  return (
-    <div
-      ref={sectionRef}
-      className="overflow-x-hidden"
-      style={{ background: 'transparent' }}
-    >
-      <section
-        className="relative flex flex-col items-center justify-start min-h-[100dvh]"
-        style={{ overflow: 'hidden' }}
-      >
-        <div className="relative w-full flex flex-col items-center min-h-[100dvh]">
-
-          {/* ── Fondo panorámico (bgImageSrc) — se desvanece al hacer scroll ── */}
-          <motion.div
-            className="absolute inset-0 h-full"
-            style={{ zIndex: 0 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 - scrollProgress }}
-            transition={{ duration: 0.08 }}
-          >
-            {bgImageSrc && !bgError ? (
-              <img
-                src={bgImageSrc}
-                alt=""
-                role="presentation"
-                loading="eager"
-                className="w-screen h-screen object-cover object-center"
-                onError={() => setBgError(true)}
-                style={{
-                  // En light mode, suavizar el contraste de la imagen de fondo
-                  filter: 'brightness(0.82) contrast(1.05)',
-                }}
-              />
-            ) : (
-              /* Fallback — gradiente de marca si la imagen no carga */
-              <div
-                className="w-screen h-screen"
-                style={{
-                  background: 'linear-gradient(160deg, #00031F 0%, #050828 40%, #0D0A22 70%, #0A0614 100%)',
-                }}
-              />
-            )}
-            {/* Velo oscuro sobre el fondo — más transparente de lo que traía el original */}
-            <div className="absolute inset-0" style={{ background: 'rgba(0,3,31,0.38)' }} />
-
-            {/* Aurora de marca — da contexto visual antes de interactuar */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `
-                  radial-gradient(ellipse 60% 45% at 30% 55%, rgba(77,102,255,0.18) 0%, transparent 65%),
-                  radial-gradient(ellipse 50% 40% at 72% 42%, rgba(255,109,77,0.13) 0%, transparent 60%)
-                `,
-              }}
-            />
-          </motion.div>
-
-          {/* ── Capa de palabras flotantes (z-20) ──────────────────────────── */}
-          {FLOAT_WORDS.map((item, i) => (
-            <FloatingWord
-              key={i}
-              item={item}
-              mouseX={mouseX}
-              mouseY={mouseY}
-              scrollProgress={scrollProgress}
-            />
-          ))}
-
-          {/* ── Contenedor principal ────────────────────────────────────────── */}
-          <div
-            className="container mx-auto flex flex-col items-center justify-start"
-            style={{ position: 'relative', zIndex: 10 }}
-          >
-            <div
-              className="flex flex-col items-center justify-center w-full relative"
-              style={{ minHeight: '100dvh' }}
-            >
-
-              {/* ── Media expandible (video/imagen) ─────────────────────────── */}
-              <div
-                style={{
-                  position:  'absolute',
-                  zIndex:    0,
-                  top:       '50%',
-                  left:      '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width:     `${mediaW}px`,
-                  height:    `${mediaH}px`,
-                  maxWidth:  '95vw',
-                  maxHeight: '85vh',
-                  boxShadow: `${glowBlue}, ${glowCorpo}`,
-                  borderRadius: `${borderR}px`,
-                  overflow:  'hidden',
-                  transition: 'none',
-                  willChange: 'width, height, box-shadow',
-                }}
-              >
-                {/* ── Overlay de marca que se disuelve al expandir ─────────── */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    zIndex: 3,
-                    pointerEvents: 'none',
-                    opacity: Math.max(0, 1 - scrollProgress * 2.2),
-                    background: `
-                      radial-gradient(ellipse 55% 40% at 35% 60%, rgba(77,102,255,0.32) 0%, transparent 60%),
-                      radial-gradient(ellipse 45% 35% at 68% 38%, rgba(255,109,77,0.22) 0%, transparent 55%)
-                    `,
-                    mixBlendMode: 'screen',
-                  }}
-                />
-
-                {mediaType === 'video' ? (
-                  /* ── Video (local .mp4/.webm o YouTube embed) ────────────── */
-                  mediaSrc?.includes('youtube.com') ? (
-                    <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: 'none' }}>
-                      <iframe
-                        title="Enfoque media"
-                        width="100%" height="100%"
-                        src={
-                          mediaSrc.includes('embed')
-                            ? `${mediaSrc}${mediaSrc.includes('?') ? '&' : '?'}autoplay=1&mute=1&loop=1&controls=0&rel=0&modestbranding=1`
-                            : `${mediaSrc.replace('watch?v=', 'embed/')}?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=${mediaSrc.split('v=')[1]}`
-                        }
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        style={{ borderRadius: `${borderR}px` }}
-                      />
-                      <motion.div
-                        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.25)', zIndex: 2 }}
-                        initial={{ opacity: 0.65 }}
-                        animate={{ opacity: 0.45 - scrollProgress * 0.25 }}
-                      />
-                    </div>
-                  ) : (
-                    <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: 'none' }}>
-                      {mediaSrc && !mediaError ? (
-                        <video
-                          src={mediaSrc}
-                          poster={posterSrc}
-                          autoPlay muted loop playsInline preload="auto"
-                          controls={false}
-                          style={{
-                            width: '100%', height: '100%',
-                            objectFit: 'cover', objectPosition: 'center',
-                            display: 'block',
-                          }}
-                          onError={() => setMediaError(true)}
-                        />
-                      ) : (
-                        /* Fallback si el video falla */
-                        <div
-                          style={{
-                            width: '100%', height: '100%',
-                            background: 'linear-gradient(135deg, #050828 0%, #0D1340 50%, #1A0A28 100%)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          }}
-                        >
-                          <span
-                            style={{
-                              fontFamily: "'Cal Sans', sans-serif",
-                              fontSize: '48px', color: 'rgba(255,255,255,0.08)',
-                            }}
-                          >
-                            CL
-                          </span>
-                        </div>
-                      )}
-                      <motion.div
-                        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.30)', zIndex: 2 }}
-                        initial={{ opacity: 0.65 }}
-                        animate={{ opacity: 0.48 - scrollProgress * 0.28 }}
-                      />
-                    </div>
-                  )
-                ) : (
-                  /* ── Imagen estática ───────────────────────────────────────── */
-                  <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                    {mediaSrc && !mediaError ? (
-                      <img
-                        src={mediaSrc}
-                        alt={title || 'Concéntrico Lab'}
-                        loading="lazy"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
-                        onError={() => setMediaError(true)}
-                      />
-                    ) : (
-                      <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #050828, #0D1340)' }} />
-                    )}
-                    <motion.div
-                      style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)' }}
-                      initial={{ opacity: 0.65 }}
-                      animate={{ opacity: 0.65 - scrollProgress * 0.30 }}
-                    />
-                  </div>
-                )}
-
-                {/* ── Textos que se separan lateralmente al expandir ───────── */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '-2.5rem',
-                    left: 0, right: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '4px',
-                    zIndex: 5,
-                  }}
-                >
-                  {date && (
-                    <p
-                      style={{
-                        transform:  `translateX(-${textTX}vw)`,
-                        fontFamily: "'Cal Sans', sans-serif",
-                        fontSize:   '11px',
-                        fontWeight: '500',
-                        letterSpacing: '0.10em',
-                        textTransform: 'uppercase',
-                        color: 'rgba(130,138,255,0.70)',
-                        transition: 'none',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {date}
-                    </p>
-                  )}
-                  {scrollToExpand && (
-                    <p
-                      style={{
-                        transform:  `translateX(${textTX}vw)`,
-                        fontFamily: "'Inter', sans-serif",
-                        fontSize:   '10px',
-                        fontWeight: '500',
-                        letterSpacing: '0.08em',
-                        color: 'rgba(255,109,77,0.60)',
-                        transition: 'none',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {scrollToExpand}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* ── Título que se abre hacia los lados ──────────────────────── */}
-              <div
-                style={{
-                  position: 'relative',
-                  zIndex: 10,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                  gap: isMobile ? '8px' : '16px',
-                  width: '100%',
-                  mixBlendMode: textBlend ? 'difference' : 'normal',
-                  pointerEvents: 'none',
-                }}
-              >
-                {/* Primera palabra — se va a la izquierda */}
-                <h2
-                  style={{
-                    transform:  `translateX(-${textTX}vw)`,
-                    fontFamily: "'Cal Sans', sans-serif",
-                    fontSize:   isMobile ? '2.5rem' : '4rem',
-                    fontWeight: '400',
-                    lineHeight:  1.05,
-                    letterSpacing: '-0.02em',
-                    color: '#F5F5F0',
-                    transition: 'none',
-                    willChange: 'transform',
-                    userSelect: 'none',
-                  }}
-                >
-                  {firstWord}
-                </h2>
-
-                {/* Resto del título — se va a la derecha */}
-                <h2
-                  style={{
-                    transform:  `translateX(${textTX}vw)`,
-                    fontFamily: "'Cal Sans', sans-serif",
-                    fontSize:   isMobile ? '2.5rem' : '4rem',
-                    fontWeight: '400',
-                    lineHeight:  1.05,
-                    letterSpacing: '-0.02em',
-                    color: '#F5F5F0',
-                    transition: 'none',
-                    willChange: 'transform',
-                    userSelect: 'none',
-                  }}
-                >
-                  {restTitle}
-                </h2>
-              </div>
-
-            </div>{/* end viewport-height div */}
-
-            {/* ── Contenido revelado tras la expansión completa ───────────── */}
-            <motion.section
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
-                padding: isMobile ? '2.5rem 1.5rem' : '4rem 4rem',
-              }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={
-                showContent
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 20 }
-              }
-              transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {children}
-            </motion.section>
-
-          </div>{/* end container */}
-        </div>
-      </section>
-    </div>
-  )
-}
-
-export default ScrollExpandMedia
-</file>
-
-<file path="src/components/ScrollToTop.jsx">
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUp } from 'lucide-react'
-export default function ScrollToTop() {
-  const [v, setV] = useState(false)
-  useEffect(()=>{
-    const fn=()=>setV(window.scrollY>600)
-    window.addEventListener('scroll',fn,{passive:true})
-    return ()=>window.removeEventListener('scroll',fn)
-  },[])
-  return(
-    <AnimatePresence>
-      {v&&(
-        <motion.button
-          onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}
-          className="fixed bottom-7 right-7 z-50 w-11 h-11 rounded-full glass-blue border border-b-blue/25 flex items-center justify-center text-b-blue hover:bg-b-blue hover:text-white hover:-translate-y-1 transition-all duration-200"
-          initial={{opacity:0,scale:.7}} animate={{opacity:1,scale:1}} exit={{opacity:0,scale:.7}}
-          transition={{type:'spring',stiffness:220,damping:18}}
-          aria-label="Volver arriba">
-          <ArrowUp size={16}/>
-        </motion.button>
-      )}
-    </AnimatePresence>
-  )
-}
-</file>
-
 <file path="src/lib/utils.js">
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge"
@@ -4016,46 +3428,6 @@ Después de estos 3 pasos, el DESIGN.md y el código estarán al 95% de sincron�
 </html>
 </file>
 
-<file path="package.json">
-{
-  "name": "concentrico-lab",
-  "private": true,
-  "version": "0.2.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@fontsource-variable/geist": "^5.2.8",
-    "@react-three/drei": "^9.109.2",
-    "@react-three/fiber": "^8.17.10",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^11.11.11",
-    "gsap": "^3.12.5",
-    "lenis": "^1.1.16",
-    "lucide-react": "^0.447.0",
-    "motion": "^12.38.0",
-    "radix-ui": "^1.4.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "shadcn": "^4.4.0",
-    "tailwind-merge": "^3.5.0",
-    "three": "^0.167.1",
-    "tw-animate-css": "^1.4.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.2",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.14",
-    "vite": "^5.4.9"
-  }
-}
-</file>
-
 <file path="public/assets/images/README_ASSETS.txt">
 Place logo.png, favicon.png and og-image.png here before deploy.
 
@@ -4167,6 +3539,34 @@ Coloca estos archivos en `/public/assets/images/` antes de hacer deploy:
 Ver [DESIGN_AUDIT.md](./docs/DESIGN_AUDIT.md) para detalles técnicos completos.
 </file>
 
+<file path="src/components/ScrollToTop.jsx">
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
+import { ArrowUp } from 'lucide-react'
+export default function ScrollToTop() {
+  const [v, setV] = useState(false)
+  useEffect(()=>{
+    const fn=()=>setV(window.scrollY>600)
+    window.addEventListener('scroll',fn,{passive:true})
+    return ()=>window.removeEventListener('scroll',fn)
+  },[])
+  return(
+    <AnimatePresence>
+      {v&&(
+        <motion.button
+          onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}
+          className="fixed bottom-7 right-7 z-50 w-11 h-11 rounded-full glass-blue border border-b-blue/25 flex items-center justify-center text-b-blue hover:bg-b-blue hover:text-white hover:-translate-y-1 transition-all duration-200"
+          initial={{opacity:0,scale:.7}} animate={{opacity:1,scale:1}} exit={{opacity:0,scale:.7}}
+          transition={{type:'spring',stiffness:220,damping:18}}
+          aria-label="Volver arriba">
+          <ArrowUp size={16}/>
+        </motion.button>
+      )}
+    </AnimatePresence>
+  )
+}
+</file>
+
 <file path="src/hooks/useLenis.js">
 /**
  * useLenis.js — Smooth scroll con Lenis
@@ -4214,9 +3614,48 @@ export function useLenis() {
 }
 </file>
 
+<file path="package.json">
+{
+  "name": "concentrico-lab",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.2.8",
+    "@react-three/drei": "^9.109.2",
+    "@react-three/fiber": "^8.17.10",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.16",
+    "lucide-react": "^0.447.0",
+    "motion": "^12.38.0",
+    "radix-ui": "^1.4.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "shadcn": "^4.4.0",
+    "tailwind-merge": "^3.5.0",
+    "three": "^0.167.1",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "vite": "^5.4.9"
+  }
+}
+</file>
+
 <file path="src/sections/Capacidades.jsx">
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import { Layers, Box, Monitor, Play, Zap, MessageSquare } from 'lucide-react'
 
 const items = [
@@ -4445,22 +3884,6 @@ export default function Capacidades({ lang }) {
 }
 </file>
 
-<file path="vite.config.js">
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-
-export default defineConfig({
-  plugins: [react()],
-  server: { port: 3000 },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-})
-</file>
-
 <file path="tailwind.config.js">
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -4526,6 +3949,23 @@ export default {
   },
   plugins: [],
 }
+</file>
+
+<file path="vite.config.js">
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  server: { port: 3000 },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      'framer-motion': path.resolve(__dirname, 'node_modules/framer-motion/dist/cjs/index.js'),
+    },
+  },
+})
 </file>
 
 <file path="src/components/ParticleField.jsx">
@@ -4730,138 +4170,6 @@ export default function ParticleField({ darkMode = true }) {
 }
 </file>
 
-<file path="src/sections/Stack.jsx">
-import { motion } from 'framer-motion'
-
-const tools = [
-  { name: 'Figma',        src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
-  { name: 'Notion',       src: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png' },
-  { name: 'Illustrator',  src: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg' },
-  { name: 'ChatGPT',      src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
-  { name: 'Claude',       src: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg' },
-  {
-    name: 'Perplexity',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/perplexity.svg',
-    bg: '#ffffff',
-    pad: 6,
-  },
-  { name: 'Make',         src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/make.svg', bg: '#6D00CC', pad: 7 },
-  { name: 'n8n',          src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/n8n.svg', bg: '#EA4B71', pad: 6 },
-  { name: 'Canva',        src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/canva.svg', bg: '#00C4CC', pad: 6 },
-  { name: 'Framer',       src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg', bg: '#0055FF', pad: 6 },
-  { name: 'ElevenLabs',   src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/elevenlabs.svg', bg: '#000000', pad: 6 },
-  // { name: 'Vercel', ... },  // herramienta interna dev — no mostrar al visitante
-  // { name: 'GitHub', ... },  // herramienta interna dev — no mostrar al visitante
-]
-
-export default function Stack({ lang }) {
-  return (
-    <section id="stack" className="relative z-10 py-24 px-6">
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-12">
-        <motion.div
-          className="text-center flex flex-col gap-3"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35">
-            {lang === 'es' ? 'Potenciado por' : 'Powered by'}
-          </p>
-          <h2 className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark">
-            {lang === 'es' ? 'Las mejores ' : 'Best in class '}
-            <span className="text-grad">{lang === 'es' ? 'herramientas' : 'tools'}</span>
-          </h2>
-        </motion.div>
-        <motion.div
-          className="flex flex-wrap justify-center gap-4"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-40px' }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
-        >
-          {tools.map((tool, i) => (
-            <motion.div
-              key={i}
-              className="group glass flex flex-col items-center gap-2.5 px-5 py-4 rounded-2xl border dark:border-white/6 border-black/6 cursor-default"
-              variants={{
-                hidden: { opacity: 0, scale: 0.82 },
-                show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } },
-              }}
-              whileHover={{
-                y: -6,
-                scale: 1.07,
-                borderColor: 'rgba(77,102,255,.3)',
-                transition: { duration: 0.22, ease: 'easeOut' },
-              }}
-            >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
-                style={{
-                  background: tool.bg || 'rgba(120,120,180,.08)',
-                  padding: `${tool.pad ?? 7}px`,
-                }}
-              >
-                <img
-                  src={tool.src}
-                  alt={tool.name}
-                  className="w-full h-full object-contain"
-                  style={tool.invertIcon ? { filter: 'invert(1)' } : undefined}
-                  loading="lazy"
-                />
-              </div>
-              <span className="text-[12px] font-medium dark:text-white/50 text-black/50 group-hover:dark:text-white/80 group-hover:text-black/80 transition-colors duration-200">
-                {tool.name}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-</file>
-
-<file path="src/sections/Ticker.jsx">
-import { motion } from 'framer-motion'
-const tags=['Diseño UX/UI','IA Generativa','Branding','Métricas','Automatización','Diseño Industrial','Plantillas Notion','Sistemas digitales','Make · n8n','Consultoría CX','Design Systems','Creative Coding']
-
-export default function Ticker() {
-  const d=[...tags,...tags]
-  const isDark = typeof window !== 'undefined' && document.documentElement.classList.contains('light') === false
-  
-  return (
-    <div className="relative z-10 overflow-hidden py-5 border-y dark:border-white/5 border-black/6">
-      {/* Gradientes adaptativo al modo — left fade */}
-      <div 
-        className="absolute left-0 top-0 w-28 h-full z-10 pointer-events-none"
-        style={{
-          background: isDark 
-            ? 'linear-gradient(to right, #00031F, transparent)'
-            : 'linear-gradient(to right, #EEF1FF, transparent)'
-        }}
-      />
-      {/* Gradientes adaptativo al modo — right fade */}
-      <div 
-        className="absolute right-0 top-0 w-28 h-full z-10 pointer-events-none"
-        style={{
-          background: isDark 
-            ? 'linear-gradient(to left, #00031F, transparent)'
-            : 'linear-gradient(to left, #EEF1FF, transparent)'
-        }}
-      />
-      <motion.div className="flex gap-3 w-max" animate={{x:['0%','-50%']}} transition={{duration:32,ease:'linear',repeat:Infinity}}>
-        {d.map((tag,i)=>(
-          <span key={i} className="inline-flex items-center gap-2 glass-blue text-b-blue-lt text-[12px] font-semibold px-4 py-1.5 rounded-full whitespace-nowrap border border-b-blue/20 select-none">
-            <span className="w-1 h-1 rounded-full bg-b-blue opacity-60"/>{tag}
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  )
-}
-</file>
-
 <file path="src/hooks/useCursor.js">
 /**
  * useCursor — cursor aware del modo claro/oscuro
@@ -5017,6 +4325,138 @@ export function useCursor() {
 }
 </file>
 
+<file path="src/sections/Stack.jsx">
+import { motion } from 'motion/react'
+
+const tools = [
+  { name: 'Figma',        src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
+  { name: 'Notion',       src: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png' },
+  { name: 'Illustrator',  src: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg' },
+  { name: 'ChatGPT',      src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
+  { name: 'Claude',       src: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg' },
+  {
+    name: 'Perplexity',
+    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/perplexity.svg',
+    bg: '#ffffff',
+    pad: 6,
+  },
+  { name: 'Make',         src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/make.svg', bg: '#6D00CC', pad: 7 },
+  { name: 'n8n',          src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/n8n.svg', bg: '#EA4B71', pad: 6 },
+  { name: 'Canva',        src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/canva.svg', bg: '#00C4CC', pad: 6 },
+  { name: 'Framer',       src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg', bg: '#0055FF', pad: 6 },
+  { name: 'ElevenLabs',   src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/elevenlabs.svg', bg: '#000000', pad: 6 },
+  // { name: 'Vercel', ... },  // herramienta interna dev — no mostrar al visitante
+  // { name: 'GitHub', ... },  // herramienta interna dev — no mostrar al visitante
+]
+
+export default function Stack({ lang }) {
+  return (
+    <section id="stack" className="relative z-10 py-24 px-6">
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-12">
+        <motion.div
+          className="text-center flex flex-col gap-3"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35">
+            {lang === 'es' ? 'Potenciado por' : 'Powered by'}
+          </p>
+          <h2 className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark">
+            {lang === 'es' ? 'Las mejores ' : 'Best in class '}
+            <span className="text-grad">{lang === 'es' ? 'herramientas' : 'tools'}</span>
+          </h2>
+        </motion.div>
+        <motion.div
+          className="flex flex-wrap justify-center gap-4"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-40px' }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
+        >
+          {tools.map((tool, i) => (
+            <motion.div
+              key={i}
+              className="group glass flex flex-col items-center gap-2.5 px-5 py-4 rounded-2xl border dark:border-white/6 border-black/6 cursor-default"
+              variants={{
+                hidden: { opacity: 0, scale: 0.82 },
+                show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } },
+              }}
+              whileHover={{
+                y: -6,
+                scale: 1.07,
+                borderColor: 'rgba(77,102,255,.3)',
+                transition: { duration: 0.22, ease: 'easeOut' },
+              }}
+            >
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
+                style={{
+                  background: tool.bg || 'rgba(120,120,180,.08)',
+                  padding: `${tool.pad ?? 7}px`,
+                }}
+              >
+                <img
+                  src={tool.src}
+                  alt={tool.name}
+                  className="w-full h-full object-contain"
+                  style={tool.invertIcon ? { filter: 'invert(1)' } : undefined}
+                  loading="lazy"
+                />
+              </div>
+              <span className="text-[12px] font-medium dark:text-white/50 text-black/50 group-hover:dark:text-white/80 group-hover:text-black/80 transition-colors duration-200">
+                {tool.name}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+</file>
+
+<file path="src/sections/Ticker.jsx">
+import { motion } from 'motion/react'
+const tags=['Diseño UX/UI','IA Generativa','Branding','Métricas','Automatización','Diseño Industrial','Plantillas Notion','Sistemas digitales','Make · n8n','Consultoría CX','Design Systems','Creative Coding']
+
+export default function Ticker() {
+  const d=[...tags,...tags]
+  const isDark = typeof window !== 'undefined' && document.documentElement.classList.contains('light') === false
+  
+  return (
+    <div className="relative z-10 overflow-hidden py-5 border-y dark:border-white/5 border-black/6">
+      {/* Gradientes adaptativo al modo — left fade */}
+      <div 
+        className="absolute left-0 top-0 w-28 h-full z-10 pointer-events-none"
+        style={{
+          background: isDark 
+            ? 'linear-gradient(to right, #00031F, transparent)'
+            : 'linear-gradient(to right, #EEF1FF, transparent)'
+        }}
+      />
+      {/* Gradientes adaptativo al modo — right fade */}
+      <div 
+        className="absolute right-0 top-0 w-28 h-full z-10 pointer-events-none"
+        style={{
+          background: isDark 
+            ? 'linear-gradient(to left, #00031F, transparent)'
+            : 'linear-gradient(to left, #EEF1FF, transparent)'
+        }}
+      />
+      <motion.div className="flex gap-3 w-max" animate={{x:['0%','-50%']}} transition={{duration:32,ease:'linear',repeat:Infinity}}>
+        {d.map((tag,i)=>(
+          <span key={i} className="inline-flex items-center gap-2 glass-blue text-b-blue-lt text-[12px] font-semibold px-4 py-1.5 rounded-full whitespace-nowrap border border-b-blue/20 select-none">
+            <span className="w-1 h-1 rounded-full bg-b-blue opacity-60"/>{tag}
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  )
+}
+</file>
+
 <file path="src/sections/LabStats.jsx">
 /**
  * LabStats — "Dark glass island" section
@@ -5025,7 +4465,7 @@ export function useCursor() {
  * En modo light: panel blanco con sombra y borde suave.
  */
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 
 const stats = [
   {
@@ -5112,7 +4552,7 @@ export default function LabStats({ lang }) {
 
 <file path="src/sections/Proceso.jsx">
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import { Search, PenTool, Boxes } from 'lucide-react'
 
 const steps = [
@@ -5295,9 +4735,132 @@ export default function Proceso({ lang }) {
 }
 </file>
 
+<file path="src/components/ui/geometric.jsx">
+"use client";
+import React from "react";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
+
+function ElegantShape({
+  className, delay = 0, width = 400, height = 100, rotate = 0,
+  darkGradient = "from-white/[0.08]",
+  lightColor = "rgba(77,102,255,0.52)",
+  lightGlow  = "rgba(77,102,255,0.28)",
+  darkMode = true,
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
+      animate={{ opacity: 1, y: 0, rotate }}
+      transition={{ duration: 2.4, delay, ease: [0.23, 0.86, 0.39, 0.96], opacity: { duration: 1.2 } }}
+      className={cn("absolute", className)}
+    >
+      <motion.div
+        animate={{ y: [0, 20, 0], x: [0, 6, 0] }}
+        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+        style={{ width, height }}
+        className="relative"
+      >
+        {darkMode ? (
+          <div className={cn(
+            "absolute inset-0 rounded-full",
+            "bg-gradient-to-r to-transparent", darkGradient,
+            "backdrop-blur-[2px] border-2 border-white/[0.15]",
+            "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
+            "after:absolute after:inset-0 after:rounded-full",
+            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]",
+          )} />
+        ) : (
+          /* LIGHT — formas sólidas con color de marca, glass y sombra fuerte */
+          <div
+            className="absolute inset-0 rounded-full backdrop-blur-[10px]"
+            style={{
+              background: `linear-gradient(135deg, ${lightColor} 0%, ${lightColor.replace(/[\d.]+\)$/, '0.28)')} 100%)`,
+              border: '1.5px solid rgba(255,255,255,0.75)',
+              boxShadow: [
+                `inset 0 2px 0 rgba(255,255,255,0.85)`,
+                `0 12px 40px ${lightGlow}`,
+                `0 4px 16px rgba(0,0,0,0.06)`,
+              ].join(', '),
+            }}
+          >
+            {/* Reflejo interno superior */}
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'radial-gradient(ellipse 80% 40% at 50% 15%, rgba(255,255,255,0.65), transparent 60%)',
+              }}
+            />
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export default function GeometricBackground({ className, darkMode = true }) {
+  const bg       = darkMode ? "#0D0F1C" : "#EEF1FF"
+  const radial   = darkMode
+    ? "bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05]"
+    : "bg-gradient-to-br from-blue-400/[0.08] via-transparent to-rose-400/[0.08]"
+  const fadeClass = darkMode
+    ? "from-[#0D0F1C] via-transparent to-[#0D0F1C]/80"
+    : "from-[#EEF1FF] via-transparent to-[#EEF1FF]/80"
+
+  return (
+    <div
+      className={cn("fixed inset-0 w-full h-full z-[-1]", className)}
+      style={{ backgroundColor: bg }}
+    >
+      <div className={cn("absolute inset-0 blur-3xl", radial)} />
+
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Grande izq — azul */}
+        <ElegantShape delay={0.3} width={600} height={140} rotate={12}
+          darkGradient="from-[#41EAFF]/[0.15]"
+          lightColor="rgba(77,102,255,0.55)" lightGlow="rgba(77,102,255,0.30)"
+          darkMode={darkMode} className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+        />
+        {/* Grande der — coral */}
+        <ElegantShape delay={0.5} width={500} height={120} rotate={-15}
+          darkGradient="from-[#FF6D4D]/[0.15]"
+          lightColor="rgba(255,109,77,0.52)" lightGlow="rgba(255,109,77,0.28)"
+          darkMode={darkMode} className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+        />
+        {/* Pequeña inf izq — cyan */}
+        <ElegantShape delay={0.4} width={300} height={80} rotate={-8}
+          darkGradient="from-[#41EAFF]/[0.15]"
+          lightColor="rgba(65,234,255,0.50)" lightGlow="rgba(65,234,255,0.26)"
+          darkMode={darkMode} className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+        />
+        {/* Pequeña sup der — coral */}
+        <ElegantShape delay={0.6} width={200} height={60} rotate={20}
+          darkGradient="from-[#FF6D4D]/[0.15]"
+          lightColor="rgba(255,109,77,0.48)" lightGlow="rgba(255,109,77,0.24)"
+          darkMode={darkMode} className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
+        />
+        {/* Mínima — purple */}
+        <ElegantShape delay={0.7} width={150} height={40} rotate={-25}
+          darkGradient="from-[#828AFF]/[0.15]"
+          lightColor="rgba(130,138,255,0.52)" lightGlow="rgba(130,138,255,0.26)"
+          darkMode={darkMode} className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+        />
+      </div>
+
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="hero-side-glow hero-side-glow-left" />
+        <div className="hero-side-glow hero-side-glow-right" />
+      </div>
+
+      <div className={cn("absolute inset-0 bg-gradient-to-t pointer-events-none", fadeClass)} />
+    </div>
+  );
+}
+</file>
+
 <file path="src/sections/Connect.jsx">
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Mail, Instagram, Linkedin, Youtube, Send } from 'lucide-react'
 
 const EMAIL = 'concentriclabco@gmail.com'
@@ -5549,132 +5112,315 @@ export default function Connect({ lang }) {
 }
 </file>
 
-<file path="src/components/ui/geometric.jsx">
-"use client";
-import React from "react";
-import { motion } from "motion/react";
-import { cn } from "@/lib/utils";
+<file path="src/App.jsx">
+import { useState, useEffect } from 'react'
+import { useLenis }   from './hooks/useLenis'
+import { useCursor }  from './hooks/useCursor'
 
-function ElegantShape({
-  className, delay = 0, width = 400, height = 100, rotate = 0,
-  darkGradient = "from-white/[0.08]",
-  lightColor = "rgba(77,102,255,0.52)",
-  lightGlow  = "rgba(77,102,255,0.28)",
-  darkMode = true,
-}) {
+import ScrollToTop          from './components/ScrollToTop'
+import Navbar               from './components/Navbar'
+import GeometricBackground  from './components/ui/geometric'
+
+import Hero        from './sections/Hero'
+import Ticker      from './sections/Ticker'
+import Capacidades from './sections/Capacidades'
+import Enfoque     from './sections/Enfoque'
+import Manifiesto  from './sections/Manifiesto'
+import Productos   from './sections/Productos'
+import Proceso     from './sections/Proceso'
+import Stack       from './sections/Stack'
+import Connect     from './sections/Connect'
+import Footer      from './sections/Footer'
+
+export default function App() {
+  const [lang, setLang] = useState('es')
+  const [dark, setDark] = useState(true)
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.remove('light')
+    } else {
+      document.documentElement.classList.add('light')
+    }
+  }, [dark])
+
+  useLenis()
+  useCursor()
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
-      animate={{ opacity: 1, y: 0, rotate }}
-      transition={{ duration: 2.4, delay, ease: [0.23, 0.86, 0.39, 0.96], opacity: { duration: 1.2 } }}
-      className={cn("absolute", className)}
-    >
-      <motion.div
-        animate={{ y: [0, 20, 0], x: [0, 6, 0] }}
-        transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-        style={{ width, height }}
-        className="relative"
-      >
-        {darkMode ? (
-          <div className={cn(
-            "absolute inset-0 rounded-full",
-            "bg-gradient-to-r to-transparent", darkGradient,
-            "backdrop-blur-[2px] border-2 border-white/[0.15]",
-            "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
-            "after:absolute after:inset-0 after:rounded-full",
-            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]",
-          )} />
-        ) : (
-          /* LIGHT — formas sólidas con color de marca, glass y sombra fuerte */
-          <div
-            className="absolute inset-0 rounded-full backdrop-blur-[10px]"
-            style={{
-              background: `linear-gradient(135deg, ${lightColor} 0%, ${lightColor.replace(/[\d.]+\)$/, '0.28)')} 100%)`,
-              border: '1.5px solid rgba(255,255,255,0.75)',
-              boxShadow: [
-                `inset 0 2px 0 rgba(255,255,255,0.85)`,
-                `0 12px 40px ${lightGlow}`,
-                `0 4px 16px rgba(0,0,0,0.06)`,
-              ].join(', '),
-            }}
-          >
-            {/* Reflejo interno superior */}
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: 'radial-gradient(ellipse 80% 40% at 50% 15%, rgba(255,255,255,0.65), transparent 60%)',
-              }}
-            />
-          </div>
-        )}
-      </motion.div>
-    </motion.div>
-  );
-}
+    <>
+      <GeometricBackground darkMode={dark} />
 
-export default function GeometricBackground({ className, darkMode = true }) {
-  const bg       = darkMode ? "#0D0F1C" : "#EEF1FF"
-  const radial   = darkMode
-    ? "bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05]"
-    : "bg-gradient-to-br from-blue-400/[0.08] via-transparent to-rose-400/[0.08]"
-  const fadeClass = darkMode
-    ? "from-[#0D0F1C] via-transparent to-[#0D0F1C]/80"
-    : "from-[#EEF1FF] via-transparent to-[#EEF1FF]/80"
+      <div id="pb" aria-hidden="true" />
+      <div className="cur-dot"  style={{ opacity: 0 }} aria-hidden="true" />
+      <div className="cur-ring" style={{ opacity: 0 }} aria-hidden="true" />
+      <div className="film-grain-overlay" aria-hidden="true" />
+
+      <Navbar lang={lang} setLang={setLang} dark={dark} setDark={setDark} />
+
+      <main className="relative z-10">
+        <Hero        lang={lang} />
+        <Ticker      />
+        <Capacidades lang={lang} />
+        <Enfoque     lang={lang} />
+        <Manifiesto  lang={lang} />
+        <Productos   lang={lang} />
+        <Proceso     lang={lang} />
+        <Stack       lang={lang} />
+        <Connect     lang={lang} />
+      </main>
+
+      <Footer lang={lang} />
+      <ScrollToTop />
+    </>
+  )
+}
+</file>
+
+<file path="src/components/ScrollExpandMedia.jsx">
+import { useEffect, useRef, useState } from 'react'
+import { motion, useScroll, useTransform } from 'motion/react'
+
+/* ── Palabras flotantes — glass blanco, cercanas al centro ───────── */
+const FLOAT_WORDS = [
+  { word: 'Diseño',         xPct: -32, yPct: -18, factor: 0.018 },
+  { word: 'Forma',          xPct:  32, yPct: -20, factor: 0.026 },
+  { word: 'Sistema',        xPct: -36, yPct:  22, factor: 0.013 },
+  { word: 'UX/UI',          xPct:  36, yPct:  20, factor: 0.022 },
+  { word: 'Branding',       xPct: -14, yPct: -34, factor: 0.015 },
+  { word: 'Automatización', xPct:  14, yPct:  36, factor: 0.020 },
+  { word: 'Motion',         xPct:  42, yPct:  -4, factor: 0.017 },
+  { word: 'Producto',       xPct: -40, yPct:   6, factor: 0.021 },
+]
+
+function FloatingWord({ item, mouseX, mouseY }) {
+  const tx = mouseX * item.factor * -1
+  const ty = mouseY * item.factor * -1
 
   return (
     <div
-      className={cn("fixed inset-0 w-full h-full z-[-1]", className)}
-      style={{ backgroundColor: bg }}
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        left:      `calc(50% + ${item.xPct}vw)`,
+        top:       `calc(50% + ${item.yPct}vh)`,
+        transform: `translate(-50%, -50%) translate(${tx}px, ${ty}px)`,
+        transition: 'transform 0.05s linear',
+        fontFamily: "'Cal Sans', 'Inter', sans-serif",
+        fontSize:   '16px',
+        fontWeight: '500',
+        color: 'rgba(245, 245, 240, 0.80)',
+        letterSpacing: '0.03em',
+        pointerEvents: 'none',
+        userSelect: 'none',
+        whiteSpace: 'nowrap',
+        background: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        borderRadius: '10px',
+        padding: '6px 14px',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+      }}
     >
-      <div className={cn("absolute inset-0 blur-3xl", radial)} />
-
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Grande izq — azul */}
-        <ElegantShape delay={0.3} width={600} height={140} rotate={12}
-          darkGradient="from-[#41EAFF]/[0.15]"
-          lightColor="rgba(77,102,255,0.55)" lightGlow="rgba(77,102,255,0.30)"
-          darkMode={darkMode} className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
-        />
-        {/* Grande der — coral */}
-        <ElegantShape delay={0.5} width={500} height={120} rotate={-15}
-          darkGradient="from-[#FF6D4D]/[0.15]"
-          lightColor="rgba(255,109,77,0.52)" lightGlow="rgba(255,109,77,0.28)"
-          darkMode={darkMode} className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
-        />
-        {/* Pequeña inf izq — cyan */}
-        <ElegantShape delay={0.4} width={300} height={80} rotate={-8}
-          darkGradient="from-[#41EAFF]/[0.15]"
-          lightColor="rgba(65,234,255,0.50)" lightGlow="rgba(65,234,255,0.26)"
-          darkMode={darkMode} className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
-        />
-        {/* Pequeña sup der — coral */}
-        <ElegantShape delay={0.6} width={200} height={60} rotate={20}
-          darkGradient="from-[#FF6D4D]/[0.15]"
-          lightColor="rgba(255,109,77,0.48)" lightGlow="rgba(255,109,77,0.24)"
-          darkMode={darkMode} className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
-        />
-        {/* Mínima — purple */}
-        <ElegantShape delay={0.7} width={150} height={40} rotate={-25}
-          darkGradient="from-[#828AFF]/[0.15]"
-          lightColor="rgba(130,138,255,0.52)" lightGlow="rgba(130,138,255,0.26)"
-          darkMode={darkMode} className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
-        />
-      </div>
-
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="hero-side-glow hero-side-glow-left" />
-        <div className="hero-side-glow hero-side-glow-right" />
-      </div>
-
-      <div className={cn("absolute inset-0 bg-gradient-to-t pointer-events-none", fadeClass)} />
+      {item.word}
     </div>
-  );
+  )
 }
+
+/* ── Componente principal ────────────────────────────────────────── */
+const ScrollExpandMedia = ({
+  mediaType   = 'video',
+  mediaSrc,
+  bgImageSrc,
+  title,
+  subtitle,
+  children,
+}) => {
+  const sectionRef = useRef(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const [mouseX, setMouseX] = useState(0)
+  const [mouseY, setMouseY] = useState(0)
+  const [bgError, setBgError] = useState(false)
+  const [mediaError, setMediaError] = useState(false)
+
+  /* ── Scroll: animation completes when section reaches center of viewport ── */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'center center'],
+  })
+
+  const progress = useTransform(scrollYProgress, [0, 1], [0, 1])
+  const wordsOpacity = useTransform(progress, [0, 0.35], [1, 0])
+  const bgOpacity = useTransform(progress, [0.5, 0.9], [1, 0.3])
+
+  /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
+  const mediaW = useTransform(progress, [0, 1], [300, isMobile ? 900 : 1500])
+  const mediaH = useTransform(progress, [0, 1], [400, isMobile ? 500 : 700])
+  const borderR = useTransform(progress, [0, 1], [32, 16])
+
+  /* ── Opacidades ───────────────────────────────────────────────── */
+  const textX = useTransform(progress, [0, 1], [0, isMobile ? -60 : -50])
+  const contentOpacity = useTransform(progress, [0.65, 0.95], [0, 1])
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  useEffect(() => {
+    const onMove = (e) => {
+      setMouseX(e.clientX - window.innerWidth  / 2)
+      setMouseY(e.clientY - window.innerHeight / 2)
+    }
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [])
+
+  const words = title ? title.split(' ') : []
+  const lastWord = words.length > 0 ? words[words.length - 1] : ''
+  const leadingWords = words.slice(0, -1).join(' ')
+
+  return (
+    <div ref={sectionRef} className="relative overflow-hidden rounded-section border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl">
+
+      {/* ── Fondo ────────────────────────────────────────────────── */}
+      <motion.div className="absolute inset-0 z-0 rounded-section overflow-hidden" style={{ opacity: bgOpacity }}>
+        {bgImageSrc && !bgError ? (
+          <img
+            src={bgImageSrc}
+            alt=""
+            role="presentation"
+            className="w-full h-full"
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            onError={() => setBgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full" style={{ background: 'linear-gradient(160deg, #00031F 0%, #050828 40%, #0D0A22 70%, #0A0614 100%)' }} />
+        )}
+        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.10)' }} />
+      </motion.div>
+
+      {/* ── Palabras flotantes ───────────────────────────────────── */}
+      <motion.div style={{ position: 'absolute', inset: 0, zIndex: 15, pointerEvents: 'none', opacity: wordsOpacity }}>
+        {FLOAT_WORDS.map((item, i) => (
+          <FloatingWord key={i} item={item} mouseX={mouseX} mouseY={mouseY} />
+        ))}
+      </motion.div>
+
+      {/* ── Header ───────────────────────────────────────────────── */}
+      <div className="relative z-10 pt-8 md:pt-10 px-6 md:px-8">
+        <div className="flex flex-col items-center text-center gap-3">
+          {subtitle && (
+            <motion.p
+              className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/40 text-black/45"
+              style={{ opacity: useTransform(progress, [0, 0.3], [1, 0]) }}
+            >
+              {subtitle}
+            </motion.p>
+          )}
+          <div className="flex items-center justify-center gap-4 flex-wrap mix-blend-normal">
+            <motion.h2
+              className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+              style={{ x: textX }}
+            >
+              {leadingWords}{leadingWords ? ' ' : ''}
+              <span className="text-grad">{lastWord}</span>
+            </motion.h2>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Media ────────────────────────────────────────────────── */}
+      <div className="relative z-10 flex items-center justify-center w-full px-4 md:px-6 py-6 md:py-8" style={{ minHeight: '45vh' }}>
+        <motion.div
+          className="overflow-hidden relative"
+          style={{
+            width: mediaW,
+            height: mediaH,
+            maxWidth: '95vw',
+            maxHeight: '80vh',
+            borderRadius: borderR,
+            boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
+          }}
+        >
+          {mediaType === 'video' ? (
+            mediaSrc?.includes('youtube.com') ? (
+              <div className="relative w-full h-full pointer-events-none">
+                <iframe
+                  title="Enfoque media"
+                  width="100%" height="100%"
+                  src={`${mediaSrc.replace('watch?v=', 'embed/')}?autoplay=1&mute=1&loop=1&controls=0`}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+                <motion.div className="absolute inset-0 bg-black/30" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.2]) }} />
+              </div>
+            ) : (
+              <div className="relative w-full h-full pointer-events-none">
+                {mediaSrc && !mediaError ? (
+                  <video
+                    src={mediaSrc}
+                    type="video/mp4"
+                    autoPlay muted loop playsInline preload="auto"
+                    className="w-full h-full object-cover"
+                    controls={false}
+                    disablePictureInPicture
+                    disableRemotePlayback
+                    onError={() => setMediaError(true)}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #050828, #0D1340, #1A0A28)' }}>
+                    <span style={{ fontFamily: "'Cal Sans', sans-serif", fontSize: '48px', color: 'rgba(255,255,255,0.08)' }}>CL</span>
+                  </div>
+                )}
+                <motion.div className="absolute inset-0 bg-black/30" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.2]) }} />
+              </div>
+            )
+          ) : (
+            <div className="relative w-full h-full">
+              {mediaSrc && !mediaError ? (
+                <img src={mediaSrc} alt={title || ''} loading="lazy" className="w-full h-full object-cover" onError={() => setMediaError(true)} />
+              ) : (
+                <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, #050828, #0D1340)' }} />
+              )}
+              <motion.div className="absolute inset-0 bg-black/50" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.4]) }} />
+            </div>
+          )}
+
+          {/* ── Fade inferior del video → se difumina con el fondo ── */}
+          <motion.div
+            className="pointer-events-none absolute bottom-0 left-0 right-0"
+            style={{
+              height: '140px',
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,3,31,0.15) 30%, rgba(0,3,31,0.35) 70%, rgba(0,3,31,0.55) 100%)',
+              borderBottomLeftRadius: borderR,
+              borderBottomRightRadius: borderR,
+            }}
+          />
+        </motion.div>
+      </div>
+
+      {/* ── Contenido revelado ───────────────────────────────────── */}
+      <motion.div
+        className="relative z-10 px-6 md:px-8 pb-8 md:pb-10"
+        style={{ opacity: contentOpacity }}
+      >
+        {children}
+      </motion.div>
+    </div>
+  )
+}
+
+export default ScrollExpandMedia
 </file>
 
 <file path="src/sections/Hero.jsx">
 import { useState, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { ArrowDown } from 'lucide-react'
 import HeroGrid from '../components/HeroGrid'
 
@@ -5884,71 +5630,6 @@ export default function Hero({ lang }) {
 }
 </file>
 
-<file path="src/App.jsx">
-import { useState, useEffect } from 'react'
-import { useLenis }   from './hooks/useLenis'
-import { useCursor }  from './hooks/useCursor'
-
-import ScrollToTop          from './components/ScrollToTop'
-import Navbar               from './components/Navbar'
-import GeometricBackground  from './components/ui/geometric'
-
-import Hero        from './sections/Hero'
-import Ticker      from './sections/Ticker'
-import Capacidades from './sections/Capacidades'
-import Enfoque     from './sections/Enfoque'
-import Manifiesto  from './sections/Manifiesto'
-import Productos   from './sections/Productos'
-import Proceso     from './sections/Proceso'
-import Stack       from './sections/Stack'
-import Connect     from './sections/Connect'
-import Footer      from './sections/Footer'
-
-export default function App() {
-  const [lang, setLang] = useState('es')
-  const [dark, setDark] = useState(true)
-
-  useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.remove('light')
-    } else {
-      document.documentElement.classList.add('light')
-    }
-  }, [dark])
-
-  useLenis()
-  useCursor()
-
-  return (
-    <>
-      <GeometricBackground darkMode={dark} />
-
-      <div id="pb" aria-hidden="true" />
-      <div className="cur-dot"  style={{ opacity: 0 }} aria-hidden="true" />
-      <div className="cur-ring" style={{ opacity: 0 }} aria-hidden="true" />
-      <div className="film-grain-overlay" aria-hidden="true" />
-
-      <Navbar lang={lang} setLang={setLang} dark={dark} setDark={setDark} />
-
-      <main className="relative z-10">
-        <Hero        lang={lang} />
-        <Ticker      />
-        <Capacidades lang={lang} />
-        <Enfoque     lang={lang} />
-        <Manifiesto  lang={lang} />
-        <Productos   lang={lang} />
-        <Proceso     lang={lang} />
-        <Stack       lang={lang} />
-        <Connect     lang={lang} />
-      </main>
-
-      <Footer lang={lang} />
-      <ScrollToTop />
-    </>
-  )
-}
-</file>
-
 <file path="src/sections/Productos.jsx">
 /**
  * Productos.jsx — "Recursos del lab" carousel
@@ -5962,7 +5643,7 @@ export default function App() {
  * - 4ª tarjeta asoma ~20% al fondo (gap right en el wrapper)
  * - Dots clicables sincronizados con el índice activo
  */
-import { motion, useMotionValue, animate } from 'framer-motion'
+import { motion, useMotionValue, animate } from 'motion/react'
 import { ExternalLink, ShoppingBag, Zap, Layers, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef, useState, useCallback, useEffect } from 'react'
 
@@ -6273,7 +5954,7 @@ export default function Productos({ lang }) {
 
 <file path="src/components/Navbar.jsx">
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'motion/react'
 import { Menu, X, Sun, Moon } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -6421,7 +6102,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
 
 <file path="src/sections/Manifiesto.jsx">
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, useInView } from 'framer-motion'
+import { motion, useScroll, useTransform, useInView } from 'motion/react'
 
 const principles = [
   { num: '01', color: '#4D66FF',
@@ -6605,261 +6286,8 @@ export default function Manifiesto({ lang }) {
 }
 </file>
 
-<file path="src/sections/Enfoque.jsx">
-/**
- * Enfoque.jsx — Sección de enfoque rediseñada con ScrollExpandMedia
- *
- * Narrativa en 3 momentos:
- * ─────────────────────────────────────────────────────────────────
- * [1] LLEGADA — Imagen de fondo (imagen_dinamico.jpeg) + título poético
- *     centrado + 8 palabras flotantes con parallax al mouse.
- *     El usuario siente curiosidad antes de leer.
- *
- * [2] SCROLL — El video (video_dinamico.mp4) se expande dramáticamente
- *     mientras el título se abre hacia los lados y las palabras
- *     flotantes se disuelven. El gesto comunica apertura y profundidad.
- *
- * [3] REVELADO — Una vez expandido, aparece el párrafo original del lab
- *     con animación palabra por palabra en Cal Sans, seguido de los
- *     tags de disciplina y un CTA suave.
- *
- * Assets que debes colocar en /public/assets/images/:
- * ────────────────────────────────────────────────────
- *   imagen_dinamico.jpeg  → fondo panorámico (ver MEDIA_GUIDE abajo)
- *   video_dinamico.mp4    → video central 16:9, sujeto en 40% central
- *
- * MEDIA_GUIDE (especificaciones de los assets):
- *   Background (bgImageSrc):
- *     - Formato: JPEG, mínimo 1920×1080 px
- *     - Contenido: flat lay de herramientas de diseño / workspace
- *       cenital con fondo oscuro. Tonos: navy + coral + neutros cálidos.
- *     - Términos de búsqueda: "dark flatlay design tools overhead"
- *       "creative workspace top view dark background" (Pexels/Unsplash)
- *
- *   Video (mediaSrc):
- *     - Formato: MP4 (H.264) + WebM (VP9)  |  Res: 1920×1080 mínimo
- *     - Loop: 6-12 s sin corte visible
- *     - Sujeto: centrado en el 40% horizontal del frame (survives 3:4 crop)
- *     - Contenido ideal: manos en torno de alfarería, tinta en agua,
- *       arcilla siendo trabajada, linocut artesanal, resin art
- *     - Términos de búsqueda: "pottery wheel hands close up dark"
- *       "clay throwing slow motion loop" (Pexels/Mixkit/Coverr — gratis)
- *     - Comprimir con HandBrake, CRF 28, <6 MB para web
- */
-
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import ScrollExpandMedia from '../components/ScrollExpandMedia'
-
-/* ── Assets ──────────────────────────────────────────────────────────
-   Coloca tus archivos en /public/assets/images/ y actualiza estas rutas.
-   En Vite, /public/ se sirve directamente en la raíz.              */
-const BG_SRC    = '/assets/images/imagen_dinamico.jpeg'
-const VIDEO_SRC = '/assets/images/video_dinamico.mp4'
-const POSTER_SRC = '/assets/images/video_dinamico_poster.jpeg' // frame del video para precarga
-
-/* ── Tags de disciplina ──────────────────────────────────────────── */
-const TAGS_ES = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Video', 'Branding', 'Automatización', 'Sistemas visuales']
-const TAGS_EN = ['Design', 'Product & form', 'Digital experience', 'Video', 'Branding', 'Automation', 'Visual systems']
-
-/* ── Palabras clave en coral (animación de revelado) ─────────────── */
-const CORAL_ES = new Set(['núcleo', 'forma', 'pantalla', 'diseño,', 'producto,'])
-const CORAL_EN = new Set(['core', 'form', 'screen', 'design,', 'product,'])
-
-/* ── RevealedText — párrafo original animado palabra por palabra ──── */
-function RevealedText({ lang }) {
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-40px' })
-
-  /* ★ Párrafo original extraído de la sección Enfoque anterior ★
-     Preservado exactamente, solo se activa tras la expansión del video. */
-  const text = lang === 'es'
-    ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — integrando diseño, producto, automatización e inteligencia artificial en piezas digitales que funcionan y comunican.'
-    : 'We build from the core outward — from form to system, from object to screen — integrating design, product, automation and artificial intelligence into digital pieces that work and communicate.'
-
-  const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
-  const tags     = lang === 'es' ? TAGS_ES   : TAGS_EN
-  const words    = text.split(' ')
-  const t        = (es, en) => lang === 'es' ? es : en
-
-  return (
-    <div
-      className="max-w-[900px] mx-auto flex flex-col items-center gap-10"
-      aria-label={text}
-    >
-
-      {/* Divider editorial */}
-      <motion.div
-        className="flex items-center gap-4 w-full max-w-sm"
-        initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="flex-1 h-px dark:bg-white/10 bg-black/12" />
-        <span className="text-[10px] font-bold tracking-[0.14em] uppercase dark:text-white/30 text-black/40">
-          {t('El enfoque', 'The approach')}
-        </span>
-        <div className="flex-1 h-px dark:bg-white/10 bg-black/12" />
-      </motion.div>
-
-      {/* ── Párrafo animado — Cal Sans como "anotación de autor" ──
-           Cada palabra aparece individualmente con blur→clear.
-           Las palabras clave pulsan en coral.
-           Estilo: densidad alta, lectura meditada, no un bloque plano. */}
-      <p
-        ref={ref}
-        className="font-cal text-2xl sm:text-3xl md:text-4xl lg:text-[42px] leading-[1.28] tracking-[-0.3px] text-center"
-      >
-        {words.map((word, i) => {
-          const isCoral = coralSet.has(word)
-          return (
-            <motion.span
-              key={i}
-              aria-hidden="true"
-              initial={{
-                opacity: 0, y: 14,
-                filter: 'blur(5px)',
-                color: 'rgba(140, 148, 180, 0.32)',
-              }}
-              animate={inView ? {
-                opacity: 1, y: 0,
-                filter: 'blur(0px)',
-                color: isCoral ? '#FF6D4D' : 'var(--enfoque-text, #F5F5F0)',
-                ...(isCoral ? {
-                  textShadow: ['0 0 8px rgba(255,109,77,0)', '0 0 20px rgba(255,109,77,0.5)', '0 0 8px rgba(255,109,77,0)'],
-                } : {}),
-              } : { opacity: 0, y: 14, filter: 'blur(5px)', color: 'rgba(140,148,180,0.32)' }}
-              transition={{
-                delay:    i * 0.048,
-                duration: 0.55,
-                ease:     [0.16, 1, 0.3, 1],
-                textShadow: isCoral
-                  ? { duration: 2, delay: i * 0.048 + 0.4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }
-                  : undefined,
-              }}
-              style={{ display: 'inline-block', marginRight: '0.25em' }}
-            >
-              {word}
-            </motion.span>
-          )
-        })}
-      </p>
-
-      {/* ── Tags de disciplina — aparecen tras el texto ──────────── */}
-      <motion.div
-        className="flex flex-wrap justify-center gap-2.5"
-        initial="hidden"
-        animate={inView ? 'show' : 'hidden'}
-        variants={{
-          hidden: {},
-          show: {
-            transition: {
-              staggerChildren: 0.065,
-              delayChildren: words.length * 0.048 + 0.15,
-            },
-          },
-        }}
-      >
-        {tags.map((tag, i) => (
-          <motion.span
-            key={i}
-            className="inline-flex items-center glass-blue text-b-blue-lt text-[12px] font-semibold px-4 py-2 rounded-full border border-b-blue/18"
-            variants={{
-              hidden: { opacity: 0, scale: 0.84, rotate: -4 },
-              show:   {
-                opacity: 1, scale: 1, rotate: 0,
-                transition: { duration: 0.55, ease: [0.34, 1.56, 0.64, 1] },
-              },
-            }}
-          >
-            {tag}
-          </motion.span>
-        ))}
-      </motion.div>
-
-      {/* ── CTA suave — invita a seguir sin presionar ─────────────── */}
-      <motion.div
-        className="flex flex-col items-center gap-2 pb-8"
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ delay: words.length * 0.048 + 0.9, duration: 0.6 }}
-      >
-        <a
-          href="#capacidades"
-          className="group inline-flex items-center gap-3 text-[11px] font-bold tracking-[0.10em] uppercase dark:text-white/40 text-black/50 hover:dark:text-white hover:text-black transition-colors duration-250"
-        >
-          <span className="h-px w-6 dark:bg-white/25 bg-black/25 group-hover:w-10 transition-all duration-300" aria-hidden="true" />
-          {t('Descubrir capacidades', 'Discover capabilities')}
-          <span className="h-px w-6 dark:bg-white/25 bg-black/25 group-hover:w-10 transition-all duration-300" aria-hidden="true" />
-        </a>
-      </motion.div>
-
-    </div>
-  )
-}
-
-/* ── Componente principal ─────────────────────────────────────────── */
-export default function Enfoque({ lang }) {
-  const t = (es, en) => lang === 'es' ? es : en
-
-  return (
-    /*
-     * z-index: 20 — sobre el fondo (z-0) y film-grain (z-2),
-     * por debajo del navbar fijo (z-50).
-     *
-     * Los gradientes superior e inferior crean una transición fluida
-     * con las secciones adyacentes sin bordes bruscos.
-     */
-    <section
-      id="enfoque"
-      className="relative overflow-hidden"
-      style={{ zIndex: 20 }}
-      aria-label={t('Nuestro enfoque', 'Our approach')}
-    >
-      {/* Gradiente superior — funde con el fondo oscuro del Hero */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0,
-          height: '120px',
-          background: 'linear-gradient(to bottom, #00031F 0%, transparent 100%)',
-          zIndex: 30,
-          pointerEvents: 'none',
-        }}
-      />
-
-      <ScrollExpandMedia
-        mediaType="video"
-        mediaSrc={VIDEO_SRC}
-        posterSrc={POSTER_SRC}
-        bgImageSrc={BG_SRC}
-        title={t('Del objeto a la pantalla.', 'From object to screen.')}
-        date={t('Desde el núcleo', 'From the core')}
-        scrollToExpand={t('Desplázate para descubrir ↓', 'Scroll to discover ↓')}
-        textBlend={false}
-      >
-        <RevealedText lang={lang} />
-      </ScrollExpandMedia>
-
-      {/* Gradiente inferior — funde con la siguiente sección */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: 0, left: 0, right: 0,
-          height: '100px',
-          background: 'linear-gradient(to top, #00031F 0%, transparent 100%)',
-          zIndex: 30,
-          pointerEvents: 'none',
-        }}
-      />
-    </section>
-  )
-}
-</file>
-
 <file path="src/sections/Footer.jsx">
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 const navLinks = [
   { href: '#enfoque',     es: 'Enfoque',     en: 'Focus'      },
@@ -6973,6 +6401,145 @@ export default function Footer({ lang }) {
       </div>
     </div>
     </footer>
+  )
+}
+</file>
+
+<file path="src/sections/Enfoque.jsx">
+import { useRef } from 'react'
+import { motion, useInView } from 'motion/react'
+import ScrollExpandMedia from '../components/ScrollExpandMedia'
+
+/* ── Assets ────────────────────────────────────────────────────────── */
+const BG_SRC    = '/assets/images/imagen_dinamico.webp'
+const VIDEO_SRC = '/assets/images/video_dinamico.mp4'
+
+/* ── Tags ────────────────────────────────────────────────────────── */
+const TAGS_ES = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Video', 'Branding', 'Automatización', 'Sistemas visuales']
+const TAGS_EN = ['Design', 'Product & form', 'Digital experience', 'Video', 'Branding', 'Automation', 'Visual systems']
+
+const CORAL_ES = new Set(['núcleo', 'forma', 'pantalla', 'diseño,', 'producto,'])
+const CORAL_EN = new Set(['core', 'form', 'screen', 'design,', 'product,'])
+
+/* ── RevealedText ────────────────────────────────────────────────── */
+function RevealedText({ lang }) {
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+
+  const text = lang === 'es'
+    ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — integrando diseño, producto, automatización e inteligencia artificial en piezas digitales que funcionan y comunican.'
+    : 'We build from the core outward — from form to system, from object to screen — integrating design, product, automation and artificial intelligence into digital pieces that work and communicate.'
+
+  const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
+  const tags     = lang === 'es' ? TAGS_ES   : TAGS_EN
+  const words    = text.split(' ')
+  const t        = (es, en) => lang === 'es' ? es : en
+
+  return (
+    <div className="flex flex-col items-center gap-8">
+
+      {/* Divider */}
+      <motion.div
+        className="flex items-center gap-4 w-full max-w-sm"
+        initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="flex-1 h-px dark:bg-white/10 bg-black/12" />
+        <span className="text-[10px] font-bold tracking-[0.14em] uppercase dark:text-white/30 text-black/40">
+          {t('El enfoque', 'The approach')}
+        </span>
+        <div className="flex-1 h-px dark:bg-white/10 bg-black/12" />
+      </motion.div>
+
+      {/* Párrafo — tipografía más pequeña */}
+      <p
+        ref={ref}
+        className="font-cal text-lg sm:text-xl md:text-2xl leading-[1.35] tracking-[-0.2px] text-center max-w-[720px] dark:text-white/80 text-black/60"
+      >
+        {words.map((word, i) => {
+          const isCoral = coralSet.has(word)
+          return (
+            <motion.span
+              key={i}
+              aria-hidden="true"
+              initial={{ opacity: 0, y: 10, filter: 'blur(4px)', color: 'rgba(140,148,180,0.30)' }}
+              animate={inView ? {
+                opacity: 1, y: 0, filter: 'blur(0px)',
+                color: isCoral ? '#FF6D4D' : 'var(--enfoque-text, #F5F5F0)',
+                ...(isCoral ? { textShadow: ['0 0 8px rgba(255,109,77,0)', '0 0 20px rgba(255,109,77,0.5)', '0 0 8px rgba(255,109,77,0)'] } : {}),
+              } : { opacity: 0, y: 10, filter: 'blur(4px)', color: 'rgba(140,148,180,0.30)' }}
+              transition={{
+                delay: i * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1],
+                textShadow: isCoral ? { duration: 2, delay: i * 0.04 + 0.4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } : undefined,
+              }}
+              style={{ display: 'inline-block', marginRight: '0.22em' }}
+            >
+              {word}
+            </motion.span>
+          )
+        })}
+      </p>
+
+      {/* Tags */}
+      <motion.div
+        className="flex flex-wrap justify-center gap-2.5"
+        initial="hidden" animate={inView ? 'show' : 'hidden'}
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.055, delayChildren: words.length * 0.04 + 0.12 } } }}
+      >
+        {tags.map((tag, i) => (
+          <motion.span
+            key={i}
+            className="inline-flex items-center glass-blue text-b-blue-lt text-[11px] font-semibold px-3.5 py-1.5 rounded-full border border-b-blue/18"
+            variants={{ hidden: { opacity: 0, scale: 0.84, rotate: -4 }, show: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } } }}
+          >
+            {tag}
+          </motion.span>
+        ))}
+      </motion.div>
+
+      {/* CTA */}
+      <motion.div
+        className="flex items-center gap-2"
+        initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
+        transition={{ delay: words.length * 0.04 + 0.7, duration: 0.6 }}
+      >
+        <a
+          href="#capacidades"
+          className="group inline-flex items-center gap-3 text-[10px] font-bold tracking-[0.10em] uppercase dark:text-white/40 text-black/50 hover:dark:text-white hover:text-black transition-colors duration-250"
+        >
+          <span className="h-px w-6 dark:bg-white/25 bg-black/25 group-hover:w-10 transition-all duration-300" aria-hidden="true" />
+          {t('Descubrir capacidades', 'Discover capabilities')}
+          <span className="h-px w-6 dark:bg-white/25 bg-black/25 group-hover:w-10 transition-all duration-300" aria-hidden="true" />
+        </a>
+      </motion.div>
+
+    </div>
+  )
+}
+
+/* ── Componente principal ─────────────────────────────────────────── */
+export default function Enfoque({ lang }) {
+  const t = (es, en) => lang === 'es' ? es : en
+
+  return (
+    <section
+      id="enfoque"
+      className="relative py-12 md:py-16 px-4 overflow-hidden bg-transparent"
+      aria-label={t('Nuestro enfoque', 'Our approach')}
+    >
+      <div className="max-w-[1400px] mx-auto">
+        <ScrollExpandMedia
+          mediaType="video"
+          mediaSrc={VIDEO_SRC}
+          bgImageSrc={BG_SRC}
+          title={t('Del objeto a la pantalla.', 'From object to screen.')}
+          subtitle={t('Diseño, sistemas y criterio', 'From the core')}
+          textBlend={false}
+        >
+          <RevealedText lang={lang} />
+        </ScrollExpandMedia>
+      </div>
+    </section>
   )
 }
 </file>
@@ -7644,14 +7211,39 @@ export default function Footer({ lang }) {
      will-change: background-position !important;
    }
    
-   /* ── Secciones — fondo semitransparente base ───────────────── */
-   html.light #enfoque,
-   html.light #productos,
-   html.light #contenido,
-   html.light #stack,
-   html.light #connect {
-     background: rgba(238, 241, 255, 0.35);
-   }
+    /* ── Secciones — fondo semitransparente base ───────────────── */
+    html.light #enfoque,
+    html.light #productos,
+    html.light #contenido,
+    html.light #stack,
+    html.light #connect {
+      background: rgba(238, 241, 255, 0.35);
+    }
+
+    /* ── Enfoque card — macrotarjeta en light mode ──────────────── */
+    html.light #enfoque [class*="rounded-section"] {
+      background: rgba(3, 6, 40, 0.88) !important;
+      border-color: rgba(77, 102, 255, 0.15) !important;
+    }
+    html.light #enfoque .dark\:text-white\/40 {
+      color: rgba(245, 245, 240, 0.45) !important;
+    }
+    html.light #enfoque .dark\:text-white\/30 {
+      color: rgba(245, 245, 240, 0.35) !important;
+    }
+    html.light #enfoque .dark\:text-white\/80 {
+      color: rgba(245, 245, 240, 0.85) !important;
+    }
+    html.light #enfoque .dark\:bg-white\/10 {
+      background: rgba(245, 245, 240, 0.12) !important;
+    }
+    html.light #enfoque .text-b-dark {
+      color: #F5F5F0 !important;
+    }
+    html.light #enfoque .glass-blue {
+      background: rgba(77, 102, 255, 0.15) !important;
+      border-color: rgba(77, 102, 255, 0.25) !important;
+    }
    
    /* ── Secciones con tinte azul de marca (principios + proceso) ─
       Crea el ritmo de "sección azulada / sección neutra"
