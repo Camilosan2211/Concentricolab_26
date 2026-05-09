@@ -51,7 +51,75 @@ export default function Proceso({ lang }) {
         </div>
 
         {/* Steps as individual cards */}
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div ref={ref} className="relative">
+
+          {/* ── Desktop: conector horizontal ────────────────────── */}
+          <div className="hidden md:block absolute inset-x-0 pointer-events-none" style={{ top: '88px', height: '2px', zIndex: 0 }} aria-hidden>
+            <motion.div
+              className="absolute inset-0 rounded-full origin-left"
+              style={{ background: 'linear-gradient(90deg, #4D66FF, #FF6D4D, #828AFF)' }}
+              initial={{ scaleX: 0 }}
+              animate={inView ? { scaleX: 1 } : {}}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            />
+            {/* Shimmer */}
+            <motion.div
+              className="absolute inset-0 rounded-full overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 1.8, duration: 0.3 }}
+            >
+              <motion.div
+                className="absolute top-0 h-full w-[20%] rounded-full"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent)' }}
+                animate={inView ? { x: ['-100%', '500%'] } : {}}
+                transition={{ duration: 2.6, repeat: Infinity, ease: 'linear', repeatDelay: 1.0, delay: 1.8 }}
+              />
+            </motion.div>
+            {/* Nodos */}
+            {[16.67, 50, 83.33].map((pct, i) => (
+              <motion.div
+                key={i}
+                className="absolute top-1/2 w-2.5 h-2.5 rounded-full"
+                style={{
+                  left: `${pct}%`,
+                  transform: 'translate(-50%, -50%)',
+                  background: steps[i].color,
+                  boxShadow: `0 0 8px ${steps[i].color}`,
+                }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={inView ? { scale: 1, opacity: 1 } : {}}
+                transition={{ delay: 0.4 + i * 0.35, type: 'spring', stiffness: 200 }}
+              />
+            ))}
+          </div>
+
+          {/* ── Mobile: conector vertical ────────────────────────── */}
+          <div className="md:hidden absolute inset-y-0 pointer-events-none" style={{ left: '50%', width: '2px', transform: 'translateX(-50%)', zIndex: 0 }} aria-hidden>
+            <motion.div
+              className="absolute inset-0 rounded-full origin-top"
+              style={{ background: 'linear-gradient(180deg, #4D66FF, #FF6D4D, #828AFF)' }}
+              initial={{ scaleY: 0 }}
+              animate={inView ? { scaleY: 1 } : {}}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+            />
+            <motion.div
+              className="absolute inset-0 rounded-full overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 1.8, duration: 0.3 }}
+            >
+              <motion.div
+                className="absolute left-0 w-full h-[20%] rounded-full"
+                style={{ background: 'linear-gradient(180deg, transparent, rgba(255,255,255,.4), transparent)' }}
+                animate={inView ? { y: ['-100%', '500%'] } : {}}
+                transition={{ duration: 2.6, repeat: Infinity, ease: 'linear', repeatDelay: 1.0, delay: 1.8 }}
+              />
+            </motion.div>
+          </div>
+
+          {/* ── Grid de tarjetas ─────────────────────────────────── */}
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-4 z-10">
           {steps.map((step, i) => {
             const Icon = step.Icon
             const c    = lang === 'es' ? step.es : step.en
@@ -117,6 +185,7 @@ export default function Proceso({ lang }) {
               </motion.div>
             )
           })}
+          </div>
         </div>
       </div>
     </section>
