@@ -37,7 +37,7 @@ function useMediaQuery(query) {
 }
 
 /* ── Tarjeta de etapa ──────────────────────────────────────────── */
-function StepCard({ step, lang, isFocused, onClick }) {
+function StepCard({ step, lang, isFocused, onClick, compact }) {
   const Icon = step.Icon
   const c    = lang === 'es' ? step.es : step.en
 
@@ -52,18 +52,19 @@ function StepCard({ step, lang, isFocused, onClick }) {
         style={{ background: `radial-gradient(circle, ${step.color}40 0%, transparent 70%)`, filter: 'blur(24px)' }} aria-hidden="true"
       />
 
-      <div className="relative z-10 py-6 md:py-7 px-6 md:px-7 flex flex-col items-center text-center gap-4">
-        <span className="font-cal text-[10px] font-bold tracking-[.12em] uppercase transition-opacity duration-500" style={{ color: step.color, opacity: isFocused ? 0.7 : 0.35 }}>
+      <div className={`relative z-10 flex flex-col items-center text-center gap-3 ${compact ? 'p-4 md:p-5' : 'py-5 md:py-7 px-5 md:px-8'}`}>
+        <span className="font-cal text-[10px] font-bold tracking-[.12em] uppercase transition-opacity duration-500" style={{ color: step.color, opacity: isFocused ? 0.7 : 0.3 }}>
           {isFocused ? (lang === 'es' ? 'En foco' : 'In focus') : (lang === 'es' ? 'En órbita' : 'In orbit')}
         </span>
 
-        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center transition-all duration-500" style={{ background: `${step.color}18`, border: `1px solid ${step.color}30`, boxShadow: isFocused ? `0 0 24px ${step.color}33` : 'none' }}>
-          <Icon size={20} style={{ color: step.color }} strokeWidth={1.75} />
+        <div className={`rounded-xl flex items-center justify-center transition-all duration-500 ${compact ? 'w-10 h-10 md:w-11 md:h-11' : 'w-12 h-12 md:w-14 md:h-14'}`}
+          style={{ background: `${step.color}18`, border: `1px solid ${step.color}30`, boxShadow: isFocused ? `0 0 24px ${step.color}33` : 'none' }}>
+          <Icon size={compact ? 16 : 20} style={{ color: step.color }} strokeWidth={1.75} />
         </div>
 
         <div className="flex flex-col gap-1.5 max-w-[240px]">
-          <h3 className="font-cal text-lg md:text-xl dark:text-white text-b-dark">{c.title}</h3>
-          <p className="dark:text-white/50 text-black/50 text-xs md:text-sm leading-[1.6]">{c.desc}</p>
+          <h3 className={`font-cal dark:text-white text-b-dark ${compact ? 'text-base md:text-lg' : 'text-lg md:text-xl'}`}>{c.title}</h3>
+          <p className={`dark:text-white/50 text-black/50 leading-[1.6] ${compact ? 'text-[11px] md:text-xs' : 'text-xs md:text-sm'}`}>{c.desc}</p>
         </div>
       </div>
 
@@ -72,7 +73,7 @@ function StepCard({ step, lang, isFocused, onClick }) {
   )
 }
 
-/* ── SVG de órbita — glow trail + partículas + spark ──────────── */
+/* ── SVG de órbita — glow trail elíptico + partículas + spark ─── */
 function OrbitSVG({ inView, isMobile, frontArc, backArc, sparkPath, particles }) {
   const gradId = 'orbitGrad'
   const viewBox = isMobile ? '0 0 400 500' : '0 0 1200 520'
@@ -89,44 +90,51 @@ function OrbitSVG({ inView, isMobile, frontArc, backArc, sparkPath, particles })
           <stop offset="100%" stopColor="#828AFF" />
         </linearGradient>
         <radialGradient id="centerGlow">
-          <stop offset="0%" stopColor="#4D66FF" stopOpacity="0.12" />
-          <stop offset="50%" stopColor="#FF6D4D" stopOpacity="0.06" />
+          <stop offset="0%" stopColor="#4D66FF" stopOpacity="0.1" />
+          <stop offset="50%" stopColor="#FF6D4D" stopOpacity="0.05" />
           <stop offset="100%" stopColor="#828AFF" stopOpacity="0" />
         </radialGradient>
-        <filter id="trailBlur" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="10" />
+        <filter id="glowBlurLg" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="14" />
+        </filter>
+        <filter id="glowBlurMd" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="8" />
         </filter>
       </defs>
 
       {/* Center hub glow */}
       <motion.circle
         cx={isMobile ? 200 : 600}
-        cy={isMobile ? 250 : 260}
-        r={isMobile ? 60 : 100}
+        cy={isMobile ? 250 : 225}
+        r={isMobile ? 60 : 90}
         fill="url(#centerGlow)"
         initial={{ opacity: 0, scale: 0.6 }}
-        animate={inView ? { opacity: [0, 0.7, 0], scale: [0.6, 1.3, 0.6] } : {}}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+        animate={inView ? { opacity: [0, 0.6, 0], scale: [0.6, 1.4, 0.6] } : {}}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
       />
 
-      {/* Back arc — thinner, dimmer (further in perspective) */}
+      {/* Back arc — tenue, lejano */}
       <path d={backArc}
+        stroke={`url(#${gradId})`} strokeWidth="16" fill="none"
+        opacity="0.025" filter="url(#glowBlurLg)" strokeLinecap="round"
+      />
+      <path d={backArc}
+        stroke={`url(#${gradId})`} strokeWidth="5" fill="none"
+        opacity="0.035" filter="url(#glowBlurMd)" strokeLinecap="round"
+      />
+
+      {/* Front arc — más presente, cercano */}
+      <path d={frontArc}
+        stroke={`url(#${gradId})`} strokeWidth="36" fill="none"
+        opacity="0.045" filter="url(#glowBlurLg)" strokeLinecap="round"
+      />
+      <path d={frontArc}
         stroke={`url(#${gradId})`} strokeWidth="14" fill="none"
-        opacity="0.04" filter="url(#trailBlur)" strokeLinecap="round"
-      />
-      <path d={backArc}
-        stroke={`url(#${gradId})`} strokeWidth="4" fill="none"
-        opacity="0.05" filter="url(#trailBlur)" strokeLinecap="round"
-      />
-
-      {/* Front arc — thicker, brighter (closer in perspective) */}
-      <path d={frontArc}
-        stroke={`url(#${gradId})`} strokeWidth="28" fill="none"
-        opacity="0.07" filter="url(#trailBlur)" strokeLinecap="round"
+        opacity="0.06" filter="url(#glowBlurMd)" strokeLinecap="round"
       />
       <path d={frontArc}
-        stroke={`url(#${gradId})`} strokeWidth="10" fill="none"
-        opacity="0.08" filter="url(#trailBlur)" strokeLinecap="round"
+        stroke={`url(#${gradId})`} strokeWidth="3" fill="none"
+        opacity="0.06" filter="url(#glowBlurMd)" strokeLinecap="round"
       />
 
       {/* Floating particles */}
@@ -137,9 +145,10 @@ function OrbitSVG({ inView, isMobile, frontArc, backArc, sparkPath, particles })
           fill={p.color}
           initial={{ opacity: 0, scale: 0 }}
           animate={{
-            opacity: [0.15, 0.65, 0.15],
-            scale: [0.6, 1.15, 0.6],
+            opacity: [0.08, 0.5, 0.08],
+            scale: [0.5, 1.2, 0.5],
             cy: [p.y, p.y - p.floatY, p.y],
+            cx: [p.x, p.x + p.floatX, p.x],
           }}
           transition={{
             duration: p.dur,
@@ -150,14 +159,14 @@ function OrbitSVG({ inView, isMobile, frontArc, backArc, sparkPath, particles })
         />
       ))}
 
-      {/* Hex spark — full orbital loop */}
+      {/* Hex spark */}
       {inView && (
         <g>
-          <polygon points="0,-5 4.33,-2.5 4.33,2.5 0,5 -4.33,2.5 -4.33,-2.5" fill="#4D66FF">
-            <animateMotion dur={isMobile ? '7s' : '6s'} repeatCount="indefinite" path={sparkPath} />
+          <polygon points="0,-4.5 3.9,-2.25 3.9,2.25 0,4.5 -3.9,2.25 -3.9,-2.25" fill="#4D66FF">
+            <animateMotion dur={isMobile ? '8s' : '7s'} repeatCount="indefinite" path={sparkPath} />
           </polygon>
-          <polygon points="0,-3 2.6,-1.5 2.6,1.5 0,3 -2.6,1.5 -2.6,-1.5" fill="#FF6D4D" opacity="0.6">
-            <animateMotion dur={isMobile ? '7s' : '6s'} repeatCount="indefinite" path={sparkPath} begin={isMobile ? '-1.2s' : '-1s'} />
+          <polygon points="0,-2.5 2.16,-1.25 2.16,1.25 0,2.5 -2.16,1.25 -2.16,-1.25" fill="#FF6D4D" opacity="0.5">
+            <animateMotion dur={isMobile ? '8s' : '7s'} repeatCount="indefinite" path={sparkPath} begin={isMobile ? '-1.5s' : '-1.2s'} />
           </polygon>
         </g>
       )}
@@ -169,39 +178,44 @@ function OrbitSVG({ inView, isMobile, frontArc, backArc, sparkPath, particles })
 function useOrbitPositions(isMobile) {
   if (isMobile) {
     return [
-      { left: '50%', top: '54%', scale: 1.12, opacity: 1,   blur: 0,  z: 30, rotateX: 0  },
-      { left: '30%', top: '12%', scale: 0.7,  opacity: 0.25, blur: 3,  z: 10, rotateX: 4  },
-      { left: '70%', top: '88%', scale: 0.7,  opacity: 0.25, blur: 3,  z: 10, rotateX: -4 },
+      { left: '50%', top: '56%', scale: 1.1,    opacity: 1,   blur: 0,  z: 30, rotateX: 0,  width: '84%' },
+      { left: '28%', top: '22%', scale: 0.68,   opacity: 0.22, blur: 3,  z: 10, rotateX: 5,  width: '66%' },
+      { left: '72%', top: '84%', scale: 0.68,   opacity: 0.22, blur: 3,  z: 10, rotateX: -5, width: '66%' },
     ]
   }
   return [
-    { left: '50%', top: '70%', scale: 1.18,   opacity: 1,   blur: 0,  z: 30, rotateX: 0  },
-    { left: '17%', top: '24%', scale: 0.76,   opacity: 0.3,  blur: 3,  z: 10, rotateX: 6  },
-    { left: '83%', top: '24%', scale: 0.76,   opacity: 0.3,  blur: 3,  z: 10, rotateX: 6  },
+    { left: '50%', top: '55%', scale: 1.15,     opacity: 1,   blur: 0,  z: 30, rotateX: 0,  width: '360px' },
+    { left: '22%', top: '28%', scale: 0.76,     opacity: 0.28, blur: 3,  z: 10, rotateX: 6,  width: '260px' },
+    { left: '78%', top: '28%', scale: 0.76,     opacity: 0.28, blur: 3,  z: 10, rotateX: 6,  width: '260px' },
   ]
 }
 
-/* ── Partículas flotantes ─────────────────────────────────────── */
+/* ── Partículas ───────────────────────────────────────────────── */
 const desktopParticles = [
-  { x: 380, y: 330, r: 2.5, color: '#4D66FF', dur: 4,   floatY: 6, delay: 0   },
-  { x: 600, y: 420, r: 3.2, color: '#FF6D4D', dur: 3.5, floatY: 8, delay: 0.3 },
-  { x: 820, y: 330, r: 2.2, color: '#828AFF', dur: 4.5, floatY: 5, delay: 0.7 },
-  { x: 340, y: 130, r: 1.8, color: '#41EAFF', dur: 5,   floatY: 4, delay: 1   },
-  { x: 600, y: 70,  r: 2,   color: '#4D66FF', dur: 3.8, floatY: 5, delay: 0.5 },
-  { x: 860, y: 130, r: 1.8, color: '#FF6D4D', dur: 4.2, floatY: 4, delay: 1.2 },
-  { x: 480, y: 200, r: 2.5, color: '#828AFF', dur: 3.6, floatY: 7, delay: 0.9 },
-  { x: 720, y: 200, r: 2,   color: '#41EAFF', dur: 5.5, floatY: 5, delay: 1.5 },
-  { x: 200, y: 260, r: 1.5, color: '#4D66FF', dur: 4.8, floatY: 4, delay: 1.8 },
-  { x: 1000, y: 260, r: 1.5, color: '#FF6D4D', dur: 4.2, floatY: 4, delay: 0.2 },
+  { x: 580,  y: 380, r: 3,   color: '#4D66FF', dur: 4.5, floatY: 7,  floatX: 3,  delay: 0   },
+  { x: 800,  y: 310, r: 2.5, color: '#FF6D4D', dur: 3.8, floatY: 5,  floatX: 4,  delay: 0.4 },
+  { x: 930,  y: 225, r: 2,   color: '#828AFF', dur: 5.2, floatY: 4,  floatX: -3, delay: 0.8 },
+  { x: 800,  y: 140, r: 2.2, color: '#41EAFF', dur: 4,   floatY: -5, floatX: 3,  delay: 1.2 },
+  { x: 600,  y: 90,  r: 2.8, color: '#4D66FF', dur: 4.8, floatY: 4,  floatX: -2, delay: 0.3 },
+  { x: 400,  y: 140, r: 2,   color: '#FF6D4D', dur: 3.6, floatY: -4, floatX: -3, delay: 0.9 },
+  { x: 270,  y: 225, r: 2.3, color: '#828AFF', dur: 4.3, floatY: 5,  floatX: 2,  delay: 1.5 },
+  { x: 400,  y: 310, r: 2.8, color: '#41EAFF', dur: 5,   floatY: 6,  floatX: -4, delay: 0.6 },
+  { x: 600,  y: 225, r: 1.5, color: '#4D66FF', dur: 3.5, floatY: 8,  floatX: 5,  delay: 2   },
+  { x: 730,  y: 225, r: 1.8, color: '#FF6D4D', dur: 4.2, floatY: -6, floatX: 4,  delay: 1.8 },
+  { x: 480,  y: 225, r: 1.5, color: '#828AFF', dur: 4.6, floatY: 5,  floatX: -3, delay: 0.2 },
+  { x: 150,  y: 225, r: 1.5, color: '#41EAFF', dur: 3.9, floatY: -4, floatX: 2,  delay: 1.4 },
 ]
 
 const mobileParticles = [
-  { x: 180, y: 290, r: 2.5, color: '#4D66FF', dur: 4,   floatY: 5, delay: 0   },
-  { x: 240, y: 350, r: 2,   color: '#FF6D4D', dur: 3.5, floatY: 6, delay: 0.4 },
-  { x: 140, y: 160, r: 1.8, color: '#828AFF', dur: 4.5, floatY: 4, delay: 0.8 },
-  { x: 260, y: 120, r: 1.5, color: '#41EAFF', dur: 5,   floatY: 3, delay: 1.2 },
-  { x: 200, y: 440, r: 2,   color: '#4D66FF', dur: 3.8, floatY: 5, delay: 0.5 },
-  { x: 120, y: 260, r: 1.5, color: '#FF6D4D', dur: 4.2, floatY: 4, delay: 1   },
+  { x: 200, y: 300, r: 2.5, color: '#4D66FF', dur: 4,   floatY: 5,  floatX: 3,  delay: 0   },
+  { x: 280, y: 350, r: 2,   color: '#FF6D4D', dur: 3.5, floatY: 4,  floatX: -3, delay: 0.5 },
+  { x: 320, y: 250, r: 1.8, color: '#828AFF', dur: 4.5, floatY: -3, floatX: 2,  delay: 1   },
+  { x: 280, y: 150, r: 1.5, color: '#41EAFF', dur: 5,   floatY: 3,  floatX: 2,  delay: 1.4 },
+  { x: 200, y: 100, r: 2,   color: '#4D66FF', dur: 3.8, floatY: -4, floatX: -2, delay: 0.3 },
+  { x: 120, y: 150, r: 1.8, color: '#FF6D4D', dur: 4.2, floatY: 3,  floatX: -3, delay: 0.8 },
+  { x: 80,  y: 250, r: 1.5, color: '#828AFF', dur: 4.7, floatY: -3, floatX: 2,  delay: 1.6 },
+  { x: 120, y: 350, r: 2.2, color: '#41EAFF', dur: 3.6, floatY: 4,  floatX: 2,  delay: 0.2 },
+  { x: 200, y: 210, r: 1.2, color: '#4D66FF', dur: 5.2, floatY: 6,  floatX: -4, delay: 2.2 },
 ]
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -214,23 +228,23 @@ export default function Proceso({ lang }) {
   const inView   = useInView(ref, { once: true, margin: '-80px' })
   const [focus, setFocus] = useState(0)
 
-  const positions   = useOrbitPositions(isMobile)
-  const particles   = isMobile ? mobileParticles : desktopParticles
+  const positions = useOrbitPositions(isMobile)
+  const particles = isMobile ? mobileParticles : desktopParticles
 
-  /* Arcos de la órbita ovalada en perspectiva */
-  const desktopFrontArc = 'M 220 160 Q 600 580 980 160'
-  const desktopBackArc  = 'M 980 160 Q 600 -60 220 160'
-  const desktopSpark    = 'M 220 160 Q 600 580 980 160 Q 600 -60 220 160'
+  /* Elipse en perspectiva */
+  const desktopFrontArc = 'M 230 225 A 370 160 0 0 0 970 225'
+  const desktopBackArc  = 'M 970 225 A 370 160 0 0 0 230 225'
+  const desktopSpark    = 'M 230 225 A 370 160 0 0 0 970 225 A 370 160 0 0 0 230 225'
 
-  const mobileFrontArc = 'M 150 80 Q 320 320 240 440'
-  const mobileBackArc  = 'M 240 440 Q 80 180 150 80'
-  const mobileSpark    = 'M 150 80 Q 320 320 240 440 Q 80 180 150 80'
+  const mobileFrontArc = 'M 80 250 A 120 180 0 0 0 320 250'
+  const mobileBackArc  = 'M 320 250 A 120 180 0 0 0 80 250'
+  const mobileSpark    = 'M 80 250 A 120 180 0 0 0 320 250 A 120 180 0 0 0 80 250'
 
   const frontArc  = isMobile ? mobileFrontArc : desktopFrontArc
   const backArc   = isMobile ? mobileBackArc  : desktopBackArc
   const sparkPath = isMobile ? mobileSpark    : desktopSpark
 
-  /* Rotación de foco cada 5 s */
+  /* Rotación de foco */
   useEffect(() => {
     if (!inView) return
     const id = setInterval(() => setFocus(i => (i + 1) % 3), 5000)
@@ -241,14 +255,13 @@ export default function Proceso({ lang }) {
 
   return (
     <section id="proceso" className="relative z-10 py-16 md:py-20 px-4 overflow-hidden">
-      {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full pointer-events-none opacity-30"
         style={{ background: 'radial-gradient(ellipse, rgba(77,102,255,.06) 0%, transparent 70%)', filter: 'blur(60px)' }} aria-hidden="true"
       />
 
       <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
-        {/* ── Header ────────────────────────────────────────────── */}
+        {/* Header */}
         <div className="text-center max-w-xl mx-auto flex flex-col gap-3">
           <motion.p
             className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
@@ -273,7 +286,7 @@ export default function Proceso({ lang }) {
           </motion.p>
         </div>
 
-        {/* ── Órbita ────────────────────────────────────────────── */}
+        {/* Órbita */}
         <div ref={ref} className="relative w-full h-[500px] md:h-[520px]">
           <OrbitSVG
             inView={inView}
@@ -292,11 +305,11 @@ export default function Proceso({ lang }) {
               <motion.div
                 key={i}
                 className="absolute"
-                style={{ width: isMobile ? '75%' : '300px' }}
                 animate={{
                   left: pos.left,
                   top: pos.top,
                   scale: pos.scale,
+                  width: pos.width,
                   opacity: pos.opacity,
                   filter: `blur(${pos.blur}px)`,
                   zIndex: pos.z,
@@ -307,7 +320,7 @@ export default function Proceso({ lang }) {
                 }}
                 transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               >
-                <StepCard step={step} lang={lang} isFocused={i === focus} onClick={() => setFocus(i)} />
+                <StepCard step={step} lang={lang} isFocused={i === focus} onClick={() => setFocus(i)} compact={offset !== 0} />
               </motion.div>
             )
           })}
