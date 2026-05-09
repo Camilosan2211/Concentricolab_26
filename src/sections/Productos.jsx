@@ -1,15 +1,3 @@
-/**
- * Productos.jsx — "Recursos del lab" carousel
- *
- * Arquitectura:
- * - Contenedor overflow:hidden (wrapper visible)
- * - motion.div interior con drag="x" + dragConstraints
- * - onDragEnd → snap al índice más cercano
- * - Sin scrollbar nativo (no hay overflow scroll)
- * - Flechas en el encabezado, fuera del área de tarjetas
- * - 4ª tarjeta asoma ~20% al fondo (gap right en el wrapper)
- * - Dots clicables sincronizados con el índice activo
- */
 import { motion, useMotionValue, animate } from 'motion/react'
 import { ExternalLink, ShoppingBag, Zap, Layers, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef, useState, useCallback, useEffect } from 'react'
@@ -221,98 +209,100 @@ export default function Productos({ lang }) {
 
   return (
     <section id="productos recursos" className="relative z-10 py-24 px-4 md:px-8">
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
+      <div className="section-premium">
+        <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
-        {/* Encabezado con flechas a la derecha */}
-        <div className="flex items-end justify-between gap-4">
-          <div className="flex flex-col gap-3 max-w-2xl">
-            <motion.p
-              className="text-[12px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/35"
-              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            >
-              {t('Recursos del lab', 'Lab resources')}
-            </motion.p>
-            <motion.h2
-              className="font-cal text-4xl md:text-5xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
-              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .08 }}
-            >
-              {t('Recursos y ', 'Resources & ')}
-              <span className="text-grad">{t('herramientas', 'tools')}</span>
-            </motion.h2>
+          {/* Encabezado con flechas a la derecha */}
+          <div className="flex items-end justify-between gap-4">
+            <div className="flex flex-col gap-3 max-w-2xl">
+              <motion.p
+                className="text-[12px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/35"
+                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+              >
+                {t('Recursos del lab', 'Lab resources')}
+              </motion.p>
+              <motion.h2
+                className="font-cal text-4xl md:text-5xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+                initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .08 }}
+              >
+                {t('Recursos y ', 'Resources & ')}
+                <span className="text-grad">{t('herramientas', 'tools')}</span>
+              </motion.h2>
+            </div>
+
+            {/* Flechas */}
+            <div className="flex items-center gap-2 shrink-0 pb-1">
+              <button type="button" onClick={() => handleArrow(-1)}
+                disabled={activeIndex === 0}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full glass border dark:border-white/10 border-black/10 dark:text-white/70 text-black/60 transition-all duration-200 hover:dark:text-white hover:text-black disabled:opacity-25 disabled:cursor-not-allowed"
+                aria-label={t('Anterior', 'Previous')}>
+                <ChevronLeft size={18} />
+              </button>
+              <button type="button" onClick={() => handleArrow(1)}
+                disabled={activeIndex === TOTAL - 1}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full glass border dark:border-white/10 border-black/10 dark:text-white/70 text-black/60 transition-all duration-200 hover:dark:text-white hover:text-black disabled:opacity-25 disabled:cursor-not-allowed"
+                aria-label={t('Siguiente', 'Next')}>
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
 
-          {/* Flechas */}
-          <div className="flex items-center gap-2 shrink-0 pb-1">
-            <button type="button" onClick={() => handleArrow(-1)}
-              disabled={activeIndex === 0}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full glass border dark:border-white/10 border-black/10 dark:text-white/70 text-black/60 transition-all duration-200 hover:dark:text-white hover:text-black disabled:opacity-25 disabled:cursor-not-allowed"
-              aria-label={t('Anterior', 'Previous')}>
-              <ChevronLeft size={18} />
-            </button>
-            <button type="button" onClick={() => handleArrow(1)}
-              disabled={activeIndex === TOTAL - 1}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full glass border dark:border-white/10 border-black/10 dark:text-white/70 text-black/60 transition-all duration-200 hover:dark:text-white hover:text-black disabled:opacity-25 disabled:cursor-not-allowed"
-              aria-label={t('Siguiente', 'Next')}>
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        </div>
-
-        {/* Carrusel draggable */}
-        <div
-          ref={containerRef}
-          className="relative overflow-hidden"
-          style={{ touchAction: 'pan-y' }}
-        >
-          <motion.div
-            className="flex gap-6 cursor-grab active:cursor-grabbing select-none"
-            style={{ x }}
-            drag="x"
-            dragConstraints={{ left: maxDrag, right: 0 }}
-            dragElastic={0.08}
-            dragMomentum={true}
-            onDragStart={() => setIsDragging(true)}
-            onDragEnd={handleDragEnd}
-            onDrag={(_, info) => {
-              const rawIndex = -info.point.x / STEP
-              const clamped  = Math.round(Math.max(0, Math.min(rawIndex, TOTAL - 1)))
-              if (clamped !== activeIndex) setActiveIndex(clamped)
-            }}
+          {/* Carrusel draggable */}
+          <div
+            ref={containerRef}
+            className="relative overflow-hidden"
+            style={{ touchAction: 'pan-y' }}
           >
-            {products.map((prod, i) => (
-              <ProductCard key={i} prod={prod} lang={lang} index={i} isDragging={isDragging} />
+            <motion.div
+              className="flex gap-6 cursor-grab active:cursor-grabbing select-none"
+              style={{ x }}
+              drag="x"
+              dragConstraints={{ left: maxDrag, right: 0 }}
+              dragElastic={0.08}
+              dragMomentum={true}
+              onDragStart={() => setIsDragging(true)}
+              onDragEnd={handleDragEnd}
+              onDrag={(_, info) => {
+                const rawIndex = -info.point.x / STEP
+                const clamped  = Math.round(Math.max(0, Math.min(rawIndex, TOTAL - 1)))
+                if (clamped !== activeIndex) setActiveIndex(clamped)
+              }}
+            >
+              {products.map((prod, i) => (
+                <ProductCard key={i} prod={prod} lang={lang} index={i} isDragging={isDragging} />
+              ))}
+              <YouTubeCard lang={lang} isDragging={isDragging} />
+            </motion.div>
+          </div>
+
+          {/* Dots clicables */}
+          <div className="flex justify-center items-center gap-2">
+            {Array.from({ length: TOTAL }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => snapTo(i)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === activeIndex
+                    ? 'w-7 dark:bg-white/80 bg-black/60'
+                    : 'w-2 dark:bg-white/25 bg-black/22 hover:dark:bg-white/45 hover:bg-black/40'
+                }`}
+                aria-label={`Slide ${i + 1}`}
+              />
             ))}
-            <YouTubeCard lang={lang} isDragging={isDragging} />
+          </div>
+
+          {/* CTA ver todos */}
+          <motion.div className="flex justify-center"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: .3 }}>
+            <a href="https://concentriclab.gumroad.com" target="_blank" rel="noopener noreferrer"
+              className="glass inline-flex items-center gap-2.5 dark:text-white/60 text-black/65 hover:dark:text-white hover:text-black text-sm font-semibold px-6 py-3 rounded-full border dark:border-white/8 border-black/10 hover:dark:border-white/16 hover:border-black/18 transition-all duration-300">
+              {t('Ver todos los recursos', 'View all resources')}
+              <ExternalLink size={13} />
+            </a>
           </motion.div>
+
         </div>
-
-        {/* Dots clicables */}
-        <div className="flex justify-center items-center gap-2">
-          {Array.from({ length: TOTAL }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => snapTo(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === activeIndex
-                  ? 'w-7 dark:bg-white/80 bg-black/60'
-                  : 'w-2 dark:bg-white/25 bg-black/22 hover:dark:bg-white/45 hover:bg-black/40'
-              }`}
-              aria-label={`Slide ${i + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* CTA ver todos */}
-        <motion.div className="flex justify-center"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: .3 }}>
-          <a href="https://concentriclab.gumroad.com" target="_blank" rel="noopener noreferrer"
-            className="glass inline-flex items-center gap-2.5 dark:text-white/60 text-black/65 hover:dark:text-white hover:text-black text-sm font-semibold px-6 py-3 rounded-full border dark:border-white/8 border-black/10 hover:dark:border-white/16 hover:border-black/18 transition-all duration-300">
-            {t('Ver todos los recursos', 'View all resources')}
-            <ExternalLink size={13} />
-          </a>
-        </motion.div>
-
       </div>
     </section>
   )

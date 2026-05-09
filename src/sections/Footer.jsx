@@ -23,14 +23,13 @@ export default function Footer({ lang }) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative z-10 px-4 pb-8 pt-20 mb-8 overflow-hidden bg-transparent">
+    <footer className="relative z-10 px-4 pb-8 pt-20 mb-8 overflow-hidden">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
         style={{ background: 'linear-gradient(to right,transparent,rgba(77,102,255,.22),transparent)' }}
       />
 
-      <div className="section-premium">
-        <div className="max-w-[1200px] mx-auto">
+      <div className="max-w-[1200px] mx-auto">
 
         {/* CTA grande */}
         <motion.div
@@ -110,7 +109,6 @@ export default function Footer({ lang }) {
           </p>
         </div>
       </div>
-    </div>
     </footer>
   )
 }

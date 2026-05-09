@@ -29,9 +29,8 @@ export default function Proceso({ lang }) {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="proceso" className="relative z-10 py-16 px-4">
-      <div className="section-premium">
-        <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
+    <section id="proceso" className="relative z-10 py-16 md:py-20 px-4">
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
         {/* Header */}
         <div className="text-center max-w-xl mx-auto flex flex-col gap-3">
@@ -51,132 +50,75 @@ export default function Proceso({ lang }) {
           </motion.h2>
         </div>
 
-        {/* Panel */}
-        <motion.div
-          ref={ref}
-          className="relative rounded-card px-6 py-12 md:px-14 md:py-14 overflow-hidden"
-          initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {/* Glow interior sutil */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-50"
-            style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(77,102,255,.06) 0%, transparent 70%)' }}
-          />
-
-          {/* Conector animado (desktop) */}
-          <div
-            className="hidden md:block absolute pointer-events-none"
-            style={{
-              top: 'calc(48px + 28px)',
-              left:  'calc(33.33% / 2)',
-              right: 'calc(33.33% / 2)',
-              height: '2px',
-              zIndex: 0,
-            }}
-            aria-hidden
-          >
-            {/* Línea base */}
-            <motion.div
-              className="absolute inset-0 rounded-full origin-left"
-              style={{ background: 'linear-gradient(90deg, #4D66FF, #FF6D4D, #828AFF)' }}
-              initial={{ scaleX: 0 }}
-              animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-            />
-            {/* Shimmer */}
-            <motion.div
-              className="absolute inset-0 rounded-full overflow-hidden"
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ delay: 1.8, duration: 0.3 }}
-            >
+        {/* Steps as individual cards */}
+        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {steps.map((step, i) => {
+            const Icon = step.Icon
+            const c    = lang === 'es' ? step.es : step.en
+            return (
               <motion.div
-                className="absolute top-0 h-full w-[30%] rounded-full"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent)' }}
-                animate={inView ? { x: ['-100%', '400%'] } : {}}
-                transition={{ duration: 2.6, repeat: Infinity, ease: 'linear', repeatDelay: 1.0, delay: 1.8 }}
-              />
-            </motion.div>
+                key={step.es.title}
+                className="relative rounded-card overflow-hidden group border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm"
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15 + i * 0.1, duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -5, transition: { duration: 0.22, ease: 'easeOut' } }}
+              >
+                {/* Línea accent superior */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-[2px]"
+                  style={{ background: `linear-gradient(to right, ${step.color}, transparent)` }}
+                />
 
-            {/* Puntos en los nodos */}
-            {[0, 50, 100].map((pct, i) => (
-              <motion.div
-                key={i}
-                className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
-                style={{
-                  left: `${pct}%`,
-                  transform: 'translate(-50%, -50%)',
-                  background: [steps[0].color, steps[1].color, steps[2].color][i],
-                  boxShadow: `0 0 8px ${[steps[0].color, steps[1].color, steps[2].color][i]}`,
-                }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={inView ? { scale: 1, opacity: 1 } : {}}
-                transition={{ delay: 0.4 + i * 0.35, type: 'spring', stiffness: 200 }}
-              />
-            ))}
-          </div>
+                {/* Glow de fondo */}
+                <div
+                  className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none opacity-20 group-hover:opacity-50 group-hover:scale-125 transition-all duration-500"
+                  style={{
+                    background: `radial-gradient(circle, ${step.color}40 0%, transparent 70%)`,
+                    filter: 'blur(24px)',
+                  }}
+                  aria-hidden="true"
+                />
 
-          {/* Steps grid */}
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
-            {steps.map((step, i) => {
-              const Icon = step.Icon
-              const c    = lang === 'es' ? step.es : step.en
-              return (
-                <motion.div
-                  key={step.es.title}
-                  className="flex flex-col items-center text-center gap-4"
-                  initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.15 + i * 0.14, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                >
+                {/* Contenido centrado */}
+                <div className="relative z-10 p-6 md:p-8 flex flex-col items-center text-center gap-4">
                   {/* Número de paso */}
                   <span
-                    className="font-cal text-[11px] font-bold tracking-[.12em] uppercase mb-[-6px]"
+                    className="font-cal text-[10px] font-bold tracking-[.12em] uppercase"
                     style={{ color: step.color, opacity: .6 }}
                   >
                     0{i + 1}
                   </span>
 
                   {/* Icono */}
-                  <motion.div
-                    className="w-14 h-14 rounded-card flex items-center justify-center border dark:border-white/10 border-black/8 dark:bg-b-deep/70 bg-white/80 backdrop-blur-sm"
-                    style={{ boxShadow: `0 8px 28px ${step.color}28` }}
-                    whileHover={{ scale: 1.08, transition: { duration: .2, ease: 'easeOut' } }}
-                    animate={inView ? {
-                      boxShadow: [
-                        `0 8px 28px ${step.color}28`,
-                        `0 8px 40px ${step.color}55`,
-                        `0 8px 28px ${step.color}28`,
-                      ]
-                    } : {}}
-                    transition={{ delay: 1.2 + i * .25, duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                  <div
+                    className="w-14 h-14 rounded-xl flex items-center justify-center"
+                    style={{
+                      background: `${step.color}18`,
+                      border: `1px solid ${step.color}30`,
+                    }}
                   >
                     <Icon size={24} style={{ color: step.color }} strokeWidth={1.75} />
-                  </motion.div>
+                  </div>
 
                   {/* Texto */}
                   <div className="flex flex-col gap-2 max-w-[260px]">
                     <h3 className="font-cal text-xl dark:text-white text-b-dark">{c.title}</h3>
                     <p className="dark:text-white/50 text-black/50 text-sm leading-[1.65]">{c.desc}</p>
                   </div>
+                </div>
 
-                  {/* Conector vertical mobile */}
-                  {i < steps.length - 1 && (
-                    <div
-                      className="md:hidden w-px h-8 rounded-full mt-1"
-                      style={{ background: `linear-gradient(180deg, ${step.color}55, ${steps[i + 1].color}55)` }}
-                      aria-hidden
-                    />
-                  )}
-                </motion.div>
-              )
-            })}
-          </div>
-        </motion.div>
+                {/* Línea inferior animada */}
+                <div
+                  className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
+                  style={{ background: `linear-gradient(to right, ${step.color}, transparent)` }}
+                />
+              </motion.div>
+            )
+          })}
+        </div>
       </div>
-    </div>
     </section>
   )
 }
