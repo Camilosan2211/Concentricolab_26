@@ -108,10 +108,12 @@ function StepCard({ step, lang, index, inView }) {
 function FlowPaths({ inView, isMobile }) {
   const gradId = isMobile ? 'flowGradMob' : 'flowGrad'
   const revId  = isMobile ? 'revGradMob'  : 'revGrad'
+  const cls    = isMobile ? 'absolute inset-0 w-full h-full pointer-events-none z-0 md:hidden'
+                         : 'absolute inset-0 w-full h-full pointer-events-none z-0 hidden md:block'
 
   if (isMobile) {
     return (
-      <svg className="absolute inset-0 w-full h-full pointer-events-none z-0"
+      <svg className={cls}
         viewBox="0 0 300 700" preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="700" gradientUnits="userSpaceOnUse">
@@ -150,12 +152,27 @@ function FlowPaths({ inView, isMobile }) {
           strokeDasharray="2 10"
           initial={{ strokeDashoffset: 0 }} animate={inView ? { strokeDashoffset: 24 } : {}}
           transition={{ duration: 1.2, repeat: Infinity, ease: 'linear', delay: 1.8 }} />
+
+        {/* Hexagonal spark — mobile */}
+        {inView && (
+          <g>
+            <polygon points="0,-4 3.46,-2 3.46,2 0,4 -3.46,2 -3.46,-2" fill="#4D66FF">
+              <animateMotion dur="5s" repeatCount="indefinite"
+                path="M 150 100 Q 270 200 150 310 Q 30 420 150 530 Q 270 310 150 100" />
+            </polygon>
+            <polygon points="0,-2.5 2.16,-1.25 2.16,1.25 0,2.5 -2.16,1.25 -2.16,-1.25" fill="#FF6D4D" opacity="0.6">
+              <animateMotion dur="5s" repeatCount="indefinite"
+                path="M 150 100 Q 30 310 150 530 Q 270 310 150 100"
+                begin="-0.8s" />
+            </polygon>
+          </g>
+        )}
       </svg>
     )
   }
 
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0"
+    <svg className={cls}
       viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="1000" y2="500" gradientUnits="userSpaceOnUse">
@@ -223,6 +240,21 @@ function FlowPaths({ inView, isMobile }) {
         strokeDasharray="2 12"
         initial={{ strokeDashoffset: 0 }} animate={inView ? { strokeDashoffset: 28 } : {}}
         transition={{ duration: 1.4, repeat: Infinity, ease: 'linear', delay: 1.8 }} />
+
+      {/* Hexagonal spark orbiting the main trajectory */}
+      {inView && (
+        <g>
+          <polygon points="0,-5 4.33,-2.5 4.33,2.5 0,5 -4.33,2.5 -4.33,-2.5" fill="#4D66FF">
+            <animateMotion dur="4s" repeatCount="indefinite"
+              path="M 500 80 Q 200 -60 167 280 Q 500 520 833 280 Q 800 -60 500 80" />
+          </polygon>
+          <polygon points="0,-3 2.6,-1.5 2.6,1.5 0,3 -2.6,1.5 -2.6,-1.5" fill="#FF6D4D" opacity="0.6">
+            <animateMotion dur="4s" repeatCount="indefinite"
+              path="M 500 80 Q 800 -60 833 280 Q 500 520 167 280 Q 200 -60 500 80"
+              begin="-0.5s" />
+          </polygon>
+        </g>
+      )}
     </svg>
   )
 }
