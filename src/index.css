@@ -669,7 +669,6 @@
     html.light #enfoque,
     html.light #productos,
     html.light #contenido,
-    html.light #stack,
     html.light #connect {
       background: rgba(238, 241, 255, 0.35);
     }
@@ -823,13 +822,7 @@
      color: rgba(245, 245, 240, 0.55) !important;
    }
    
-   /* ── Stack chips ────────────────────────────────────────────── */
-   html.light #stack .glass {
-     background: rgba(255, 255, 255, 0.48) !important;
-     border: 1px solid rgba(255, 255, 255, 0.68) !important;
-     backdrop-filter: blur(10px) !important;
-     -webkit-backdrop-filter: blur(10px) !important;
-   }
+
    
    /* ── Connect ────────────────────────────────────────────────── */
    html.light #connect .glass {

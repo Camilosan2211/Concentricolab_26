@@ -1,292 +1,331 @@
-import { useState, useEffect, useRef } from 'react'
-import { motion, useInView, AnimatePresence } from 'motion/react'
+import { useRef, useState, useEffect } from 'react'
+import { motion, AnimatePresence, useInView } from 'motion/react'
 import { Search, Pen, Zap } from 'lucide-react'
 
-const steps = [
+const phases = [
   {
     Icon: Search, color: '#4D66FF',
-    es: { title: 'Diagnóstico', desc: 'Analizamos tu producto o marca — su forma, contexto y cómo se percibe, en lo digital y en lo físico.' },
-    en: { title: 'Diagnosis', desc: 'We analyze your product or brand — its shape, context and how it\'s perceived, digitally and physically.' },
+    es: { leftLabel: 'Diagnóstico', title: 'Analizar',  output: 'Contexto + forma',  desc: 'Analizamos tu producto o marca — su forma, contexto y cómo se percibe, en lo digital y en lo físico.' },
+    en: { leftLabel: 'Diagnosis',  title: 'Analyze',   output: 'Context + form',    desc: 'We analyze your product or brand — its shape, context and how it\'s perceived, digitally and physically.' },
   },
   {
     Icon: Pen, color: '#FF6D4D',
-    es: { title: 'Diseño', desc: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.' },
-    en: { title: 'Design', desc: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.' },
+    es: { leftLabel: 'Diseño',     title: 'Crear',     output: 'Sistema + narrativa', desc: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.' },
+    en: { leftLabel: 'Design',     title: 'Create',    output: 'System + narrative',  desc: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.' },
   },
   {
     Icon: Zap, color: '#828AFF',
-    es: { title: 'Activación', desc: 'Piezas listas para comunicar y posicionar — para publicar, implementar o producir.' },
-    en: { title: 'Activation', desc: 'Pieces ready to communicate and position — to publish, implement or produce.' },
+    es: { leftLabel: 'Activación', title: 'Lanzar',    output: 'Producir + publicar', desc: 'Piezas listas para comunicar y posicionar — para publicar, implementar o producir.' },
+    en: { leftLabel: 'Activation', title: 'Launch',    output: 'Produce + publish',   desc: 'Pieces ready to communicate and position — to publish, implement or produce.' },
   },
 ]
 
-/* ── useMediaQuery ─────────────────────────────────────────────── */
-function useMediaQuery(q) {
-  const [m, setM] = useState(false)
-  useEffect(() => {
-    const mql = window.matchMedia(q)
-    setM(mql.matches)
-    const h = (e) => setM(e.matches)
-    mql.addEventListener('change', h)
-    return () => mql.removeEventListener('change', h)
-  }, [q])
-  return m
-}
-
-/* ── SVG línea conectora + partícula ──────────────────────────── */
-function TimelineLine({ inView, isMobile }) {
-  const [forwardDrawn, setForwardDrawn] = useState(false)
-
-  useEffect(() => {
-    if (inView) {
-      const t = setTimeout(() => setForwardDrawn(true), 900)
-      return () => clearTimeout(t)
-    }
-  }, [inView])
-
-  if (isMobile) {
-    return (
-      <svg className="absolute left-[18px] top-0 h-full w-[40px] pointer-events-none z-0"
-        viewBox="0 0 40 300" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id="lineGradMob" x1="0" y1="0" x2="0" y2="300" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#4D66FF" />
-            <stop offset="50%" stopColor="#FF6D4D" />
-            <stop offset="100%" stopColor="#828AFF" />
-          </linearGradient>
-        </defs>
-        <motion.path d="M 20 30 L 20 150 L 20 270"
-          stroke="rgba(255,255,255,0.08)" strokeWidth="2" fill="none" strokeLinecap="round"
-          initial={{ pathLength: 0 }} animate={inView ? { pathLength: 1 } : {}}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-        />
-        <path d="M 20 30 L 20 150 L 20 270 Q 30 150 20 30"
-          stroke="url(#lineGradMob)" strokeWidth="1" fill="none" opacity="0.15" strokeLinecap="round"
-        />
-        {forwardDrawn && (
-          <>
-            <circle r="3" fill="#4D66FF">
-              <animateMotion dur="7.5s" repeatCount="indefinite" path="M 20 30 L 20 150 L 20 270 Q 30 150 20 30" />
-            </circle>
-            <circle r="1.5" fill="#FF6D4D" opacity="0.6">
-              <animateMotion dur="7.5s" repeatCount="indefinite" path="M 20 30 L 20 150 L 20 270 Q 30 150 20 30" begin="-1.5s" />
-            </circle>
-          </>
-        )}
-      </svg>
-    )
-  }
-
-  return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      viewBox="0 0 1000 100" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <linearGradient id="lineGrad" x1="0" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#4D66FF" />
-          <stop offset="40%" stopColor="#41EAFF" />
-          <stop offset="100%" stopColor="#FF6D4D" />
-        </linearGradient>
-      </defs>
-      <motion.path d="M 165 50 L 500 50 L 835 50"
-        stroke="rgba(255,255,255,0.08)" strokeWidth="2" fill="none" strokeLinecap="round"
-        initial={{ pathLength: 0 }} animate={inView ? { pathLength: 1 } : {}}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-      />
-      <path d="M 165 50 L 500 50 L 835 50 Q 500 80 165 50"
-        stroke="url(#lineGrad)" strokeWidth="1.5" fill="none" opacity="0.12" strokeLinecap="round"
-      />
-      {forwardDrawn && (
-        <>
-          <circle r="4" fill="#4D66FF" filter="url(#particleGlow)">
-            <animateMotion dur="7.5s" repeatCount="indefinite" path="M 165 50 L 500 50 L 835 50 Q 500 80 165 50" />
-          </circle>
-          <circle r="2" fill="#FF6D4D" opacity="0.5">
-            <animateMotion dur="7.5s" repeatCount="indefinite" path="M 165 50 L 500 50 L 835 50 Q 500 80 165 50" begin="-1.2s" />
-          </circle>
-        </>
-      )}
-      <defs>
-        <filter id="particleGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="2" />
-        </filter>
-      </defs>
-    </svg>
-  )
-}
-
-/* ── Indicador de paso individual ──────────────────────────────── */
-function StepDot({ step, index, isActive, lang, onClick, entryDelay }) {
-  const Icon = step.Icon
-  const c    = lang === 'es' ? step.es : step.en
-
-  return (
-    <motion.button
-      onClick={() => onClick(index)}
-      className="relative flex flex-col items-center gap-2 md:gap-3 group cursor-pointer outline-none"
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: entryDelay, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-    >
-      <span className="font-cal text-[11px] font-bold tracking-[0.15em] transition-all duration-500"
-        style={{ color: step.color, opacity: isActive ? 0.7 : 0.3 }}>
-        0{index + 1}
-      </span>
-
-      <div className="relative flex items-center justify-center transition-all duration-500"
-        style={{
-          width: isActive ? 56 : 42,
-          height: isActive ? 56 : 42,
-        }}>
-        {isActive && (
-          <motion.div className="absolute inset-0 rounded-xl"
-            style={{ background: `radial-gradient(circle, ${step.color}25 0%, transparent 70%)` }}
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: [0, 0.8, 0.4], scale: [0.6, 1.4, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        )}
-        <div className="relative rounded-xl flex items-center justify-center transition-all duration-500"
-          style={{
-            width: isActive ? 56 : 42,
-            height: isActive ? 56 : 42,
-            background: `${step.color}12`,
-            border: `1px solid ${step.color}25`,
-            boxShadow: isActive ? `0 0 20px ${step.color}22` : 'none',
-          }}>
-          <Icon size={isActive ? 22 : 17} style={{ color: step.color }} strokeWidth={1.75} />
-        </div>
-      </div>
-
-      <span className="font-cal text-sm md:text-base dark:text-white text-b-dark transition-all duration-500"
-        style={{ opacity: isActive ? 1 : 0.5 }}>
-        {c.title}
-      </span>
-    </motion.button>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   Componente principal
-   ═══════════════════════════════════════════════════════════════════ */
 export default function Proceso({ lang }) {
-  const t        = (es, en) => lang === 'es' ? es : en
-  const isMobile = useMediaQuery('(max-width: 767px)')
-  const ref      = useRef(null)
-  const inView   = useInView(ref, { once: true, margin: '-60px' })
+  const t           = (es, en) => lang === 'es' ? es : en
+  const wrapperRef  = useRef(null)
+  const sectionRef  = useRef(null)
+  const progressRef = useRef(null)
+  const activeRef   = useRef(0)
   const [active, setActive] = useState(0)
 
-  useEffect(() => {
-    if (!inView) return
-    const id = setInterval(() => setActive(i => (i + 1) % 3), 2500)
-    return () => clearInterval(id)
-  }, [inView])
+  const sectionInView = useInView(sectionRef, { once: true, margin: '-100px' })
 
-  const step         = steps[active]
-  const c            = lang === 'es' ? step.es : step.en
-  const Icon         = step.Icon
-  const focusColors  = ['#4D66FF', '#FF6D4D', '#828AFF']
-  const entryDelays  = [0.15, 0.3, 0.45]
+  /* ── Lenis scroll listener ─────────────────────────────────── */
+  useEffect(() => {
+    const lenis = window.__lenis
+    if (!lenis || !wrapperRef.current) return
+
+    const update = () => {
+      const el = wrapperRef.current
+      if (!el) return
+
+      const top        = el.getBoundingClientRect().top
+      const height     = el.offsetHeight
+      const vh         = window.innerHeight
+      const scrollable = height - vh
+      if (scrollable <= 0) return
+
+      const p = Math.max(0, Math.min(1, (-top) / scrollable))
+
+      if (progressRef.current) {
+        progressRef.current.style.width = `${p * 100}%`
+      }
+
+      const i = Math.min(Math.floor(p * 3), 2)
+      if (i !== activeRef.current) {
+        activeRef.current = i
+        setActive(i)
+      }
+    }
+
+    lenis.on('scroll', update)
+    update()
+
+    return () => lenis.off('scroll', update)
+  }, [])
+
+  const scrollToPhase = (index) => {
+    const lenis = window.__lenis
+    if (!lenis || !wrapperRef.current) return
+
+    const el     = wrapperRef.current
+    const target = el.offsetTop + (index / 3) * (el.offsetHeight - window.innerHeight)
+
+    lenis.scrollTo(target, { duration: 1.2 })
+  }
+
+  const current = phases[active]
 
   return (
-    <section id="proceso" className="relative z-10 py-14 md:py-16 px-4 overflow-hidden">
-      {/* Fondo atmosférico */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse, rgba(77,102,255,.05) 0%, transparent 70%)', filter: 'blur(60px)' }} aria-hidden="true"
-      />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[200px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse, rgba(255,109,77,.03) 0%, transparent 70%)', filter: 'blur(50px)' }} aria-hidden="true"
-      />
+    <section id="proceso" ref={sectionRef}>
 
-      <div ref={ref} className="max-w-[900px] lg:max-w-[1000px] mx-auto flex flex-col gap-8 md:gap-10">
+      {/* ── Header ──────────────────────────────────────────── */}
+      <div className="text-center pb-[3vh] pt-16 md:pt-20 px-4">
+        <motion.p
+          className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35 mb-2"
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+        >
+          {t('Cómo trabajamos', 'How we work')}
+        </motion.p>
+        <motion.h2
+          className="font-cal text-[clamp(1.6rem,4vw,3rem)] dark:text-white text-b-dark leading-tight"
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {t('Un proceso que ', 'A process that ')}
+          <span style={{ color: '#FF6D4D' }}>{t('itera', 'iterates')}</span>
+        </motion.h2>
+      </div>
 
-        {/* ── Header ──────────────────────────────────────────── */}
-        <div className={`text-center flex flex-col gap-1 ${isMobile ? '' : 'max-w-lg mx-auto'}`}>
-          <motion.p className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-            {t('Cómo trabajamos', 'How we work')}
-          </motion.p>
-          <motion.h2 className="font-cal text-2xl md:text-3xl dark:text-white text-b-dark leading-tight"
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}>
-            {t('Un proceso que ', 'A process that ')}
-            <span className="text-grad">{t('itera', 'iterates')}</span>
-          </motion.h2>
-          <motion.p className="text-xs md:text-sm dark:text-white/40 text-black/40"
-            initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}>
-            {t('Diagnóstico, diseño y activación — en ciclo constante.', 'Diagnosis, design and activation — in constant cycle.')}
-          </motion.p>
-        </div>
+      {/* ── Desktop — sticky scroll panel ────────────────────── */}
+      <div ref={wrapperRef} className="relative h-[240vh] hidden md:block">
+        <div className="sticky top-0 h-screen overflow-hidden" style={{ background: '#00031F' }}>
 
-        {/* ── Timeline ──────────────────────────────────────────── */}
-        <div className={`relative ${isMobile ? 'pl-[50px] flex flex-col gap-6' : 'pt-2'}`}>
-          {!isMobile && <TimelineLine inView={inView} isMobile={false} />}
+          {/* Background glows */}
+          {phases.map((p, i) => (
+            <motion.div
+              key={i}
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse at 50% 50%, ${p.color} 0%, transparent 70%)`,
+                filter: 'blur(90px)',
+              }}
+              animate={{ opacity: i === active ? 0.18 : 0 }}
+              transition={{ duration: 1, ease: 'easeInOut' }}
+            />
+          ))}
 
-          {/* Desktop: grid row */}
-          {!isMobile && (
-            <div className="relative grid grid-cols-3 gap-4 z-10">
-              {steps.map((s, i) => (
-                <StepDot key={i} step={s} index={i} isActive={i === active} lang={lang}
-                  onClick={setActive} entryDelay={entryDelays[i]} />
-              ))}
-            </div>
-          )}
-
-          {/* Mobile: vertical stacked */}
-          {isMobile && (
-            <div className="relative z-10 flex flex-col gap-6">
-              <TimelineLine inView={inView} isMobile={true} />
-              {steps.map((s, i) => (
-                <StepDot key={i} step={s} index={i} isActive={i === active} lang={lang}
-                  onClick={setActive} entryDelay={entryDelays[i]} />
-              ))}
-            </div>
-          )}
-
-          {/* ── Card de detalle ─────────────────────────────────── */}
-          <div className={`${isMobile ? 'mt-2' : 'mt-8 md:mt-10'}`}>
+          {/* Step number — top right */}
+          <div className="absolute top-8 right-8 z-10">
             <AnimatePresence mode="wait">
-              <motion.div
+              <motion.span
                 key={active}
-                className="rounded-card overflow-hidden border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.04] bg-white/70 backdrop-blur-md shadow-[0_4px_20px_-6px_rgba(0,0,0,0.08)] max-w-lg mx-auto"
-                initial={{ opacity: 0, y: 12, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                className="text-[11px] tracking-[0.12em] dark:text-white/40 text-white/40 font-mono block"
+                initial={{ y: 16, opacity: 0 }}
+                animate={{ y: 0, opacity: 0.6 }}
+                exit={{ y: -16, opacity: 0 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="h-[3px] w-full" style={{ background: `linear-gradient(to right, ${step.color}, transparent)` }} />
-                <div className="p-5 md:p-6 flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ background: `${step.color}15`, border: `1px solid ${step.color}20` }}>
-                    <Icon size={18} style={{ color: step.color }} strokeWidth={1.75} />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <h4 className="font-cal text-base md:text-lg dark:text-white text-b-dark">{c.title}</h4>
-                    <p className="text-xs md:text-sm dark:text-white/60 text-black/60 leading-relaxed">{c.desc}</p>
-                  </div>
-                </div>
-              </motion.div>
+                {String(active + 1).padStart(2, '0')} / 03
+              </motion.span>
             </AnimatePresence>
           </div>
 
-          {/* Indicadores */}
-          <div className="flex justify-center items-center gap-3 mt-6 md:mt-8 z-10 relative">
-            {steps.map((_, i) => (
-              <button key={i} onClick={() => setActive(i)}
-                className="h-1.5 rounded-full transition-all duration-700"
+          {/* Three columns */}
+          <div className="relative z-10 flex items-center h-full px-8 lg:px-16">
+
+            {/* ── Left column (25%) ─────────────────────────── */}
+            <div className="w-[25%] flex flex-col gap-6">
+              {phases.map((p, i) => (
+                <motion.div
+                  key={i}
+                  className="flex items-center gap-3 cursor-pointer"
+                  onClick={() => scrollToPhase(i)}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{
+                    opacity: i === active ? 1 : 0.28,
+                    x: i === active ? 8 : 0,
+                  }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: sectionInView ? i * 0.08 : 0 }}
+                >
+                  <span
+                    className="font-cal text-xl md:text-2xl tabular-nums transition-all duration-500"
+                    style={{ color: p.color, opacity: i === active ? 0.8 : 0.35 }}
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="font-cal text-base md:text-lg dark:text-white text-white">
+                    {t(p.es.leftLabel, p.en.leftLabel)}
+                  </span>
+                  <div
+                    className="w-2 h-2 rounded-full transition-all duration-500"
+                    style={{
+                      background: i === active ? p.color : 'transparent',
+                      boxShadow: i === active ? `0 0 8px ${p.color}` : 'none',
+                    }}
+                  />
+                </motion.div>
+              ))}
+            </div>
+
+            {/* ── Center column (50%) ───────────────────────── */}
+            <div className="w-[50%] flex flex-col justify-center px-6 lg:px-12">
+              <div className="relative min-h-[280px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active}
+                    initial={{ y: '60%', opacity: 0 }}
+                    animate={{ y: '0%', opacity: 1 }}
+                    exit={{ y: '-60%', opacity: 0 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <h3
+                      className="font-cal text-[clamp(3rem,9vw,8rem)] leading-[0.9] dark:text-white text-white mb-5"
+                      style={{ color: 'rgba(245,245,240,0.92)' }}
+                    >
+                      {t(current.es.title, current.en.title)}
+                    </h3>
+                    <motion.p
+                      className="text-sm md:text-base max-w-md leading-relaxed"
+                      style={{ color: 'rgba(245,245,240,0.55)' }}
+                      initial={{ y: '60%', opacity: 0 }}
+                      animate={{ y: '0%', opacity: 1 }}
+                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+                    >
+                      {t(current.es.desc, current.en.desc)}
+                    </motion.p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* ── Right column (25%) ────────────────────────── */}
+            <div className="w-[25%] flex flex-col justify-center">
+              <div className="relative min-h-[80px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active}
+                    initial={{ y: '60%', opacity: 0 }}
+                    animate={{ y: '0%', opacity: 1 }}
+                    exit={{ y: '-60%', opacity: 0 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <span className="font-cal text-lg" style={{ color: 'rgba(245,245,240,0.65)' }}>
+                      {t(current.es.output, current.en.output)}
+                    </span>
+                    <div
+                      className="mt-4 w-10 h-10 rounded-lg flex items-center justify-center"
+                      style={{ background: `${current.color}15`, border: `1px solid ${current.color}25` }}
+                    >
+                      <current.Icon size={18} style={{ color: current.color }} strokeWidth={1.75} />
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ── Progress bar ──────────────────────────────── */}
+          <div
+            ref={progressRef}
+            className="absolute bottom-0 left-0 h-[2px] z-10 pointer-events-none"
+            style={{
+              width: '0%',
+              background: 'linear-gradient(to right, #4D66FF, #FF6D4D)',
+            }}
+          />
+
+          {/* ── Dots ──────────────────────────────────────── */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 z-10">
+            {phases.map((p, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToPhase(i)}
+                className="h-1.5 rounded-full transition-all duration-500"
                 style={{
-                  width: i === active ? 24 : 8,
-                  background: i === active ? focusColors[i] : 'rgba(255,255,255,0.12)',
-                  boxShadow: i === active ? `0 0 8px ${focusColors[i]}` : 'none',
+                  width: i === active ? 20 : 6,
+                  background: i === active ? p.color : 'rgba(255,255,255,0.12)',
+                  boxShadow: i === active ? `0 0 8px ${p.color}` : 'none',
                 }}
-                aria-label={t(`Ir a paso ${i + 1}`, `Go to step ${i + 1}`)}
+                aria-label={t(`Ir a fase ${i + 1}`, `Go to phase ${i + 1}`)}
               />
             ))}
           </div>
+
         </div>
       </div>
+
+      {/* ── Mobile — cards en scroll normal ────────────────── */}
+      <div className="md:hidden">
+        {phases.map((p, i) => (
+          <MobilePhase key={i} phase={p} index={i} lang={lang} />
+        ))}
+        <div className="flex justify-center items-center gap-3 pb-12">
+          {phases.map((p, i) => (
+            <button
+              key={i}
+              className="h-1.5 rounded-full transition-all duration-500"
+              style={{
+                width: i === active ? 20 : 6,
+                background: i === active ? p.color : 'rgba(255,255,255,0.12)',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
     </section>
+  )
+}
+
+/* ── Mobile phase card ───────────────────────────────────────── */
+function MobilePhase({ phase, index, lang }) {
+  const ref    = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const t      = (es, en) => lang === 'es' ? es : en
+  const Icon   = phase.Icon
+
+  return (
+    <div className="relative px-4 py-16 overflow-hidden">
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at 50% 50%, ${phase.color} 0%, transparent 70%)`,
+          filter: 'blur(80px)',
+        }}
+        animate={{ opacity: inView ? 0.15 : 0 }}
+        transition={{ duration: 1 }}
+      />
+      <motion.div
+        ref={ref}
+        className="relative z-10 max-w-lg mx-auto"
+        initial={{ opacity: 0, y: 40 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <span className="font-cal text-sm" style={{ color: phase.color }}>
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <h3 className="font-cal text-lg dark:text-white text-white mt-1">
+          {t(phase.es.leftLabel, phase.en.leftLabel)}
+        </h3>
+        <div
+          className="w-10 h-10 rounded-lg flex items-center justify-center mt-4 mb-5"
+          style={{ background: `${phase.color}15`, border: `1px solid ${phase.color}25` }}
+        >
+          <Icon size={18} style={{ color: phase.color }} strokeWidth={1.75} />
+        </div>
+        <h4 className="font-cal text-4xl dark:text-white text-white mb-4">
+          {t(phase.es.title, phase.en.title)}
+        </h4>
+        <p className="text-sm leading-relaxed" style={{ color: 'rgba(245,245,240,0.55)' }}>
+          {t(phase.es.desc, phase.en.desc)}
+        </p>
+        <div className="mt-5 text-xs" style={{ color: 'rgba(245,245,240,0.40)' }}>
+          {t(phase.es.output, phase.en.output)}
+        </div>
+      </motion.div>
+    </div>
   )
 }

@@ -3653,237 +3653,6 @@ export function useLenis() {
 }
 </file>
 
-<file path="src/sections/Capacidades.jsx">
-import { useRef } from 'react'
-import { motion, useInView } from 'motion/react'
-import { Layers, Box, Monitor, Play, Zap, MessageSquare } from 'lucide-react'
-
-const items = [
-  {
-    id: '01',
-    Icon: Layers,
-    color: '#4D66FF',
-    span: 1, // Cambiado de 2 a 1 para mantener el grid perfecto de 3x2
-    es: {
-      title: 'Diseño',
-      body: 'Sistemas visuales, identidad y UI que conectan lo físico con lo digital — desde la pieza gráfica hasta la interfaz.',
-    },
-    en: {
-      title: 'Design',
-      body: 'Visual systems, identity and UI that connect the physical with the digital — from graphic piece to interface.',
-    },
-  },
-  {
-    id: '02',
-    Icon: Box,
-    color: '#FF6D4D',
-    span: 1,
-    es: {
-      title: 'Producto & forma',
-      body: 'Exploración de objeto, espacio, packaging y materialidad como base de la experiencia de marca.',
-    },
-    en: {
-      title: 'Product & form',
-      body: 'Exploration of object, space, packaging and materiality as the foundation of brand experience.',
-    },
-  },
-  {
-    id: '03',
-    Icon: Monitor,
-    color: '#41EAFF',
-    span: 1,
-    es: {
-      title: 'UX/UI & experiencia digital',
-      body: 'Interfaces y flujos que extienden la experiencia del producto en entornos digitales.',
-    },
-    en: {
-      title: 'UX/UI & digital experience',
-      body: 'Interfaces and flows that extend the product experience into digital environments.',
-    },
-  },
-  {
-    id: '04',
-    Icon: Play,
-    color: '#828AFF',
-    span: 1,
-    es: {
-      title: 'Video & contenido',
-      body: 'Narrativa visual para comunicar producto, espacio o marca — reels, animaciones y piezas en movimiento.',
-    },
-    en: {
-      title: 'Video & content',
-      body: 'Visual narrative to communicate product, space or brand — reels, animations and motion pieces.',
-    },
-  },
-  {
-    id: '05',
-    Icon: Zap,
-    color: '#9F6EFF',
-    span: 1,
-    es: {
-      title: 'Automatización & IA',
-      body: 'Sistemas que optimizan procesos creativos, escalan ejecución y reducen trabajo repetitivo.',
-    },
-    en: {
-      title: 'Automation & AI',
-      body: 'Systems that optimize creative processes, scale execution and reduce repetitive work.',
-    },
-  },
-  {
-    id: '06',
-    Icon: MessageSquare,
-    color: '#FF6D4D',
-    span: 1,
-    es: {
-      title: 'Consultoría',
-      body: 'Dirección estratégica para alinear producto, marca y experiencia — sprints enfocados, criterio aplicado.',
-    },
-    en: {
-      title: 'Consulting',
-      body: 'Strategic direction to align product, brand and experience — focused sprints, applied criteria.',
-    },
-  },
-]
-
-function CapCard({ item, lang, index }) {
-  const c = lang === 'es' ? item.es : item.en
-  const Icon = item.Icon
-
-  return (
-    <motion.div
-      className="relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm md:col-span-1"
-      initial={{ opacity: 0, y: 36 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
-      whileHover={{ y: -5, transition: { duration: 0.22, ease: 'easeOut' } }}
-    >
-      {/* Línea accent superior — siempre visible */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px]"
-        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
-      />
-
-      {/* Glow de fondo — se intensifica en hover */}
-      <div
-        className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none opacity-20 group-hover:opacity-50 group-hover:scale-125 transition-all duration-500"
-        style={{
-          background: `radial-gradient(circle, ${item.color}40 0%, transparent 70%)`,
-          filter: 'blur(24px)',
-        }}
-        aria-hidden="true"
-      />
-
-      {/* Contenido */}
-      <div className="relative z-10 p-6 md:p-8 flex flex-col gap-4 h-full">
-        {/* Icono */}
-        <div className="flex-shrink-0">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{
-              background: `${item.color}18`,
-              border: `1px solid ${item.color}30`,
-            }}
-          >
-            <Icon size={22} style={{ color: item.color }} strokeWidth={1.75} />
-          </div>
-        </div>
-
-        {/* Texto */}
-        <div className="flex flex-col gap-2 flex-1">
-          <div>
-            <span
-              className="text-[10px] font-bold tracking-[0.12em] uppercase block mb-1"
-              style={{ color: item.color, opacity: 0.7 }}
-            >
-              {item.id}
-            </span>
-            <h3 className="font-cal text-xl md:text-2xl dark:text-white text-b-dark leading-snug">
-              {c.title}
-            </h3>
-          </div>
-          <p className="dark:text-white/50 text-black/55 text-sm leading-[1.7]">
-            {c.body}
-          </p>
-        </div>
-      </div>
-
-      {/* Línea inferior animada en hover */}
-      <div
-        className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
-        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
-      />
-    </motion.div>
-  )
-}
-
-export default function Capacidades({ lang }) {
-  const ref    = useRef()
-  const inView = useInView(ref, { once: true, margin: '-60px' })
-  const t      = (es, en) => lang === 'es' ? es : en
-
-  return (
-    <section id="capacidades" className="py-16 md:py-20 px-4 relative overflow-hidden">
-      {/* Orbe de fondo */}
-      <div
-        className="absolute top-[-80px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse, rgba(77,102,255,0.08) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-10 relative z-10">
-        {/* Header */}
-        <div className="flex flex-col items-center text-center gap-3">
-          <motion.p
-            className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            {t('Lo que producimos', 'What we produce')}
-          </motion.p>
-          <motion.h2
-            className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
-          >
-            {t('Capacidades ', 'Lab ')}
-            <span className="text-grad">{t('del lab', 'capabilities')}</span>
-          </motion.h2>
-          <motion.p
-            className="dark:text-white/40 text-black/45 text-sm max-w-[480px] leading-[1.7]"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.12, duration: 0.7 }}
-          >
-            {t(
-              'Transversalidad aplicada. Disciplinas que convergen para dar forma, posicionar y hacer escalable cualquier producto o marca.',
-              'Applied transversality. Disciplines that converge to shape, position, and scale any product or brand.'
-            )}
-          </motion.p>
-        </div>
-
-        {/* Bento grid: 6 items simétricos (2 filas x 3 columnas) */}
-        <div
-          ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-        >
-          {items.map((item, i) => (
-            <CapCard key={item.id} item={item} lang={lang} index={i} />
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-</file>
-
 <file path="tailwind.config.js">
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -4170,6 +3939,237 @@ export default function ParticleField({ darkMode = true }) {
 }
 </file>
 
+<file path="src/sections/Capacidades.jsx">
+import { useRef } from 'react'
+import { motion, useInView } from 'motion/react'
+import { Layers, Box, Monitor, Play, Zap, MessageSquare } from 'lucide-react'
+
+const items = [
+  {
+    id: '01',
+    Icon: Layers,
+    color: '#4D66FF',
+    span: 1,
+    es: {
+      title: 'Sistemas & marca',
+      body: 'Identidad, estructura y lenguaje para construir marcas coherentes — desde lo visual hasta cómo funciona.',
+    },
+    en: {
+      title: 'Systems & brand',
+      body: 'Identity, structure and language to build coherent brands — from the visual to how it works.',
+    },
+  },
+  {
+    id: '02',
+    Icon: Box,
+    color: '#FF6D4D',
+    span: 1,
+    es: {
+      title: 'Producto & forma',
+      body: 'Exploración de forma, objeto y espacio como parte de una experiencia bien construida — cuando necesita existir más allá de la pantalla.',
+    },
+    en: {
+      title: 'Product & form',
+      body: 'Exploration of form, object and space as part of a well-built experience — when it needs to exist beyond the screen.',
+    },
+  },
+  {
+    id: '03',
+    Icon: Monitor,
+    color: '#41EAFF',
+    span: 1,
+    es: {
+      title: 'UX/UI & experiencia digital',
+      body: 'Interfaces, flujos y experiencias digitales para apps, productos y entornos web — claras, útiles y coherentes con la marca.',
+    },
+    en: {
+      title: 'UX/UI & digital experience',
+      body: 'Interfaces, flows and digital experiences for apps, products and web environments — clear, useful and consistent with the brand.',
+    },
+  },
+  {
+    id: '04',
+    Icon: Play,
+    color: '#828AFF',
+    span: 1,
+    es: {
+      title: 'Video & contenido',
+      body: 'Edición y narrativa visual a partir de assets, plantillas y referencias — reels, animaciones y piezas de marca listas para publicar.',
+    },
+    en: {
+      title: 'Video & content',
+      body: 'Editing and visual narrative from assets, templates and references — reels, animations and brand pieces ready to publish.',
+    },
+  },
+  {
+    id: '05',
+    Icon: Zap,
+    color: '#9F6EFF',
+    span: 1,
+    es: {
+      title: 'Automatización & IA',
+      body: 'Sistemas que conectan herramientas, escalan procesos y aplican inteligencia para liberar tiempo y capacidad operativa.',
+    },
+    en: {
+      title: 'Automation & AI',
+      body: 'Systems that connect tools, scale processes and apply intelligence to free up time and operational capacity.',
+    },
+  },
+  {
+    id: '06',
+    Icon: MessageSquare,
+    color: '#FF6D4D',
+    span: 1,
+    es: {
+      title: 'Consultoría',
+      body: 'Acompañamiento estratégico para alinear marca, producto y negocio — con foco, claridad y criterio en cada decisión.',
+    },
+    en: {
+      title: 'Consulting',
+      body: 'Strategic support to align brand, product and business — with focus, clarity and criteria in every decision.',
+    },
+  },
+]
+
+function CapCard({ item, lang, index }) {
+  const c = lang === 'es' ? item.es : item.en
+  const Icon = item.Icon
+
+  return (
+    <motion.div
+      className="relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm md:col-span-1"
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+      whileHover={{ y: -5, transition: { duration: 0.22, ease: 'easeOut' } }}
+    >
+      {/* Línea accent superior */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px]"
+        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
+      />
+
+      {/* Glow de fondo */}
+      <div
+        className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none opacity-20 group-hover:opacity-50 group-hover:scale-125 transition-all duration-500"
+        style={{
+          background: `radial-gradient(circle, ${item.color}40 0%, transparent 70%)`,
+          filter: 'blur(24px)',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Contenido */}
+      <div className="relative z-10 p-6 md:p-8 flex flex-col gap-4 h-full">
+        {/* Icono */}
+        <div className="flex-shrink-0">
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center"
+            style={{
+              background: `${item.color}18`,
+              border: `1px solid ${item.color}30`,
+            }}
+          >
+            <Icon size={22} style={{ color: item.color }} strokeWidth={1.75} />
+          </div>
+        </div>
+
+        {/* Texto */}
+        <div className="flex flex-col gap-2 flex-1">
+          <div>
+            <span
+              className="text-[10px] font-bold tracking-[0.12em] uppercase block mb-1"
+              style={{ color: item.color, opacity: 0.7 }}
+            >
+              {item.id}
+            </span>
+            <h3 className="font-cal text-xl md:text-2xl dark:text-white text-b-dark leading-snug">
+              {c.title}
+            </h3>
+          </div>
+          <p className="dark:text-white/50 text-black/55 text-sm leading-[1.7]">
+            {c.body}
+          </p>
+        </div>
+      </div>
+
+      {/* Línea inferior animada */}
+      <div
+        className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
+        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
+      />
+    </motion.div>
+  )
+}
+
+export default function Capacidades({ lang }) {
+  const ref    = useRef()
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const t      = (es, en) => lang === 'es' ? es : en
+
+  return (
+    <section id="capacidades" className="py-16 md:py-20 px-4 relative overflow-hidden">
+      {/* Orbe de fondo */}
+      <div
+        className="absolute top-[-80px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse, rgba(77,102,255,0.08) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-10 relative z-10">
+        {/* Header */}
+        <div className="flex flex-col items-center text-center gap-3">
+          <motion.p
+            className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            {t('Lo que producimos', 'What we produce')}
+          </motion.p>
+          <motion.h2
+            className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
+          >
+            {t('Capacidades ', 'Lab ')}
+            <span className="text-grad">{t('del lab', 'capabilities')}</span>
+          </motion.h2>
+          <motion.p
+            className="dark:text-white/40 text-black/45 text-sm max-w-[500px] leading-[1.7]"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.12, duration: 0.7 }}
+          >
+            {t(
+              'Capacidades que convergen para construir, ordenar y escalar marcas, productos y sistemas.',
+              'Capabilities that converge to build, organize and scale brands, products and systems.'
+            )}
+          </motion.p>
+        </div>
+
+        {/* Grid: 2 filas x 3 columnas */}
+        <div
+          ref={ref}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+        >
+          {items.map((item, i) => (
+            <CapCard key={item.id} item={item} lang={lang} index={i} />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+</file>
+
 <file path="src/hooks/useCursor.js">
 /**
  * useCursor — cursor aware del modo claro/oscuro
@@ -4325,98 +4325,6 @@ export function useCursor() {
 }
 </file>
 
-<file path="src/sections/Stack.jsx">
-import { motion } from 'motion/react'
-
-const tools = [
-  { name: 'Figma',        src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
-  { name: 'Notion',       src: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png' },
-  { name: 'Illustrator',  src: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg' },
-  { name: 'ChatGPT',      src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
-  { name: 'Claude',       src: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg' },
-  {
-    name: 'Perplexity',
-    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/perplexity.svg',
-    bg: '#ffffff',
-    pad: 6,
-  },
-  { name: 'Make',         src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/make.svg', bg: '#6D00CC', pad: 7 },
-  { name: 'n8n',          src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/n8n.svg', bg: '#EA4B71', pad: 6 },
-  { name: 'Canva',        src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/canva.svg', bg: '#00C4CC', pad: 6 },
-  { name: 'Framer',       src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg', bg: '#0055FF', pad: 6 },
-  { name: 'ElevenLabs',   src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/elevenlabs.svg', bg: '#000000', pad: 6 },
-  // { name: 'Vercel', ... },  // herramienta interna dev — no mostrar al visitante
-  // { name: 'GitHub', ... },  // herramienta interna dev — no mostrar al visitante
-]
-
-export default function Stack({ lang }) {
-  return (
-    <section id="stack" className="relative z-10 py-24 px-6">
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-12">
-        <motion.div
-          className="text-center flex flex-col gap-3"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35">
-            {lang === 'es' ? 'Potenciado por' : 'Powered by'}
-          </p>
-          <h2 className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark">
-            {lang === 'es' ? 'Las mejores ' : 'Best in class '}
-            <span className="text-grad">{lang === 'es' ? 'herramientas' : 'tools'}</span>
-          </h2>
-        </motion.div>
-        <motion.div
-          className="flex flex-wrap justify-center gap-4"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-40px' }}
-          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
-        >
-          {tools.map((tool, i) => (
-            <motion.div
-              key={i}
-              className="group glass flex flex-col items-center gap-2.5 px-5 py-4 rounded-2xl border dark:border-white/6 border-black/6 cursor-default"
-              variants={{
-                hidden: { opacity: 0, scale: 0.82 },
-                show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } },
-              }}
-              whileHover={{
-                y: -6,
-                scale: 1.07,
-                borderColor: 'rgba(77,102,255,.3)',
-                transition: { duration: 0.22, ease: 'easeOut' },
-              }}
-            >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
-                style={{
-                  background: tool.bg || 'rgba(120,120,180,.08)',
-                  padding: `${tool.pad ?? 7}px`,
-                }}
-              >
-                <img
-                  src={tool.src}
-                  alt={tool.name}
-                  className="w-full h-full object-contain"
-                  style={tool.invertIcon ? { filter: 'invert(1)' } : undefined}
-                  loading="lazy"
-                />
-              </div>
-              <span className="text-[12px] font-medium dark:text-white/50 text-black/50 group-hover:dark:text-white/80 group-hover:text-black/80 transition-colors duration-200">
-                {tool.name}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-</file>
-
 <file path="src/sections/Ticker.jsx">
 import { motion } from 'motion/react'
 const tags=['Diseño UX/UI','IA Generativa','Branding','Métricas','Automatización','Diseño Industrial','Plantillas Notion','Sistemas digitales','Make · n8n','Consultoría CX','Design Systems','Creative Coding']
@@ -4550,186 +4458,93 @@ export default function LabStats({ lang }) {
 }
 </file>
 
-<file path="src/sections/Proceso.jsx">
-import { useRef } from 'react'
-import { motion, useInView } from 'motion/react'
-import { Search, PenTool, Boxes } from 'lucide-react'
+<file path="src/sections/Stack.jsx">
+import { motion } from 'motion/react'
 
-const steps = [
+const tools = [
+  { name: 'Figma',        src: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg' },
+  { name: 'Notion',       src: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png' },
+  { name: 'Illustrator',  src: 'https://upload.wikimedia.org/wikipedia/commons/f/fb/Adobe_Illustrator_CC_icon.svg' },
+  { name: 'ChatGPT',      src: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg' },
+  { name: 'Claude',       src: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg' },
   {
-    Icon: Search,
-    color: '#4D66FF',
-    es: { title: 'Entendemos', desc: 'Analizamos el producto, espacio o marca — su forma, contexto y cómo se percibe en el mundo real.' },
-    en: { title: 'We understand', desc: 'We analyze the product, space or brand — its form, context and how it is perceived in the real world.' },
+    name: 'Perplexity',
+    src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/perplexity.svg',
+    bg: '#ffffff',
+    pad: 6,
   },
-  {
-    Icon: PenTool,
-    color: '#FF6D4D',
-    es: { title: 'Traducimos', desc: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.' },
-    en: { title: 'We translate', desc: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.' },
-  },
-  {
-    Icon: Boxes,
-    color: '#828AFF',
-    es: { title: 'Entregamos', desc: 'Piezas listas para comunicar y posicionar — en los formatos acordados, listas para publicar o producir.' },
-    en: { title: 'We deliver', desc: 'Pieces ready to communicate and position — in agreed formats, ready to publish or produce.' },
-  },
+  { name: 'Make',         src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/make.svg', bg: '#6D00CC', pad: 7 },
+  { name: 'n8n',          src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/n8n.svg', bg: '#EA4B71', pad: 6 },
+  { name: 'Canva',        src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/canva.svg', bg: '#00C4CC', pad: 6 },
+  { name: 'Framer',       src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg', bg: '#0055FF', pad: 6 },
+  { name: 'ElevenLabs',   src: 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/elevenlabs.svg', bg: '#000000', pad: 6 },
 ]
 
-export default function Proceso({ lang }) {
-  const t      = (es, en) => lang === 'es' ? es : en
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-
+export default function Stack({ lang }) {
   return (
-    <section id="proceso" className="relative z-10 py-16 px-4">
+    <section id="stack" className="relative z-10 py-24 px-6">
       <div className="section-premium">
-        <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
-
-        {/* Header */}
-        <div className="text-center max-w-xl mx-auto flex flex-col gap-3">
-          <motion.p
-            className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
-            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+        <div className="max-w-[1200px] mx-auto flex flex-col gap-12">
+          <motion.div
+            className="text-center flex flex-col gap-3"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            {t('Así funciona', 'How it works')}
-          </motion.p>
-          <motion.h2
-            className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark leading-tight"
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+            <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35">
+              {lang === 'es' ? 'Potenciado por' : 'Powered by'}
+            </p>
+            <h2 className="font-cal text-3xl md:text-4xl dark:text-white text-b-dark">
+              {lang === 'es' ? 'Las mejores ' : 'Best in class '}
+              <span className="text-grad">{lang === 'es' ? 'herramientas' : 'tools'}</span>
+            </h2>
+          </motion.div>
+          <motion.div
+            className="flex flex-wrap justify-center gap-4"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
           >
-            {t('Simple como ', 'As simple as ')}
-            <span className="text-grad">{t('3 pasos', '3 steps')}</span>
-          </motion.h2>
-        </div>
-
-        {/* Panel */}
-        <motion.div
-          ref={ref}
-          className="relative rounded-card px-6 py-12 md:px-14 md:py-14 overflow-hidden"
-          initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {/* Glow interior sutil */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-50"
-            style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(77,102,255,.06) 0%, transparent 70%)' }}
-          />
-
-          {/* Conector animado (desktop) */}
-          <div
-            className="hidden md:block absolute pointer-events-none"
-            style={{
-              top: 'calc(48px + 28px)',
-              left:  'calc(33.33% / 2)',
-              right: 'calc(33.33% / 2)',
-              height: '2px',
-              zIndex: 0,
-            }}
-            aria-hidden
-          >
-            {/* Línea base */}
-            <motion.div
-              className="absolute inset-0 rounded-full origin-left"
-              style={{ background: 'linear-gradient(90deg, #4D66FF, #FF6D4D, #828AFF)' }}
-              initial={{ scaleX: 0 }}
-              animate={inView ? { scaleX: 1 } : { scaleX: 0 }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-            />
-            {/* Shimmer */}
-            <motion.div
-              className="absolute inset-0 rounded-full overflow-hidden"
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ delay: 1.8, duration: 0.3 }}
-            >
-              <motion.div
-                className="absolute top-0 h-full w-[30%] rounded-full"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent)' }}
-                animate={inView ? { x: ['-100%', '400%'] } : {}}
-                transition={{ duration: 2.6, repeat: Infinity, ease: 'linear', repeatDelay: 1.0, delay: 1.8 }}
-              />
-            </motion.div>
-
-            {/* Puntos en los nodos */}
-            {[0, 50, 100].map((pct, i) => (
+            {tools.map((tool, i) => (
               <motion.div
                 key={i}
-                className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full"
-                style={{
-                  left: `${pct}%`,
-                  transform: 'translate(-50%, -50%)',
-                  background: [steps[0].color, steps[1].color, steps[2].color][i],
-                  boxShadow: `0 0 8px ${[steps[0].color, steps[1].color, steps[2].color][i]}`,
+                className="group glass flex flex-col items-center gap-2.5 px-5 py-4 rounded-2xl border dark:border-white/6 border-black/6 cursor-default"
+                variants={{
+                  hidden: { opacity: 0, scale: 0.82 },
+                  show: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } },
                 }}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={inView ? { scale: 1, opacity: 1 } : {}}
-                transition={{ delay: 0.4 + i * 0.35, type: 'spring', stiffness: 200 }}
-              />
-            ))}
-          </div>
-
-          {/* Steps grid */}
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
-            {steps.map((step, i) => {
-              const Icon = step.Icon
-              const c    = lang === 'es' ? step.es : step.en
-              return (
-                <motion.div
-                  key={step.es.title}
-                  className="flex flex-col items-center text-center gap-4"
-                  initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.15 + i * 0.14, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{
+                  y: -6,
+                  scale: 1.07,
+                  borderColor: 'rgba(77,102,255,.3)',
+                  transition: { duration: 0.22, ease: 'easeOut' },
+                }}
+              >
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden"
+                  style={{
+                    background: tool.bg || 'rgba(120,120,180,.08)',
+                    padding: `${tool.pad ?? 7}px`,
+                  }}
                 >
-                  {/* Número de paso */}
-                  <span
-                    className="font-cal text-[11px] font-bold tracking-[.12em] uppercase mb-[-6px]"
-                    style={{ color: step.color, opacity: .6 }}
-                  >
-                    0{i + 1}
-                  </span>
-
-                  {/* Icono */}
-                  <motion.div
-                    className="w-14 h-14 rounded-card flex items-center justify-center border dark:border-white/10 border-black/8 dark:bg-b-deep/70 bg-white/80 backdrop-blur-sm"
-                    style={{ boxShadow: `0 8px 28px ${step.color}28` }}
-                    whileHover={{ scale: 1.08, transition: { duration: .2, ease: 'easeOut' } }}
-                    animate={inView ? {
-                      boxShadow: [
-                        `0 8px 28px ${step.color}28`,
-                        `0 8px 40px ${step.color}55`,
-                        `0 8px 28px ${step.color}28`,
-                      ]
-                    } : {}}
-                    transition={{ delay: 1.2 + i * .25, duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    <Icon size={24} style={{ color: step.color }} strokeWidth={1.75} />
-                  </motion.div>
-
-                  {/* Texto */}
-                  <div className="flex flex-col gap-2 max-w-[260px]">
-                    <h3 className="font-cal text-xl dark:text-white text-b-dark">{c.title}</h3>
-                    <p className="dark:text-white/50 text-black/50 text-sm leading-[1.65]">{c.desc}</p>
-                  </div>
-
-                  {/* Conector vertical mobile */}
-                  {i < steps.length - 1 && (
-                    <div
-                      className="md:hidden w-px h-8 rounded-full mt-1"
-                      style={{ background: `linear-gradient(180deg, ${step.color}55, ${steps[i + 1].color}55)` }}
-                      aria-hidden
-                    />
-                  )}
-                </motion.div>
-              )
-            })}
-          </div>
-        </motion.div>
+                  <img
+                    src={tool.src}
+                    alt={tool.name}
+                    className="w-full h-full object-contain"
+                    style={tool.invertIcon ? { filter: 'invert(1)' } : undefined}
+                    loading="lazy"
+                  />
+                </div>
+                <span className="text-[12px] font-medium dark:text-white/50 text-black/50 group-hover:dark:text-white/80 group-hover:text-black/80 transition-colors duration-200">
+                  {tool.name}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </div>
-    </div>
     </section>
   )
 }
@@ -5177,247 +4992,6 @@ export default function App() {
 }
 </file>
 
-<file path="src/components/ScrollExpandMedia.jsx">
-import { useEffect, useRef, useState } from 'react'
-import { motion, useScroll, useTransform } from 'motion/react'
-
-/* ── Palabras flotantes — glass blanco, cercanas al centro ───────── */
-const FLOAT_WORDS = [
-  { word: 'Diseño',         xPct: -32, yPct: -18, factor: 0.018 },
-  { word: 'Forma',          xPct:  32, yPct: -20, factor: 0.026 },
-  { word: 'Sistema',        xPct: -36, yPct:  22, factor: 0.013 },
-  { word: 'UX/UI',          xPct:  36, yPct:  20, factor: 0.022 },
-  { word: 'Branding',       xPct: -14, yPct: -34, factor: 0.015 },
-  { word: 'Automatización', xPct:  14, yPct:  36, factor: 0.020 },
-  { word: 'Motion',         xPct:  42, yPct:  -4, factor: 0.017 },
-  { word: 'Producto',       xPct: -40, yPct:   6, factor: 0.021 },
-]
-
-function FloatingWord({ item, mouseX, mouseY }) {
-  const tx = mouseX * item.factor * -1
-  const ty = mouseY * item.factor * -1
-
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        left:      `calc(50% + ${item.xPct}vw)`,
-        top:       `calc(50% + ${item.yPct}vh)`,
-        transform: `translate(-50%, -50%) translate(${tx}px, ${ty}px)`,
-        transition: 'transform 0.05s linear',
-        fontFamily: "'Cal Sans', 'Inter', sans-serif",
-        fontSize:   '16px',
-        fontWeight: '500',
-        color: 'rgba(245, 245, 240, 0.80)',
-        letterSpacing: '0.03em',
-        pointerEvents: 'none',
-        userSelect: 'none',
-        whiteSpace: 'nowrap',
-        background: 'rgba(255, 255, 255, 0.05)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderRadius: '10px',
-        padding: '6px 14px',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-      }}
-    >
-      {item.word}
-    </div>
-  )
-}
-
-/* ── Componente principal ────────────────────────────────────────── */
-const ScrollExpandMedia = ({
-  mediaType   = 'video',
-  mediaSrc,
-  bgImageSrc,
-  title,
-  subtitle,
-  children,
-}) => {
-  const sectionRef = useRef(null)
-  const [isMobile, setIsMobile] = useState(false)
-  const [mouseX, setMouseX] = useState(0)
-  const [mouseY, setMouseY] = useState(0)
-  const [bgError, setBgError] = useState(false)
-  const [mediaError, setMediaError] = useState(false)
-
-  /* ── Scroll: animation completes when section reaches center of viewport ── */
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'center center'],
-  })
-
-  const progress = useTransform(scrollYProgress, [0, 1], [0, 1])
-  const wordsOpacity = useTransform(progress, [0, 0.35], [1, 0])
-  const bgOpacity = useTransform(progress, [0.5, 0.9], [1, 0.3])
-
-  /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
-  const mediaW = useTransform(progress, [0, 1], [300, isMobile ? 900 : 1500])
-  const mediaH = useTransform(progress, [0, 1], [400, isMobile ? 500 : 700])
-  const borderR = useTransform(progress, [0, 1], [32, 16])
-
-  /* ── Opacidades ───────────────────────────────────────────────── */
-  const textX = useTransform(progress, [0, 1], [0, isMobile ? -60 : -50])
-  const contentOpacity = useTransform(progress, [0.65, 0.95], [0, 1])
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  useEffect(() => {
-    const onMove = (e) => {
-      setMouseX(e.clientX - window.innerWidth  / 2)
-      setMouseY(e.clientY - window.innerHeight / 2)
-    }
-    window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  const words = title ? title.split(' ') : []
-  const lastWord = words.length > 0 ? words[words.length - 1] : ''
-  const leadingWords = words.slice(0, -1).join(' ')
-
-  return (
-    <div ref={sectionRef} className="relative overflow-hidden rounded-section border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl">
-
-      {/* ── Fondo ────────────────────────────────────────────────── */}
-      <motion.div className="absolute inset-0 z-0 rounded-section overflow-hidden" style={{ opacity: bgOpacity }}>
-        {bgImageSrc && !bgError ? (
-          <img
-            src={bgImageSrc}
-            alt=""
-            role="presentation"
-            className="w-full h-full"
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-            onError={() => setBgError(true)}
-          />
-        ) : (
-          <div className="w-full h-full" style={{ background: 'linear-gradient(160deg, #00031F 0%, #050828 40%, #0D0A22 70%, #0A0614 100%)' }} />
-        )}
-        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.10)' }} />
-      </motion.div>
-
-      {/* ── Palabras flotantes ───────────────────────────────────── */}
-      <motion.div style={{ position: 'absolute', inset: 0, zIndex: 15, pointerEvents: 'none', opacity: wordsOpacity }}>
-        {FLOAT_WORDS.map((item, i) => (
-          <FloatingWord key={i} item={item} mouseX={mouseX} mouseY={mouseY} />
-        ))}
-      </motion.div>
-
-      {/* ── Header ───────────────────────────────────────────────── */}
-      <div className="relative z-10 pt-8 md:pt-10 px-6 md:px-8">
-        <div className="flex flex-col items-center text-center gap-3">
-          {subtitle && (
-            <motion.p
-              className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/40 text-black/45"
-              style={{ opacity: useTransform(progress, [0, 0.3], [1, 0]) }}
-            >
-              {subtitle}
-            </motion.p>
-          )}
-          <div className="flex items-center justify-center gap-4 flex-wrap mix-blend-normal">
-            <motion.h2
-              className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
-              style={{ x: textX }}
-            >
-              {leadingWords}{leadingWords ? ' ' : ''}
-              <span className="text-grad">{lastWord}</span>
-            </motion.h2>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Media ────────────────────────────────────────────────── */}
-      <div className="relative z-10 flex items-center justify-center w-full px-4 md:px-6 py-6 md:py-8" style={{ minHeight: '45vh' }}>
-        <motion.div
-          className="overflow-hidden relative"
-          style={{
-            width: mediaW,
-            height: mediaH,
-            maxWidth: '95vw',
-            maxHeight: '80vh',
-            borderRadius: borderR,
-            boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
-          }}
-        >
-          {mediaType === 'video' ? (
-            mediaSrc?.includes('youtube.com') ? (
-              <div className="relative w-full h-full pointer-events-none">
-                <iframe
-                  title="Enfoque media"
-                  width="100%" height="100%"
-                  src={`${mediaSrc.replace('watch?v=', 'embed/')}?autoplay=1&mute=1&loop=1&controls=0`}
-                  className="w-full h-full"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-                <motion.div className="absolute inset-0 bg-black/30" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.2]) }} />
-              </div>
-            ) : (
-              <div className="relative w-full h-full pointer-events-none">
-                {mediaSrc && !mediaError ? (
-                  <video
-                    src={mediaSrc}
-                    type="video/mp4"
-                    autoPlay muted loop playsInline preload="auto"
-                    className="w-full h-full object-cover"
-                    controls={false}
-                    disablePictureInPicture
-                    disableRemotePlayback
-                    onError={() => setMediaError(true)}
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #050828, #0D1340, #1A0A28)' }}>
-                    <span style={{ fontFamily: "'Cal Sans', sans-serif", fontSize: '48px', color: 'rgba(255,255,255,0.08)' }}>CL</span>
-                  </div>
-                )}
-                <motion.div className="absolute inset-0 bg-black/30" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.2]) }} />
-              </div>
-            )
-          ) : (
-            <div className="relative w-full h-full">
-              {mediaSrc && !mediaError ? (
-                <img src={mediaSrc} alt={title || ''} loading="lazy" className="w-full h-full object-cover" onError={() => setMediaError(true)} />
-              ) : (
-                <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, #050828, #0D1340)' }} />
-              )}
-              <motion.div className="absolute inset-0 bg-black/50" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.4]) }} />
-            </div>
-          )}
-
-          {/* ── Fade inferior del video → se difumina con el fondo ── */}
-          <motion.div
-            className="pointer-events-none absolute bottom-0 left-0 right-0"
-            style={{
-              height: '140px',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,3,31,0.15) 30%, rgba(0,3,31,0.35) 70%, rgba(0,3,31,0.55) 100%)',
-              borderBottomLeftRadius: borderR,
-              borderBottomRightRadius: borderR,
-            }}
-          />
-        </motion.div>
-      </div>
-
-      {/* ── Contenido revelado ───────────────────────────────────── */}
-      <motion.div
-        className="relative z-10 px-6 md:px-8 pb-8 md:pb-10"
-        style={{ opacity: contentOpacity }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  )
-}
-
-export default ScrollExpandMedia
-</file>
-
 <file path="src/sections/Hero.jsx">
 import { useState, useMemo } from 'react'
 import { motion } from 'motion/react'
@@ -5630,19 +5204,177 @@ export default function Hero({ lang }) {
 }
 </file>
 
+<file path="src/components/ScrollExpandMedia.jsx">
+import { useEffect, useRef, useState } from 'react'
+import { motion, useScroll, useTransform } from 'motion/react'
+
+/* ── Componente principal ────────────────────────────────────────── */
+const ScrollExpandMedia = ({
+  mediaType   = 'video',
+  mediaSrc,
+  bgImageSrc,
+  title,
+  subtitle,
+  children,
+}) => {
+  const sectionRef = useRef(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const [bgError, setBgError] = useState(false)
+  const [mediaError, setMediaError] = useState(false)
+
+  /* ── Scroll: animation completes when section reaches center of viewport ── */
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'center center'],
+  })
+
+  const progress = useTransform(scrollYProgress, [0, 1], [0, 1])
+  const bgOpacity = useTransform(progress, [0.5, 0.9], [1, 0.3])
+
+  /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
+  const mediaW = useTransform(progress, [0, 1], [300, isMobile ? 900 : 1500])
+  const mediaH = useTransform(progress, [0, 1], [400, isMobile ? 500 : 700])
+  const borderR = useTransform(progress, [0, 1], [32, 16])
+
+  /* ── Opacidades ───────────────────────────────────────────────── */
+  const contentOpacity = useTransform(progress, [0.65, 0.95], [0, 1])
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  const words = title ? title.split(' ') : []
+  const lastWord = words.length > 0 ? words[words.length - 1] : ''
+  const leadingWords = words.slice(0, -1).join(' ')
+
+  return (
+    <div ref={sectionRef} className="relative overflow-hidden rounded-section border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl">
+
+      {/* ── Fondo ────────────────────────────────────────────────── */}
+      <motion.div className="absolute inset-0 z-0 rounded-section overflow-hidden" style={{ opacity: bgOpacity }}>
+        {bgImageSrc && !bgError ? (
+          <img
+            src={bgImageSrc}
+            alt=""
+            role="presentation"
+            className="w-full h-full"
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            onError={() => setBgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full" style={{ background: 'linear-gradient(160deg, #00031F 0%, #050828 40%, #0D0A22 70%, #0A0614 100%)' }} />
+        )}
+        <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.10)' }} />
+      </motion.div>
+
+      {/* ── Header ───────────────────────────────────────────────── */}
+      <div className="relative z-10 pt-8 md:pt-10 px-6 md:px-8">
+        <div className="flex flex-col items-center text-center gap-3">
+          {subtitle && (
+            <motion.p
+              className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/40 text-black/45"
+              style={{ opacity: useTransform(progress, [0, 0.3], [1, 0]) }}
+            >
+              {subtitle}
+            </motion.p>
+          )}
+          <h2 className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px] text-center">
+            {leadingWords}{leadingWords ? ' ' : ''}
+            <span className="text-grad">{lastWord}</span>
+          </h2>
+        </div>
+      </div>
+
+      {/* ── Media ────────────────────────────────────────────────── */}
+      <div className="relative z-10 flex items-center justify-center w-full px-4 md:px-6 py-6 md:py-8" style={{ minHeight: '45vh' }}>
+        <motion.div
+          className="overflow-hidden relative"
+          style={{
+            width: mediaW,
+            height: mediaH,
+            maxWidth: '95vw',
+            maxHeight: '80vh',
+            borderRadius: borderR,
+            boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
+          }}
+        >
+          {mediaType === 'video' ? (
+            mediaSrc?.includes('youtube.com') ? (
+              <div className="relative w-full h-full pointer-events-none">
+                <iframe
+                  title="Enfoque media"
+                  width="100%" height="100%"
+                  src={`${mediaSrc.replace('watch?v=', 'embed/')}?autoplay=1&mute=1&loop=1&controls=0`}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+                <motion.div className="absolute inset-0 bg-black/30" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.2]) }} />
+              </div>
+            ) : (
+              <div className="relative w-full h-full pointer-events-none">
+                {mediaSrc && !mediaError ? (
+                  <video
+                    src={mediaSrc}
+                    type="video/mp4"
+                    autoPlay muted loop playsInline preload="auto"
+                    className="w-full h-full object-cover"
+                    controls={false}
+                    disablePictureInPicture
+                    disableRemotePlayback
+                    onError={() => setMediaError(true)}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #050828, #0D1340, #1A0A28)' }}>
+                    <span style={{ fontFamily: "'Cal Sans', sans-serif", fontSize: '48px', color: 'rgba(255,255,255,0.08)' }}>CL</span>
+                  </div>
+                )}
+                <motion.div className="absolute inset-0 bg-black/30" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.2]) }} />
+              </div>
+            )
+          ) : (
+            <div className="relative w-full h-full">
+              {mediaSrc && !mediaError ? (
+                <img src={mediaSrc} alt={title || ''} loading="lazy" className="w-full h-full object-cover" onError={() => setMediaError(true)} />
+              ) : (
+                <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, #050828, #0D1340)' }} />
+              )}
+              <motion.div className="absolute inset-0 bg-black/50" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.4]) }} />
+            </div>
+          )}
+
+          {/* ── Fade inferior del video → se difumina con el fondo ── */}
+          <motion.div
+            className="pointer-events-none absolute bottom-0 left-0 right-0"
+            style={{
+              height: '140px',
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,3,31,0.15) 30%, rgba(0,3,31,0.35) 70%, rgba(0,3,31,0.55) 100%)',
+              borderBottomLeftRadius: borderR,
+              borderBottomRightRadius: borderR,
+            }}
+          />
+        </motion.div>
+      </div>
+
+      {/* ── Contenido revelado ───────────────────────────────────── */}
+      <motion.div
+        className="relative z-10 px-6 md:px-8 pb-8 md:pb-10"
+        style={{ opacity: contentOpacity }}
+      >
+        {children}
+      </motion.div>
+    </div>
+  )
+}
+
+export default ScrollExpandMedia
+</file>
+
 <file path="src/sections/Productos.jsx">
-/**
- * Productos.jsx — "Recursos del lab" carousel
- *
- * Arquitectura:
- * - Contenedor overflow:hidden (wrapper visible)
- * - motion.div interior con drag="x" + dragConstraints
- * - onDragEnd → snap al índice más cercano
- * - Sin scrollbar nativo (no hay overflow scroll)
- * - Flechas en el encabezado, fuera del área de tarjetas
- * - 4ª tarjeta asoma ~20% al fondo (gap right en el wrapper)
- * - Dots clicables sincronizados con el índice activo
- */
 import { motion, useMotionValue, animate } from 'motion/react'
 import { ExternalLink, ShoppingBag, Zap, Layers, Play, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRef, useState, useCallback, useEffect } from 'react'
@@ -5854,98 +5586,100 @@ export default function Productos({ lang }) {
 
   return (
     <section id="productos recursos" className="relative z-10 py-24 px-4 md:px-8">
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
+      <div className="section-premium">
+        <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
-        {/* Encabezado con flechas a la derecha */}
-        <div className="flex items-end justify-between gap-4">
-          <div className="flex flex-col gap-3 max-w-2xl">
-            <motion.p
-              className="text-[12px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/35"
-              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            >
-              {t('Recursos del lab', 'Lab resources')}
-            </motion.p>
-            <motion.h2
-              className="font-cal text-4xl md:text-5xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
-              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .08 }}
-            >
-              {t('Recursos y ', 'Resources & ')}
-              <span className="text-grad">{t('herramientas', 'tools')}</span>
-            </motion.h2>
+          {/* Encabezado con flechas a la derecha */}
+          <div className="flex items-end justify-between gap-4">
+            <div className="flex flex-col gap-3 max-w-2xl">
+              <motion.p
+                className="text-[12px] font-bold tracking-[.12em] uppercase dark:text-white/30 text-black/35"
+                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+              >
+                {t('Recursos del lab', 'Lab resources')}
+              </motion.p>
+              <motion.h2
+                className="font-cal text-4xl md:text-5xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+                initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .08 }}
+              >
+                {t('Recursos y ', 'Resources & ')}
+                <span className="text-grad">{t('herramientas', 'tools')}</span>
+              </motion.h2>
+            </div>
+
+            {/* Flechas */}
+            <div className="flex items-center gap-2 shrink-0 pb-1">
+              <button type="button" onClick={() => handleArrow(-1)}
+                disabled={activeIndex === 0}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full glass border dark:border-white/10 border-black/10 dark:text-white/70 text-black/60 transition-all duration-200 hover:dark:text-white hover:text-black disabled:opacity-25 disabled:cursor-not-allowed"
+                aria-label={t('Anterior', 'Previous')}>
+                <ChevronLeft size={18} />
+              </button>
+              <button type="button" onClick={() => handleArrow(1)}
+                disabled={activeIndex === TOTAL - 1}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full glass border dark:border-white/10 border-black/10 dark:text-white/70 text-black/60 transition-all duration-200 hover:dark:text-white hover:text-black disabled:opacity-25 disabled:cursor-not-allowed"
+                aria-label={t('Siguiente', 'Next')}>
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
 
-          {/* Flechas */}
-          <div className="flex items-center gap-2 shrink-0 pb-1">
-            <button type="button" onClick={() => handleArrow(-1)}
-              disabled={activeIndex === 0}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full glass border dark:border-white/10 border-black/10 dark:text-white/70 text-black/60 transition-all duration-200 hover:dark:text-white hover:text-black disabled:opacity-25 disabled:cursor-not-allowed"
-              aria-label={t('Anterior', 'Previous')}>
-              <ChevronLeft size={18} />
-            </button>
-            <button type="button" onClick={() => handleArrow(1)}
-              disabled={activeIndex === TOTAL - 1}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full glass border dark:border-white/10 border-black/10 dark:text-white/70 text-black/60 transition-all duration-200 hover:dark:text-white hover:text-black disabled:opacity-25 disabled:cursor-not-allowed"
-              aria-label={t('Siguiente', 'Next')}>
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        </div>
-
-        {/* Carrusel draggable */}
-        <div
-          ref={containerRef}
-          className="relative overflow-hidden"
-          style={{ touchAction: 'pan-y' }}
-        >
-          <motion.div
-            className="flex gap-6 cursor-grab active:cursor-grabbing select-none"
-            style={{ x }}
-            drag="x"
-            dragConstraints={{ left: maxDrag, right: 0 }}
-            dragElastic={0.08}
-            dragMomentum={true}
-            onDragStart={() => setIsDragging(true)}
-            onDragEnd={handleDragEnd}
-            onDrag={(_, info) => {
-              const rawIndex = -info.point.x / STEP
-              const clamped  = Math.round(Math.max(0, Math.min(rawIndex, TOTAL - 1)))
-              if (clamped !== activeIndex) setActiveIndex(clamped)
-            }}
+          {/* Carrusel draggable */}
+          <div
+            ref={containerRef}
+            className="relative overflow-hidden"
+            style={{ touchAction: 'pan-y' }}
           >
-            {products.map((prod, i) => (
-              <ProductCard key={i} prod={prod} lang={lang} index={i} isDragging={isDragging} />
+            <motion.div
+              className="flex gap-6 cursor-grab active:cursor-grabbing select-none"
+              style={{ x }}
+              drag="x"
+              dragConstraints={{ left: maxDrag, right: 0 }}
+              dragElastic={0.08}
+              dragMomentum={true}
+              onDragStart={() => setIsDragging(true)}
+              onDragEnd={handleDragEnd}
+              onDrag={(_, info) => {
+                const rawIndex = -info.point.x / STEP
+                const clamped  = Math.round(Math.max(0, Math.min(rawIndex, TOTAL - 1)))
+                if (clamped !== activeIndex) setActiveIndex(clamped)
+              }}
+            >
+              {products.map((prod, i) => (
+                <ProductCard key={i} prod={prod} lang={lang} index={i} isDragging={isDragging} />
+              ))}
+              <YouTubeCard lang={lang} isDragging={isDragging} />
+            </motion.div>
+          </div>
+
+          {/* Dots clicables */}
+          <div className="flex justify-center items-center gap-2">
+            {Array.from({ length: TOTAL }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => snapTo(i)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === activeIndex
+                    ? 'w-7 dark:bg-white/80 bg-black/60'
+                    : 'w-2 dark:bg-white/25 bg-black/22 hover:dark:bg-white/45 hover:bg-black/40'
+                }`}
+                aria-label={`Slide ${i + 1}`}
+              />
             ))}
-            <YouTubeCard lang={lang} isDragging={isDragging} />
+          </div>
+
+          {/* CTA ver todos */}
+          <motion.div className="flex justify-center"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: .3 }}>
+            <a href="https://concentriclab.gumroad.com" target="_blank" rel="noopener noreferrer"
+              className="glass inline-flex items-center gap-2.5 dark:text-white/60 text-black/65 hover:dark:text-white hover:text-black text-sm font-semibold px-6 py-3 rounded-full border dark:border-white/8 border-black/10 hover:dark:border-white/16 hover:border-black/18 transition-all duration-300">
+              {t('Ver todos los recursos', 'View all resources')}
+              <ExternalLink size={13} />
+            </a>
           </motion.div>
+
         </div>
-
-        {/* Dots clicables */}
-        <div className="flex justify-center items-center gap-2">
-          {Array.from({ length: TOTAL }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => snapTo(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === activeIndex
-                  ? 'w-7 dark:bg-white/80 bg-black/60'
-                  : 'w-2 dark:bg-white/25 bg-black/22 hover:dark:bg-white/45 hover:bg-black/40'
-              }`}
-              aria-label={`Slide ${i + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* CTA ver todos */}
-        <motion.div className="flex justify-center"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: .3 }}>
-          <a href="https://concentriclab.gumroad.com" target="_blank" rel="noopener noreferrer"
-            className="glass inline-flex items-center gap-2.5 dark:text-white/60 text-black/65 hover:dark:text-white hover:text-black text-sm font-semibold px-6 py-3 rounded-full border dark:border-white/8 border-black/10 hover:dark:border-white/16 hover:border-black/18 transition-all duration-300">
-            {t('Ver todos los recursos', 'View all resources')}
-            <ExternalLink size={13} />
-          </a>
-        </motion.div>
-
       </div>
     </section>
   )
@@ -6047,9 +5781,9 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
               {lang.toUpperCase()}
             </button>
 
-            <a href="#capacidades"
+            <a href="#connect"
               className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(77,102,255,.45)] transition-all duration-200">
-              {t('Explorar', 'Explore')}
+              {t('Contáctenos', 'Contact us')}
             </a>
 
             <button className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"
@@ -6102,185 +5836,191 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
 
 <file path="src/sections/Manifiesto.jsx">
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, useInView } from 'motion/react'
+import { motion, useInView } from 'motion/react'
 
 const principles = [
   { num: '01', color: '#4D66FF',
-    es: { title: 'Del núcleo hacia afuera', body: 'Las mejores soluciones parten del centro: del usuario al sistema, del problema a la solución.' },
-    en: { title: 'From the core outward',   body: 'The best solutions start from the center: from the user to the system, from the problem to the solution.' },
+    es: { title: 'Del núcleo hacia afuera',      body: 'Del usuario al sistema, del problema a la solución.' },
+    en: { title: 'From the core outward',         body: 'From the user to the system, from the problem to the solution.' },
   },
   { num: '02', color: '#FF6D4D',
-    es: { title: 'Criterio sobre velocidad', body: 'Mover con intención produce sistemas mejores que mover rápido. El criterio transforma ideas en resultados duraderos.' },
-    en: { title: 'Criterion over speed',     body: 'Moving with intention produces better systems than moving fast. Criterion turns ideas into lasting results.' },
+    es: { title: 'Criterio sobre velocidad',      body: 'Avanzar con intención produce mejores sistemas.' },
+    en: { title: 'Criterion over speed',          body: 'Moving with intention produces better systems.' },
   },
   { num: '03', color: '#828AFF',
-    es: { title: 'Convergencia, no fragmentación', body: 'Diseño, IA y automatización bajo la misma lógica se potencian mutuamente — los resultados se multiplican.' },
-    en: { title: 'Convergence, not fragmentation', body: 'Design, AI and automation under the same logic amplify each other — results multiply.' },
+    es: { title: 'Convergencia, no fragmentación',  body: 'Diseño, automatización e inteligencia bajo una misma lógica.' },
+    en: { title: 'Convergence, not fragmentation',  body: 'Design, automation and intelligence under one logic.' },
   },
   { num: '04', color: '#41EAFF',
-    es: { title: 'Sistemas sobre piezas', body: 'Una pieza gráfica impresiona. Un sistema que funciona transforma y escala. El lab construye lo segundo.' },
-    en: { title: 'Systems over pieces',   body: 'A great piece can impress. A system that works transforms and scales. The lab builds the second.' },
+    es: { title: 'Sistemas sobre piezas',         body: 'Buscamos estructuras que sostienen y escalan, no solo piezas sueltas.' },
+    en: { title: 'Systems over pieces',           body: 'We seek structures that sustain and scale, not just loose pieces.' },
   },
 ]
 
-const stats = [
-  { num: '+40h', color: '#4D66FF', es: 'Ahorradas por automatización en un proyecto típico',   en: 'Saved through automation in a typical project' },
-  { num: '6+',   color: '#FF6D4D', es: 'Disciplinas convergiendo en cada entrega',               en: 'Disciplines converging in every delivery' },
-  { num: '3×',   color: '#41EAFF', es: 'Más rápido que un flujo de trabajo tradicional',         en: 'Faster than a traditional workflow' },
-]
-
-function Card({ p, lang, index }) {
-  const c       = lang === 'es' ? p.es : p.en
-  const numRef  = useRef()
-  const numView = useInView(numRef, { once: true, margin: '-40px' })
+function PrincipleCard({ p, lang, index }) {
+  const c = lang === 'es' ? p.es : p.en
 
   return (
     <motion.div
-      className="rounded-card p-5 flex flex-col gap-2.5 relative overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.04] bg-white/60 backdrop-blur-sm"
-      initial={{ opacity: 0, y: 36 }}
+      className="relative rounded-card overflow-hidden group border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm"
+      initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: .75, ease: [.16, 1, .3, 1], delay: index * .08 }}
-      whileHover={{ y: -4, transition: { duration: .22, ease: 'easeOut' } }}
+      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+      whileHover={{ y: -5, transition: { duration: 0.22, ease: 'easeOut' } }}
     >
-      {/* Glow en hover */}
+      {/* Línea accent superior */}
       <div
-        className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none opacity-30 group-hover:opacity-70 group-hover:scale-150 transition-all duration-500"
-        style={{ background: `radial-gradient(circle,${p.color}30 0%,transparent 70%)`, filter: 'blur(12px)' }}
+        className="absolute top-0 left-0 right-0 h-[2px]"
+        style={{ background: `linear-gradient(to right, ${p.color}, transparent)` }}
       />
 
-      {/* Numeral — mismo estilo que las métricas: color + glow */}
-      <motion.span
-        ref={numRef}
-        className="font-cal text-3xl font-bold glow-number"
-        style={{ color: p.color }}
-        initial={{ textShadow: 'none', opacity: 0.4 }}
-        animate={numView ? {
-          opacity: 1,
-          textShadow: [
-            `0 0 12px ${p.color}44`,
-            `0 0 28px ${p.color}88`,
-            `0 0 16px ${p.color}66`,
-          ],
-        } : {}}
-        transition={{ delay: index * 0.1 + 0.3, duration: 0.9, ease: [.16,1,.3,1] }}
-      >
-        {p.num}
-      </motion.span>
+      {/* Glow de fondo */}
+      <div
+        className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none opacity-20 group-hover:opacity-50 group-hover:scale-125 transition-all duration-500"
+        style={{
+          background: `radial-gradient(circle, ${p.color}40 0%, transparent 70%)`,
+          filter: 'blur(24px)',
+        }}
+        aria-hidden="true"
+      />
 
-      <h3 className="font-cal text-[17px] dark:text-white text-b-dark leading-snug">{c.title}</h3>
-      <p className="dark:text-white/50 text-black/55 leading-[1.65] text-[13px]">{c.body}</p>
+      {/* Contenido */}
+      <div className="relative z-10 p-6 md:p-8 flex flex-col gap-4 min-h-[200px]">
+        {/* Número en lugar del icono — misma caja visual */}
+        <div className="flex-shrink-0">
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center font-cal text-lg font-bold"
+            style={{
+              background: `${p.color}18`,
+              border: `1px solid ${p.color}30`,
+              color: p.color,
+            }}
+          >
+            {p.num}
+          </div>
+        </div>
 
-      {/* Línea inferior en hover */}
+        {/* Texto */}
+        <div className="flex flex-col gap-2 flex-1">
+          <h3 className="font-cal text-xl md:text-2xl dark:text-white text-b-dark leading-snug">
+            {c.title}
+          </h3>
+          <p className="dark:text-white/50 text-black/55 text-sm leading-[1.7]">
+            {c.body}
+          </p>
+        </div>
+      </div>
+
+      {/* Línea inferior animada */}
       <div
         className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
-        style={{ background: `linear-gradient(to right,${p.color},transparent)` }}
+        style={{ background: `linear-gradient(to right, ${p.color}, transparent)` }}
       />
     </motion.div>
   )
 }
 
 export default function Manifiesto({ lang }) {
-  const sec      = useRef()
   const statsRef = useRef()
-  const { scrollYProgress } = useScroll({ target: sec, offset: ['start end', 'end start'] })
-  const y        = useTransform(scrollYProgress, [0, 1], [40, -40])
   const statsInView = useInView(statsRef, { once: true, margin: '-60px' })
   const t = (es, en) => lang === 'es' ? es : en
 
+  const stats = [
+    { num: '+40h', color: '#4D66FF', es: 'Ahorradas por automatización en un proyecto típico',   en: 'Saved through automation in a typical project' },
+    { num: '6+',   color: '#FF6D4D', es: 'Disciplinas convergiendo en cada entrega',               en: 'Disciplines converging in every delivery' },
+    { num: '3×',   color: '#41EAFF', es: 'Más rápido que un flujo de trabajo tradicional',         en: 'Faster than a traditional workflow' },
+  ]
+
   return (
-    <section
-      id="principios"
-      ref={sec}
-      className="py-12 md:py-16 px-4 relative overflow-hidden bg-transparent"
-    >
-      {/* Orbe parallax */}
-      <motion.div
-        style={{ y }}
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] rounded-full pointer-events-none"
+    <section id="principios" className="py-16 md:py-20 px-4 relative overflow-hidden bg-transparent">
+      {/* Atmósfera de fondo sutil */}
+      <div
+        className="absolute top-[-60px] left-1/2 -translate-x-1/2 w-[500px] h-[250px] rounded-full pointer-events-none opacity-40"
+        style={{
+          background: 'radial-gradient(ellipse, rgba(77,102,255,0.08) 0%, transparent 68%)',
+          filter: 'blur(55px)',
+        }}
         aria-hidden="true"
-      >
-        <div className="w-full h-full rounded-full" style={{ background: 'radial-gradient(ellipse,rgba(77,102,255,.12) 0%,transparent 68%)', filter: 'blur(55px)' }} />
-      </motion.div>
+      />
 
-      <div className="section-premium">
-        <div className="max-w-[1200px] mx-auto flex flex-col gap-8 md:gap-10 relative z-10">
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-8 relative z-10">
 
-        {/* Header */}
-        <div className="flex flex-col items-center text-center gap-3">
+        {/* ── Header ─────────────────────────────────────────────── */}
+        <div className="flex flex-col items-center text-center gap-2">
           <motion.p
-            className="text-[11px] font-bold tracking-[.12em] uppercase dark:text-white/40 text-black/45"
+            className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
           >
-            {t('Diseño, sistemas y criterio', 'What we believe')}
+            {t('Cómo pensamos', 'How we think')}
           </motion.p>
           <motion.h2
-            className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px] max-w-[520px]"
-            initial={{ opacity: 0, y: 20 }}
+            className="font-cal text-2xl md:text-3xl dark:text-white text-b-dark leading-tight tracking-[-0.3px]"
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .06 }}
+            transition={{ duration: .7, ease: [.16, 1, .3, 1], delay: .06 }}
           >
-            {t('Principios ', 'Lab ')}
-            <span className="text-grad">{t('del lab', 'principles')}</span>
+            {t('Principios y ', 'Principles & ')}
+            <span className="text-grad">{t('métricas', 'metrics')}</span>
           </motion.h2>
           <motion.p
-            className="dark:text-white/40 text-black/45 text-sm max-w-[440px] leading-[1.7]"
+            className="dark:text-white/35 text-black/45 text-[13px] max-w-[420px] leading-[1.6]"
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
-            viewport={{ once: true }} transition={{ delay: .12, duration: .7 }}
+            viewport={{ once: true }} transition={{ delay: .1, duration: .6 }}
           >
             {t(
-              'Aquí están los principios, los enfoques y las métricas que usamos para diseñar sistemas y ejecutar soluciones con rigor.',
-              'These are the principles, approaches, and metrics we use to design systems and execute solutions with rigor.'
+              'La lógica con la que diseñamos, decidimos y ejecutamos.',
+              'The logic behind how we design, decide, and execute.'
             )}
           </motion.p>
         </div>
 
-        {/* Grid de principios */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {principles.map((p, i) => <Card key={p.num} p={p} lang={lang} index={i} />)}
+        {/* ── 4 principios como cards individuales (estilo Capacidades) ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {principles.map((p, i) => (
+            <PrincipleCard key={p.num} p={p} lang={lang} index={i} />
+          ))}
         </div>
 
-        {/* Métricas integradas */}
+        {/* ── Métricas — banda integrada con mismo lenguaje visual ── */}
         <motion.div
           ref={statsRef}
-          className="relative overflow-hidden rounded-card border dark:border-white/[0.07] border-black/[0.07] dark:bg-b-deep/55 bg-white/55 backdrop-blur-xl"
-          initial={{ opacity: 0, y: 32 }}
+          className="relative rounded-card overflow-hidden group border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm"
+          initial={{ opacity: 0, y: 20 }}
           animate={statsInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: .9, ease: [.16, 1, .3, 1] }}
+          transition={{ duration: .8, ease: [.16, 1, .3, 1] }}
         >
-          <div className="absolute top-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-b-blue/30 to-transparent" />
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x dark:divide-white/[0.06] divide-black/[0.06] px-2 py-7">
+          {/* Línea accent superior */}
+          <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(to right, #4D66FF, transparent)' }} />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x dark:divide-white/[0.06] divide-black/[0.06]">
             {stats.map((s, i) => (
               <motion.div
                 key={i}
-                className="flex flex-col items-center text-center gap-1.5 px-6 py-4 md:py-2"
-                initial={{ opacity: 0, y: 14 }}
+                className="flex flex-col items-center text-center gap-1.5 px-6 py-6 md:py-5"
+                initial={{ opacity: 0, y: 10 }}
                 animate={statsInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: i * .14, duration: .7, ease: [.16, 1, .3, 1] }}
+                transition={{ delay: i * .1, duration: .6, ease: [.16, 1, .3, 1] }}
               >
-                <motion.span
-                  className="font-cal text-4xl md:text-5xl glow-number"
+                <span
+                  className="font-cal text-3xl md:text-4xl"
                   style={{ color: s.color }}
-                  initial={{ scale: .82, opacity: 0, textShadow: 'none' }}
-                  animate={statsInView ? {
-                    scale: 1, opacity: 1,
-                    textShadow: `0 0 24px ${s.color}70`,
-                  } : {}}
-                  transition={{ delay: .22 + i * .14, type: 'spring', stiffness: 130 }}
                 >
                   {s.num}
-                </motion.span>
-                <p className="dark:text-white/50 text-black/50 text-[12px] leading-[1.55] max-w-[155px]">
+                </span>
+                <p className="dark:text-white/45 text-black/50 text-[12px] leading-[1.55] max-w-[150px]">
                   {lang === 'es' ? s.es : s.en}
                 </p>
               </motion.div>
             ))}
           </div>
-          <div className="absolute bottom-0 left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-b-coral/25 to-transparent" />
+
+          {/* Línea inferior animada */}
+          <div className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out" style={{ background: 'linear-gradient(to right, #4D66FF, #FF6D4D, #41EAFF, transparent)' }} />
         </motion.div>
+
       </div>
-    </div>
     </section>
   )
 }
@@ -6312,14 +6052,13 @@ export default function Footer({ lang }) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative z-10 px-4 pb-8 pt-20 mb-8 overflow-hidden bg-transparent">
+    <footer className="relative z-10 px-4 pb-8 pt-20 mb-8 overflow-hidden">
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
         style={{ background: 'linear-gradient(to right,transparent,rgba(77,102,255,.22),transparent)' }}
       />
 
-      <div className="section-premium">
-        <div className="max-w-[1200px] mx-auto">
+      <div className="max-w-[1200px] mx-auto">
 
         {/* CTA grande */}
         <motion.div
@@ -6399,7 +6138,6 @@ export default function Footer({ lang }) {
           </p>
         </div>
       </div>
-    </div>
     </footer>
   )
 }
@@ -6415,11 +6153,11 @@ const BG_SRC    = '/assets/images/imagen_dinamico.webp'
 const VIDEO_SRC = '/assets/images/video_dinamico.mp4'
 
 /* ── Tags ────────────────────────────────────────────────────────── */
-const TAGS_ES = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Video', 'Branding', 'Automatización', 'Sistemas visuales']
-const TAGS_EN = ['Design', 'Product & form', 'Digital experience', 'Video', 'Branding', 'Automation', 'Visual systems']
+const TAGS_ES = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Branding', 'Sistemas visuales', 'Video & contenido', 'Automatización']
+const TAGS_EN = ['Design', 'Product & form', 'Digital experience', 'Branding', 'Visual systems', 'Video & CONTENT', 'Automation']
 
-const CORAL_ES = new Set(['núcleo', 'forma', 'pantalla', 'diseño,', 'producto,'])
-const CORAL_EN = new Set(['core', 'form', 'screen', 'design,', 'product,'])
+const CORAL_ES = new Set(['núcleo', 'forma', 'sistema', 'objeto', 'pantalla', 'diseño,'])
+const CORAL_EN = new Set(['core', 'form', 'system', 'object', 'screen', 'design,'])
 
 /* ── RevealedText ────────────────────────────────────────────────── */
 function RevealedText({ lang }) {
@@ -6427,31 +6165,17 @@ function RevealedText({ lang }) {
   const inView = useInView(ref, { once: true, margin: '-40px' })
 
   const text = lang === 'es'
-    ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — integrando diseño, producto, automatización e inteligencia artificial en piezas digitales que funcionan y comunican.'
-    : 'We build from the core outward — from form to system, from object to screen — integrating design, product, automation and artificial intelligence into digital pieces that work and communicate.'
+    ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — combinando diseño, automatización e inteligencia aplicada para crear marcas, productos y experiencias que funcionan y comunican.'
+    : 'We build from the core outward — from form to system, from object to screen — combining design, automation and applied intelligence to create brands, products and experiences that work and communicate.'
 
   const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
   const tags     = lang === 'es' ? TAGS_ES   : TAGS_EN
   const words    = text.split(' ')
-  const t        = (es, en) => lang === 'es' ? es : en
 
   return (
     <div className="flex flex-col items-center gap-8">
 
-      {/* Divider */}
-      <motion.div
-        className="flex items-center gap-4 w-full max-w-sm"
-        initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="flex-1 h-px dark:bg-white/10 bg-black/12" />
-        <span className="text-[10px] font-bold tracking-[0.14em] uppercase dark:text-white/30 text-black/40">
-          {t('El enfoque', 'The approach')}
-        </span>
-        <div className="flex-1 h-px dark:bg-white/10 bg-black/12" />
-      </motion.div>
-
-      {/* Párrafo — tipografía más pequeña */}
+      {/* Párrafo */}
       <p
         ref={ref}
         className="font-cal text-lg sm:text-xl md:text-2xl leading-[1.35] tracking-[-0.2px] text-center max-w-[720px] dark:text-white/80 text-black/60"
@@ -6497,22 +6221,6 @@ function RevealedText({ lang }) {
         ))}
       </motion.div>
 
-      {/* CTA */}
-      <motion.div
-        className="flex items-center gap-2"
-        initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
-        transition={{ delay: words.length * 0.04 + 0.7, duration: 0.6 }}
-      >
-        <a
-          href="#capacidades"
-          className="group inline-flex items-center gap-3 text-[10px] font-bold tracking-[0.10em] uppercase dark:text-white/40 text-black/50 hover:dark:text-white hover:text-black transition-colors duration-250"
-        >
-          <span className="h-px w-6 dark:bg-white/25 bg-black/25 group-hover:w-10 transition-all duration-300" aria-hidden="true" />
-          {t('Descubrir capacidades', 'Discover capabilities')}
-          <span className="h-px w-6 dark:bg-white/25 bg-black/25 group-hover:w-10 transition-all duration-300" aria-hidden="true" />
-        </a>
-      </motion.div>
-
     </div>
   )
 }
@@ -6533,11 +6241,305 @@ export default function Enfoque({ lang }) {
           mediaSrc={VIDEO_SRC}
           bgImageSrc={BG_SRC}
           title={t('Del objeto a la pantalla.', 'From object to screen.')}
-          subtitle={t('Diseño, sistemas y criterio', 'From the core')}
-          textBlend={false}
+          subtitle={t('Diseño, automatización e inteligencia', 'Design, automation & intelligence')}
         >
           <RevealedText lang={lang} />
         </ScrollExpandMedia>
+      </div>
+    </section>
+  )
+}
+</file>
+
+<file path="src/sections/Proceso.jsx">
+import { useState, useEffect, useRef } from 'react'
+import { motion, useInView, AnimatePresence } from 'motion/react'
+import { Search, Pen, Zap } from 'lucide-react'
+
+const steps = [
+  {
+    Icon: Search, color: '#4D66FF',
+    es: { title: 'Diagnóstico', desc: 'Analizamos tu producto o marca — su forma, contexto y cómo se percibe, en lo digital y en lo físico.' },
+    en: { title: 'Diagnosis', desc: 'We analyze your product or brand — its shape, context and how it\'s perceived, digitally and physically.' },
+  },
+  {
+    Icon: Pen, color: '#FF6D4D',
+    es: { title: 'Diseño', desc: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.' },
+    en: { title: 'Design', desc: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.' },
+  },
+  {
+    Icon: Zap, color: '#828AFF',
+    es: { title: 'Activación', desc: 'Piezas listas para comunicar y posicionar — para publicar, implementar o producir.' },
+    en: { title: 'Activation', desc: 'Pieces ready to communicate and position — to publish, implement or produce.' },
+  },
+]
+
+/* ── useMediaQuery ─────────────────────────────────────────────── */
+function useMediaQuery(q) {
+  const [m, setM] = useState(false)
+  useEffect(() => {
+    const mql = window.matchMedia(q)
+    setM(mql.matches)
+    const h = (e) => setM(e.matches)
+    mql.addEventListener('change', h)
+    return () => mql.removeEventListener('change', h)
+  }, [q])
+  return m
+}
+
+/* ── SVG línea conectora + partícula ──────────────────────────── */
+function TimelineLine({ inView, isMobile }) {
+  const [forwardDrawn, setForwardDrawn] = useState(false)
+
+  useEffect(() => {
+    if (inView) {
+      const t = setTimeout(() => setForwardDrawn(true), 900)
+      return () => clearTimeout(t)
+    }
+  }, [inView])
+
+  if (isMobile) {
+    return (
+      <svg className="absolute left-[18px] top-0 h-full w-[40px] pointer-events-none z-0"
+        viewBox="0 0 40 300" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="lineGradMob" x1="0" y1="0" x2="0" y2="300" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#4D66FF" />
+            <stop offset="50%" stopColor="#FF6D4D" />
+            <stop offset="100%" stopColor="#828AFF" />
+          </linearGradient>
+        </defs>
+        <motion.path d="M 20 30 L 20 150 L 20 270"
+          stroke="rgba(255,255,255,0.08)" strokeWidth="2" fill="none" strokeLinecap="round"
+          initial={{ pathLength: 0 }} animate={inView ? { pathLength: 1 } : {}}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+        />
+        <path d="M 20 30 L 20 150 L 20 270 Q 30 150 20 30"
+          stroke="url(#lineGradMob)" strokeWidth="1" fill="none" opacity="0.15" strokeLinecap="round"
+        />
+        {forwardDrawn && (
+          <>
+            <circle r="3" fill="#4D66FF">
+              <animateMotion dur="7.5s" repeatCount="indefinite" path="M 20 30 L 20 150 L 20 270 Q 30 150 20 30" />
+            </circle>
+            <circle r="1.5" fill="#FF6D4D" opacity="0.6">
+              <animateMotion dur="7.5s" repeatCount="indefinite" path="M 20 30 L 20 150 L 20 270 Q 30 150 20 30" begin="-1.5s" />
+            </circle>
+          </>
+        )}
+      </svg>
+    )
+  }
+
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0"
+      viewBox="0 0 1000 100" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="lineGrad" x1="0" y1="0" x2="1000" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#4D66FF" />
+          <stop offset="40%" stopColor="#41EAFF" />
+          <stop offset="100%" stopColor="#FF6D4D" />
+        </linearGradient>
+      </defs>
+      <motion.path d="M 165 50 L 500 50 L 835 50"
+        stroke="rgba(255,255,255,0.08)" strokeWidth="2" fill="none" strokeLinecap="round"
+        initial={{ pathLength: 0 }} animate={inView ? { pathLength: 1 } : {}}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+      />
+      <path d="M 165 50 L 500 50 L 835 50 Q 500 80 165 50"
+        stroke="url(#lineGrad)" strokeWidth="1.5" fill="none" opacity="0.12" strokeLinecap="round"
+      />
+      {forwardDrawn && (
+        <>
+          <circle r="4" fill="#4D66FF" filter="url(#particleGlow)">
+            <animateMotion dur="7.5s" repeatCount="indefinite" path="M 165 50 L 500 50 L 835 50 Q 500 80 165 50" />
+          </circle>
+          <circle r="2" fill="#FF6D4D" opacity="0.5">
+            <animateMotion dur="7.5s" repeatCount="indefinite" path="M 165 50 L 500 50 L 835 50 Q 500 80 165 50" begin="-1.2s" />
+          </circle>
+        </>
+      )}
+      <defs>
+        <filter id="particleGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="2" />
+        </filter>
+      </defs>
+    </svg>
+  )
+}
+
+/* ── Indicador de paso individual ──────────────────────────────── */
+function StepDot({ step, index, isActive, lang, onClick, entryDelay }) {
+  const Icon = step.Icon
+  const c    = lang === 'es' ? step.es : step.en
+
+  return (
+    <motion.button
+      onClick={() => onClick(index)}
+      className="relative flex flex-col items-center gap-2 md:gap-3 group cursor-pointer outline-none"
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: entryDelay, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+    >
+      <span className="font-cal text-[11px] font-bold tracking-[0.15em] transition-all duration-500"
+        style={{ color: step.color, opacity: isActive ? 0.7 : 0.3 }}>
+        0{index + 1}
+      </span>
+
+      <div className="relative flex items-center justify-center transition-all duration-500"
+        style={{
+          width: isActive ? 56 : 42,
+          height: isActive ? 56 : 42,
+        }}>
+        {isActive && (
+          <motion.div className="absolute inset-0 rounded-xl"
+            style={{ background: `radial-gradient(circle, ${step.color}25 0%, transparent 70%)` }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: [0, 0.8, 0.4], scale: [0.6, 1.4, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        )}
+        <div className="relative rounded-xl flex items-center justify-center transition-all duration-500"
+          style={{
+            width: isActive ? 56 : 42,
+            height: isActive ? 56 : 42,
+            background: `${step.color}12`,
+            border: `1px solid ${step.color}25`,
+            boxShadow: isActive ? `0 0 20px ${step.color}22` : 'none',
+          }}>
+          <Icon size={isActive ? 22 : 17} style={{ color: step.color }} strokeWidth={1.75} />
+        </div>
+      </div>
+
+      <span className="font-cal text-sm md:text-base dark:text-white text-b-dark transition-all duration-500"
+        style={{ opacity: isActive ? 1 : 0.5 }}>
+        {c.title}
+      </span>
+    </motion.button>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Componente principal
+   ═══════════════════════════════════════════════════════════════════ */
+export default function Proceso({ lang }) {
+  const t        = (es, en) => lang === 'es' ? es : en
+  const isMobile = useMediaQuery('(max-width: 767px)')
+  const ref      = useRef(null)
+  const inView   = useInView(ref, { once: true, margin: '-60px' })
+  const [active, setActive] = useState(0)
+
+  useEffect(() => {
+    if (!inView) return
+    const id = setInterval(() => setActive(i => (i + 1) % 3), 2500)
+    return () => clearInterval(id)
+  }, [inView])
+
+  const step         = steps[active]
+  const c            = lang === 'es' ? step.es : step.en
+  const Icon         = step.Icon
+  const focusColors  = ['#4D66FF', '#FF6D4D', '#828AFF']
+  const entryDelays  = [0.15, 0.3, 0.45]
+
+  return (
+    <section id="proceso" className="relative z-10 py-14 md:py-16 px-4 overflow-hidden">
+      {/* Fondo atmosférico */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse, rgba(77,102,255,.05) 0%, transparent 70%)', filter: 'blur(60px)' }} aria-hidden="true"
+      />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[200px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse, rgba(255,109,77,.03) 0%, transparent 70%)', filter: 'blur(50px)' }} aria-hidden="true"
+      />
+
+      <div ref={ref} className="max-w-[900px] lg:max-w-[1000px] mx-auto flex flex-col gap-8 md:gap-10">
+
+        {/* ── Header ──────────────────────────────────────────── */}
+        <div className={`text-center flex flex-col gap-1 ${isMobile ? '' : 'max-w-lg mx-auto'}`}>
+          <motion.p className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            {t('Cómo trabajamos', 'How we work')}
+          </motion.p>
+          <motion.h2 className="font-cal text-2xl md:text-3xl dark:text-white text-b-dark leading-tight"
+            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}>
+            {t('Un proceso que ', 'A process that ')}
+            <span className="text-grad">{t('itera', 'iterates')}</span>
+          </motion.h2>
+          <motion.p className="text-xs md:text-sm dark:text-white/40 text-black/40"
+            initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}>
+            {t('Diagnóstico, diseño y activación — en ciclo constante.', 'Diagnosis, design and activation — in constant cycle.')}
+          </motion.p>
+        </div>
+
+        {/* ── Timeline ──────────────────────────────────────────── */}
+        <div className={`relative ${isMobile ? 'pl-[50px] flex flex-col gap-6' : 'pt-2'}`}>
+          {!isMobile && <TimelineLine inView={inView} isMobile={false} />}
+
+          {/* Desktop: grid row */}
+          {!isMobile && (
+            <div className="relative grid grid-cols-3 gap-4 z-10">
+              {steps.map((s, i) => (
+                <StepDot key={i} step={s} index={i} isActive={i === active} lang={lang}
+                  onClick={setActive} entryDelay={entryDelays[i]} />
+              ))}
+            </div>
+          )}
+
+          {/* Mobile: vertical stacked */}
+          {isMobile && (
+            <div className="relative z-10 flex flex-col gap-6">
+              <TimelineLine inView={inView} isMobile={true} />
+              {steps.map((s, i) => (
+                <StepDot key={i} step={s} index={i} isActive={i === active} lang={lang}
+                  onClick={setActive} entryDelay={entryDelays[i]} />
+              ))}
+            </div>
+          )}
+
+          {/* ── Card de detalle ─────────────────────────────────── */}
+          <div className={`${isMobile ? 'mt-2' : 'mt-8 md:mt-10'}`}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={active}
+                className="rounded-card overflow-hidden border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.04] bg-white/70 backdrop-blur-md shadow-[0_4px_20px_-6px_rgba(0,0,0,0.08)] max-w-lg mx-auto"
+                initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="h-[3px] w-full" style={{ background: `linear-gradient(to right, ${step.color}, transparent)` }} />
+                <div className="p-5 md:p-6 flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ background: `${step.color}15`, border: `1px solid ${step.color}20` }}>
+                    <Icon size={18} style={{ color: step.color }} strokeWidth={1.75} />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <h4 className="font-cal text-base md:text-lg dark:text-white text-b-dark">{c.title}</h4>
+                    <p className="text-xs md:text-sm dark:text-white/60 text-black/60 leading-relaxed">{c.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Indicadores */}
+          <div className="flex justify-center items-center gap-3 mt-6 md:mt-8 z-10 relative">
+            {steps.map((_, i) => (
+              <button key={i} onClick={() => setActive(i)}
+                className="h-1.5 rounded-full transition-all duration-700"
+                style={{
+                  width: i === active ? 24 : 8,
+                  background: i === active ? focusColors[i] : 'rgba(255,255,255,0.12)',
+                  boxShadow: i === active ? `0 0 8px ${focusColors[i]}` : 'none',
+                }}
+                aria-label={t(`Ir a paso ${i + 1}`, `Go to step ${i + 1}`)}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -7311,12 +7313,9 @@ export default function Enfoque({ lang }) {
    html.light #principios .text-black\/50,
    html.light #principios .text-black\/55 {
      color: rgba(245, 245, 240, 0.55) !important;
-   }
-   html.light #principios .glow-number {
-     text-shadow: 0 0 14px currentColor, 0 0 28px currentColor;
-   }
-   
-   /* Panel métricas */
+    }
+    
+    /* Panel métricas */
    html.light #principios .backdrop-blur-xl {
      background: rgba(5, 8, 40, 0.55) !important;
      border: 1px solid rgba(255, 255, 255, 0.07) !important;
