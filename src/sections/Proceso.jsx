@@ -1,331 +1,522 @@
-import { useRef, useState, useEffect } from 'react'
-import { motion, AnimatePresence, useInView } from 'motion/react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { Search, Pen, Zap } from 'lucide-react'
 
 const phases = [
   {
-    Icon: Search, color: '#4D66FF',
-    es: { leftLabel: 'Diagnóstico', title: 'Analizar',  output: 'Contexto + forma',  desc: 'Analizamos tu producto o marca — su forma, contexto y cómo se percibe, en lo digital y en lo físico.' },
-    en: { leftLabel: 'Diagnosis',  title: 'Analyze',   output: 'Context + form',    desc: 'We analyze your product or brand — its shape, context and how it\'s perceived, digitally and physically.' },
+    color: '#4D66FF',
+    icon: Search,
+    label: { es: 'Diagnóstico', en: 'Diagnosis' },
+    title: { es: 'Analizar', en: 'Analyze' },
+    output: { es: 'Contexto + forma', en: 'Context + form' },
+    badge: { es: 'Diagnóstico estratégico', en: 'Strategic diagnosis' },
+    desc: {
+      es: 'Analizamos tu producto o marca — su forma, contexto y cómo se percibe, en lo digital y en lo físico.',
+      en: 'We analyze your product or brand — its form, context and how it is perceived, digitally and physically.',
+    },
   },
   {
-    Icon: Pen, color: '#FF6D4D',
-    es: { leftLabel: 'Diseño',     title: 'Crear',     output: 'Sistema + narrativa', desc: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.' },
-    en: { leftLabel: 'Design',     title: 'Create',    output: 'System + narrative',  desc: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.' },
+    color: '#FF6D4D',
+    icon: Pen,
+    label: { es: 'Diseño', en: 'Design' },
+    title: { es: 'Crear', en: 'Create' },
+    output: { es: 'Sistema + narrativa', en: 'System + narrative' },
+    badge: { es: 'Diseño de sistema', en: 'System design' },
+    desc: {
+      es: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.',
+      en: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.',
+    },
   },
   {
-    Icon: Zap, color: '#828AFF',
-    es: { leftLabel: 'Activación', title: 'Lanzar',    output: 'Producir + publicar', desc: 'Piezas listas para comunicar y posicionar — para publicar, implementar o producir.' },
-    en: { leftLabel: 'Activation', title: 'Launch',    output: 'Produce + publish',   desc: 'Pieces ready to communicate and position — to publish, implement or produce.' },
+    color: '#828AFF',
+    icon: Zap,
+    label: { es: 'Activación', en: 'Activation' },
+    title: { es: 'Lanzar', en: 'Launch' },
+    output: { es: 'Producir + publicar', en: 'Produce + publish' },
+    badge: { es: 'Activación y entrega', en: 'Activation & delivery' },
+    desc: {
+      es: 'Piezas listas para comunicar y posicionar — para publicar, implementar o producir.',
+      en: 'Pieces ready to communicate and position — to publish, implement or produce.',
+    },
   },
 ]
 
-export default function Proceso({ lang }) {
-  const t           = (es, en) => lang === 'es' ? es : en
-  const wrapperRef  = useRef(null)
-  const sectionRef  = useRef(null)
-  const progressRef = useRef(null)
-  const activeRef   = useRef(0)
-  const [active, setActive] = useState(0)
-
-  const sectionInView = useInView(sectionRef, { once: true, margin: '-100px' })
-
-  /* ── Lenis scroll listener ─────────────────────────────────── */
-  useEffect(() => {
-    const lenis = window.__lenis
-    if (!lenis || !wrapperRef.current) return
-
-    const update = () => {
-      const el = wrapperRef.current
-      if (!el) return
-
-      const top        = el.getBoundingClientRect().top
-      const height     = el.offsetHeight
-      const vh         = window.innerHeight
-      const scrollable = height - vh
-      if (scrollable <= 0) return
-
-      const p = Math.max(0, Math.min(1, (-top) / scrollable))
-
-      if (progressRef.current) {
-        progressRef.current.style.width = `${p * 100}%`
-      }
-
-      const i = Math.min(Math.floor(p * 3), 2)
-      if (i !== activeRef.current) {
-        activeRef.current = i
-        setActive(i)
-      }
+/* ── Floating background elements per phase ───────────────── */
+function FloatingBg({ phase, c }) {
+  switch (phase) {
+    case 0: {
+      const cl = '#4D66FF'
+      return (
+        <>
+          <svg className="absolute top-6 right-8 w-40 h-40" viewBox="0 0 160 160">
+            <motion.g style={{ transformOrigin: '80px 80px' }}
+              animate={{ scale: [1, 1.06, 1] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <circle cx="80" cy="80" r="30" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.12} />
+              <circle cx="80" cy="80" r="50" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.08} />
+              <circle cx="80" cy="80" r="70" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.05} />
+            </motion.g>
+          </svg>
+          <svg className="absolute bottom-8 left-8 w-10 h-10" viewBox="0 0 40 40">
+            <motion.g style={{ transformOrigin: '20px 20px' }}
+              animate={{ rotate: [0, 90] }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+            >
+              <line x1="20" y1="0" x2="20" y2="40" stroke={cl} strokeWidth="0.5" opacity={0.15} />
+              <line x1="0" y1="20" x2="40" y2="20" stroke={cl} strokeWidth="0.5" opacity={0.15} />
+            </motion.g>
+          </svg>
+          <div className="absolute top-1/2 right-12 -translate-y-1/2 flex flex-col gap-2">
+            {[24, 16, 20].map((w, i) => (
+              <motion.div key={i}
+                className="h-px" style={{ width: w, background: `${cl}33` }}
+                animate={{ x: [-4, 4, -4] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }}
+              />
+            ))}
+          </div>
+        </>
+      )
     }
+    case 1: {
+      const cl = '#FF6D4D'
+      return (
+        <>
+          <svg className="absolute top-8 left-8 w-16 h-16" viewBox="0 0 60 60">
+            <motion.g style={{ transformOrigin: '30px 35px' }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+            >
+              <polygon points="30,5 55,55 5,55" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.12} />
+            </motion.g>
+          </svg>
+          <div className="absolute bottom-8 right-8">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <rect x="10" y="10" width="50" height="50" rx="8" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.08} />
+              <motion.rect
+                x="20" y="20" width="50" height="50" rx="8" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.05}
+                animate={{ rotate: [0, 8, 0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                style={{ transformOrigin: '45px 45px' }}
+              />
+            </svg>
+          </div>
+          <svg className="absolute top-1/3 right-1/3 w-24 h-24" viewBox="0 0 100 100">
+            <motion.path
+              d="M10,80 C30,20 60,60 90,10"
+              fill="none" stroke={cl} strokeWidth="0.5" opacity={0.1}
+              strokeDasharray="200"
+              animate={{ strokeDashoffset: [200, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+            />
+          </svg>
+        </>
+      )
+    }
+    case 2: {
+      const cl = '#828AFF'
+      return (
+        <>
+          <motion.div className="absolute top-10 right-16 w-1 h-1 rounded-full"
+            style={{ background: cl }}
+            animate={{ opacity: [0.2, 0.8, 0.2] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0 }}
+          />
+          <motion.div className="absolute top-1/2 right-8 w-1 h-1 rounded-full"
+            style={{ background: '#41EAFF' }}
+            animate={{ opacity: [0.2, 0.8, 0.2] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
+          />
+          <motion.div className="absolute bottom-20 left-1/2 w-1 h-1 rounded-full"
+            style={{ background: cl }}
+            animate={{ opacity: [0.2, 0.8, 0.2] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+          />
+          <svg className="absolute bottom-8 left-8 w-12 h-12" viewBox="0 0 40 40">
+            <motion.g
+              animate={{ y: [-6, 0, -6] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <polyline points="5,35 15,15 25,25 35,5" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.15} />
+            </motion.g>
+          </svg>
+          <svg className="absolute top-1/3 left-1/4 w-16 h-16" viewBox="0 0 50 50">
+            <motion.path
+              d="M25,5 A20,20 0 1,1 24.99,5"
+              fill="none" stroke="#41EAFF" strokeWidth="0.5" opacity={0.12}
+              strokeDasharray="126"
+              animate={{ rotate: 360, strokeDashoffset: [126, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+              style={{ transformOrigin: '25px 25px' }}
+            />
+          </svg>
+        </>
+      )
+    }
+    default: return null
+  }
+}
 
-    lenis.on('scroll', update)
-    update()
+export default function Proceso({ lang }) {
+  const t = (es, en) => lang === 'es' ? es : en
+  const [active, setActive] = useState(0)
+  const timerRef = useRef(null)
 
-    return () => lenis.off('scroll', update)
+  const resetTimer = useCallback(() => {
+    clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setActive(p => (p + 1) % 3)
+    }, 4000)
   }, [])
 
-  const scrollToPhase = (index) => {
-    const lenis = window.__lenis
-    if (!lenis || !wrapperRef.current) return
+  useEffect(() => {
+    resetTimer()
+    return () => clearInterval(timerRef.current)
+  }, [resetTimer])
 
-    const el     = wrapperRef.current
-    const target = el.offsetTop + (index / 3) * (el.offsetHeight - window.innerHeight)
-
-    lenis.scrollTo(target, { duration: 1.2 })
+  const handleSetPhase = (i) => {
+    setActive(i)
+    resetTimer()
   }
 
-  const current = phases[active]
+  const phase = phases[active]
+  const Icon = phase.icon
 
   return (
-    <section id="proceso" ref={sectionRef}>
+    <section id="proceso" className="py-20 md:py-24">
 
-      {/* ── Header ──────────────────────────────────────────── */}
-      <div className="text-center pb-[3vh] pt-16 md:pt-20 px-4">
-        <motion.p
-          className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35 mb-2"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-        >
+      <style>{`@keyframes timerFill{from{width:0%}to{width:100%}}`}</style>
+
+      {/* ── Header ────────────────────────────────────────── */}
+      <div className="text-center mb-10 px-4">
+        <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-white/30 mb-2">
           {t('Cómo trabajamos', 'How we work')}
-        </motion.p>
-        <motion.h2
-          className="font-cal text-[clamp(1.6rem,4vw,3rem)] dark:text-white text-b-dark leading-tight"
-          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        >
+        </p>
+        <h2 className="font-cal text-[clamp(1.6rem,3.5vw,2.8rem)] text-white leading-tight">
           {t('Un proceso que ', 'A process that ')}
           <span style={{ color: '#FF6D4D' }}>{t('itera', 'iterates')}</span>
-        </motion.h2>
+        </h2>
       </div>
 
-      {/* ── Desktop — sticky scroll panel ────────────────────── */}
-      <div ref={wrapperRef} className="relative h-[240vh] hidden md:block">
-        <div className="sticky top-0 h-screen overflow-hidden" style={{ background: '#00031F' }}>
+      {/* ── Panel container ───────────────────────────────── */}
+      <div className="max-w-[960px] mx-auto px-4">
 
-          {/* Background glows */}
-          {phases.map((p, i) => (
-            <motion.div
-              key={i}
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: `radial-gradient(ellipse at 50% 50%, ${p.color} 0%, transparent 70%)`,
-                filter: 'blur(90px)',
-              }}
-              animate={{ opacity: i === active ? 0.18 : 0 }}
-              transition={{ duration: 1, ease: 'easeInOut' }}
-            />
-          ))}
+        <div className="relative rounded-2xl border border-white/[0.07] bg-white/[0.03] backdrop-blur-[12px] overflow-hidden p-8 md:p-12">
 
-          {/* Step number — top right */}
-          <div className="absolute top-8 right-8 z-10">
+          {/* ── Floating background layer ─────────────────── */}
+          <div className="hidden md:block">
             <AnimatePresence mode="wait">
-              <motion.span
+              <motion.div
                 key={active}
-                className="text-[11px] tracking-[0.12em] dark:text-white/40 text-white/40 font-mono block"
-                initial={{ y: 16, opacity: 0 }}
-                animate={{ y: 0, opacity: 0.6 }}
-                exit={{ y: -16, opacity: 0 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute inset-0 pointer-events-none z-0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, exit: { duration: 0.3 } }}
               >
-                {String(active + 1).padStart(2, '0')} / 03
-              </motion.span>
+                <FloatingBg phase={active} />
+              </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Three columns */}
-          <div className="relative z-10 flex items-center h-full px-8 lg:px-16">
+          {/* ── Content layer ─────────────────────────────── */}
+          <div className="relative z-10">
 
-            {/* ── Left column (25%) ─────────────────────────── */}
-            <div className="w-[25%] flex flex-col gap-6">
-              {phases.map((p, i) => (
-                <motion.div
-                  key={i}
-                  className="flex items-center gap-3 cursor-pointer"
-                  onClick={() => scrollToPhase(i)}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{
-                    opacity: i === active ? 1 : 0.28,
-                    x: i === active ? 8 : 0,
-                  }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: sectionInView ? i * 0.08 : 0 }}
-                >
-                  <span
-                    className="font-cal text-xl md:text-2xl tabular-nums transition-all duration-500"
-                    style={{ color: p.color, opacity: i === active ? 0.8 : 0.35 }}
+            {/* ── Desktop: 3-column grid ──────────────────── */}
+            <div className="hidden md:grid grid-cols-[1fr_1.4fr_1fr] min-h-[420px] items-center">
+
+              {/* Left column — phase list */}
+              <div className="flex flex-col gap-5">
+                {phases.map((p, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-center gap-3 cursor-pointer group"
+                    onClick={() => handleSetPhase(i)}
+                    animate={{ opacity: i === active ? 1 : 0.3, x: i === active ? 6 : 0 }}
+                    transition={{ duration: 0.45, ease: 'easeOut' }}
                   >
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <span className="font-cal text-base md:text-lg dark:text-white text-white">
-                    {t(p.es.leftLabel, p.en.leftLabel)}
-                  </span>
-                  <div
-                    className="w-2 h-2 rounded-full transition-all duration-500"
-                    style={{
-                      background: i === active ? p.color : 'transparent',
-                      boxShadow: i === active ? `0 0 8px ${p.color}` : 'none',
-                    }}
-                  />
-                </motion.div>
-              ))}
-            </div>
+                    <span
+                      className="text-[13px] font-inter transition-all duration-300 tabular-nums"
+                      style={{
+                        color: i === active ? p.color : '#ffffff',
+                        fontWeight: i === active ? 700 : 400,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span
+                      className="text-[13px] font-inter transition-all duration-300"
+                      style={{
+                        color: i === active ? '#ffffff' : '#ffffff',
+                        fontWeight: i === active ? 700 : 400,
+                      }}
+                    >
+                      {t(p.label.es, p.label.en)}
+                    </span>
+                    {i === active && (
+                      <motion.div
+                        className="w-1 h-1 rounded-full"
+                        style={{
+                          background: p.color,
+                          boxShadow: `0 0 6px ${p.color}`,
+                        }}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.25 }}
+                      />
+                    )}
+                  </motion.div>
+                ))}
+              </div>
 
-            {/* ── Center column (50%) ───────────────────────── */}
-            <div className="w-[50%] flex flex-col justify-center px-6 lg:px-12">
-              <div className="relative min-h-[280px]">
+              {/* Center column — content */}
+              <div className="flex flex-col items-center text-center">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={active}
-                    initial={{ y: '60%', opacity: 0 }}
-                    animate={{ y: '0%', opacity: 1 }}
-                    exit={{ y: '-60%', opacity: 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col items-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <h3
-                      className="font-cal text-[clamp(3rem,9vw,8rem)] leading-[0.9] dark:text-white text-white mb-5"
-                      style={{ color: 'rgba(245,245,240,0.92)' }}
+                    {/* Icon */}
+                    <motion.div
+                      className="flex items-center justify-center"
+                      style={{
+                        width: 96,
+                        height: 96,
+                        borderRadius: 24,
+                        background: `${phase.color}1A`,
+                        border: `1px solid ${phase.color}4D`,
+                        boxShadow: `0 0 0 1px ${phase.color}33, 0 0 20px ${phase.color}59, 0 0 60px ${phase.color}27`,
+                      }}
+                      initial={{ scale: 0.7, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
                     >
-                      {t(current.es.title, current.en.title)}
-                    </h3>
+                      <Icon
+                        size={52}
+                        strokeWidth={1.25}
+                        style={{
+                          color: phase.color,
+                          filter: `drop-shadow(0 0 8px ${phase.color}CC)`,
+                        }}
+                      />
+                    </motion.div>
+
+                    {/* Title */}
+                    <motion.h3
+                      className="font-cal text-[clamp(2.2rem,5vw,3.8rem)] text-white/[0.95] leading-[0.9]"
+                      style={{ marginTop: 20 }}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.45, ease: 'easeOut', delay: 0.05 }}
+                    >
+                      {t(phase.title.es, phase.title.en)}
+                    </motion.h3>
+
+                    {/* Description */}
                     <motion.p
-                      className="text-sm md:text-base max-w-md leading-relaxed"
-                      style={{ color: 'rgba(245,245,240,0.55)' }}
-                      initial={{ y: '60%', opacity: 0 }}
-                      animate={{ y: '0%', opacity: 1 }}
-                      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+                      className="text-[14px] leading-[1.65] max-w-[360px] mx-auto"
+                      style={{ color: 'rgba(245,245,240,0.55)', marginTop: 12 }}
+                      initial={{ y: 12, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
                     >
-                      {t(current.es.desc, current.en.desc)}
+                      {t(phase.desc.es, phase.desc.en)}
                     </motion.p>
                   </motion.div>
                 </AnimatePresence>
               </div>
-            </div>
 
-            {/* ── Right column (25%) ────────────────────────── */}
-            <div className="w-[25%] flex flex-col justify-center">
-              <div className="relative min-h-[80px]">
+              {/* Right column — output */}
+              <div className="flex flex-col items-start">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={active}
-                    initial={{ y: '60%', opacity: 0 }}
-                    animate={{ y: '0%', opacity: 1 }}
-                    exit={{ y: '-60%', opacity: 0 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    initial={{ x: 16, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4, ease: 'easeOut', delay: 0.08 }}
                   >
-                    <span className="font-cal text-lg" style={{ color: 'rgba(245,245,240,0.65)' }}>
-                      {t(current.es.output, current.en.output)}
-                    </span>
+                    <p className="text-[10px] tracking-[0.15em] uppercase text-white/30 font-inter">
+                      Output
+                    </p>
+                    <p className="text-[15px] font-semibold text-white/80 font-inter" style={{ marginTop: 10 }}>
+                      {t(phase.output.es, phase.output.en)}
+                    </p>
                     <div
-                      className="mt-4 w-10 h-10 rounded-lg flex items-center justify-center"
-                      style={{ background: `${current.color}15`, border: `1px solid ${current.color}25` }}
+                      className="inline-flex items-center px-[14px] py-[6px] rounded-full text-[12px] font-medium font-inter"
+                      style={{
+                        marginTop: 10,
+                        background: `${phase.color}1A`,
+                        border: `1px solid ${phase.color}40`,
+                        color: phase.color,
+                      }}
                     >
-                      <current.Icon size={18} style={{ color: current.color }} strokeWidth={1.75} />
+                      {t(phase.badge.es, phase.badge.en)}
                     </div>
                   </motion.div>
                 </AnimatePresence>
               </div>
+
+            </div>
+
+            {/* ── Mobile: stacked layout ──────────────────── */}
+            <div className="md:hidden flex flex-col gap-8">
+
+              {/* Mobile nav */}
+              <div className="flex flex-col gap-5">
+                {phases.map((p, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-center gap-3 cursor-pointer"
+                    onClick={() => handleSetPhase(i)}
+                    animate={{ opacity: i === active ? 1 : 0.3, x: i === active ? 6 : 0 }}
+                    transition={{ duration: 0.45, ease: 'easeOut' }}
+                  >
+                    <span
+                      className="text-[12px] font-inter tabular-nums"
+                      style={{
+                        color: i === active ? p.color : '#ffffff',
+                        fontWeight: i === active ? 700 : 400,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span
+                      className="text-[12px] font-inter"
+                      style={{
+                        color: '#ffffff',
+                        fontWeight: i === active ? 700 : 400,
+                      }}
+                    >
+                      {t(p.label.es, p.label.en)}
+                    </span>
+                    {i === active && (
+                      <div
+                        className="w-1 h-1 rounded-full"
+                        style={{
+                          background: p.color,
+                          boxShadow: `0 0 6px ${p.color}`,
+                        }}
+                      />
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Mobile content */}
+              <div className="flex flex-col items-center text-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active}
+                    className="flex flex-col items-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div
+                      className="flex items-center justify-center"
+                      style={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: 20,
+                        background: `${phase.color}1A`,
+                        border: `1px solid ${phase.color}4D`,
+                      }}
+                    >
+                      <Icon size={40} strokeWidth={1.25} style={{ color: phase.color }} />
+                    </div>
+                    <h3
+                      className="font-cal text-[clamp(1.8rem,8vw,2.6rem)] text-white/[0.95] leading-[0.9]"
+                      style={{ marginTop: 16 }}
+                    >
+                      {t(phase.title.es, phase.title.en)}
+                    </h3>
+                    <p
+                      className="text-[13px] leading-[1.6] max-w-[320px] mx-auto"
+                      style={{ color: 'rgba(245,245,240,0.55)', marginTop: 10 }}
+                    >
+                      {t(phase.desc.es, phase.desc.en)}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Mobile output */}
+              <div className="flex flex-col items-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active}
+                    className="flex flex-col items-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <p className="text-[10px] tracking-[0.15em] uppercase text-white/30 font-inter">
+                      Output
+                    </p>
+                    <p className="text-[14px] font-semibold text-white/80 font-inter" style={{ marginTop: 8 }}>
+                      {t(phase.output.es, phase.output.en)}
+                    </p>
+                    <div
+                      className="inline-flex items-center px-[12px] py-[5px] rounded-full text-[11px] font-medium font-inter"
+                      style={{
+                        marginTop: 8,
+                        background: `${phase.color}1A`,
+                        border: `1px solid ${phase.color}40`,
+                        color: phase.color,
+                      }}
+                    >
+                      {t(phase.badge.es, phase.badge.en)}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
             </div>
 
           </div>
+        </div>
 
-          {/* ── Progress bar ──────────────────────────────── */}
+        {/* ── Timer bar ─────────────────────────────────────── */}
+        <div className="h-[2px] w-full bg-white/10 overflow-hidden rounded-full">
           <div
-            ref={progressRef}
-            className="absolute bottom-0 left-0 h-[2px] z-10 pointer-events-none"
+            key={active}
+            className="h-full rounded-full"
             style={{
-              width: '0%',
-              background: 'linear-gradient(to right, #4D66FF, #FF6D4D)',
+              background: phase.color,
+              animation: 'timerFill 4s linear forwards',
             }}
           />
-
-          {/* ── Dots ──────────────────────────────────────── */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 z-10">
-            {phases.map((p, i) => (
-              <button
-                key={i}
-                onClick={() => scrollToPhase(i)}
-                className="h-1.5 rounded-full transition-all duration-500"
-                style={{
-                  width: i === active ? 20 : 6,
-                  background: i === active ? p.color : 'rgba(255,255,255,0.12)',
-                  boxShadow: i === active ? `0 0 8px ${p.color}` : 'none',
-                }}
-                aria-label={t(`Ir a fase ${i + 1}`, `Go to phase ${i + 1}`)}
-              />
-            ))}
-          </div>
-
         </div>
-      </div>
 
-      {/* ── Mobile — cards en scroll normal ────────────────── */}
-      <div className="md:hidden">
-        {phases.map((p, i) => (
-          <MobilePhase key={i} phase={p} index={i} lang={lang} />
-        ))}
-        <div className="flex justify-center items-center gap-3 pb-12">
+        {/* ── Dots indicator ────────────────────────────────── */}
+        <div className="flex items-center justify-center gap-2 mt-3">
           {phases.map((p, i) => (
             <button
               key={i}
-              className="h-1.5 rounded-full transition-all duration-500"
+              onClick={() => handleSetPhase(i)}
+              className="transition-all duration-400 ease-in-out"
               style={{
-                width: i === active ? 20 : 6,
-                background: i === active ? p.color : 'rgba(255,255,255,0.12)',
+                width: i === active ? 18 : 6,
+                height: 6,
+                borderRadius: i === active ? 3 : '50%',
+                background: i === active ? p.color : 'rgba(255,255,255,0.15)',
+                boxShadow: i === active ? `0 0 8px ${p.color}99` : 'none',
+                transition: 'all 0.4s ease',
               }}
+              aria-label={t(`Fase ${i + 1}`, `Phase ${i + 1}`)}
             />
           ))}
         </div>
+
       </div>
-
     </section>
-  )
-}
-
-/* ── Mobile phase card ───────────────────────────────────────── */
-function MobilePhase({ phase, index, lang }) {
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
-  const t      = (es, en) => lang === 'es' ? es : en
-  const Icon   = phase.Icon
-
-  return (
-    <div className="relative px-4 py-16 overflow-hidden">
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(ellipse at 50% 50%, ${phase.color} 0%, transparent 70%)`,
-          filter: 'blur(80px)',
-        }}
-        animate={{ opacity: inView ? 0.15 : 0 }}
-        transition={{ duration: 1 }}
-      />
-      <motion.div
-        ref={ref}
-        className="relative z-10 max-w-lg mx-auto"
-        initial={{ opacity: 0, y: 40 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <span className="font-cal text-sm" style={{ color: phase.color }}>
-          {String(index + 1).padStart(2, '0')}
-        </span>
-        <h3 className="font-cal text-lg dark:text-white text-white mt-1">
-          {t(phase.es.leftLabel, phase.en.leftLabel)}
-        </h3>
-        <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center mt-4 mb-5"
-          style={{ background: `${phase.color}15`, border: `1px solid ${phase.color}25` }}
-        >
-          <Icon size={18} style={{ color: phase.color }} strokeWidth={1.75} />
-        </div>
-        <h4 className="font-cal text-4xl dark:text-white text-white mb-4">
-          {t(phase.es.title, phase.en.title)}
-        </h4>
-        <p className="text-sm leading-relaxed" style={{ color: 'rgba(245,245,240,0.55)' }}>
-          {t(phase.es.desc, phase.en.desc)}
-        </p>
-        <div className="mt-5 text-xs" style={{ color: 'rgba(245,245,240,0.40)' }}>
-          {t(phase.es.output, phase.en.output)}
-        </div>
-      </motion.div>
-    </div>
   )
 }
