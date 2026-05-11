@@ -158,36 +158,47 @@ function FloatingBg({ phase }) {
   }
 }
 
-/* ── Mini floating icons per phase ──────────────────────── */
+/* ── Mini glass icons per phase ─────────────────────────── */
 function MiniIcons({ color, Icon }) {
-  return (
-    <>
-      <motion.div
-        className="absolute top-[15%] right-[8%] pointer-events-none"
-        style={{ color, filter: `drop-shadow(0 0 4px ${color}99)`, opacity: 0.20 }}
-        animate={{ y: [-5, 5] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <Icon size={14} strokeWidth={1} />
-      </motion.div>
-      <motion.div
-        className="absolute bottom-[20%] left-[12%] pointer-events-none"
-        style={{ color, filter: `drop-shadow(0 0 4px ${color}99)`, opacity: 0.14 }}
-        animate={{ y: [4, -4], rotate: [-8, 8] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <Icon size={14} strokeWidth={1} />
-      </motion.div>
-      <motion.div
-        className="absolute top-[60%] right-[18%] pointer-events-none"
-        style={{ color, filter: `drop-shadow(0 0 4px ${color}99)` }}
-        animate={{ opacity: [0.10, 0.20, 0.10] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <Icon size={14} strokeWidth={1} />
-      </motion.div>
-    </>
-  )
+  const items = [
+    { c: 'top-[8%] right-[10%]', s: 20, bs: 36, a: { y: [-7, 7] }, d: 3.2, delay: 0 },
+    { c: 'bottom-[12%] left-[6%]', s: 18, bs: 32, a: { y: [6, -6], rotate: [-12, 12] }, d: 4.0, delay: 0.3 },
+    { c: 'top-[50%] right-[22%]', s: 16, bs: 30, a: { y: [-4, 4], scale: [1, 1.1] }, d: 2.8, delay: 0.6 },
+    { c: 'top-[22%] left-[14%]', s: 22, bs: 40, a: { y: [-5, 5] }, d: 3.6, delay: 0.1 },
+    { c: 'bottom-[25%] right-[14%]', s: 17, bs: 30, a: { x: [-6, 6], rotate: [-8, 8] }, d: 3.4, delay: 0.5 },
+    { c: 'top-[65%] left-[20%]', s: 18, bs: 32, a: { opacity: [0.35, 0.85] }, d: 2.6, delay: 0.2 },
+    { c: 'top-[12%] left-[55%]', s: 15, bs: 28, a: { rotate: [-14, 14] }, d: 4.2, delay: 0.4 },
+    { c: 'bottom-[8%] right-[28%]', s: 19, bs: 34, a: { y: [5, -5], scale: [1, 1.08] }, d: 3.8, delay: 0.7 },
+    { c: 'top-[38%] left-[6%]', s: 14, bs: 26, a: { y: [-3, 3] }, d: 2.4, delay: 0.8 },
+  ]
+
+  return items.map((item, i) => (
+    <motion.div
+      key={i}
+      className={`absolute pointer-events-none flex items-center justify-center ${item.c}`}
+      style={{
+        width: item.bs,
+        height: item.bs,
+        borderRadius: 12,
+        background: `${color}18`,
+        border: `1px solid ${color}35`,
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        boxShadow: `0 0 20px ${color}40, inset 0 0 12px ${color}12`,
+      }}
+      animate={item.a}
+      transition={{ duration: item.d, repeat: Infinity, ease: 'easeInOut', delay: item.delay }}
+    >
+      <Icon
+        size={item.s}
+        strokeWidth={1}
+        style={{
+          color,
+          filter: `drop-shadow(0 0 8px ${color}CC)`,
+        }}
+      />
+    </motion.div>
+  ))
 }
 
 export default function Proceso({ lang }) {
@@ -227,7 +238,7 @@ export default function Proceso({ lang }) {
         </p>
         <h2 className="font-cal text-[clamp(1.6rem,3.5vw,2.8rem)] text-white leading-tight">
           {t('Un proceso que ', 'A process that ')}
-          <span style={{ color: '#FF6D4D' }}>{t('itera', 'iterates')}</span>
+          <span className="text-grad">{t('itera', 'iterates')}</span>
         </h2>
       </div>
 

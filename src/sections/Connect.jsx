@@ -78,7 +78,8 @@ export default function Connect({ lang }) {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
           >
             {t('¿Qué estás construyendo?', 'What are you building?')}<br />
-            {t('Cuéntanos qué necesitas.', 'Tell us what you need.')}
+            {t('Cuéntanos ', 'Tell us ')}
+            <span className="text-grad">{t('qué necesitas.', 'what you need.')}</span>
           </motion.h2>
           <motion.p
             className="text-[14px] font-inter text-white/45"

@@ -31,30 +31,6 @@ export default function Footer({ lang }) {
 
       <div className="max-w-[1200px] mx-auto">
 
-        {/* CTA grande */}
-        <motion.div
-          className="flex flex-col items-center text-center gap-6 pb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <p className="text-[12px] font-bold tracking-[0.12em] uppercase dark:text-white/75 text-black/60">
-            {t('¿Qué estás construyendo?', 'What are you building?')}
-          </p>
-          <h2 className="font-cal text-5xl md:text-6xl lg:text-7xl leading-tight tracking-[-1.5px] dark:text-white text-b-dark">
-            {t('Cuéntanos', 'Tell us')}
-            <br />
-            <span className="text-grad">{t('qué necesitas.', 'what you need.')}</span>
-          </h2>
-          <a
-            href="#connect"
-            className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-8 py-4 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(77,102,255,.55)] transition-all duration-300 mt-2"
-          >
-            {t('Escribirnos', 'Get in touch')}
-          </a>
-        </motion.div>
-
         {/* Grid de links */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8 border-t dark:border-white/10 border-black/12">
           <div className="flex flex-col gap-3">
