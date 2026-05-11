@@ -72,14 +72,21 @@ export default function Connect({ lang }) {
             {t('Hablemos', "Let's talk")}
           </motion.p>
           <motion.h2
-            className="font-cal text-4xl md:text-5xl lg:text-6xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+            className="font-cal text-4xl md:text-5xl lg:text-6xl text-white/[0.95] leading-tight tracking-[-0.5px]"
             initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
           >
-            {t('Proyectos donde producto, ', 'Projects where product, ')}
-            <span className="text-grad">{t('marca y experiencia se encuentran', 'brand and experience meet')}</span>
+            {t('¿Qué estás construyendo?', 'What are you building?')}<br />
+            {t('Cuéntanos qué necesitas.', 'Tell us what you need.')}
           </motion.h2>
+          <motion.p
+            className="text-[14px] font-inter text-white/45"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            {t('Escríbenos o síguenos — respondemos rápido.', 'Write to us or follow us — we respond fast.')}
+          </motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:items-stretch">
@@ -123,7 +130,7 @@ export default function Connect({ lang }) {
               >
                 <Send size={14} />
                 {status === 'loading' ? t('Enviando…', 'Sending…')
-                  : status === 'ok'   ? t('¡Listo! ✓', 'Done! ✓')
+                  : status === 'ok'   ? t('¡Listo! Te avisamos pronto. ✓', "Done! We'll be in touch. ✓")
                   : status === 'error' ? t('Intenta de nuevo', 'Try again')
                   : t('Suscribirme', 'Subscribe')}
               </button>
