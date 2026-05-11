@@ -16,7 +16,7 @@
     --cursor-dot: #FF6D4D;
     --cursor-ring: rgba(255, 109, 77, 0.45);
     --cursor-ring-hov: rgba(255, 109, 77, 0.32);
-    --enfoque-text: #0A0A18;
+    --enfoque-text: #F5F5F0;
     --background:    oklch(1 0 0);
     --foreground:    oklch(0.145 0 0);
     --card:    oklch(1 0 0);
@@ -67,6 +67,11 @@
     @apply bg-background text-foreground;
   }
 
+  html.light body {
+    background: #F8F7F4;
+    color: #0A0A18;
+  }
+
   /* LIGHT */
  
 
@@ -111,6 +116,13 @@
 
   }
 
+  html.light {
+    --enfoque-text: #0A0A18;
+    --cursor-dot: #4D66FF;
+    --cursor-ring: rgba(77, 102, 255, 0.5);
+    --cursor-ring-hov: rgba(77, 102, 255, 0.35);
+  }
+
 }
 
 @layer utilities {
@@ -144,8 +156,17 @@
     @apply max-w-[1400px] mx-auto my-12 rounded-section border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl px-6 md:px-8 py-10 md:py-12;
   }
 
-  /* Glass — light */
-
+  /* Glass — light mode */
+  html.light .glass {
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(77, 102, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  html.light .glass-blue {
+    background: rgba(77, 102, 255, 0.06);
+    border: 1px solid rgba(77, 102, 255, 0.18);
+  }
 
   /* Glow */
   .glow-blue  { box-shadow: 0 0 36px rgba(77,102,255,.35); }

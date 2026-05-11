@@ -208,7 +208,7 @@ export default function Productos({ lang }) {
   const handleArrow = (dir) => snapTo(activeIndex + dir)
 
   return (
-    <section id="productos recursos" className="relative z-10 py-24 px-4 md:px-8">
+    <section id="productos" className="relative z-10 py-24 px-4 md:px-8">
       <div className="section-premium">
         <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 

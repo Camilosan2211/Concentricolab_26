@@ -4,7 +4,7 @@ const navLinks = [
   { href: '#enfoque',     es: 'Enfoque',     en: 'Focus'      },
   { href: '#principios',  es: 'Principios',  en: 'Principles' },
   { href: '#capacidades', es: 'Capacidades', en: 'Capabilities'},
-  { href: '#recursos',    es: 'Recursos',    en: 'Resources'  },
+  { href: '#productos',   es: 'Productos',   en: 'Products'   },
   { href: '#proceso',     es: 'Proceso',     en: 'Process'    },
   { href: '#connect',     es: 'Contacto',    en: 'Contact'    },
 ]

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { motion } from 'motion/react'
-import { ArrowDown } from 'lucide-react'
+import { ArrowDown, ArrowRight, ShoppingBag } from 'lucide-react'
 import HeroGrid from '../components/HeroGrid'
 
 const motionPresets = {
@@ -178,18 +178,19 @@ export default function Hero({ lang }) {
         {/* CTAs */}
         <motion.div variants={variants.item} className="flex flex-wrap items-center gap-4 justify-center">
           <a
-            href="#enfoque"
+            href="#proceso"
             className="group relative inline-flex items-center gap-2.5 glass dark:text-white text-black text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(77,102,255,.22)]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral" />
             {t('Cómo trabajamos', 'How we work')}
-            <ArrowDown size={14} className="group-hover:translate-y-1 transition-transform duration-300" />
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
           </a>
           <a
-            href="#capacidades"
+            href="#productos"
             className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
           >
-            {t('Nuestros servicios', 'Our services')}
+            <ShoppingBag size={15} />
+            {t('Ver productos', 'See products')}
           </a>
         </motion.div>
 

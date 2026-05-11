@@ -242,7 +242,7 @@ export default function Connect({ lang }) {
                 <button
                   type="submit"
                   disabled={formStatus === 'loading'}
-                  className="mt-auto inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-action glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
+                  className="mt-auto inline-flex items-center justify-center gap-2.5 bg-b-coral text-white font-semibold text-sm py-3.5 rounded-action glow-coral hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
                 >
                   <Send size={14} />
                   {formStatus === 'loading' ? t('Enviando…', 'Sending…')

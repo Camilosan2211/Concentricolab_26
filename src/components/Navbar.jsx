@@ -4,10 +4,9 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navLinks = [
-  { href:'#capacidades', es:'Capacidades', en:'Capabilities' },
-  { href:'#enfoque',     es:'Enfoque',    en:'Focus'      },
-  { href:'#principios',  es:'Principios', en:'Principles' },
-  { href:'#connect',     es:'Contacto',   en:'Contact'    },
+  { href: '#capacidades', es: 'Capacidades',  en: 'Capabilities' },
+  { href: '#productos',   es: 'Productos',    en: 'Products'     },
+  { href: '#principios',  es: 'Principios',   en: 'Principles'   },
 ]
 
 export default function Navbar({ lang, setLang, dark, setDark }) {
