@@ -182,14 +182,14 @@ export default function Hero({ lang }) {
             className="group relative inline-flex items-center gap-2.5 glass dark:text-white text-black text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(77,102,255,.22)]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral" />
-            {t('Nuestro enfoque', 'Our approach')}
+            {t('Cómo trabajamos', 'How we work')}
             <ArrowDown size={14} className="group-hover:translate-y-1 transition-transform duration-300" />
           </a>
           <a
             href="#capacidades"
             className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
           >
-            {t('Explorar el lab', 'Explore the lab')}
+            {t('Nuestros servicios', 'Our services')}
           </a>
         </motion.div>
 
