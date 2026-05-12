@@ -67,12 +67,9 @@ const ScrollExpandMedia = ({
       <div className="relative z-10 pt-8 md:pt-10 px-6 md:px-8">
         <div className="flex flex-col items-center text-center gap-3">
           {subtitle && (
-            <motion.p
-              className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/40 text-black/45"
-              style={{ opacity: useTransform(progress, [0, 0.3], [1, 0]) }}
-            >
+            <p className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/40 text-black/45">
               {subtitle}
-            </motion.p>
+            </p>
           )}
           <h2 className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px] text-center">
             {leadingWords}{leadingWords ? ' ' : ''}

@@ -41,8 +41,7 @@ export default function Footer({ lang }) {
           <p className="font-cal text-3xl md:text-4xl lg:text-5xl dark:text-white/90 text-b-dark leading-tight tracking-[-0.5px]">
             {t('Construimos desde Bogotá', 'We build from Bogotá')}
           </p>
-          <p className="font-cal text-3xl md:text-4xl lg:text-5xl leading-tight tracking-[-0.5px]"
-            style={{ color: '#FF6D4D' }}>
+          <p className="font-cal text-3xl md:text-4xl lg:text-5xl leading-tight tracking-[-0.5px] text-grad">
             {t('para cualquier parte.', 'for anywhere.')}
           </p>
           <a

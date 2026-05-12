@@ -6,12 +6,28 @@ import ScrollExpandMedia from '../components/ScrollExpandMedia'
 const BG_SRC    = '/assets/images/imagen_dinamico.webp'
 const VIDEO_SRC = '/assets/images/video_dinamico.mp4'
 
-/* ── Tags ────────────────────────────────────────────────────────── */
-const TAGS_ES = ['Diseño', 'Producto & forma', 'Experiencia digital', 'Branding', 'Sistemas visuales', 'Video & contenido', 'Automatización']
-const TAGS_EN = ['Design', 'Product & form', 'Digital experience', 'Branding', 'Visual systems', 'Video & CONTENT', 'Automation']
-
-const CORAL_ES = new Set(['núcleo', 'forma', 'sistema', 'objeto', 'pantalla', 'diseño,'])
-const CORAL_EN = new Set(['core', 'form', 'system', 'object', 'screen', 'design,'])
+const COLOR_MAP = new Map([
+  ['diseño',          '#FF6D4D'],
+  ['forma',           '#4D66FF'],
+  ['sistema',         '#828AFF'],
+  ['objeto',          '#41EAFF'],
+  ['pantalla',        '#FF6D4D'],
+  ['automatización',  '#4D66FF'],
+  ['inteligencia',    '#828AFF'],
+  ['marcas',          '#FF6D4D'],
+  ['productos',       '#41EAFF'],
+  ['experiencias',    '#828AFF'],
+  ['design',          '#FF6D4D'],
+  ['form',            '#4D66FF'],
+  ['system',          '#828AFF'],
+  ['object',          '#41EAFF'],
+  ['screen',          '#FF6D4D'],
+  ['automation',      '#4D66FF'],
+  ['intelligence',    '#828AFF'],
+  ['brands',          '#FF6D4D'],
+  ['products',        '#41EAFF'],
+  ['experiences',     '#828AFF'],
+])
 
 /* ── RevealedText ────────────────────────────────────────────────── */
 function RevealedText({ lang }) {
@@ -22,9 +38,17 @@ function RevealedText({ lang }) {
     ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — combinando diseño, automatización e inteligencia aplicada para crear marcas, productos y experiencias que funcionan y comunican.'
     : 'We build from the core outward — from form to system, from object to screen — combining design, automation and applied intelligence to create brands, products and experiences that work and communicate.'
 
-  const coralSet = lang === 'es' ? CORAL_ES : CORAL_EN
-  const tags     = lang === 'es' ? TAGS_ES   : TAGS_EN
-  const words    = text.split(' ')
+  const words = text.split(' ')
+
+  const tags = [
+    { es: 'Diseño',               en: 'Design'           },
+    { es: 'Producto & forma',     en: 'Product & form'   },
+    { es: 'Experiencia digital',  en: 'Digital experience'},
+    { es: 'Branding',             en: 'Branding'         },
+    { es: 'Sistemas visuales',    en: 'Visual systems'   },
+    { es: 'Video & contenido',    en: 'Video & content'  },
+    { es: 'Automatización & IA',  en: 'Automation & AI'  },
+  ]
 
   return (
     <div className="flex flex-col items-center gap-8">
@@ -35,7 +59,7 @@ function RevealedText({ lang }) {
         className="font-cal text-lg sm:text-xl md:text-2xl leading-[1.35] tracking-[-0.2px] text-center max-w-[720px] dark:text-white/80 text-black/60"
       >
         {words.map((word, i) => {
-          const isCoral = coralSet.has(word)
+          const accentColor = COLOR_MAP.get(word.toLowerCase().replace(/[^a-záéíóúñü]/gi, ''))
           return (
             <motion.span
               key={i}
@@ -43,12 +67,12 @@ function RevealedText({ lang }) {
               initial={{ opacity: 0, y: 10, filter: 'blur(4px)', color: 'rgba(140,148,180,0.30)' }}
               animate={inView ? {
                 opacity: 1, y: 0, filter: 'blur(0px)',
-                color: isCoral ? '#FF6D4D' : 'var(--enfoque-text, #F5F5F0)',
-                ...(isCoral ? { textShadow: ['0 0 8px rgba(255,109,77,0)', '0 0 20px rgba(255,109,77,0.5)', '0 0 8px rgba(255,109,77,0)'] } : {}),
+                color: accentColor ?? 'var(--enfoque-text, #F5F5F0)',
+                ...(accentColor ? { textShadow: [`0 0 8px ${accentColor}00`, `0 0 20px ${accentColor}80`, `0 0 8px ${accentColor}00`] } : {}),
               } : { opacity: 0, y: 10, filter: 'blur(4px)', color: 'rgba(140,148,180,0.30)' }}
               transition={{
                 delay: i * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1],
-                textShadow: isCoral ? { duration: 2, delay: i * 0.04 + 0.4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } : undefined,
+                textShadow: accentColor ? { duration: 2, delay: i * 0.04 + 0.4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } : undefined,
               }}
               style={{ display: 'inline-block', marginRight: '0.22em' }}
             >
@@ -58,19 +82,38 @@ function RevealedText({ lang }) {
         })}
       </p>
 
-      {/* Tags */}
       <motion.div
-        className="flex flex-wrap justify-center gap-2.5"
-        initial="hidden" animate={inView ? 'show' : 'hidden'}
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.055, delayChildren: words.length * 0.04 + 0.12 } } }}
+        className="flex flex-wrap justify-center gap-2.5 mt-6"
+        initial="hidden"
+        animate={inView ? 'show' : 'hidden'}
+        variants={{
+          hidden: {},
+          show: {
+            transition: {
+              staggerChildren: 0.055,
+              delayChildren: words.length * 0.04 + 0.12,
+            },
+          },
+        }}
       >
         {tags.map((tag, i) => (
           <motion.span
             key={i}
             className="inline-flex items-center glass-blue text-b-blue-lt text-[11px] font-semibold px-3.5 py-1.5 rounded-full border border-b-blue/18"
-            variants={{ hidden: { opacity: 0, scale: 0.84, rotate: -4 }, show: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] } } }}
+            variants={{
+              hidden: { opacity: 0, scale: 0.84, rotate: -4 },
+              show: {
+                opacity: 1,
+                scale: 1,
+                rotate: 0,
+                transition: {
+                  duration: 0.5,
+                  ease: [0.34, 1.56, 0.64, 1],
+                },
+              },
+            }}
           >
-            {tag}
+            {lang === 'es' ? tag.es : tag.en}
           </motion.span>
         ))}
       </motion.div>

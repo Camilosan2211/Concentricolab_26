@@ -47,16 +47,16 @@ const items = [
   },
   {
     id: '04',
-    Icon: Monitor,
-    color: '#41EAFF',
+    Icon: Zap,
+    color: '#9F6EFF',
     span: 1,
     es: {
-      title: 'UX/UI & experiencia digital',
-      body: 'Interfaces, flujos y experiencias digitales para apps, productos y entornos web — claras, útiles y coherentes con la marca.',
+      title: 'Automatización & IA',
+      body: 'Sistemas que conectan herramientas, escalan procesos y aplican inteligencia para liberar tiempo y capacidad operativa.',
     },
     en: {
-      title: 'UX/UI & digital experience',
-      body: 'Interfaces, flows and digital experiences for apps, products and web environments — clear, useful and consistent with the brand.',
+      title: 'Automation & AI',
+      body: 'Systems that connect tools, scale processes and apply intelligence to free up time and operational capacity.',
     },
   },
   {
@@ -75,16 +75,16 @@ const items = [
   },
   {
     id: '06',
-    Icon: Zap,
-    color: '#9F6EFF',
+    Icon: Monitor,
+    color: '#41EAFF',
     span: 1,
     es: {
-      title: 'Automatización & IA',
-      body: 'Sistemas que conectan herramientas, escalan procesos y aplican inteligencia para liberar tiempo y capacidad operativa.',
+      title: 'UX/UI & experiencia digital',
+      body: 'Interfaces, flujos y experiencias digitales para apps, productos y entornos web — claras, útiles y coherentes con la marca.',
     },
     en: {
-      title: 'Automation & AI',
-      body: 'Systems that connect tools, scale processes and apply intelligence to free up time and operational capacity.',
+      title: 'UX/UI & digital experience',
+      body: 'Interfaces, flows and digital experiences for apps, products and web environments — clear, useful and consistent with the brand.',
     },
   },
 ]
