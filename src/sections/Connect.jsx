@@ -83,7 +83,7 @@ export default function Connect({ lang }) {
             {t('Hablemos', "Let's talk")}
           </motion.p>
           <motion.h2
-            className="font-cal text-4xl md:text-5xl lg:text-6xl text-white/[0.95] leading-tight tracking-[-0.5px]"
+            className="section-title dark:text-white text-b-dark"
             initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}

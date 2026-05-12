@@ -8,9 +8,9 @@ const navLinks = [
   { href: '#productos',   es: 'Recursos',   en: 'Resources' },
 ]
 const social = [
-  { label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
-  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/' },
-  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab' },
+  { label: 'Instagram', href: 'https://www.instagram.com/concentriclab', color: '#FF6D4D' },
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/', color: '#4D66FF' },
+  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab', color: '#828AFF' },
 ]
 const products = [
   { label: 'Kit de Métricas', href: 'https://concentriclab.gumroad.com/l/metricasdigitales' },
@@ -31,8 +31,16 @@ export default function Footer({ lang }) {
       <div className="max-w-[1200px] mx-auto">
 
         {/* Headline */}
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center,rgba(77,102,255,0.07) 0%,rgba(255,109,77,0.04) 50%,transparent 70%)',
+            filter: 'blur(50px)',
+          }}
+          aria-hidden="true"
+        />
         <motion.div
-          className="text-center pb-12"
+          className="text-center pb-12 relative z-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -46,9 +54,10 @@ export default function Footer({ lang }) {
           </p>
           <a
             href="#connect"
-            className="inline-flex items-center gap-2 mt-6 text-sm font-semibold dark:text-white/50 text-black/45 hover:dark:text-white hover:text-black transition-colors duration-200"
+            className="inline-flex items-center gap-2 mt-8 text-sm font-semibold px-6 py-2.5 rounded-full border dark:border-white/15 border-black/12 dark:text-white/70 text-black/55 dark:hover:border-white/35 hover:border-black/25 dark:hover:text-white hover:text-black transition-all duration-300"
           >
-            {t('Iniciemos algo →', "Let's start something →")}
+            {t('Iniciemos algo', "Let's start something")}
+            <span aria-hidden="true" className="dark:text-b-coral text-b-coral">→</span>
           </a>
         </motion.div>
 
@@ -82,7 +91,10 @@ export default function Footer({ lang }) {
             </span>
             {social.map(s => (
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                className="text-sm transition-colors duration-200 dark:text-white/50 dark:hover:text-white text-black/50 hover:text-black">
+                className="flex items-center gap-2 text-sm transition-colors duration-200 dark:text-white/55 dark:hover:text-white text-black/50 hover:text-black group">
+                <span className="w-1 h-1 rounded-full flex-shrink-0 transition-all duration-300 group-hover:scale-150"
+                  style={{ background: s.color }}
+                />
                 {s.label}
               </a>
             ))}
@@ -90,7 +102,11 @@ export default function Footer({ lang }) {
         </div>
 
         {/* Barra inferior */}
-        <div className="pt-7 grid grid-cols-3 items-center gap-4 border-t dark:border-white/10 border-black/12">
+        <div className="pt-7 grid grid-cols-3 items-center gap-4 border-t dark:border-white/[0.07] border-black/8"
+          style={{
+            borderImageSource: 'linear-gradient(to right,transparent,rgba(77,102,255,0.25),rgba(255,109,77,0.15),transparent)',
+            borderImageSlice: 1,
+          }}>
           <a href="#hero" className="flex items-center gap-0 group" aria-label="Concéntrico Lab">
             <img
               src="/assets/images/logo.png"

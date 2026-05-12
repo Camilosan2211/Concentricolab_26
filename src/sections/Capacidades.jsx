@@ -190,7 +190,7 @@ export default function Capacidades({ lang }) {
             {t('Lo que producimos', 'What we produce')}
           </motion.p>
           <motion.h2
-            className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+            className="section-title dark:text-white text-b-dark"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

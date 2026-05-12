@@ -118,7 +118,7 @@ export default function Manifiesto({ lang }) {
             {t('Cómo pensamos', 'How we think')}
           </motion.p>
           <motion.h2
-            className="font-cal text-2xl md:text-3xl dark:text-white text-b-dark leading-tight tracking-[-0.3px]"
+            className="section-title dark:text-white text-b-dark"
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

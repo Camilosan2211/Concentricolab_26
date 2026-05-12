@@ -222,7 +222,7 @@ export default function Productos({ lang }) {
                 {t('Recursos del lab', 'Lab resources')}
               </motion.p>
               <motion.h2
-                className="font-cal text-4xl md:text-5xl dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+                className="section-title dark:text-white text-b-dark"
                 initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }} transition={{ duration: .8, ease: [.16, 1, .3, 1], delay: .08 }}
               >

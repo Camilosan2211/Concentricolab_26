@@ -6,27 +6,27 @@ import ScrollExpandMedia from '../components/ScrollExpandMedia'
 const BG_SRC    = '/assets/images/imagen_dinamico.webp'
 const VIDEO_SRC = '/assets/images/video_dinamico.mp4'
 
-const COLOR_MAP = new Map([
-  ['diseño',          '#FF6D4D'],
-  ['forma',           '#4D66FF'],
-  ['sistema',         '#828AFF'],
-  ['objeto',          '#41EAFF'],
-  ['pantalla',        '#FF6D4D'],
-  ['automatización',  '#4D66FF'],
-  ['inteligencia',    '#828AFF'],
-  ['marcas',          '#FF6D4D'],
-  ['productos',       '#41EAFF'],
-  ['experiencias',    '#828AFF'],
-  ['design',          '#FF6D4D'],
-  ['form',            '#4D66FF'],
-  ['system',          '#828AFF'],
-  ['object',          '#41EAFF'],
-  ['screen',          '#FF6D4D'],
-  ['automation',      '#4D66FF'],
-  ['intelligence',    '#828AFF'],
-  ['brands',          '#FF6D4D'],
-  ['products',        '#41EAFF'],
-  ['experiences',     '#828AFF'],
+const coralSet = new Set([
+  'diseño',
+  'forma',
+  'sistema',
+  'objeto',
+  'pantalla',
+  'automatización',
+  'inteligencia',
+  'marcas',
+  'productos',
+  'experiencias',
+  'design',
+  'form',
+  'system',
+  'object',
+  'screen',
+  'automation',
+  'intelligence',
+  'brands',
+  'products',
+  'experiences',
 ])
 
 /* ── RevealedText ────────────────────────────────────────────────── */
@@ -59,7 +59,7 @@ function RevealedText({ lang }) {
         className="font-cal text-lg sm:text-xl md:text-2xl leading-[1.35] tracking-[-0.2px] text-center max-w-[720px] dark:text-white/80 text-black/60"
       >
         {words.map((word, i) => {
-          const accentColor = COLOR_MAP.get(word.toLowerCase().replace(/[^a-záéíóúñü]/gi, ''))
+          const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúñü]/gi, ''))
           return (
             <motion.span
               key={i}
@@ -67,12 +67,12 @@ function RevealedText({ lang }) {
               initial={{ opacity: 0, y: 10, filter: 'blur(4px)', color: 'rgba(140,148,180,0.30)' }}
               animate={inView ? {
                 opacity: 1, y: 0, filter: 'blur(0px)',
-                color: accentColor ?? 'var(--enfoque-text, #F5F5F0)',
-                ...(accentColor ? { textShadow: [`0 0 8px ${accentColor}00`, `0 0 20px ${accentColor}80`, `0 0 8px ${accentColor}00`] } : {}),
+                color: isCoral ? '#FF6D4D' : 'var(--enfoque-text, #F5F5F0)',
+                ...(isCoral ? { textShadow: ['0 0 8px rgba(255,109,77,0)', '0 0 20px rgba(255,109,77,0.5)', '0 0 8px rgba(255,109,77,0)'] } : {}),
               } : { opacity: 0, y: 10, filter: 'blur(4px)', color: 'rgba(140,148,180,0.30)' }}
               transition={{
                 delay: i * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1],
-                textShadow: accentColor ? { duration: 2, delay: i * 0.04 + 0.4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } : undefined,
+                textShadow: isCoral ? { duration: 2, delay: i * 0.04 + 0.4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } : undefined,
               }}
               style={{ display: 'inline-block', marginRight: '0.22em' }}
             >

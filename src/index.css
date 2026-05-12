@@ -128,6 +128,12 @@
 
 @layer utilities {
   .font-cal { font-family: 'Cal Sans', sans-serif; }
+  .section-title {
+    font-family: 'Cal Sans', sans-serif;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    line-height: 1.15;
+    letter-spacing: -0.4px;
+  }
 
   /* Gradient text */
   .text-grad {
