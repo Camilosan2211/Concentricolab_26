@@ -15,8 +15,13 @@ export default function Connect({ lang }) {
   const [status, setStatus]       = useState('idle')
   const [formData, setFormData]   = useState({ nombre: '', email: '', tipo: '', mensaje: '' })
   const [formStatus, setFormStatus] = useState('idle')
+  const [touched, setTouched] = useState({})
+  const [nlTouched, setNlTouched] = useState(false)
 
   const t = (es, en) => (lang === 'es' ? es : en)
+
+  const isValidEmail = (val) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)
 
   // Newsletter submit
   const submitNewsletter = async (e) => {
@@ -54,6 +59,12 @@ export default function Connect({ lang }) {
   }
 
   const inputCls = "w-full glass dark:border-white/10 border-black/8 focus:border-b-blue/50 dark:text-white text-b-dark placeholder:dark:text-white/30 placeholder:text-black/30 text-sm px-5 py-3.5 rounded-action outline-none bg-transparent transition-colors duration-200"
+
+  const nlInputCls = `${inputCls} ${
+    nlTouched && !isValidEmail(email)
+      ? 'border-red-400/60 focus:border-red-400'
+      : ''
+  }`
 
   return (
     <section id="connect" className="relative z-10 py-24 px-6 overflow-hidden">
@@ -120,10 +131,16 @@ export default function Connect({ lang }) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setNlTouched(true)}
                 placeholder={t('tu@email.com', 'your@email.com')}
                 required
-                className={inputCls}
+                className={nlInputCls}
               />
+              {nlTouched && !isValidEmail(email) && email.length > 0 && (
+                <p className="text-[11px] text-red-400/80 -mt-1 px-1">
+                  {t('Ingresa un email válido', 'Enter a valid email')}
+                </p>
+              )}
               <button
                 type="submit"
                 disabled={status === 'loading'}
@@ -194,17 +211,19 @@ export default function Connect({ lang }) {
                     type="text"
                     value={formData.nombre}
                     onChange={(e) => setFormData(d => ({ ...d, nombre: e.target.value }))}
+                    onBlur={() => setTouched(p => ({ ...p, nombre: true }))}
                     placeholder={t('Nombre', 'Name')}
                     required
-                    className={inputCls}
+                    className={`${inputCls} ${touched.nombre && !formData.nombre ? 'border-red-400/60' : ''}`}
                   />
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData(d => ({ ...d, email: e.target.value }))}
+                    onBlur={() => setTouched(p => ({ ...p, email: true }))}
                     placeholder={t('Email', 'Email')}
                     required
-                    className={inputCls}
+                    className={`${inputCls} ${touched.email && !isValidEmail(formData.email) ? 'border-red-400/60' : ''}`}
                   />
                 </div>
                 
@@ -213,8 +232,9 @@ export default function Connect({ lang }) {
                   <select
                     value={formData.tipo}
                     onChange={(e) => setFormData(d => ({ ...d, tipo: e.target.value }))}
+                    onBlur={() => setTouched(p => ({ ...p, tipo: true }))}
                     required
-                    className={`${inputCls} appearance-none cursor-pointer pr-10`}
+                    className={`${inputCls} appearance-none cursor-pointer pr-10 ${touched.tipo && !formData.tipo ? 'border-red-400/60' : ''}`}
                   >
                     <option value="" disabled className="dark:bg-b-dark bg-b-light">{t('¿De qué trata tu proyecto?', 'What is your project about?')}</option>
                     <option value="producto" className="dark:bg-b-dark bg-b-light">{t('Producto & Empaque', 'Product & Packaging')}</option>
@@ -233,9 +253,10 @@ export default function Connect({ lang }) {
                 <textarea
                   value={formData.mensaje}
                   onChange={(e) => setFormData(d => ({ ...d, mensaje: e.target.value }))}
+                  onBlur={() => setTouched(p => ({ ...p, mensaje: true }))}
                   rows={3}
                   placeholder={t('Cuéntanos brevemente...', 'Tell us briefly...')}
-                  className={`${inputCls} resize-none`}
+                  className={`${inputCls} resize-none ${touched.mensaje && !formData.mensaje ? 'border-red-400/60' : ''}`}
                 />
                 
                 {/* Botón anclado abajo gracias al mt-auto */}

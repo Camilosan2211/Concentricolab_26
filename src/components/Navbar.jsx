@@ -4,19 +4,40 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navLinks = [
-  { href: '#capacidades', es: 'Capacidades',  en: 'Capabilities' },
-  { href: '#productos',   es: 'Productos',    en: 'Products'     },
-  { href: '#principios',  es: 'Principios',   en: 'Principles'   },
+  { href: '#capacidades', es: 'Servicios',  en: 'Services'  },
+  { href: '#principios',  es: 'Principios', en: 'Principles'},
+  { href: '#enfoque',     es: 'Enfoque',    en: 'Approach'  },
 ]
 
 export default function Navbar({ lang, setLang, dark, setDark }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
+  const [activeSection, setActiveSection] = useState('')
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', fn, { passive: true })
     return () => window.removeEventListener('scroll', fn)
+  }, [])
+
+  useEffect(() => {
+    const sectionIds = ['capacidades', 'enfoque', 'principios', 'productos', 'connect']
+    const observers = []
+
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id)
+      if (!el) return
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id)
+        },
+        { threshold: 0.3 }
+      )
+      obs.observe(el)
+      observers.push(obs)
+    })
+
+    return () => observers.forEach(o => o.disconnect())
   }, [])
 
   const t = (es, en) => lang === 'es' ? es : en
@@ -58,16 +79,23 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
           </a>
 
           <nav className="hidden md:flex items-center gap-7">
-            {navLinks.map(l => (
-              <a key={l.href} href={l.href}
-                className="text-sm font-medium transition-colors duration-200 relative group"
-                style={{ color: dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}
-                onMouseEnter={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)' }}
-                onMouseLeave={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}>
-                {t(l.es, l.en)}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300" />
-              </a>
-            ))}
+              {navLinks.map(l => {
+                const sectionId = l.href.replace('#', '')
+                return (
+                <a key={l.href} href={l.href}
+                  className="text-sm font-medium transition-colors duration-200 relative group"
+                  style={{
+                    color: activeSection === sectionId
+                      ? (dark ? 'rgba(255,255,255,1)' : 'rgba(10,10,24,1)')
+                      : (dark ? 'rgba(255,255,255,0.6)' : 'rgba(10,10,24,0.85)')
+                  }}
+                  onMouseEnter={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)' }}
+                  onMouseLeave={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}>
+                  {t(l.es, l.en)}
+                  <span className={`absolute -bottom-0.5 left-0 h-px bg-b-blue transition-all duration-300 ${activeSection === sectionId ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                </a>
+                )
+              })}
           </nav>
 
           <div className="flex items-center gap-2">

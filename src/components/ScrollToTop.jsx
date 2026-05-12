@@ -4,7 +4,7 @@ import { ArrowUp } from 'lucide-react'
 export default function ScrollToTop() {
   const [v, setV] = useState(false)
   useEffect(()=>{
-    const fn=()=>setV(window.scrollY>600)
+    const fn=()=>setV(window.scrollY>window.innerHeight*1.8)
     window.addEventListener('scroll',fn,{passive:true})
     return ()=>window.removeEventListener('scroll',fn)
   },[])

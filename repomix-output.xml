@@ -1074,28 +1074,6 @@ Después de estos 3 pasos, el DESIGN.md y el código estarán al 95% de sincron�
 **Estado post 3 pasos:** ~95% sincronizado
 </file>
 
-<file path="index.html">
-<!DOCTYPE html>
-<html lang="es-CO" class="dark">
-  <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Concéntrico Lab — Producto, marca y experiencia</title>
-    <meta name="description" content="Diseño en la intersección entre producto, marca y experiencia digital. Desde la forma y el objeto hasta su experiencia en pantalla."/>
-    <meta property="og:image" content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
-    <link rel="icon" href="/assets/images/favicon.png"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/cal-sans/index.css" rel="stylesheet"/>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
-</file>
-
 <file path="public/assets/images/README_ASSETS.txt">
 Place logo.png, favicon.png and og-image.png here before deploy.
 
@@ -1233,6 +1211,37 @@ export default function ScrollToTop() {
     </AnimatePresence>
   )
 }
+</file>
+
+<file path="index.html">
+<!DOCTYPE html>
+<html lang="es-CO" class="dark">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Concéntrico Lab — Producto, marca y experiencia</title>
+    <meta name="description" content="Diseño en la intersección entre producto, marca y experiencia digital. Desde la forma y el objeto hasta su experiencia en pantalla."/>
+    <meta property="og:image" content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
+    <meta property="og:title" content="Concéntrico Lab — Producto, marca y experiencia"/>
+    <meta property="og:description" content="Diseño en la intersección entre producto, marca y experiencia digital. Desde la forma y el objeto hasta su experiencia en pantalla."/>
+    <meta property="og:url" content="https://concentricolab.vercel.app/"/>
+    <meta property="og:type" content="website"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="Concéntrico Lab — Producto, marca y experiencia"/>
+    <meta name="twitter:image" content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
+    <link rel="canonical" href="https://concentricolab.vercel.app/"/>
+    <meta name="theme-color" content="#00031F"/>
+    <link rel="icon" href="/assets/images/favicon.png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/cal-sans/index.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
 </file>
 
 <file path="package.json">
@@ -2252,69 +2261,6 @@ export default function GeometricBackground({ className, darkMode = true }) {
 }
 </file>
 
-<file path="src/App.jsx">
-import { useState, useEffect } from 'react'
-import { useLenis }   from './hooks/useLenis'
-import { useCursor }  from './hooks/useCursor'
-
-import ScrollToTop          from './components/ScrollToTop'
-import Navbar               from './components/Navbar'
-import GeometricBackground  from './components/ui/geometric'
-
-import Hero        from './sections/Hero'
-import Ticker      from './sections/Ticker'
-import Capacidades from './sections/Capacidades'
-import Enfoque     from './sections/Enfoque'
-import Manifiesto  from './sections/Manifiesto'
-import Productos   from './sections/Productos'
-import Proceso     from './sections/Proceso'
-import Connect     from './sections/Connect'
-import Footer      from './sections/Footer'
-
-export default function App() {
-  const [lang, setLang] = useState('es')
-  const [dark, setDark] = useState(true)
-
-  useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.remove('light')
-    } else {
-      document.documentElement.classList.add('light')
-    }
-  }, [dark])
-
-  useLenis()
-  useCursor()
-
-  return (
-    <>
-      <GeometricBackground darkMode={dark} />
-
-      <div id="pb" aria-hidden="true" />
-      <div className="cur-dot"  style={{ opacity: 0 }} aria-hidden="true" />
-      <div className="cur-ring" style={{ opacity: 0 }} aria-hidden="true" />
-      <div className="film-grain-overlay" aria-hidden="true" />
-
-      <Navbar lang={lang} setLang={setLang} dark={dark} setDark={setDark} />
-
-      <main className="relative z-10">
-        <Hero        lang={lang} />
-        <Ticker      />
-        <Capacidades lang={lang} />
-        <Enfoque     lang={lang} />
-        <Manifiesto  lang={lang} />
-        <Productos   lang={lang} />
-        <Proceso     lang={lang} />
-        <Connect     lang={lang} />
-      </main>
-
-      <Footer lang={lang} />
-      <ScrollToTop />
-    </>
-  )
-}
-</file>
-
 <file path="src/components/ScrollExpandMedia.jsx">
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'motion/react'
@@ -2483,6 +2429,71 @@ const ScrollExpandMedia = ({
 }
 
 export default ScrollExpandMedia
+</file>
+
+<file path="src/App.jsx">
+import { useState, useEffect } from 'react'
+import { useLenis }   from './hooks/useLenis'
+import { useCursor }  from './hooks/useCursor'
+
+import ScrollToTop          from './components/ScrollToTop'
+import Navbar               from './components/Navbar'
+import GeometricBackground  from './components/ui/geometric'
+
+import Hero        from './sections/Hero'
+import Ticker      from './sections/Ticker'
+import Capacidades from './sections/Capacidades'
+import Enfoque     from './sections/Enfoque'
+import Manifiesto  from './sections/Manifiesto'
+import Productos   from './sections/Productos'
+import Proceso     from './sections/Proceso'
+import Connect     from './sections/Connect'
+import Footer      from './sections/Footer'
+
+export default function App() {
+  const [lang, setLang] = useState('es')
+  const [dark, setDark] = useState(true)
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add('dark')
+      document.documentElement.classList.remove('light')
+    } else {
+      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.add('light')
+    }
+  }, [dark])
+
+  useLenis()
+  useCursor()
+
+  return (
+    <>
+      <GeometricBackground darkMode={dark} />
+
+      <div id="pb" aria-hidden="true" />
+      <div className="cur-dot"  style={{ opacity: 0 }} aria-hidden="true" />
+      <div className="cur-ring" style={{ opacity: 0 }} aria-hidden="true" />
+      <div className="film-grain-overlay" aria-hidden="true" />
+
+      <Navbar lang={lang} setLang={setLang} dark={dark} setDark={setDark} />
+
+      <main className="relative z-10">
+        <Hero        lang={lang} />
+        <Ticker      />
+        <Capacidades lang={lang} />
+        <Enfoque     lang={lang} />
+        <Manifiesto  lang={lang} />
+        <Productos   lang={lang} />
+        <Proceso     lang={lang} />
+        <Connect     lang={lang} />
+      </main>
+
+      <Footer lang={lang} />
+      <ScrollToTop />
+    </>
+  )
+}
 </file>
 
 <file path="src/sections/Connect.jsx">
@@ -2730,7 +2741,7 @@ export default function Connect({ lang }) {
                 <button
                   type="submit"
                   disabled={formStatus === 'loading'}
-                  className="mt-auto inline-flex items-center justify-center gap-2.5 bg-b-blue text-white font-semibold text-sm py-3.5 rounded-action glow-blue hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
+                  className="mt-auto inline-flex items-center justify-center gap-2.5 bg-b-coral text-white font-semibold text-sm py-3.5 rounded-action glow-coral hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-60"
                 >
                   <Send size={14} />
                   {formStatus === 'loading' ? t('Enviando…', 'Sending…')
@@ -2750,7 +2761,7 @@ export default function Connect({ lang }) {
 <file path="src/sections/Hero.jsx">
 import { useState, useMemo } from 'react'
 import { motion } from 'motion/react'
-import { ArrowDown } from 'lucide-react'
+import { ArrowDown, ArrowRight, ShoppingBag } from 'lucide-react'
 import HeroGrid from '../components/HeroGrid'
 
 const motionPresets = {
@@ -2928,18 +2939,19 @@ export default function Hero({ lang }) {
         {/* CTAs */}
         <motion.div variants={variants.item} className="flex flex-wrap items-center gap-4 justify-center">
           <a
-            href="#enfoque"
+            href="#proceso"
             className="group relative inline-flex items-center gap-2.5 glass dark:text-white text-black text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(77,102,255,.22)]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral" />
             {t('Cómo trabajamos', 'How we work')}
-            <ArrowDown size={14} className="group-hover:translate-y-1 transition-transform duration-300" />
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
           </a>
           <a
-            href="#capacidades"
+            href="#productos"
             className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
           >
-            {t('Nuestros servicios', 'Our services')}
+            <ShoppingBag size={15} />
+            {t('Ver productos', 'See products')}
           </a>
         </motion.div>
 
@@ -3170,7 +3182,7 @@ export default function Productos({ lang }) {
   const handleArrow = (dir) => snapTo(activeIndex + dir)
 
   return (
-    <section id="productos recursos" className="relative z-10 py-24 px-4 md:px-8">
+    <section id="productos" className="relative z-10 py-24 px-4 md:px-8">
       <div className="section-premium">
         <div className="max-w-[1200px] mx-auto flex flex-col gap-10">
 
@@ -3278,10 +3290,9 @@ import { Menu, X, Sun, Moon } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const navLinks = [
-  { href:'#capacidades', es:'Capacidades', en:'Capabilities' },
-  { href:'#enfoque',     es:'Enfoque',    en:'Focus'      },
-  { href:'#principios',  es:'Principios', en:'Principles' },
-  { href:'#connect',     es:'Contacto',   en:'Contact'    },
+  { href: '#capacidades', es: 'Capacidades',  en: 'Capabilities' },
+  { href: '#productos',   es: 'Productos',    en: 'Products'     },
+  { href: '#principios',  es: 'Principios',   en: 'Principles'   },
 ]
 
 export default function Navbar({ lang, setLang, dark, setDark }) {
@@ -3611,99 +3622,6 @@ export default function Manifiesto({ lang }) {
 }
 </file>
 
-<file path="src/sections/Footer.jsx">
-import { motion } from 'motion/react'
-
-const navLinks = [
-  { href: '#enfoque',     es: 'Enfoque',     en: 'Focus'      },
-  { href: '#principios',  es: 'Principios',  en: 'Principles' },
-  { href: '#capacidades', es: 'Capacidades', en: 'Capabilities'},
-  { href: '#recursos',    es: 'Recursos',    en: 'Resources'  },
-  { href: '#proceso',     es: 'Proceso',     en: 'Process'    },
-  { href: '#connect',     es: 'Contacto',    en: 'Contact'    },
-]
-const social = [
-  { label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
-  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/' },
-  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab' },
-]
-const products = [
-  { label: 'Kit de Métricas', href: 'https://concentriclab.gumroad.com/l/metricasdigitales' },
-  { label: 'Ver todos →',     href: 'https://concentriclab.gumroad.com' },
-]
-
-export default function Footer({ lang }) {
-  const t    = (es, en) => lang === 'es' ? es : en
-  const year = new Date().getFullYear()
-
-  return (
-    <footer className="relative z-10 px-4 pb-8 pt-20 mb-8 overflow-hidden">
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
-        style={{ background: 'linear-gradient(to right,transparent,rgba(77,102,255,.22),transparent)' }}
-      />
-
-      <div className="max-w-[1200px] mx-auto">
-
-        {/* Grid de links */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8 border-t dark:border-white/10 border-black/12">
-          <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
-              {t('Navegación', 'Navigation')}
-            </span>
-            {navLinks.map(l => (
-              <a key={l.href} href={l.href}
-                className="text-sm transition-colors duration-200 dark:text-white/55 dark:hover:text-white text-black/50 hover:text-black">
-                {t(l.es, l.en)}
-              </a>
-            ))}
-          </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
-              {t('Recursos', 'Resources')}
-            </span>
-            {products.map(p => (
-              <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer"
-                className="text-sm transition-colors duration-200 dark:text-white/55 dark:hover:text-white text-black/50 hover:text-black">
-                {p.label}
-              </a>
-            ))}
-          </div>
-          <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
-            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
-              Social
-            </span>
-            {social.map(s => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                className="text-sm transition-colors duration-200 dark:text-white/50 dark:hover:text-white text-black/50 hover:text-black">
-                {s.label}
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* Barra inferior */}
-        <div className="pt-7 grid grid-cols-3 items-center gap-4 border-t dark:border-white/10 border-black/12">
-          <a href="#hero" className="flex items-center gap-0 group" aria-label="Concéntrico Lab">
-            <img
-              src="/assets/images/logo.png"
-              alt="Concéntrico Lab"
-              className="h-5 w-auto opacity-55 group-hover:opacity-90 transition-opacity duration-200 dark:brightness-0 dark:invert"
-            />
-          </a>
-          <p className="text-[11px] text-center dark:text-white/30 text-black/35">
-            © {year} Concéntrico Lab. Bogotá, Colombia.
-          </p>
-          <p className="text-[11px] text-right italic hidden sm:block dark:text-white/30 text-black/35">
-            {t('Construido con diseño, IA y mucho café.', 'Built with design, AI and a lot of coffee.')}
-          </p>
-        </div>
-      </div>
-    </footer>
-  )
-}
-</file>
-
 <file path="src/sections/Enfoque.jsx">
 import { useRef } from 'react'
 import { motion, useInView } from 'motion/react'
@@ -3808,6 +3726,99 @@ export default function Enfoque({ lang }) {
         </ScrollExpandMedia>
       </div>
     </section>
+  )
+}
+</file>
+
+<file path="src/sections/Footer.jsx">
+import { motion } from 'motion/react'
+
+const navLinks = [
+  { href: '#enfoque',     es: 'Enfoque',     en: 'Focus'      },
+  { href: '#principios',  es: 'Principios',  en: 'Principles' },
+  { href: '#capacidades', es: 'Capacidades', en: 'Capabilities'},
+  { href: '#productos',   es: 'Productos',   en: 'Products'   },
+  { href: '#proceso',     es: 'Proceso',     en: 'Process'    },
+  { href: '#connect',     es: 'Contacto',    en: 'Contact'    },
+]
+const social = [
+  { label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/' },
+  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab' },
+]
+const products = [
+  { label: 'Kit de Métricas', href: 'https://concentriclab.gumroad.com/l/metricasdigitales' },
+  { label: 'Ver todos →',     href: 'https://concentriclab.gumroad.com' },
+]
+
+export default function Footer({ lang }) {
+  const t    = (es, en) => lang === 'es' ? es : en
+  const year = new Date().getFullYear()
+
+  return (
+    <footer className="relative z-10 px-4 pb-8 pt-20 mb-8 overflow-hidden">
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px pointer-events-none"
+        style={{ background: 'linear-gradient(to right,transparent,rgba(77,102,255,.22),transparent)' }}
+      />
+
+      <div className="max-w-[1200px] mx-auto">
+
+        {/* Grid de links */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8 border-t dark:border-white/10 border-black/12">
+          <div className="flex flex-col gap-3">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
+              {t('Navegación', 'Navigation')}
+            </span>
+            {navLinks.map(l => (
+              <a key={l.href} href={l.href}
+                className="text-sm transition-colors duration-200 dark:text-white/55 dark:hover:text-white text-black/50 hover:text-black">
+                {t(l.es, l.en)}
+              </a>
+            ))}
+          </div>
+          <div className="flex flex-col gap-3">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
+              {t('Recursos', 'Resources')}
+            </span>
+            {products.map(p => (
+              <a key={p.label} href={p.href} target="_blank" rel="noopener noreferrer"
+                className="text-sm transition-colors duration-200 dark:text-white/55 dark:hover:text-white text-black/50 hover:text-black">
+                {p.label}
+              </a>
+            ))}
+          </div>
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
+            <span className="text-[11px] font-bold tracking-[0.1em] uppercase dark:text-white/50 text-black/45">
+              Social
+            </span>
+            {social.map(s => (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                className="text-sm transition-colors duration-200 dark:text-white/50 dark:hover:text-white text-black/50 hover:text-black">
+                {s.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Barra inferior */}
+        <div className="pt-7 grid grid-cols-3 items-center gap-4 border-t dark:border-white/10 border-black/12">
+          <a href="#hero" className="flex items-center gap-0 group" aria-label="Concéntrico Lab">
+            <img
+              src="/assets/images/logo.png"
+              alt="Concéntrico Lab"
+              className="h-5 w-auto opacity-55 group-hover:opacity-90 transition-opacity duration-200 dark:brightness-0 dark:invert"
+            />
+          </a>
+          <p className="text-[11px] text-center dark:text-white/30 text-black/35">
+            © {year} Concéntrico Lab. Bogotá, Colombia.
+          </p>
+          <p className="text-[11px] text-right italic hidden sm:block dark:text-white/30 text-black/35">
+            {t('Construido con diseño, IA y mucho café.', 'Built with design, AI and a lot of coffee.')}
+          </p>
+        </div>
+      </div>
+    </footer>
   )
 }
 </file>
@@ -4394,7 +4405,7 @@ export default function Proceso({ lang }) {
     --cursor-dot: #FF6D4D;
     --cursor-ring: rgba(255, 109, 77, 0.45);
     --cursor-ring-hov: rgba(255, 109, 77, 0.32);
-    --enfoque-text: #0A0A18;
+    --enfoque-text: #F5F5F0;
     --background:    oklch(1 0 0);
     --foreground:    oklch(0.145 0 0);
     --card:    oklch(1 0 0);
@@ -4445,6 +4456,11 @@ export default function Proceso({ lang }) {
     @apply bg-background text-foreground;
   }
 
+  html.light body {
+    background: #F8F7F4;
+    color: #0A0A18;
+  }
+
   /* LIGHT */
  
 
@@ -4489,6 +4505,13 @@ export default function Proceso({ lang }) {
 
   }
 
+  html.light {
+    --enfoque-text: #0A0A18;
+    --cursor-dot: #4D66FF;
+    --cursor-ring: rgba(77, 102, 255, 0.5);
+    --cursor-ring-hov: rgba(77, 102, 255, 0.35);
+  }
+
 }
 
 @layer utilities {
@@ -4522,8 +4545,17 @@ export default function Proceso({ lang }) {
     @apply max-w-[1400px] mx-auto my-12 rounded-section border border-blue-900/20 dark:border-blue-400/15 bg-blue-950/30 dark:bg-blue-950/35 shadow-2xl backdrop-blur-xl px-6 md:px-8 py-10 md:py-12;
   }
 
-  /* Glass — light */
-
+  /* Glass — light mode */
+  html.light .glass {
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(77, 102, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  html.light .glass-blue {
+    background: rgba(77, 102, 255, 0.06);
+    border: 1px solid rgba(77, 102, 255, 0.18);
+  }
 
   /* Glow */
   .glow-blue  { box-shadow: 0 0 36px rgba(77,102,255,.35); }

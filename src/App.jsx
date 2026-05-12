@@ -12,7 +12,6 @@ import Capacidades from './sections/Capacidades'
 import Enfoque     from './sections/Enfoque'
 import Manifiesto  from './sections/Manifiesto'
 import Productos   from './sections/Productos'
-import Proceso     from './sections/Proceso'
 import Connect     from './sections/Connect'
 import Footer      from './sections/Footer'
 
@@ -51,7 +50,6 @@ export default function App() {
         <Enfoque     lang={lang} />
         <Manifiesto  lang={lang} />
         <Productos   lang={lang} />
-        <Proceso     lang={lang} />
         <Connect     lang={lang} />
       </main>
 

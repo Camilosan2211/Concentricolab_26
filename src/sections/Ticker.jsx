@@ -27,9 +27,9 @@ export default function Ticker() {
       />
       <motion.div className="flex gap-3 w-max" animate={{x:['0%','-50%']}} transition={{duration:32,ease:'linear',repeat:Infinity}}>
         {d.map((tag,i)=>(
-          <span key={i} className="inline-flex items-center gap-2 glass-blue text-b-blue-lt text-[12px] font-semibold px-4 py-1.5 rounded-full whitespace-nowrap border border-b-blue/20 select-none">
+          <a key={i} href="#capacidades" className="inline-flex items-center gap-2 glass-blue text-b-blue-lt text-[12px] font-semibold px-4 py-1.5 rounded-full whitespace-nowrap border border-b-blue/20 cursor-pointer select-none">
             <span className="w-1 h-1 rounded-full bg-b-blue opacity-60"/>{tag}
-          </span>
+          </a>
         ))}
       </motion.div>
     </div>

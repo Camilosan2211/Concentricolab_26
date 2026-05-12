@@ -114,7 +114,7 @@ const ScrollExpandMedia = ({
                   <video
                     src={mediaSrc}
                     type="video/mp4"
-                    autoPlay muted loop playsInline preload="auto"
+                    autoPlay muted loop playsInline preload="none"
                     className="w-full h-full object-cover"
                     controls={false}
                     disablePictureInPicture

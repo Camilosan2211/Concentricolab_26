@@ -5,6 +5,20 @@ import { Layers, Box, Monitor, Play, Zap, MessageSquare } from 'lucide-react'
 const items = [
   {
     id: '01',
+    Icon: MessageSquare,
+    color: '#FF6D4D',
+    span: 1,
+    es: {
+      title: 'Consultoría',
+      body: 'Acompañamiento estratégico para alinear marca, producto y negocio — con foco, claridad y criterio en cada decisión.',
+    },
+    en: {
+      title: 'Consulting',
+      body: 'Strategic support to align brand, product and business — with focus, clarity and criteria in every decision.',
+    },
+  },
+  {
+    id: '02',
     Icon: Layers,
     color: '#4D66FF',
     span: 1,
@@ -18,7 +32,7 @@ const items = [
     },
   },
   {
-    id: '02',
+    id: '03',
     Icon: Box,
     color: '#FF6D4D',
     span: 1,
@@ -32,7 +46,7 @@ const items = [
     },
   },
   {
-    id: '03',
+    id: '04',
     Icon: Monitor,
     color: '#41EAFF',
     span: 1,
@@ -46,7 +60,7 @@ const items = [
     },
   },
   {
-    id: '04',
+    id: '05',
     Icon: Play,
     color: '#828AFF',
     span: 1,
@@ -60,7 +74,7 @@ const items = [
     },
   },
   {
-    id: '05',
+    id: '06',
     Icon: Zap,
     color: '#9F6EFF',
     span: 1,
@@ -73,29 +87,15 @@ const items = [
       body: 'Systems that connect tools, scale processes and apply intelligence to free up time and operational capacity.',
     },
   },
-  {
-    id: '06',
-    Icon: MessageSquare,
-    color: '#FF6D4D',
-    span: 1,
-    es: {
-      title: 'Consultoría',
-      body: 'Acompañamiento estratégico para alinear marca, producto y negocio — con foco, claridad y criterio en cada decisión.',
-    },
-    en: {
-      title: 'Consulting',
-      body: 'Strategic support to align brand, product and business — with focus, clarity and criteria in every decision.',
-    },
-  },
 ]
 
-function CapCard({ item, lang, index }) {
+function CapCard({ item, lang, index, featured }) {
   const c = lang === 'es' ? item.es : item.en
   const Icon = item.Icon
 
   return (
     <motion.div
-      className="relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm md:col-span-1"
+      className={`relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm ${featured ? 'md:col-span-2' : 'md:col-span-1'}`}
       initial={{ opacity: 0, y: 36 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
@@ -110,7 +110,7 @@ function CapCard({ item, lang, index }) {
 
       {/* Glow de fondo */}
       <div
-        className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none opacity-20 group-hover:opacity-50 group-hover:scale-125 transition-all duration-500"
+        className={`absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none transition-all duration-500 ${featured ? 'opacity-40 group-hover:opacity-70' : 'opacity-20 group-hover:opacity-50 group-hover:scale-125'}`}
         style={{
           background: `radial-gradient(circle, ${item.color}40 0%, transparent 70%)`,
           filter: 'blur(24px)',
@@ -119,7 +119,7 @@ function CapCard({ item, lang, index }) {
       />
 
       {/* Contenido */}
-      <div className="relative z-10 p-6 md:p-8 flex flex-col gap-4 h-full">
+      <div className={`relative z-10 p-6 md:p-8 flex ${featured ? 'flex-col md:flex-row md:gap-8' : 'flex-col gap-4'} h-full`}>
         {/* Icono */}
         <div className="flex-shrink-0">
           <div
@@ -142,11 +142,11 @@ function CapCard({ item, lang, index }) {
             >
               {item.id}
             </span>
-            <h3 className="font-cal text-xl md:text-2xl dark:text-white text-b-dark leading-snug">
+            <h3 className={`font-cal ${featured ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl'} dark:text-white text-b-dark leading-snug`}>
               {c.title}
             </h3>
           </div>
-          <p className="dark:text-white/50 text-black/55 text-sm leading-[1.7]">
+          <p className={`dark:text-white/50 text-black/55 text-sm leading-[1.7] ${featured ? 'max-w-[400px]' : ''}`}>
             {c.body}
           </p>
         </div>
@@ -219,9 +219,25 @@ export default function Capacidades({ lang }) {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
         >
           {items.map((item, i) => (
-            <CapCard key={item.id} item={item} lang={lang} index={i} />
+            <CapCard key={item.id} item={item} lang={lang} index={i} featured={i === 0} />
           ))}
         </div>
+
+        {/* CTA */}
+        <motion.div
+          className="flex justify-center mt-4"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+        >
+          <a
+            href="#connect"
+            className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
+          >
+            {t('Iniciemos un proyecto', "Let's start a project")}
+          </a>
+        </motion.div>
       </div>
     </section>
   )

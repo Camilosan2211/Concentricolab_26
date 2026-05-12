@@ -1,12 +1,11 @@
 import { motion } from 'motion/react'
 
 const navLinks = [
-  { href: '#enfoque',     es: 'Enfoque',     en: 'Focus'      },
-  { href: '#principios',  es: 'Principios',  en: 'Principles' },
-  { href: '#capacidades', es: 'Capacidades', en: 'Capabilities'},
-  { href: '#productos',   es: 'Productos',   en: 'Products'   },
-  { href: '#proceso',     es: 'Proceso',     en: 'Process'    },
-  { href: '#connect',     es: 'Contacto',    en: 'Contact'    },
+  { href: '#capacidades', es: 'Servicios',  en: 'Services'  },
+  { href: '#enfoque',     es: 'Enfoque',    en: 'Approach'  },
+  { href: '#principios',  es: 'Principios', en: 'Principles'},
+  { href: '#connect',     es: 'Contacto',   en: 'Contact'   },
+  { href: '#productos',   es: 'Recursos',   en: 'Resources' },
 ]
 const social = [
   { label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
@@ -30,6 +29,29 @@ export default function Footer({ lang }) {
       />
 
       <div className="max-w-[1200px] mx-auto">
+
+        {/* Headline */}
+        <motion.div
+          className="text-center pb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <p className="font-cal text-3xl md:text-4xl lg:text-5xl dark:text-white/90 text-b-dark leading-tight tracking-[-0.5px]">
+            {t('Construimos desde Bogotá', 'We build from Bogotá')}
+          </p>
+          <p className="font-cal text-3xl md:text-4xl lg:text-5xl leading-tight tracking-[-0.5px]"
+            style={{ color: '#FF6D4D' }}>
+            {t('para cualquier parte.', 'for anywhere.')}
+          </p>
+          <a
+            href="#connect"
+            className="inline-flex items-center gap-2 mt-6 text-sm font-semibold dark:text-white/50 text-black/45 hover:dark:text-white hover:text-black transition-colors duration-200"
+          >
+            {t('Iniciemos algo →', "Let's start something →")}
+          </a>
+        </motion.div>
 
         {/* Grid de links */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8 border-t dark:border-white/10 border-black/12">

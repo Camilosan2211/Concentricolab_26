@@ -1,6 +1,7 @@
 
 @import "tw-animate-css";
 @import "@fontsource-variable/geist";
+@import "@fontsource/cal-sans";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -164,9 +165,12 @@
     -webkit-backdrop-filter: blur(16px);
   }
   html.light .glass-blue {
-    background: rgba(77, 102, 255, 0.06);
-    border: 1px solid rgba(77, 102, 255, 0.18);
+    background: rgba(77, 102, 255, 0.05);
+    border: 1px solid rgba(77, 102, 255, 0.16);
   }
+
+  html.light .glow-blue  { box-shadow: 0 0 24px rgba(77,102,255,.20); }
+  html.light .glow-coral { box-shadow: 0 0 24px rgba(255,109,77,.15); }
 
   /* Glow */
   .glow-blue  { box-shadow: 0 0 36px rgba(77,102,255,.35); }
