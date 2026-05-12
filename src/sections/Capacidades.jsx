@@ -95,7 +95,7 @@ function CapCard({ item, lang, index, featured }) {
 
   return (
     <motion.div
-      className={`relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm ${featured ? 'md:col-span-2' : 'md:col-span-1'}`}
+      className={`relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm ${featured ? 'sm:col-span-2 lg:col-span-2' : 'lg:col-span-1'}`}
       initial={{ opacity: 0, y: 36 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
@@ -216,10 +216,10 @@ export default function Capacidades({ lang }) {
         {/* Grid: 2 filas x 3 columnas */}
         <div
           ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
         >
           {items.map((item, i) => (
-            <CapCard key={item.id} item={item} lang={lang} index={i} featured={i === 0} />
+            <CapCard key={item.id} item={item} lang={lang} index={i} featured={i === 0 || i === items.length - 1} />
           ))}
         </div>
 

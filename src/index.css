@@ -1,6 +1,6 @@
 
 @import "tw-animate-css";
-@import "@fontsource-variable/geist";
+
 @import "@fontsource/cal-sans";
 @tailwind base;
 @tailwind components;

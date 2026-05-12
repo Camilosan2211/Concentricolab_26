@@ -29,6 +29,19 @@ export default function App() {
     }
   }, [dark])
 
+  useEffect(() => {
+    const pb = document.getElementById('pb')
+    if (!pb) return
+    const update = () => {
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+      pb.style.width = pct + '%'
+    }
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+
   useLenis()
   useCursor()
 
@@ -46,8 +59,8 @@ export default function App() {
       <main className="relative z-10">
         <Hero        lang={lang} />
         <Ticker      />
-        <Capacidades lang={lang} />
         <Enfoque     lang={lang} />
+        <Capacidades lang={lang} />
         <Manifiesto  lang={lang} />
         <Productos   lang={lang} />
         <Connect     lang={lang} />

@@ -101,11 +101,11 @@ export default function Connect({ lang }) {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-5">
 
           {/* Card izquierda — Newsletter & Socials */}
           <motion.div
-            className="glass rounded-card p-8 md:p-10 flex flex-col h-full min-h-[340px]"
+            className="glass rounded-card p-8 md:p-10 flex flex-col h-full min-h-[340px] order-last md:order-first"
             initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -174,7 +174,7 @@ export default function Connect({ lang }) {
 
           {/* Card derecha — Formulario de proyecto */}
           <motion.div
-            className="glass rounded-card p-8 md:p-10 flex flex-col h-full min-h-[340px]"
+            className="glass rounded-card p-8 md:p-10 flex flex-col h-full min-h-[340px] order-first md:order-last"
             initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}

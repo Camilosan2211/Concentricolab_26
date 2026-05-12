@@ -46,7 +46,6 @@ The content is organized as follows:
 components.json
 DESIGN.md
 docs/DESIGN_AUDIT.md
-et --hard c3c6506
 index.html
 jsconfig.json
 package.json
@@ -65,7 +64,6 @@ README.md
 src/App.jsx
 src/components/HeroGrid.jsx
 src/components/Navbar.jsx
-src/components/ParticleField.jsx
 src/components/ScrollExpandMedia.jsx
 src/components/ScrollToTop.jsx
 src/components/ui/geometric.jsx
@@ -79,13 +77,10 @@ src/sections/Connect.jsx
 src/sections/Enfoque.jsx
 src/sections/Footer.jsx
 src/sections/Hero.jsx
-src/sections/LabStats.jsx
 src/sections/Manifiesto.jsx
-src/sections/Proceso.jsx
 src/sections/Productos.jsx
 src/sections/Ticker.jsx
 tailwind.config.js
-Untitled-1
 vercel.json
 vite.config.js
 </directory_structure>
@@ -504,29 +499,6 @@ Applied to a `<span>` wrapping the key phrase within a larger headline. Never ap
 - **Don't** use Poppins on the web — it is strictly the social media / Canva brand font.
 </file>
 
-<file path="et --hard c3c6506">
-[33m75e8b84[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/Camilosan2211/Concentricolab_26
-[33m9b74866[m Descripción breve de los cambios
-[33mc3c6506[m Descripción breve de los cambios
-[33m5e7b530[m Merge branch 'main' of https://github.com/Camilosan2211/Concentricolab_26
-[33m7548fa9[m ajustes y reparacion claude 29 de abril
-[33m754465b[m Descripción breve de los cambios
-[33mcdf1ff0[m ahora si repo nuevo 29 de abril
-[33m19c4765[m repo para pedir ayuda
-[33mbf63ad3[m Merge branch 'main' of https://github.com/Camilosan2211/Concentricolab_26
-[33md739492[m Update repomix-output.xml
-[33m35b28f5[m ajustes codespace tarde 27 de abril
-[33mfb6a2ad[m Descripción de los ajustes realizados en la web 27 de abril codespace
-[33m01b4301[m ajustes claude domingo noche eliminar cosas a mano
-[33m7acf356[m ajustes claude domingo tarde
-[33m8e40fbb[m ajustes  claude domingo
-[33m6ca823e[m Update repomix-output.xml
-[33m8e01238[m Merge branch 'main' of https://github.com/Camilosan2211/Concentricolab_26
-[33m9845d2f[m AJUSTES TEXTOS claude sabado noche
-[33md651d99[m Ajustes de diseño en Codespaces
-[33m9161e46[m ajustes clause madrugada 25 de abril
-</file>
-
 <file path="jsconfig.json">
 {
   "compilerOptions": {
@@ -586,10 +558,6 @@ import './index.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode><App /></React.StrictMode>
 )
-</file>
-
-<file path="Untitled-1">
-
 </file>
 
 <file path="vercel.json">
@@ -1192,7 +1160,7 @@ import { ArrowUp } from 'lucide-react'
 export default function ScrollToTop() {
   const [v, setV] = useState(false)
   useEffect(()=>{
-    const fn=()=>setV(window.scrollY>600)
+    const fn=()=>setV(window.scrollY>window.innerHeight*1.8)
     window.addEventListener('scroll',fn,{passive:true})
     return ()=>window.removeEventListener('scroll',fn)
   },[])
@@ -1210,76 +1178,6 @@ export default function ScrollToTop() {
       )}
     </AnimatePresence>
   )
-}
-</file>
-
-<file path="index.html">
-<!DOCTYPE html>
-<html lang="es-CO" class="dark">
-  <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Concéntrico Lab — Producto, marca y experiencia</title>
-    <meta name="description" content="Diseño en la intersección entre producto, marca y experiencia digital. Desde la forma y el objeto hasta su experiencia en pantalla."/>
-    <meta property="og:image" content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
-    <meta property="og:title" content="Concéntrico Lab — Producto, marca y experiencia"/>
-    <meta property="og:description" content="Diseño en la intersección entre producto, marca y experiencia digital. Desde la forma y el objeto hasta su experiencia en pantalla."/>
-    <meta property="og:url" content="https://concentricolab.vercel.app/"/>
-    <meta property="og:type" content="website"/>
-    <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" content="Concéntrico Lab — Producto, marca y experiencia"/>
-    <meta name="twitter:image" content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
-    <link rel="canonical" href="https://concentricolab.vercel.app/"/>
-    <meta name="theme-color" content="#00031F"/>
-    <link rel="icon" href="/assets/images/favicon.png"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/@fontsource/cal-sans/index.css" rel="stylesheet"/>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
-</file>
-
-<file path="package.json">
-{
-  "name": "concentrico-lab",
-  "private": true,
-  "version": "0.2.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@fontsource-variable/geist": "^5.2.8",
-    "@react-three/drei": "^9.109.2",
-    "@react-three/fiber": "^8.17.10",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "gsap": "^3.12.5",
-    "lenis": "^1.1.16",
-    "lucide-react": "^0.447.0",
-    "motion": "^12.38.0",
-    "radix-ui": "^1.4.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "shadcn": "^4.4.0",
-    "tailwind-merge": "^3.5.0",
-    "three": "^0.167.1",
-    "tw-animate-css": "^1.4.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.2",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.14",
-    "vite": "^5.4.9"
-  }
 }
 </file>
 
@@ -1400,6 +1298,114 @@ export default {
 }
 </file>
 
+<file path="index.html">
+<!DOCTYPE html>
+<html lang="es-CO" class="dark">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Concéntrico Lab — Producto, marca y experiencia</title>
+    <meta name="description" content="Consultora de diseño en la intersección entre producto, marca y experiencia digital. Desde la forma y el objeto hasta su experiencia en pantalla. Bogotá, Colombia."/>
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+      content="Concéntrico Lab — Producto, marca y experiencia"/>
+    <meta property="og:description"
+      content="Consultora de diseño en la intersección entre producto, marca y experiencia digital. Bogotá, Colombia."/>
+    <meta property="og:url"
+      content="https://concentricolab.vercel.app/"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image"
+      content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title"
+      content="Concéntrico Lab — Producto, marca y experiencia"/>
+    <meta name="twitter:description"
+      content="Consultora de diseño en la intersección entre producto, marca y experiencia digital. Bogotá, Colombia."/>
+    <meta name="twitter:image"
+      content="https://concentricolab.vercel.app/assets/images/og-image.png"/>
+
+    <!-- Canonical + theme -->
+    <link rel="canonical" href="https://concentricolab.vercel.app/"/>
+    <meta name="theme-color" content="#00031F"/>
+    <link rel="icon" href="/assets/images/favicon.png"/>
+
+    <!-- Fonts — Inter desde Google, Cal Sans self-hosted vía npm -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"/>
+
+    <!-- JSON-LD Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Concéntrico Lab",
+      "url": "https://concentricolab.vercel.app",
+      "logo": "https://concentricolab.vercel.app/assets/images/logo.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bogotá",
+        "addressCountry": "CO"
+      },
+      "sameAs": [
+        "https://www.instagram.com/concentriclab",
+        "https://www.linkedin.com/company/concentriclab/",
+        "https://www.youtube.com/@ConcentricLab"
+      ]
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+</file>
+
+<file path="package.json">
+{
+  "name": "concentrico-lab",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource/cal-sans": "^5.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.16",
+    "lucide-react": "^0.447.0",
+    "motion": "^12.38.0",
+    "motion-dom": "^12.38.0",
+    "radix-ui": "^1.4.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "shadcn": "^4.4.0",
+    "tailwind-merge": "^3.5.0",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "vite": "^5.4.9"
+  }
+}
+</file>
+
 <file path="vite.config.js">
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -1411,443 +1417,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      'framer-motion': path.resolve(__dirname, 'node_modules/framer-motion/dist/cjs/index.js'),
     },
   },
 })
-</file>
-
-<file path="src/components/ParticleField.jsx">
-import { useRef, useMemo, useLayoutEffect, useEffect } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
-
-function KineticSpheres({ darkMode, count = 180 }) {
-  const instanced = useRef()
-  const mouse = useRef({ x: 0, y: 0 })
-  const dummy = useMemo(() => new THREE.Object3D(), [])
-
-  const data = useMemo(() => {
-    const seeds = []
-    const colors = new Float32Array(count * 3)
-    const palette = [
-      new THREE.Color('#4D66FF'),
-      new THREE.Color('#828AFF'),
-      new THREE.Color('#41EAFF'),
-      new THREE.Color('#FF6D4D'),
-      new THREE.Color('#ffffff'),
-    ]
-    for (let i = 0; i < count; i++) {
-      seeds.push({
-        x: (Math.random() - 0.5) * 13.5,
-        y: (Math.random() - 0.5) * 7.6,
-        z: (Math.random() - 0.5) * 4.8,
-        ampX: 0.08 + Math.random() * 0.14,
-        ampY: 0.08 + Math.random() * 0.18,
-        speed: 0.45 + Math.random() * 0.85,
-        phase: Math.random() * Math.PI * 2,
-        scale: 0.012 + Math.random() * 0.03,
-      })
-      const c = palette[Math.floor(Math.random() * palette.length)]
-      colors[i * 3] = c.r
-      colors[i * 3 + 1] = c.g
-      colors[i * 3 + 2] = c.b
-    }
-    return { seeds, colors }
-  }, [count])
-
-  useEffect(() => {
-    const onMove = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2
-      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2
-    }
-    window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  useLayoutEffect(() => {
-    if (!instanced.current) return
-    instanced.current.instanceColor = new THREE.InstancedBufferAttribute(data.colors, 3)
-  }, [data.colors])
-
-  useFrame(({ clock }) => {
-    if (!instanced.current) return
-    const t = clock.getElapsedTime()
-    const mx = mouse.current.x
-    const my = mouse.current.y
-    for (let i = 0; i < count; i++) {
-      const s = data.seeds[i]
-      const px = s.x + Math.sin(t * s.speed + s.phase) * s.ampX + mx * 0.28
-      const py = s.y + Math.cos(t * (s.speed * 0.9) + s.phase) * s.ampY + my * 0.2
-      const pz = s.z + Math.sin(t * (s.speed * 0.7) + s.phase) * 0.08
-      dummy.position.set(px, py, pz)
-      dummy.scale.setScalar(s.scale)
-      dummy.updateMatrix()
-      instanced.current.setMatrixAt(i, dummy.matrix)
-    }
-    instanced.current.instanceMatrix.needsUpdate = true
-  })
-
-  return (
-    <instancedMesh ref={instanced} args={[undefined, undefined, count]} frustumCulled={false}>
-      <sphereGeometry args={[1, 10, 10]} />
-      <meshStandardMaterial
-        transparent
-        opacity={darkMode ? 0.52 : 0.38}
-        roughness={0.35}
-        metalness={0.05}
-        depthWrite={false}
-      />
-    </instancedMesh>
-  )
-}
-
-function FloatingAccent({ darkMode }) {
-  const ref = useRef()
-  const mouse = useRef({ x: 0, y: 0 })
-
-  useEffect(() => {
-    const onMove = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2
-      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2
-    }
-    window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  useFrame(({ clock }) => {
-    if (!ref.current) return
-    const t = clock.getElapsedTime()
-    ref.current.position.x = 2.55 + mouse.current.x * 0.34
-    ref.current.position.y = -0.48 + Math.sin(t * 1.15) * 0.14 + mouse.current.y * 0.24
-    ref.current.rotation.z = Math.sin(t * 0.9) * 0.18
-    ref.current.rotation.y = t * 0.36
-  })
-
-  return (
-    <mesh ref={ref}>
-      <capsuleGeometry args={[0.12, 0.46, 8, 16]} />
-      <meshStandardMaterial
-        color={darkMode ? '#7A8BFF' : '#6C7BFF'}
-        emissive={darkMode ? '#516AF0' : '#7A8BFF'}
-        emissiveIntensity={darkMode ? 0.28 : 0.16}
-        transparent
-        opacity={darkMode ? 0.6 : 0.46}
-        roughness={0.22}
-        metalness={0.45}
-      />
-    </mesh>
-  )
-}
-const SHAPE_DATA = [
-  { type: 'box',          color: '#4D66FF', emissive: '#3050CC', x: -3.8, y:  1.6, z: -1.2, scale: 0.18, speed: 0.28, phase: 0.0  },
-  { type: 'octahedron',   color: '#FF6D4D', emissive: '#CC4020', x:  3.2, y: -1.1, z: -0.9, scale: 0.22, speed: 0.21, phase: 1.1  },
-  { type: 'cone',         color: '#41EAFF', emissive: '#20B8CC', x: -1.4, y: -2.4, z: -1.5, scale: 0.17, speed: 0.33, phase: 2.2  },
-  { type: 'box',          color: '#828AFF', emissive: '#5060CC', x:  2.6, y:  2.2, z: -2.0, scale: 0.14, speed: 0.18, phase: 3.3  },
-  { type: 'octahedron',   color: '#FF6D4D', emissive: '#AA3A1C', x: -4.4, y: -0.6, z: -1.8, scale: 0.19, speed: 0.24, phase: 0.7  },
-  { type: 'cone',         color: '#4D66FF', emissive: '#3050CC', x:  4.1, y:  0.8, z: -1.4, scale: 0.15, speed: 0.30, phase: 1.8  },
-  { type: 'box',          color: '#41EAFF', emissive: '#18A0B8', x:  0.4, y:  2.9, z: -2.4, scale: 0.12, speed: 0.22, phase: 4.1  },
-  { type: 'octahedron',   color: '#828AFF', emissive: '#5060AA', x: -2.2, y:  0.3, z: -2.1, scale: 0.21, speed: 0.16, phase: 2.9  },
-]
-
-function FlatShapes({ darkMode }) {
-  const refs = useRef([])
-  const mouse = useRef({ x: 0, y: 0 })
-
-  useEffect(() => {
-    const onMove = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth  - 0.5) * 2
-      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2
-    }
-    window.addEventListener('mousemove', onMove, { passive: true })
-    return () => window.removeEventListener('mousemove', onMove)
-  }, [])
-
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime()
-    refs.current.forEach((mesh, i) => {
-      if (!mesh) return
-      const d = SHAPE_DATA[i]
-      mesh.position.x = d.x + Math.sin(t * d.speed + d.phase) * 0.22 + mouse.current.x * 0.12
-      mesh.position.y = d.y + Math.cos(t * d.speed * 0.85 + d.phase) * 0.18 + mouse.current.y * 0.09
-      mesh.rotation.x = t * d.speed * 0.6 + d.phase
-      mesh.rotation.y = t * d.speed * 0.9
-    })
-  })
-
-  const opacity = darkMode ? 0.55 : 0.35
-
-  return (
-    <>
-      {SHAPE_DATA.map((d, i) => (
-        <mesh key={i} ref={(el) => (refs.current[i] = el)} position={[d.x, d.y, d.z]} scale={d.scale}>
-          {d.type === 'box'        && <boxGeometry args={[1, 1, 1]} />}
-          {d.type === 'octahedron' && <octahedronGeometry args={[1, 0]} />}
-          {d.type === 'cone'       && <coneGeometry args={[0.8, 1.6, 5, 1]} />}
-          <meshPhongMaterial
-            color={d.color}
-            emissive={d.emissive}
-            emissiveIntensity={darkMode ? 0.35 : 0.18}
-            transparent
-            opacity={opacity}
-            flatShading={true}
-            shininess={30}
-          />
-        </mesh>
-      ))}
-    </>
-  )
-}
-export default function ParticleField({ darkMode = true }) {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
-      <Canvas
-        camera={{ position: [0, 0, 5.5], fov: 58 }}
-        gl={{ antialias: true, alpha: true }}
-        style={{ background: 'transparent' }}
-      >
-        <ambientLight intensity={0.34} />
-        <pointLight position={[3, 4, 3]} color="#4D66FF" intensity={1.05} />
-        <pointLight position={[-3, -2, 3]} color="#FF6D4D" intensity={0.62} />
-        <pointLight position={[0, 3, -3]} color="#41EAFF" intensity={0.36} />
-        <KineticSpheres darkMode={darkMode} count={180} />
-        <FloatingAccent darkMode={darkMode} />
-        <FlatShapes darkMode={darkMode} />
-      </Canvas>
-    </div>
-  )
-}
-</file>
-
-<file path="src/sections/Capacidades.jsx">
-import { useRef } from 'react'
-import { motion, useInView } from 'motion/react'
-import { Layers, Box, Monitor, Play, Zap, MessageSquare } from 'lucide-react'
-
-const items = [
-  {
-    id: '01',
-    Icon: Layers,
-    color: '#4D66FF',
-    span: 1,
-    es: {
-      title: 'Sistemas & marca',
-      body: 'Identidad, estructura y lenguaje para construir marcas coherentes — desde lo visual hasta cómo funciona.',
-    },
-    en: {
-      title: 'Systems & brand',
-      body: 'Identity, structure and language to build coherent brands — from the visual to how it works.',
-    },
-  },
-  {
-    id: '02',
-    Icon: Box,
-    color: '#FF6D4D',
-    span: 1,
-    es: {
-      title: 'Producto & forma',
-      body: 'Exploración de forma, objeto y espacio como parte de una experiencia bien construida — cuando necesita existir más allá de la pantalla.',
-    },
-    en: {
-      title: 'Product & form',
-      body: 'Exploration of form, object and space as part of a well-built experience — when it needs to exist beyond the screen.',
-    },
-  },
-  {
-    id: '03',
-    Icon: Monitor,
-    color: '#41EAFF',
-    span: 1,
-    es: {
-      title: 'UX/UI & experiencia digital',
-      body: 'Interfaces, flujos y experiencias digitales para apps, productos y entornos web — claras, útiles y coherentes con la marca.',
-    },
-    en: {
-      title: 'UX/UI & digital experience',
-      body: 'Interfaces, flows and digital experiences for apps, products and web environments — clear, useful and consistent with the brand.',
-    },
-  },
-  {
-    id: '04',
-    Icon: Play,
-    color: '#828AFF',
-    span: 1,
-    es: {
-      title: 'Video & contenido',
-      body: 'Edición y narrativa visual a partir de assets, plantillas y referencias — reels, animaciones y piezas de marca listas para publicar.',
-    },
-    en: {
-      title: 'Video & content',
-      body: 'Editing and visual narrative from assets, templates and references — reels, animations and brand pieces ready to publish.',
-    },
-  },
-  {
-    id: '05',
-    Icon: Zap,
-    color: '#9F6EFF',
-    span: 1,
-    es: {
-      title: 'Automatización & IA',
-      body: 'Sistemas que conectan herramientas, escalan procesos y aplican inteligencia para liberar tiempo y capacidad operativa.',
-    },
-    en: {
-      title: 'Automation & AI',
-      body: 'Systems that connect tools, scale processes and apply intelligence to free up time and operational capacity.',
-    },
-  },
-  {
-    id: '06',
-    Icon: MessageSquare,
-    color: '#FF6D4D',
-    span: 1,
-    es: {
-      title: 'Consultoría',
-      body: 'Acompañamiento estratégico para alinear marca, producto y negocio — con foco, claridad y criterio en cada decisión.',
-    },
-    en: {
-      title: 'Consulting',
-      body: 'Strategic support to align brand, product and business — with focus, clarity and criteria in every decision.',
-    },
-  },
-]
-
-function CapCard({ item, lang, index }) {
-  const c = lang === 'es' ? item.es : item.en
-  const Icon = item.Icon
-
-  return (
-    <motion.div
-      className="relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm md:col-span-1"
-      initial={{ opacity: 0, y: 36 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
-      whileHover={{ y: -5, transition: { duration: 0.22, ease: 'easeOut' } }}
-    >
-      {/* Línea accent superior */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px]"
-        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
-      />
-
-      {/* Glow de fondo */}
-      <div
-        className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none opacity-20 group-hover:opacity-50 group-hover:scale-125 transition-all duration-500"
-        style={{
-          background: `radial-gradient(circle, ${item.color}40 0%, transparent 70%)`,
-          filter: 'blur(24px)',
-        }}
-        aria-hidden="true"
-      />
-
-      {/* Contenido */}
-      <div className="relative z-10 p-6 md:p-8 flex flex-col gap-4 h-full">
-        {/* Icono */}
-        <div className="flex-shrink-0">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{
-              background: `${item.color}18`,
-              border: `1px solid ${item.color}30`,
-            }}
-          >
-            <Icon size={22} style={{ color: item.color }} strokeWidth={1.75} />
-          </div>
-        </div>
-
-        {/* Texto */}
-        <div className="flex flex-col gap-2 flex-1">
-          <div>
-            <span
-              className="text-[10px] font-bold tracking-[0.12em] uppercase block mb-1"
-              style={{ color: item.color, opacity: 0.7 }}
-            >
-              {item.id}
-            </span>
-            <h3 className="font-cal text-xl md:text-2xl dark:text-white text-b-dark leading-snug">
-              {c.title}
-            </h3>
-          </div>
-          <p className="dark:text-white/50 text-black/55 text-sm leading-[1.7]">
-            {c.body}
-          </p>
-        </div>
-      </div>
-
-      {/* Línea inferior animada */}
-      <div
-        className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
-        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
-      />
-    </motion.div>
-  )
-}
-
-export default function Capacidades({ lang }) {
-  const ref    = useRef()
-  const inView = useInView(ref, { once: true, margin: '-60px' })
-  const t      = (es, en) => lang === 'es' ? es : en
-
-  return (
-    <section id="capacidades" className="py-16 md:py-20 px-4 relative overflow-hidden">
-      {/* Orbe de fondo */}
-      <div
-        className="absolute top-[-80px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse, rgba(77,102,255,0.08) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="max-w-[1200px] mx-auto flex flex-col gap-10 relative z-10">
-        {/* Header */}
-        <div className="flex flex-col items-center text-center gap-3">
-          <motion.p
-            className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            {t('Lo que producimos', 'What we produce')}
-          </motion.p>
-          <motion.h2
-            className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
-          >
-            {t('Capacidades ', 'Lab ')}
-            <span className="text-grad">{t('del lab', 'capabilities')}</span>
-          </motion.h2>
-          <motion.p
-            className="dark:text-white/40 text-black/45 text-sm max-w-[500px] leading-[1.7]"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.12, duration: 0.7 }}
-          >
-            {t(
-              'Capacidades que convergen para construir, ordenar y escalar marcas, productos y sistemas.',
-              'Capabilities that converge to build, organize and scale brands, products and systems.'
-            )}
-          </motion.p>
-        </div>
-
-        {/* Grid: 2 filas x 3 columnas */}
-        <div
-          ref={ref}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-        >
-          {items.map((item, i) => (
-            <CapCard key={item.id} item={item} lang={lang} index={i} />
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
 </file>
 
 <file path="src/hooks/useCursor.js">
@@ -2005,6 +1577,253 @@ export function useCursor() {
 }
 </file>
 
+<file path="src/sections/Capacidades.jsx">
+import { useRef } from 'react'
+import { motion, useInView } from 'motion/react'
+import { Layers, Box, Monitor, Play, Zap, MessageSquare } from 'lucide-react'
+
+const items = [
+  {
+    id: '01',
+    Icon: MessageSquare,
+    color: '#FF6D4D',
+    span: 1,
+    es: {
+      title: 'Consultoría',
+      body: 'Acompañamiento estratégico para alinear marca, producto y negocio — con foco, claridad y criterio en cada decisión.',
+    },
+    en: {
+      title: 'Consulting',
+      body: 'Strategic support to align brand, product and business — with focus, clarity and criteria in every decision.',
+    },
+  },
+  {
+    id: '02',
+    Icon: Layers,
+    color: '#4D66FF',
+    span: 1,
+    es: {
+      title: 'Sistemas & marca',
+      body: 'Identidad, estructura y lenguaje para construir marcas coherentes — desde lo visual hasta cómo funciona.',
+    },
+    en: {
+      title: 'Systems & brand',
+      body: 'Identity, structure and language to build coherent brands — from the visual to how it works.',
+    },
+  },
+  {
+    id: '03',
+    Icon: Box,
+    color: '#FF6D4D',
+    span: 1,
+    es: {
+      title: 'Producto & forma',
+      body: 'Exploración de forma, objeto y espacio como parte de una experiencia bien construida — cuando necesita existir más allá de la pantalla.',
+    },
+    en: {
+      title: 'Product & form',
+      body: 'Exploration of form, object and space as part of a well-built experience — when it needs to exist beyond the screen.',
+    },
+  },
+  {
+    id: '04',
+    Icon: Monitor,
+    color: '#41EAFF',
+    span: 1,
+    es: {
+      title: 'UX/UI & experiencia digital',
+      body: 'Interfaces, flujos y experiencias digitales para apps, productos y entornos web — claras, útiles y coherentes con la marca.',
+    },
+    en: {
+      title: 'UX/UI & digital experience',
+      body: 'Interfaces, flows and digital experiences for apps, products and web environments — clear, useful and consistent with the brand.',
+    },
+  },
+  {
+    id: '05',
+    Icon: Play,
+    color: '#828AFF',
+    span: 1,
+    es: {
+      title: 'Video & contenido',
+      body: 'Edición y narrativa visual a partir de assets, plantillas y referencias — reels, animaciones y piezas de marca listas para publicar.',
+    },
+    en: {
+      title: 'Video & content',
+      body: 'Editing and visual narrative from assets, templates and references — reels, animations and brand pieces ready to publish.',
+    },
+  },
+  {
+    id: '06',
+    Icon: Zap,
+    color: '#9F6EFF',
+    span: 1,
+    es: {
+      title: 'Automatización & IA',
+      body: 'Sistemas que conectan herramientas, escalan procesos y aplican inteligencia para liberar tiempo y capacidad operativa.',
+    },
+    en: {
+      title: 'Automation & AI',
+      body: 'Systems that connect tools, scale processes and apply intelligence to free up time and operational capacity.',
+    },
+  },
+]
+
+function CapCard({ item, lang, index, featured }) {
+  const c = lang === 'es' ? item.es : item.en
+  const Icon = item.Icon
+
+  return (
+    <motion.div
+      className={`relative rounded-card overflow-hidden group cursor-default border dark:border-white/[0.07] border-black/[0.07] dark:bg-white/[0.03] bg-white/60 backdrop-blur-sm ${featured ? 'md:col-span-2' : 'md:col-span-1'}`}
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+      whileHover={{ y: -5, transition: { duration: 0.22, ease: 'easeOut' } }}
+    >
+      {/* Línea accent superior */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px]"
+        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
+      />
+
+      {/* Glow de fondo */}
+      <div
+        className={`absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none transition-all duration-500 ${featured ? 'opacity-40 group-hover:opacity-70' : 'opacity-20 group-hover:opacity-50 group-hover:scale-125'}`}
+        style={{
+          background: `radial-gradient(circle, ${item.color}40 0%, transparent 70%)`,
+          filter: 'blur(24px)',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Contenido */}
+      <div className={`relative z-10 p-6 md:p-8 flex ${featured ? 'flex-col md:flex-row md:gap-8' : 'flex-col gap-4'} h-full`}>
+        {/* Icono */}
+        <div className="flex-shrink-0">
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center"
+            style={{
+              background: `${item.color}18`,
+              border: `1px solid ${item.color}30`,
+            }}
+          >
+            <Icon size={22} style={{ color: item.color }} strokeWidth={1.75} />
+          </div>
+        </div>
+
+        {/* Texto */}
+        <div className="flex flex-col gap-2 flex-1">
+          <div>
+            <span
+              className="text-[10px] font-bold tracking-[0.12em] uppercase block mb-1"
+              style={{ color: item.color, opacity: 0.7 }}
+            >
+              {item.id}
+            </span>
+            <h3 className={`font-cal ${featured ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl'} dark:text-white text-b-dark leading-snug`}>
+              {c.title}
+            </h3>
+          </div>
+          <p className={`dark:text-white/50 text-black/55 text-sm leading-[1.7] ${featured ? 'max-w-[400px]' : ''}`}>
+            {c.body}
+          </p>
+        </div>
+      </div>
+
+      {/* Línea inferior animada */}
+      <div
+        className="absolute bottom-0 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-500 ease-out"
+        style={{ background: `linear-gradient(to right, ${item.color}, transparent)` }}
+      />
+    </motion.div>
+  )
+}
+
+export default function Capacidades({ lang }) {
+  const ref    = useRef()
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const t      = (es, en) => lang === 'es' ? es : en
+
+  return (
+    <section id="capacidades" className="py-16 md:py-20 px-4 relative overflow-hidden">
+      {/* Orbe de fondo */}
+      <div
+        className="absolute top-[-80px] left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse, rgba(77,102,255,0.08) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="max-w-[1200px] mx-auto flex flex-col gap-10 relative z-10">
+        {/* Header */}
+        <div className="flex flex-col items-center text-center gap-3">
+          <motion.p
+            className="text-[11px] font-bold tracking-[0.12em] uppercase dark:text-white/30 text-black/35"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            {t('Lo que producimos', 'What we produce')}
+          </motion.p>
+          <motion.h2
+            className="font-cal text-3xl md:text-4xl xl:text-[42px] dark:text-white text-b-dark leading-tight tracking-[-0.5px]"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.06 }}
+          >
+            {t('Capacidades ', 'Lab ')}
+            <span className="text-grad">{t('del lab', 'capabilities')}</span>
+          </motion.h2>
+          <motion.p
+            className="dark:text-white/40 text-black/45 text-sm max-w-[500px] leading-[1.7]"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.12, duration: 0.7 }}
+          >
+            {t(
+              'Capacidades que convergen para construir, ordenar y escalar marcas, productos y sistemas.',
+              'Capabilities that converge to build, organize and scale brands, products and systems.'
+            )}
+          </motion.p>
+        </div>
+
+        {/* Grid: 2 filas x 3 columnas */}
+        <div
+          ref={ref}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+        >
+          {items.map((item, i) => (
+            <CapCard key={item.id} item={item} lang={lang} index={i} featured={i === 0} />
+          ))}
+        </div>
+
+        {/* CTA */}
+        <motion.div
+          className="flex justify-center mt-4"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+        >
+          <a
+            href="#connect"
+            className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
+          >
+            {t('Iniciemos un proyecto', "Let's start a project")}
+          </a>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+</file>
+
 <file path="src/sections/Ticker.jsx">
 import { motion } from 'motion/react'
 const tags=['Diseño UX/UI','IA Generativa','Branding','Métricas','Automatización','Diseño Industrial','Plantillas Notion','Sistemas digitales','Make · n8n','Consultoría CX','Design Systems','Creative Coding']
@@ -2035,105 +1854,12 @@ export default function Ticker() {
       />
       <motion.div className="flex gap-3 w-max" animate={{x:['0%','-50%']}} transition={{duration:32,ease:'linear',repeat:Infinity}}>
         {d.map((tag,i)=>(
-          <span key={i} className="inline-flex items-center gap-2 glass-blue text-b-blue-lt text-[12px] font-semibold px-4 py-1.5 rounded-full whitespace-nowrap border border-b-blue/20 select-none">
+          <a key={i} href="#capacidades" className="inline-flex items-center gap-2 glass-blue text-b-blue-lt text-[12px] font-semibold px-4 py-1.5 rounded-full whitespace-nowrap border border-b-blue/20 cursor-pointer select-none">
             <span className="w-1 h-1 rounded-full bg-b-blue opacity-60"/>{tag}
-          </span>
+          </a>
         ))}
       </motion.div>
     </div>
-  )
-}
-</file>
-
-<file path="src/sections/LabStats.jsx">
-/**
- * LabStats — "Dark glass island" section
- * Actúa como ruptura visual entre Principios y Productos.
- * En modo dark: panel oscuro con glass y glow interior.
- * En modo light: panel blanco con sombra y borde suave.
- */
-import { useRef } from 'react'
-import { motion, useInView } from 'motion/react'
-
-const stats = [
-  {
-    num: '+40h',
-    color: '#4D66FF',
-    es: 'Ahorradas por automatización en un proyecto típico',
-    en: 'Saved through automation in a typical project',
-  },
-  {
-    num: '6+',
-    color: '#FF6D4D',
-    es: 'Disciplinas convergiendo en cada entrega',
-    en: 'Disciplines converging in every delivery',
-  },
-  {
-    num: '3×',
-    color: '#41EAFF',
-    es: 'Más rápido que un flujo de trabajo tradicional',
-    en: 'Faster than a traditional workflow',
-  },
-]
-
-export default function LabStats({ lang }) {
-  const ref    = useRef()
-  const inView = useInView(ref, { once: true, margin: '-60px' })
-
-  return (
-    /* Sección con fondo propio — rompe visualmente el scroll */
-    <section className="relative z-10 py-0 px-6">
-      <div className="max-w-[1200px] mx-auto">
-        <motion.div
-          ref={ref}
-          className="relative overflow-hidden rounded-card"
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: .9, ease: [.16, 1, .3, 1] }}
-        >
-          {/* Fondo del panel */}
-          <div className="absolute inset-0 dark:bg-b-deep/72 bg-white/80 dark:backdrop-blur-2xl backdrop-blur-xl dark:border dark:border-white/[0.07] border border-black/[0.07] rounded-card" />
-
-          {/* Glow interior */}
-          <div
-            className="absolute inset-0 pointer-events-none rounded-card"
-            style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(77,102,255,.07) 0%, transparent 75%)' }}
-          />
-
-          {/* Línea superior de acento */}
-          <div className="absolute top-0 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-b-blue/30 to-transparent" />
-
-          {/* Contenido */}
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x dark:divide-white/[0.06] divide-black/[0.06] px-2 py-8 md:py-10">
-            {stats.map((s, i) => (
-              <motion.div
-                key={i}
-                className="flex flex-col items-center text-center gap-2 px-6 py-5 md:py-2"
-                initial={{ opacity: 0, y: 16 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: i * .16, duration: .75, ease: [.16, 1, .3, 1] }}
-              >
-                <motion.span
-                  className="font-cal text-5xl md:text-[3.2rem] font-bold"
-                  style={{ color: s.color, textShadow: `0 0 32px ${s.color}50` }}
-                  initial={{ scale: .82, opacity: 0 }}
-                  animate={inView ? { scale: 1, opacity: 1 } : {}}
-                  transition={{ delay: .28 + i * .16, type: 'spring', stiffness: 130 }}
-                >
-                  {s.num}
-                </motion.span>
-                <p className="dark:text-white/50 text-black/50 text-[13px] leading-[1.6] max-w-[160px]">
-                  {lang === 'es' ? s.es : s.en}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Línea inferior de acento */}
-          <div className="absolute bottom-0 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-b-coral/25 to-transparent" />
-        </motion.div>
-      </div>
-    </section>
   )
 }
 </file>
@@ -2378,7 +2104,7 @@ const ScrollExpandMedia = ({
                   <video
                     src={mediaSrc}
                     type="video/mp4"
-                    autoPlay muted loop playsInline preload="auto"
+                    autoPlay muted loop playsInline preload="none"
                     className="w-full h-full object-cover"
                     controls={false}
                     disablePictureInPicture
@@ -2446,7 +2172,6 @@ import Capacidades from './sections/Capacidades'
 import Enfoque     from './sections/Enfoque'
 import Manifiesto  from './sections/Manifiesto'
 import Productos   from './sections/Productos'
-import Proceso     from './sections/Proceso'
 import Connect     from './sections/Connect'
 import Footer      from './sections/Footer'
 
@@ -2485,7 +2210,6 @@ export default function App() {
         <Enfoque     lang={lang} />
         <Manifiesto  lang={lang} />
         <Productos   lang={lang} />
-        <Proceso     lang={lang} />
         <Connect     lang={lang} />
       </main>
 
@@ -2514,8 +2238,13 @@ export default function Connect({ lang }) {
   const [status, setStatus]       = useState('idle')
   const [formData, setFormData]   = useState({ nombre: '', email: '', tipo: '', mensaje: '' })
   const [formStatus, setFormStatus] = useState('idle')
+  const [touched, setTouched] = useState({})
+  const [nlTouched, setNlTouched] = useState(false)
 
   const t = (es, en) => (lang === 'es' ? es : en)
+
+  const isValidEmail = (val) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)
 
   // Newsletter submit
   const submitNewsletter = async (e) => {
@@ -2553,6 +2282,12 @@ export default function Connect({ lang }) {
   }
 
   const inputCls = "w-full glass dark:border-white/10 border-black/8 focus:border-b-blue/50 dark:text-white text-b-dark placeholder:dark:text-white/30 placeholder:text-black/30 text-sm px-5 py-3.5 rounded-action outline-none bg-transparent transition-colors duration-200"
+
+  const nlInputCls = `${inputCls} ${
+    nlTouched && !isValidEmail(email)
+      ? 'border-red-400/60 focus:border-red-400'
+      : ''
+  }`
 
   return (
     <section id="connect" className="relative z-10 py-24 px-6 overflow-hidden">
@@ -2619,10 +2354,16 @@ export default function Connect({ lang }) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setNlTouched(true)}
                 placeholder={t('tu@email.com', 'your@email.com')}
                 required
-                className={inputCls}
+                className={nlInputCls}
               />
+              {nlTouched && !isValidEmail(email) && email.length > 0 && (
+                <p className="text-[11px] text-red-400/80 -mt-1 px-1">
+                  {t('Ingresa un email válido', 'Enter a valid email')}
+                </p>
+              )}
               <button
                 type="submit"
                 disabled={status === 'loading'}
@@ -2693,17 +2434,19 @@ export default function Connect({ lang }) {
                     type="text"
                     value={formData.nombre}
                     onChange={(e) => setFormData(d => ({ ...d, nombre: e.target.value }))}
+                    onBlur={() => setTouched(p => ({ ...p, nombre: true }))}
                     placeholder={t('Nombre', 'Name')}
                     required
-                    className={inputCls}
+                    className={`${inputCls} ${touched.nombre && !formData.nombre ? 'border-red-400/60' : ''}`}
                   />
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData(d => ({ ...d, email: e.target.value }))}
+                    onBlur={() => setTouched(p => ({ ...p, email: true }))}
                     placeholder={t('Email', 'Email')}
                     required
-                    className={inputCls}
+                    className={`${inputCls} ${touched.email && !isValidEmail(formData.email) ? 'border-red-400/60' : ''}`}
                   />
                 </div>
                 
@@ -2712,8 +2455,9 @@ export default function Connect({ lang }) {
                   <select
                     value={formData.tipo}
                     onChange={(e) => setFormData(d => ({ ...d, tipo: e.target.value }))}
+                    onBlur={() => setTouched(p => ({ ...p, tipo: true }))}
                     required
-                    className={`${inputCls} appearance-none cursor-pointer pr-10`}
+                    className={`${inputCls} appearance-none cursor-pointer pr-10 ${touched.tipo && !formData.tipo ? 'border-red-400/60' : ''}`}
                   >
                     <option value="" disabled className="dark:bg-b-dark bg-b-light">{t('¿De qué trata tu proyecto?', 'What is your project about?')}</option>
                     <option value="producto" className="dark:bg-b-dark bg-b-light">{t('Producto & Empaque', 'Product & Packaging')}</option>
@@ -2732,9 +2476,10 @@ export default function Connect({ lang }) {
                 <textarea
                   value={formData.mensaje}
                   onChange={(e) => setFormData(d => ({ ...d, mensaje: e.target.value }))}
+                  onBlur={() => setTouched(p => ({ ...p, mensaje: true }))}
                   rows={3}
                   placeholder={t('Cuéntanos brevemente...', 'Tell us briefly...')}
-                  className={`${inputCls} resize-none`}
+                  className={`${inputCls} resize-none ${touched.mensaje && !formData.mensaje ? 'border-red-400/60' : ''}`}
                 />
                 
                 {/* Botón anclado abajo gracias al mt-auto */}
@@ -2761,7 +2506,7 @@ export default function Connect({ lang }) {
 <file path="src/sections/Hero.jsx">
 import { useState, useMemo } from 'react'
 import { motion } from 'motion/react'
-import { ArrowDown, ArrowRight, ShoppingBag } from 'lucide-react'
+import { ArrowDown } from 'lucide-react'
 import HeroGrid from '../components/HeroGrid'
 
 const motionPresets = {
@@ -2939,19 +2684,18 @@ export default function Hero({ lang }) {
         {/* CTAs */}
         <motion.div variants={variants.item} className="flex flex-wrap items-center gap-4 justify-center">
           <a
-            href="#proceso"
+            href="#capacidades"
             className="group relative inline-flex items-center gap-2.5 glass dark:text-white text-black text-sm font-semibold px-7 py-3.5 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(77,102,255,.22)]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-b-coral" />
-            {t('Cómo trabajamos', 'How we work')}
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
+            {t('Ver capacidades', 'See capabilities')}
+            <ArrowDown size={14} className="group-hover:translate-y-1 transition-transform duration-300" />
           </a>
           <a
-            href="#productos"
+            href="#connect"
             className="inline-flex items-center gap-2.5 bg-b-blue text-white text-sm font-semibold px-7 py-3.5 rounded-full glow-blue hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(77,102,255,.5)] transition-all duration-300"
           >
-            <ShoppingBag size={15} />
-            {t('Ver productos', 'See products')}
+            {t('Iniciemos algo', "Let's build something")}
           </a>
         </motion.div>
 
@@ -3283,153 +3027,6 @@ export default function Productos({ lang }) {
 }
 </file>
 
-<file path="src/components/Navbar.jsx">
-import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { Menu, X, Sun, Moon } from 'lucide-react'
-import { clsx } from 'clsx'
-
-const navLinks = [
-  { href: '#capacidades', es: 'Capacidades',  en: 'Capabilities' },
-  { href: '#productos',   es: 'Productos',    en: 'Products'     },
-  { href: '#principios',  es: 'Principios',   en: 'Principles'   },
-]
-
-export default function Navbar({ lang, setLang, dark, setDark }) {
-  const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen]         = useState(false)
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', fn, { passive: true })
-    return () => window.removeEventListener('scroll', fn)
-  }, [])
-
-  const t = (es, en) => lang === 'es' ? es : en
-
-  const toggleDark = () => {
-    setDark(d => {
-      document.documentElement.classList.toggle('light', d)
-      return !d
-    })
-  }
-
-  return (
-    <>
-      <header 
-        className={clsx(
-        'fixed top-0 left-0 w-full z-50 flex flex-col items-center transition-all duration-400',
-        scrolled && 'border-b',
-      )}
-      style={scrolled ? {
-        background: dark ? 'rgba(0, 3, 31, 0.52)' : 'rgba(248, 247, 244, 0.48)',
-        borderColor: dark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(77, 102, 255, 0.15)',
-        boxShadow: dark ? '0 2px 12px rgba(0, 0, 0, 0.2)' : '0 2px 16px rgba(0, 0, 0, 0.06)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-      } : {
-        background: dark ? 'transparent' : 'rgba(248, 247, 244, 0.4)',
-      }}
-      >
-        <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-notch mb-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
-          <span className="text-white text-[11px] font-medium tracking-wide">
-            {t('Trabajando en nuevos proyectos ✦', 'Working on new projects ✦')}
-          </span>
-        </div>
-
-        <div className="w-full max-w-[1200px] flex items-center justify-between px-6 lg:px-10 py-3">
-          <a href="#hero" className="flex items-center gap-2">
-            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto dark:brightness-100 brightness-75" />
-          </a>
-
-          <nav className="hidden md:flex items-center gap-7">
-            {navLinks.map(l => (
-              <a key={l.href} href={l.href}
-                className="text-sm font-medium transition-colors duration-200 relative group"
-                style={{ color: dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}
-                onMouseEnter={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)' }}
-                onMouseLeave={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}>
-                {t(l.es, l.en)}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-b-blue group-hover:w-full transition-all duration-300" />
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <button onClick={toggleDark} aria-label="Toggle theme"
-              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm"
-              style={{
-                background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
-                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
-                color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
-              }}>
-              {dark ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
-
-            <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
-              className="text-[13px] font-bold px-3.5 py-1.5 rounded-full transition-all duration-200 backdrop-blur-sm"
-              style={{
-                background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
-                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
-                color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
-              }}>
-              {lang.toUpperCase()}
-            </button>
-
-            <a href="#connect"
-              className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(77,102,255,.45)] transition-all duration-200">
-              {t('Contáctenos', 'Contact us')}
-            </a>
-
-            <button className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"
-              style={{
-                background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
-                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
-                color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
-              }}
-              onClick={() => setOpen(o => !o)} aria-label="Menu">
-              {open ? <X size={16} /> : <Menu size={16} />}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="fixed inset-0 z-40 flex flex-col pt-28 px-6 pb-8 dark:bg-[rgba(0,3,31,.94)] bg-[rgba(220,225,255,.92)] backdrop-blur-2xl"
-            initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: .25, ease: [.22, 1, .36, 1] }}>
-            <nav className="flex flex-col gap-4">
-              {navLinks.map((l, i) => (
-                <motion.a key={l.href} href={l.href}
-                  className="font-cal text-3xl dark:text-white text-[#0A0A18]"
-                  onClick={() => setOpen(false)}
-                  initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * .05, duration: .3 }}>
-                  {t(l.es, l.en)}
-                </motion.a>
-              ))}
-            </nav>
-            <div className="mt-auto flex gap-3">
-              <button onClick={toggleDark}
-                className="border border-[rgba(77,102,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm dark:text-white/70 text-[#0A0A18]/70">
-                {dark ? '☀ Claro' : '☾ Oscuro'}
-              </button>
-              <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
-                className="border border-[rgba(77,102,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-[#0A0A18]/70">
-                {lang === 'es' ? 'EN' : 'ES'}
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  )
-}
-</file>
-
 <file path="src/sections/Manifiesto.jsx">
 import { useRef } from 'react'
 import { motion, useInView } from 'motion/react'
@@ -3622,6 +3219,181 @@ export default function Manifiesto({ lang }) {
 }
 </file>
 
+<file path="src/components/Navbar.jsx">
+import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
+import { Menu, X, Sun, Moon } from 'lucide-react'
+import { clsx } from 'clsx'
+
+const navLinks = [
+  { href: '#capacidades', es: 'Servicios',  en: 'Services'  },
+  { href: '#principios',  es: 'Principios', en: 'Principles'},
+  { href: '#enfoque',     es: 'Enfoque',    en: 'Approach'  },
+]
+
+export default function Navbar({ lang, setLang, dark, setDark }) {
+  const [scrolled, setScrolled] = useState(false)
+  const [open, setOpen]         = useState(false)
+  const [activeSection, setActiveSection] = useState('')
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', fn, { passive: true })
+    return () => window.removeEventListener('scroll', fn)
+  }, [])
+
+  useEffect(() => {
+    const sectionIds = ['capacidades', 'enfoque', 'principios', 'productos', 'connect']
+    const observers = []
+
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id)
+      if (!el) return
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id)
+        },
+        { threshold: 0.3 }
+      )
+      obs.observe(el)
+      observers.push(obs)
+    })
+
+    return () => observers.forEach(o => o.disconnect())
+  }, [])
+
+  const t = (es, en) => lang === 'es' ? es : en
+
+  const toggleDark = () => {
+    setDark(d => {
+      document.documentElement.classList.toggle('light', d)
+      return !d
+    })
+  }
+
+  return (
+    <>
+      <header 
+        className={clsx(
+        'fixed top-0 left-0 w-full z-50 flex flex-col items-center transition-all duration-400',
+        scrolled && 'border-b',
+      )}
+      style={scrolled ? {
+        background: dark ? 'rgba(0, 3, 31, 0.52)' : 'rgba(248, 247, 244, 0.48)',
+        borderColor: dark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(77, 102, 255, 0.15)',
+        boxShadow: dark ? '0 2px 12px rgba(0, 0, 0, 0.2)' : '0 2px 16px rgba(0, 0, 0, 0.06)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+      } : {
+        background: dark ? 'transparent' : 'rgba(248, 247, 244, 0.4)',
+      }}
+      >
+        <div className="flex items-center gap-2 px-5 py-1.5 bg-b-blue rounded-b-notch mb-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-b-coral animate-pulse" />
+          <span className="text-white text-[11px] font-medium tracking-wide">
+            {t('Trabajando en nuevos proyectos ✦', 'Working on new projects ✦')}
+          </span>
+        </div>
+
+        <div className="w-full max-w-[1200px] flex items-center justify-between px-6 lg:px-10 py-3">
+          <a href="#hero" className="flex items-center gap-2">
+            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto dark:brightness-100 brightness-75" />
+          </a>
+
+          <nav className="hidden md:flex items-center gap-7">
+              {navLinks.map(l => {
+                const sectionId = l.href.replace('#', '')
+                return (
+                <a key={l.href} href={l.href}
+                  className="text-sm font-medium transition-colors duration-200 relative group"
+                  style={{
+                    color: activeSection === sectionId
+                      ? (dark ? 'rgba(255,255,255,1)' : 'rgba(10,10,24,1)')
+                      : (dark ? 'rgba(255,255,255,0.6)' : 'rgba(10,10,24,0.85)')
+                  }}
+                  onMouseEnter={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 1)' : 'rgba(10, 10, 24, 1)' }}
+                  onMouseLeave={(e) => { e.target.style.color = dark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(10, 10, 24, 0.85)' }}>
+                  {t(l.es, l.en)}
+                  <span className={`absolute -bottom-0.5 left-0 h-px bg-b-blue transition-all duration-300 ${activeSection === sectionId ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                </a>
+                )
+              })}
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <button onClick={toggleDark} aria-label="Toggle theme"
+              className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm"
+              style={{
+                background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
+                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
+                color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
+              }}>
+              {dark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
+            <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
+              className="text-[13px] font-bold px-3.5 py-1.5 rounded-full transition-all duration-200 backdrop-blur-sm"
+              style={{
+                background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
+                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
+                color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
+              }}>
+              {lang.toUpperCase()}
+            </button>
+
+            <a href="#connect"
+              className="hidden md:inline-flex items-center gap-2 bg-b-blue text-white text-sm font-semibold px-5 py-2 rounded-full glow-blue hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(77,102,255,.45)] transition-all duration-200">
+              {t('Contáctenos', 'Contact us')}
+            </a>
+
+            <button className="md:hidden w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-sm transition-all duration-200"
+              style={{
+                background: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.7)',
+                border: dark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid rgba(77, 102, 255, 0.25)',
+                color: dark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(10, 10, 24, 0.85)',
+              }}
+              onClick={() => setOpen(o => !o)} aria-label="Menu">
+              {open ? <X size={16} /> : <Menu size={16} />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-40 flex flex-col pt-28 px-6 pb-8 dark:bg-[rgba(0,3,31,.94)] bg-[rgba(220,225,255,.92)] backdrop-blur-2xl"
+            initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: .25, ease: [.22, 1, .36, 1] }}>
+            <nav className="flex flex-col gap-4">
+              {navLinks.map((l, i) => (
+                <motion.a key={l.href} href={l.href}
+                  className="font-cal text-3xl dark:text-white text-[#0A0A18]"
+                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * .05, duration: .3 }}>
+                  {t(l.es, l.en)}
+                </motion.a>
+              ))}
+            </nav>
+            <div className="mt-auto flex gap-3">
+              <button onClick={toggleDark}
+                className="border border-[rgba(77,102,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm dark:text-white/70 text-[#0A0A18]/70">
+                {dark ? '☀ Claro' : '☾ Oscuro'}
+              </button>
+              <button onClick={() => setLang(l => l === 'es' ? 'en' : 'es')}
+                className="border border-[rgba(77,102,255,0.30)] dark:border-white/10 bg-white/40 dark:bg-white/[0.07] px-4 py-2 rounded-full text-sm font-bold dark:text-white/70 text-[#0A0A18]/70">
+                {lang === 'es' ? 'EN' : 'ES'}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
+</file>
+
 <file path="src/sections/Enfoque.jsx">
 import { useRef } from 'react'
 import { motion, useInView } from 'motion/react'
@@ -3734,12 +3506,11 @@ export default function Enfoque({ lang }) {
 import { motion } from 'motion/react'
 
 const navLinks = [
-  { href: '#enfoque',     es: 'Enfoque',     en: 'Focus'      },
-  { href: '#principios',  es: 'Principios',  en: 'Principles' },
-  { href: '#capacidades', es: 'Capacidades', en: 'Capabilities'},
-  { href: '#productos',   es: 'Productos',   en: 'Products'   },
-  { href: '#proceso',     es: 'Proceso',     en: 'Process'    },
-  { href: '#connect',     es: 'Contacto',    en: 'Contact'    },
+  { href: '#capacidades', es: 'Servicios',  en: 'Services'  },
+  { href: '#enfoque',     es: 'Enfoque',    en: 'Approach'  },
+  { href: '#principios',  es: 'Principios', en: 'Principles'},
+  { href: '#connect',     es: 'Contacto',   en: 'Contact'   },
+  { href: '#productos',   es: 'Recursos',   en: 'Resources' },
 ]
 const social = [
   { label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
@@ -3763,6 +3534,29 @@ export default function Footer({ lang }) {
       />
 
       <div className="max-w-[1200px] mx-auto">
+
+        {/* Headline */}
+        <motion.div
+          className="text-center pb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <p className="font-cal text-3xl md:text-4xl lg:text-5xl dark:text-white/90 text-b-dark leading-tight tracking-[-0.5px]">
+            {t('Construimos desde Bogotá', 'We build from Bogotá')}
+          </p>
+          <p className="font-cal text-3xl md:text-4xl lg:text-5xl leading-tight tracking-[-0.5px]"
+            style={{ color: '#FF6D4D' }}>
+            {t('para cualquier parte.', 'for anywhere.')}
+          </p>
+          <a
+            href="#connect"
+            className="inline-flex items-center gap-2 mt-6 text-sm font-semibold dark:text-white/50 text-black/45 hover:dark:text-white hover:text-black transition-colors duration-200"
+          >
+            {t('Iniciemos algo →', "Let's start something →")}
+          </a>
+        </motion.div>
 
         {/* Grid de links */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-10 pt-10 pb-8 border-t dark:border-white/10 border-black/12">
@@ -3823,573 +3617,10 @@ export default function Footer({ lang }) {
 }
 </file>
 
-<file path="src/sections/Proceso.jsx">
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
-import { Search, Pen, Zap } from 'lucide-react'
-
-const phases = [
-  {
-    color: '#4D66FF',
-    icon: Search,
-    label: { es: 'Diagnóstico', en: 'Diagnosis' },
-    title: { es: 'Analizar', en: 'Analyze' },
-    output: { es: 'Contexto + forma', en: 'Context + form' },
-    badge: { es: 'Diagnóstico estratégico', en: 'Strategic diagnosis' },
-    desc: {
-      es: 'Analizamos tu producto o marca — su forma, contexto y cómo se percibe, en lo digital y en lo físico.',
-      en: 'We analyze your product or brand — its form, context and how it is perceived, digitally and physically.',
-    },
-  },
-  {
-    color: '#FF6D4D',
-    icon: Pen,
-    label: { es: 'Diseño', en: 'Design' },
-    title: { es: 'Crear', en: 'Create' },
-    output: { es: 'Sistema + narrativa', en: 'System + narrative' },
-    badge: { es: 'Diseño de sistema', en: 'System design' },
-    desc: {
-      es: 'Lo convertimos en forma, narrativa y sistema — identidad, piezas digitales o contenido coherente.',
-      en: 'We turn it into form, narrative and system — identity, digital pieces or coherent content.',
-    },
-  },
-  {
-    color: '#828AFF',
-    icon: Zap,
-    label: { es: 'Activación', en: 'Activation' },
-    title: { es: 'Lanzar', en: 'Launch' },
-    output: { es: 'Producir + publicar', en: 'Produce + publish' },
-    badge: { es: 'Activación y entrega', en: 'Activation & delivery' },
-    desc: {
-      es: 'Piezas listas para comunicar y posicionar — para publicar, implementar o producir.',
-      en: 'Pieces ready to communicate and position — to publish, implement or produce.',
-    },
-  },
-]
-
-/* ── Floating background per phase ──────────────────────── */
-function FloatingBg({ phase }) {
-  switch (phase) {
-    case 0: {
-      const cl = '#4D66FF'
-      return (
-        <>
-          <svg className="absolute top-6 right-8 w-40 h-40" viewBox="0 0 160 160">
-            <motion.g style={{ transformOrigin: '80px 80px' }}
-              animate={{ scale: [1, 1.06, 1] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <circle cx="80" cy="80" r="30" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.22} />
-              <circle cx="80" cy="80" r="50" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.15} />
-              <circle cx="80" cy="80" r="70" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.10} />
-            </motion.g>
-          </svg>
-          <svg className="absolute bottom-8 left-8 w-10 h-10" viewBox="0 0 40 40">
-            <motion.g style={{ transformOrigin: '20px 20px' }}
-              animate={{ rotate: [0, 90] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-            >
-              <line x1="20" y1="0" x2="20" y2="40" stroke={cl} strokeWidth="0.5" opacity={0.22} />
-              <line x1="0" y1="20" x2="40" y2="20" stroke={cl} strokeWidth="0.5" opacity={0.22} />
-            </motion.g>
-          </svg>
-          <div className="absolute top-1/2 right-12 -translate-y-1/2 flex flex-col gap-2">
-            {[24, 16, 20].map((w, i) => (
-              <motion.div key={i}
-                className="h-px" style={{ width: w, background: `${cl}44` }}
-                animate={{ x: [-4, 4, -4] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }}
-              />
-            ))}
-          </div>
-        </>
-      )
-    }
-    case 1: {
-      const cl = '#FF6D4D'
-      return (
-        <>
-          <svg className="absolute top-8 left-8 w-16 h-16" viewBox="0 0 60 60">
-            <motion.g style={{ transformOrigin: '30px 35px' }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-            >
-              <polygon points="30,5 55,55 5,55" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.22} />
-            </motion.g>
-          </svg>
-          <div className="absolute bottom-8 right-8">
-            <svg width="80" height="80" viewBox="0 0 80 80">
-              <rect x="10" y="10" width="50" height="50" rx="8" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.15} />
-              <motion.rect
-                x="20" y="20" width="50" height="50" rx="8" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.10}
-                animate={{ rotate: [0, 8, 0, -8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ transformOrigin: '45px 45px' }}
-              />
-            </svg>
-          </div>
-          <svg className="absolute top-1/3 right-1/3 w-24 h-24" viewBox="0 0 100 100">
-            <motion.path
-              d="M10,80 C30,20 60,60 90,10"
-              fill="none" stroke={cl} strokeWidth="0.5" opacity={0.18}
-              strokeDasharray="200"
-              animate={{ strokeDashoffset: [200, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-            />
-          </svg>
-        </>
-      )
-    }
-    case 2: {
-      const cl = '#828AFF'
-      return (
-        <>
-          <motion.div className="absolute top-10 right-16 w-1 h-1 rounded-full"
-            style={{ background: cl }}
-            animate={{ opacity: [0.3, 0.9, 0.3] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0 }}
-          />
-          <motion.div className="absolute top-1/2 right-8 w-1 h-1 rounded-full"
-            style={{ background: '#41EAFF' }}
-            animate={{ opacity: [0.3, 0.9, 0.3] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0.6 }}
-          />
-          <motion.div className="absolute bottom-20 left-1/2 w-1 h-1 rounded-full"
-            style={{ background: cl }}
-            animate={{ opacity: [0.3, 0.9, 0.3] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-          />
-          <svg className="absolute bottom-8 left-8 w-12 h-12" viewBox="0 0 40 40">
-            <motion.g
-              animate={{ y: [-6, 0, -6] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <polyline points="5,35 15,15 25,25 35,5" fill="none" stroke={cl} strokeWidth="0.5" opacity={0.25} />
-            </motion.g>
-          </svg>
-          <svg className="absolute top-1/3 left-1/4 w-16 h-16" viewBox="0 0 50 50">
-            <motion.path
-              d="M25,5 A20,20 0 1,1 24.99,5"
-              fill="none" stroke="#41EAFF" strokeWidth="0.5" opacity={0.22}
-              strokeDasharray="126"
-              animate={{ rotate: 360, strokeDashoffset: [126, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
-              style={{ transformOrigin: '25px 25px' }}
-            />
-          </svg>
-        </>
-      )
-    }
-    default: return null
-  }
-}
-
-/* ── Mini glass icons per phase ─────────────────────────── */
-function MiniIcons({ color, Icon }) {
-  const items = [
-    { c: 'top-[8%] right-[10%]', s: 20, bs: 36, a: { y: [-6, 6] }, d: 3.2, delay: 0 },
-    { c: 'bottom-[12%] left-[6%]', s: 18, bs: 32, a: { y: [5, -5], rotate: [-10, 10] }, d: 4.0, delay: 0.3 },
-    { c: 'top-[50%] right-[22%]', s: 16, bs: 30, a: { y: [-3, 3], scale: [1, 1.06] }, d: 2.8, delay: 0.6 },
-    { c: 'top-[22%] left-[14%]', s: 22, bs: 40, a: { y: [-4, 4] }, d: 3.6, delay: 0.1 },
-    { c: 'bottom-[25%] right-[14%]', s: 17, bs: 30, a: { x: [-5, 5], rotate: [-8, 8] }, d: 3.4, delay: 0.5 },
-    { c: 'top-[12%] left-[55%]', s: 15, bs: 28, a: { rotate: [-12, 12] }, d: 4.2, delay: 0.4 },
-    { c: 'bottom-[8%] right-[28%]', s: 19, bs: 34, a: { y: [4, -4], scale: [1, 1.05] }, d: 3.8, delay: 0.7 },
-    { c: 'top-[38%] left-[6%]', s: 14, bs: 26, a: { y: [-3, 3] }, d: 2.4, delay: 0.8 },
-  ]
-
-  return items.map((item, i) => (
-    <motion.div
-      key={i}
-      className={`absolute pointer-events-none flex items-center justify-center ${item.c}`}
-      style={{
-        width: item.bs,
-        height: item.bs,
-        borderRadius: 10,
-        background: `${color}0A`,
-        border: `1px solid ${color}1A`,
-        boxShadow: `0 0 12px ${color}25`,
-      }}
-      animate={item.a}
-      transition={{ duration: item.d, repeat: Infinity, ease: 'easeInOut', delay: item.delay }}
-    >
-      <Icon
-        size={item.s}
-        strokeWidth={1}
-        style={{
-          color,
-          filter: `drop-shadow(0 0 4px ${color}88)`,
-        }}
-      />
-    </motion.div>
-  ))
-}
-
-export default function Proceso({ lang }) {
-  const t = (es, en) => lang === 'es' ? es : en
-  const [active, setActive] = useState(0)
-  const timerRef = useRef(null)
-
-  const resetTimer = useCallback(() => {
-    clearInterval(timerRef.current)
-    timerRef.current = setInterval(() => {
-      setActive(p => (p + 1) % 3)
-    }, 4000)
-  }, [])
-
-  useEffect(() => {
-    resetTimer()
-    return () => clearInterval(timerRef.current)
-  }, [resetTimer])
-
-  const handleSetPhase = (i) => {
-    setActive(i)
-    resetTimer()
-  }
-
-  const phase = phases[active]
-  const IconComponent = phase.icon
-
-  return (
-    <section id="proceso" className="relative overflow-hidden py-20 md:py-24">
-
-      <style>{`@keyframes timerFill{from{width:0%}to{width:100%}}`}</style>
-
-      {/* ── Header ──────────────────────────────────────── */}
-      <div className="text-center mb-10 px-4">
-        <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-white/30 mb-2">
-          {t('Cómo trabajamos', 'How we work')}
-        </p>
-        <h2 className="font-cal text-[clamp(1.6rem,3.5vw,2.8rem)] text-white leading-tight">
-          {t('Un proceso que ', 'A process that ')}
-          <span className="text-grad">{t('itera', 'iterates')}</span>
-        </h2>
-      </div>
-
-      {/* ── Panel content ───────────────────────────────── */}
-      <div className="max-w-[1100px] mx-auto px-6">
-
-        <div className="relative">
-
-          {/* ── Floating layer (desktop only) ────────────── */}
-          <div className="hidden md:block">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                className="absolute inset-0 pointer-events-none z-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, exit: { duration: 0.3 } }}
-              >
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: `radial-gradient(ellipse at 50% 50%, ${phase.color} 0%, transparent 70%)`,
-                    filter: 'blur(90px)',
-                    opacity: 0.28,
-                  }}
-                />
-                <FloatingBg phase={active} />
-                <MiniIcons color={phase.color} Icon={IconComponent} />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* ── Content layer ───────────────────────────── */}
-          <div className="relative z-10">
-
-            {/* ── Desktop grid ──────────────────────────── */}
-            <div className="hidden md:grid grid-cols-[180px_1fr_200px] min-h-[360px]">
-
-              {/* Left column — phase list */}
-              <div className="flex flex-col gap-6 self-center">
-                {phases.map((p, i) => (
-                  <motion.div
-                    key={i}
-                    className="flex items-center gap-3 cursor-pointer group"
-                    onClick={() => handleSetPhase(i)}
-                    animate={{ opacity: i === active ? 1 : 0.3, x: i === active ? 6 : 0 }}
-                    transition={{ duration: 0.45, ease: 'easeOut' }}
-                  >
-                    <span
-                      className="text-[12px] font-inter tabular-nums transition-all duration-300"
-                      style={{
-                        color: i === active ? p.color : '#ffffff',
-                        fontWeight: i === active ? 700 : 400,
-                      }}
-                    >
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span
-                      className="text-[12px] font-inter transition-all duration-300"
-                      style={{
-                        color: '#ffffff',
-                        fontWeight: i === active ? 700 : 400,
-                      }}
-                    >
-                      {t(p.label.es, p.label.en)}
-                    </span>
-                    {i === active && (
-                      <motion.div
-                        className="w-1 h-1 rounded-full"
-                        style={{
-                          background: p.color,
-                          boxShadow: `0 0 6px ${p.color}`,
-                        }}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ duration: 0.25 }}
-                      />
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Center column — icon + text side by side */}
-              <div className="flex items-center gap-8 md:gap-12">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={active}
-                    className="flex items-center gap-8 md:gap-12"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {/* Icon */}
-                    <motion.div
-                      className="flex-shrink-0 flex items-center justify-center"
-                      style={{
-                        width: 88,
-                        height: 88,
-                        borderRadius: 20,
-                        background: `${phase.color}1A`,
-                        border: `1px solid ${phase.color}4D`,
-                        boxShadow: `0 0 0 1px ${phase.color}33, 0 0 20px ${phase.color}59, 0 0 60px ${phase.color}27`,
-                      }}
-                      initial={{ scale: 0.7, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ duration: 0.4, ease: 'easeOut' }}
-                    >
-                      <IconComponent
-                        size={44}
-                        strokeWidth={1.25}
-                        style={{
-                          color: phase.color,
-                          filter: `drop-shadow(0 0 8px ${phase.color}CC)`,
-                        }}
-                      />
-                    </motion.div>
-
-                    {/* Title + description */}
-                    <div>
-                      <h3
-                        className="font-cal text-[clamp(2rem,4.5vw,3.2rem)] text-white/[0.95] leading-[0.9]"
-                      >
-                        {t(phase.title.es, phase.title.en)}
-                      </h3>
-                      <p
-                        className="text-[13.5px] leading-[1.7] max-w-[380px] font-inter"
-                        style={{ color: 'rgba(245,245,240,0.52)', marginTop: 8 }}
-                      >
-                        {t(phase.desc.es, phase.desc.en)}
-                      </p>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* Right column — output */}
-              <div className="flex flex-col items-start self-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={active}
-                    initial={{ x: 16, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4, ease: 'easeOut', delay: 0.08 }}
-                  >
-                    <p className="text-[10px] tracking-[0.15em] uppercase text-white/30 font-inter">
-                      Output
-                    </p>
-                    <p className="text-[14px] font-semibold text-white/80 font-inter" style={{ marginTop: 10 }}>
-                      {t(phase.output.es, phase.output.en)}
-                    </p>
-                    <div
-                      className="inline-flex items-center px-[14px] py-[6px] rounded-full text-[11px] font-medium font-inter"
-                      style={{
-                        marginTop: 10,
-                        background: `${phase.color}1A`,
-                        border: `1px solid ${phase.color}40`,
-                        color: phase.color,
-                      }}
-                    >
-                      {t(phase.badge.es, phase.badge.en)}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-            </div>
-
-            {/* ── Mobile layout ─────────────────────────── */}
-            <div className="md:hidden flex flex-col gap-8">
-
-              <div className="flex flex-col gap-5">
-                {phases.map((p, i) => (
-                  <motion.div
-                    key={i}
-                    className="flex items-center gap-3 cursor-pointer"
-                    onClick={() => handleSetPhase(i)}
-                    animate={{ opacity: i === active ? 1 : 0.3, x: i === active ? 6 : 0 }}
-                    transition={{ duration: 0.45, ease: 'easeOut' }}
-                  >
-                    <span
-                      className="text-[12px] font-inter tabular-nums"
-                      style={{
-                        color: i === active ? p.color : '#ffffff',
-                        fontWeight: i === active ? 700 : 400,
-                      }}
-                    >
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span
-                      className="text-[12px] font-inter"
-                      style={{
-                        color: '#ffffff',
-                        fontWeight: i === active ? 700 : 400,
-                      }}
-                    >
-                      {t(p.label.es, p.label.en)}
-                    </span>
-                    {i === active && (
-                      <div
-                        className="w-1 h-1 rounded-full"
-                        style={{
-                          background: p.color,
-                          boxShadow: `0 0 6px ${p.color}`,
-                        }}
-                      />
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-
-              <div className="flex flex-col items-center text-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={active}
-                    className="flex flex-col items-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div
-                      className="flex items-center justify-center"
-                      style={{
-                        width: 80,
-                        height: 80,
-                        borderRadius: 20,
-                        background: `${phase.color}1A`,
-                        border: `1px solid ${phase.color}4D`,
-                      }}
-                    >
-                      <IconComponent size={40} strokeWidth={1.25} style={{ color: phase.color }} />
-                    </div>
-                    <h3
-                      className="font-cal text-[clamp(1.8rem,8vw,2.6rem)] text-white/[0.95] leading-[0.9]"
-                      style={{ marginTop: 16 }}
-                    >
-                      {t(phase.title.es, phase.title.en)}
-                    </h3>
-                    <p
-                      className="text-[13px] leading-[1.6] max-w-[320px] mx-auto"
-                      style={{ color: 'rgba(245,245,240,0.55)', marginTop: 10 }}
-                    >
-                      {t(phase.desc.es, phase.desc.en)}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={active}
-                    className="flex flex-col items-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <p className="text-[10px] tracking-[0.15em] uppercase text-white/30 font-inter">
-                      Output
-                    </p>
-                    <p className="text-[14px] font-semibold text-white/80 font-inter" style={{ marginTop: 8 }}>
-                      {t(phase.output.es, phase.output.en)}
-                    </p>
-                    <div
-                      className="inline-flex items-center px-[12px] py-[5px] rounded-full text-[11px] font-medium font-inter"
-                      style={{
-                        marginTop: 8,
-                        background: `${phase.color}1A`,
-                        border: `1px solid ${phase.color}40`,
-                        color: phase.color,
-                      }}
-                    >
-                      {t(phase.badge.es, phase.badge.en)}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-        {/* ── Timer bar ───────────────────────────────────── */}
-        <div className="mt-4 h-[2px] w-full bg-white/8 rounded-full overflow-hidden">
-          <div
-            key={active}
-            className="h-full rounded-full"
-            style={{
-              background: phase.color,
-              animation: 'timerFill 4s linear forwards',
-            }}
-          />
-        </div>
-
-        {/* ── Dots ──────────────────────────────────────────── */}
-        <div className="flex items-center justify-center gap-2 mt-3">
-          {phases.map((p, i) => (
-            <button
-              key={i}
-              onClick={() => handleSetPhase(i)}
-              className="transition-all duration-400 ease-in-out"
-              style={{
-                width: i === active ? 18 : 6,
-                height: 6,
-                borderRadius: i === active ? 3 : '50%',
-                background: i === active ? p.color : 'rgba(255,255,255,0.15)',
-                boxShadow: i === active ? `0 0 8px ${p.color}99` : 'none',
-                transition: 'all 0.4s ease',
-              }}
-              aria-label={t(`Fase ${i + 1}`, `Phase ${i + 1}`)}
-            />
-          ))}
-        </div>
-
-      </div>
-    </section>
-  )
-}
-</file>
-
 <file path="src/index.css">
 @import "tw-animate-css";
 @import "@fontsource-variable/geist";
+@import "@fontsource/cal-sans";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -4553,9 +3784,12 @@ export default function Proceso({ lang }) {
     -webkit-backdrop-filter: blur(16px);
   }
   html.light .glass-blue {
-    background: rgba(77, 102, 255, 0.06);
-    border: 1px solid rgba(77, 102, 255, 0.18);
+    background: rgba(77, 102, 255, 0.05);
+    border: 1px solid rgba(77, 102, 255, 0.16);
   }
+
+  html.light .glow-blue  { box-shadow: 0 0 24px rgba(77,102,255,.20); }
+  html.light .glow-coral { box-shadow: 0 0 24px rgba(255,109,77,.15); }
 
   /* Glow */
   .glow-blue  { box-shadow: 0 0 36px rgba(77,102,255,.35); }
