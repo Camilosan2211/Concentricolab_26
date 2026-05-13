@@ -41,6 +41,49 @@ export default function App() {
     window.addEventListener('scroll', update, { passive: true })
     return () => window.removeEventListener('scroll', update)
   }, [])
+  
+  useEffect(() => {
+    const pb = document.getElementById('pb')
+    if (!pb) return
+    const update = () => {
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+      pb.style.width = pct + '%'
+    }
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [])
+
+  useEffect(() => {
+    const handleAnchorClick = (e) => {
+      const anchor = e.target.closest('a[href^="#"]')
+      if (!anchor) return
+
+      const hash = anchor.getAttribute('href')
+      if (!hash || hash === '#') return
+
+      const targetId = hash.slice(1)
+      const targetEl = document.getElementById(targetId)
+      if (!targetEl) return
+
+      e.preventDefault()
+
+      const lenis = window.__lenis
+      if (lenis) {
+        lenis.scrollTo(targetEl, {
+          duration: 1.4,
+          easing: (t) => 1 - Math.pow(1 - t, 4),
+          offset: -80,
+        })
+      } else {
+        targetEl.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+
+    document.addEventListener('click', handleAnchorClick)
+    return () => document.removeEventListener('click', handleAnchorClick)
+  }, [])
 
   useLenis()
   useCursor()
