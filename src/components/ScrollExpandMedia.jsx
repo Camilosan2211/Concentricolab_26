@@ -28,7 +28,10 @@ const ScrollExpandMedia = ({
 
   /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
   const mediaW = useTransform(progress, [0, 0.85], ['38%', '100%'])
-  const mediaH = useTransform(progress, [0, 0.85], ['56vh', '42vh'])
+  const mediaH = useTransform(mediaW, (w) => {
+    const numW = parseFloat(w)
+    return isNaN(numW) ? '42vh' : `${numW * (9 / 21)}vh`
+  })
   const borderR = useTransform(progress, [0, 1], [32, 16])
 
   /* ── Opacidades ───────────────────────────────────────────────── */

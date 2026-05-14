@@ -1,183 +1,9 @@
-import { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'motion/react'
+import { motion } from 'motion/react'
 import ScrollExpandMedia from '../components/ScrollExpandMedia'
 
 /* ── Assets ────────────────────────────────────────────────────────── */
 const BG_SRC      = '/assets/images/imagen_dinamico.webp'
 const LOTTIE_SRC  = '/assets/images/efectos.json'
-
-const leftAccent = new Set(['núcleo', 'nucleo', 'forma', 'sistema', 'core', 'form', 'system'])
-const rightAccent = new Set(['diseño', 'automatización', 'inteligencia', 'design', 'automation', 'intelligence'])
-
-/* ── RevealedText ────────────────────────────────────────────────── */
-function RevealedText({ lang }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-40px' })
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  })
-  const leftX = useTransform(scrollYProgress, [0.3, 0.7], ['25%', '0%'])
-  const rightX = useTransform(scrollYProgress, [0.3, 0.7], ['-25%', '0%'])
-  const splitOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.9], [0, 1, 1])
-
-  const text = lang === 'es'
-    ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — combinando diseño, automatización e inteligencia aplicada para crear marcas, productos y experiencias que funcionan y comunican.'
-    : 'We build from the core outward — from form to system, from object to screen — combining design, automation and applied intelligence to create brands, products and experiences that work and communicate.'
-
-  const words = text.split(' ')
-  const half = Math.ceil(words.length / 2)
-  const wordsLeft = words.slice(0, half)
-  const wordsRight = words.slice(half)
-
-  return (
-    <div className="absolute inset-0 z-50 pointer-events-none flex items-center">
-
-      {/* LEFT zone — first half of paragraph */}
-      <motion.div
-        className="hidden md:flex w-[26%] h-full flex-col justify-center items-start px-7 gap-2"
-        style={{ x: leftX, opacity: splitOpacity, isolation: 'isolate', zIndex: 50 }}
-      >
-        <motion.div
-          initial={{ opacity: 0, x: -32, scale: 0.88, filter: 'blur(8px)' }}
-          whileInView={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-          style={{
-            background: 'rgba(13,14,26,0.45)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            borderRadius: '14px',
-            padding: '18px 16px',
-            maxWidth: '160px',
-            position: 'relative',
-            zIndex: 50,
-            isolation: 'isolate',
-          }}
-        >
-          <span
-            className="uppercase tracking-widest"
-            style={{
-              fontSize: '0.65rem',
-              color: 'rgba(255,255,255,0.4)',
-              letterSpacing: '0.12em',
-              marginBottom: '8px',
-              display: 'block',
-            }}
-          >
-            {lang === 'es' ? 'Enfoque' : 'Approach'}
-          </span>
-          <motion.p
-            ref={ref}
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
-            className="font-semibold leading-snug"
-            style={{
-              fontSize: '1rem',
-              lineHeight: '1.5',
-              color: 'rgba(255,255,255,0.92)',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            {wordsLeft.map((word, i) => {
-              const isAccent = leftAccent.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
-              return (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, x: -8, filter: 'blur(4px)' }}
-                  animate={inView ? {
-                    opacity: 1, x: 0, filter: 'blur(0px)',
-                    color: isAccent ? '#FF6B35' : 'rgba(245,245,240,0.90)',
-                  } : { opacity: 0, x: -8, filter: 'blur(4px)' }}
-                  transition={{ delay: i * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ display: 'inline-block', marginRight: '0.22em' }}
-                >
-                  {word}
-                </motion.span>
-              )
-            })}
-          </motion.p>
-        </motion.div>
-      </motion.div>
-
-      {/* CENTER — empty, video shows through */}
-      <div className="flex-1" />
-
-      {/* RIGHT zone — second half of paragraph */}
-      <motion.div
-        className="hidden md:flex w-[26%] h-full flex-col justify-center items-end px-7 gap-2 text-right"
-        style={{ x: rightX, opacity: splitOpacity, isolation: 'isolate', zIndex: 50 }}
-      >
-        <motion.div
-          initial={{ opacity: 0, x: 32, scale: 0.88, filter: 'blur(8px)' }}
-          whileInView={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          style={{
-            background: 'rgba(13,14,26,0.45)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            borderRadius: '14px',
-            padding: '18px 16px',
-            maxWidth: '160px',
-            position: 'relative',
-            zIndex: 50,
-            isolation: 'isolate',
-          }}
-        >
-          <span
-            className="uppercase tracking-widest"
-            style={{
-              fontSize: '0.65rem',
-              color: 'rgba(255,255,255,0.4)',
-              letterSpacing: '0.12em',
-              marginBottom: '8px',
-              display: 'block',
-            }}
-          >
-            {lang === 'es' ? 'Sistema' : 'System'}
-          </span>
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
-            className="font-semibold leading-snug"
-            style={{
-              fontSize: '1rem',
-              lineHeight: '1.5',
-              color: 'rgba(255,255,255,0.92)',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            {wordsRight.map((word, i) => {
-              const isAccent = rightAccent.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
-              return (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, x: 8, filter: 'blur(4px)' }}
-                  animate={inView ? {
-                    opacity: 1, x: 0, filter: 'blur(0px)',
-                    color: isAccent ? '#7EB8FF' : 'rgba(245,245,240,0.90)',
-                  } : { opacity: 0, x: 8, filter: 'blur(4px)' }}
-                  transition={{ delay: (half + i) * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ display: 'inline-block', marginRight: '0.22em' }}
-                >
-                  {word}
-                </motion.span>
-              )
-            })}
-          </motion.p>
-        </motion.div>
-      </motion.div>
-
-    </div>
-  )
-}
 
 /* ── Componente principal ─────────────────────────────────────────── */
 export default function Enfoque({ lang }) {
@@ -209,47 +35,140 @@ export default function Enfoque({ lang }) {
       />
 
       <div className="max-w-[1600px] mx-auto">
-        <ScrollExpandMedia
-          mediaType="lottie"
-          mediaSrc={LOTTIE_SRC}
-          bgImageSrc={BG_SRC}
-          title={t('Del objeto a la pantalla.', 'From object to screen.')}
-          subtitle={t('Diseño, automatización e inteligencia', 'Design, automation & intelligence')}
-          bottomOverlay={
+        <div className="relative w-full" style={{ isolation: 'isolate' }}>
+
+          {/* Layer 4 — Video (inside ScrollExpandMedia) */}
+          <ScrollExpandMedia
+            mediaType="lottie"
+            mediaSrc={LOTTIE_SRC}
+            bgImageSrc={BG_SRC}
+            title={t('Del objeto a la pantalla.', 'From object to screen.')}
+            subtitle={t('Diseño, automatización e inteligencia', 'Design, automation & intelligence')}
+            bottomOverlay={
+              <motion.div
+                className="flex flex-wrap justify-center gap-2"
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                variants={{
+                  hidden: {},
+                  show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } },
+                }}
+              >
+                {[
+                  { es: 'Diseño de producto', en: 'Product design' },
+                  { es: 'Experiencia digital', en: 'Digital experience' },
+                  { es: 'Branding', en: 'Branding' },
+                  { es: 'Sistemas visuales', en: 'Visual systems' },
+                  { es: 'Video · contenido', en: 'Video · content' },
+                  { es: 'Automatización · IA', en: 'Automation · AI' },
+                ].map((tag, i) => (
+                  <motion.span
+                    key={i}
+                    className="glass-blue text-b-blue-lt text-[11px] font-semibold px-3 py-1.5 rounded-full border border-b-blue/18"
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.8, y: 10 },
+                      show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] } },
+                    }}
+                  >
+                    {lang === 'es' ? tag.es : tag.en}
+                  </motion.span>
+                ))}
+              </motion.div>
+            }
+          >
+          </ScrollExpandMedia>
+
+          {/* Layer 2 — Glass pills over the video */}
+          <div className="pointer-events-none absolute inset-0 z-50 hidden md:flex items-center justify-between px-0">
+
+            {/* Left pill */}
             <motion.div
-              className="flex flex-wrap justify-center gap-2"
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={{
-                hidden: {},
-                show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } },
+              initial={{ opacity: 0, x: -28, scale: 0.88, filter: 'blur(8px)' }}
+              whileInView={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              className="ml-8"
+              style={{
+                background: 'rgba(13,14,26,0.50)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '14px',
+                padding: '20px 18px',
+                maxWidth: '165px',
+                zIndex: 50,
               }}
             >
-              {[
-                { es: 'Diseño de producto', en: 'Product design' },
-                { es: 'Experiencia digital', en: 'Digital experience' },
-                { es: 'Branding', en: 'Branding' },
-                { es: 'Sistemas visuales', en: 'Visual systems' },
-                { es: 'Video · contenido', en: 'Video · content' },
-                { es: 'Automatización · IA', en: 'Automation · AI' },
-              ].map((tag, i) => (
-                <motion.span
-                  key={i}
-                  className="glass-blue text-b-blue-lt text-[11px] font-semibold px-3 py-1.5 rounded-full border border-b-blue/18"
-                  variants={{
-                    hidden: { opacity: 0, scale: 0.8, y: 10 },
-                    show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] } },
-                  }}
-                >
-                  {lang === 'es' ? tag.es : tag.en}
-                </motion.span>
-              ))}
+              <span style={{
+                display: 'block',
+                fontSize: '0.62rem',
+                letterSpacing: '0.13em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.38)',
+                marginBottom: '10px',
+              }}>
+                {lang === 'es' ? 'Enfoque' : 'Approach'}
+              </span>
+              <p style={{
+                fontSize: '1rem',
+                fontWeight: 600,
+                lineHeight: 1.5,
+                color: 'rgba(255,255,255,0.92)',
+                margin: 0,
+              }}>
+                {lang === 'es'
+                  ? <>Construimos desde el <span style={{ color: '#FF6D4D', fontWeight: 700 }}>núcleo</span> hacia afuera — de la <span style={{ color: '#FF6D4D', fontWeight: 700 }}>forma</span> al sistema, del objeto a la <span style={{ color: '#FF6D4D', fontWeight: 700 }}>pantalla</span></>
+                  : <>We build from the <span style={{ color: '#FF6D4D', fontWeight: 700 }}>core</span> outward — from <span style={{ color: '#FF6D4D', fontWeight: 700 }}>form</span> to system, from object to <span style={{ color: '#FF6D4D', fontWeight: 700 }}>screen</span></>
+                }
+              </p>
             </motion.div>
-          }
-        >
-          <RevealedText lang={lang} />
-        </ScrollExpandMedia>
+
+            {/* Right pill */}
+            <motion.div
+              initial={{ opacity: 0, x: 28, scale: 0.88, filter: 'blur(8px)' }}
+              whileInView={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+              className="mr-8"
+              style={{
+                background: 'rgba(13,14,26,0.50)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '14px',
+                padding: '20px 18px',
+                maxWidth: '165px',
+                textAlign: 'right',
+                zIndex: 50,
+              }}
+            >
+              <span style={{
+                display: 'block',
+                fontSize: '0.62rem',
+                letterSpacing: '0.13em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.38)',
+                marginBottom: '10px',
+              }}>
+                {lang === 'es' ? 'Sistema' : 'System'}
+              </span>
+              <p style={{
+                fontSize: '1rem',
+                fontWeight: 600,
+                lineHeight: 1.5,
+                color: 'rgba(255,255,255,0.92)',
+                margin: 0,
+              }}>
+                {lang === 'es'
+                  ? <>combinando <span style={{ color: '#828AFF', fontWeight: 700 }}>diseño</span>, <span style={{ color: '#828AFF', fontWeight: 700 }}>automatización</span> e <span style={{ color: '#828AFF', fontWeight: 700 }}>inteligencia</span> aplicada para crear marcas, productos y experiencias que funcionan y comunican.</>
+                  : <>combining <span style={{ color: '#828AFF', fontWeight: 700 }}>design</span>, <span style={{ color: '#828AFF', fontWeight: 700 }}>automation</span> and applied <span style={{ color: '#828AFF', fontWeight: 700 }}>intelligence</span> to create brands, products and experiences that work and communicate.</>
+                }
+              </p>
+            </motion.div>
+
+          </div>
+        </div>
       </div>
     </section>
   )
