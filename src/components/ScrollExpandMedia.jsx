@@ -152,9 +152,9 @@ const ScrollExpandMedia = ({
 
         </motion.div>
 
-        {/* Children overlay — z-30 */}
+        {/* Children overlay — z-40 */}
         <motion.div
-          className="absolute inset-0 z-30"
+          className="absolute inset-0 z-40"
           style={{ opacity: contentOpacity }}
         >
           {children}

@@ -6,10 +6,8 @@ import ScrollExpandMedia from '../components/ScrollExpandMedia'
 const BG_SRC      = '/assets/images/imagen_dinamico.webp'
 const LOTTIE_SRC  = '/assets/images/efectos.json'
 
-const coralSet = new Set([
-  'núcleo', 'nucleo', 'forma', 'pantalla',
-  'core', 'form', 'screen',
-])
+const leftAccent = new Set(['núcleo', 'nucleo', 'forma', 'sistema', 'core', 'form', 'system'])
+const rightAccent = new Set(['diseño', 'automatización', 'inteligencia', 'design', 'automation', 'intelligence'])
 
 /* ── RevealedText ────────────────────────────────────────────────── */
 function RevealedText({ lang }) {
@@ -33,39 +31,65 @@ function RevealedText({ lang }) {
   const wordsRight = words.slice(half)
 
   return (
-    <div className="absolute inset-0 z-30 pointer-events-none flex items-center">
+    <div className="absolute inset-0 z-40 pointer-events-none flex items-center">
 
       {/* LEFT zone — first half of paragraph */}
       <motion.div
         className="hidden md:flex w-[26%] h-full flex-col justify-center items-start px-7 gap-2"
-        style={{ x: leftX, opacity: splitOpacity }}
+        style={{ x: leftX, opacity: splitOpacity, isolation: 'isolate' }}
       >
-        <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/30 mb-1">
-          {lang === 'es' ? 'Enfoque' : 'Approach'}
-        </p>
-        <p
-          ref={ref}
-          className="font-cal text-base leading-snug text-white/90"
-          style={{ maxWidth: '110px', lineHeight: '1.4' }}
+        <div
+          style={{
+            background: 'rgba(13,14,26,0.45)',
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: '14px',
+            padding: '18px 16px',
+            maxWidth: '160px',
+          }}
         >
-          {wordsLeft.map((word, i) => {
-            const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
-            return (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, x: -8, filter: 'blur(4px)' }}
-                animate={inView ? {
-                  opacity: 1, x: 0, filter: 'blur(0px)',
-                  color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.90)',
-                } : { opacity: 0, x: -8, filter: 'blur(4px)' }}
-                transition={{ delay: i * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{ display: 'inline-block', marginRight: '0.22em' }}
-              >
-                {word}
-              </motion.span>
-            )
-          })}
-        </p>
+          <span
+            className="uppercase tracking-widest"
+            style={{
+              fontSize: '0.65rem',
+              color: 'rgba(255,255,255,0.4)',
+              letterSpacing: '0.12em',
+              marginBottom: '8px',
+              display: 'block',
+            }}
+          >
+            {lang === 'es' ? 'Enfoque' : 'Approach'}
+          </span>
+          <p
+            ref={ref}
+            className="font-semibold leading-snug"
+            style={{
+              fontSize: '1rem',
+              lineHeight: '1.5',
+              color: 'rgba(255,255,255,0.92)',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {wordsLeft.map((word, i) => {
+              const isAccent = leftAccent.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
+              return (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, x: -8, filter: 'blur(4px)' }}
+                  animate={inView ? {
+                    opacity: 1, x: 0, filter: 'blur(0px)',
+                    color: isAccent ? '#FF6B35' : 'rgba(245,245,240,0.90)',
+                  } : { opacity: 0, x: -8, filter: 'blur(4px)' }}
+                  transition={{ delay: i * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ display: 'inline-block', marginRight: '0.22em' }}
+                >
+                  {word}
+                </motion.span>
+              )
+            })}
+          </p>
+        </div>
       </motion.div>
 
       {/* CENTER — empty, video shows through */}
@@ -74,33 +98,59 @@ function RevealedText({ lang }) {
       {/* RIGHT zone — second half of paragraph */}
       <motion.div
         className="hidden md:flex w-[26%] h-full flex-col justify-center items-end px-7 gap-2 text-right"
-        style={{ x: rightX, opacity: splitOpacity }}
+        style={{ x: rightX, opacity: splitOpacity, isolation: 'isolate' }}
       >
-        <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/30 mb-1">
-          {lang === 'es' ? 'Sistema' : 'System'}
-        </p>
-        <p
-          className="font-cal text-base leading-snug text-white/90"
-          style={{ maxWidth: '110px', lineHeight: '1.4' }}
+        <div
+          style={{
+            background: 'rgba(13,14,26,0.45)',
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: '14px',
+            padding: '18px 16px',
+            maxWidth: '160px',
+          }}
         >
-          {wordsRight.map((word, i) => {
-            const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
-            return (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, x: 8, filter: 'blur(4px)' }}
-                animate={inView ? {
-                  opacity: 1, x: 0, filter: 'blur(0px)',
-                  color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.90)',
-                } : { opacity: 0, x: 8, filter: 'blur(4px)' }}
-                transition={{ delay: (half + i) * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                style={{ display: 'inline-block', marginRight: '0.22em' }}
-              >
-                {word}
-              </motion.span>
-            )
-          })}
-        </p>
+          <span
+            className="uppercase tracking-widest"
+            style={{
+              fontSize: '0.65rem',
+              color: 'rgba(255,255,255,0.4)',
+              letterSpacing: '0.12em',
+              marginBottom: '8px',
+              display: 'block',
+            }}
+          >
+            {lang === 'es' ? 'Sistema' : 'System'}
+          </span>
+          <p
+            className="font-semibold leading-snug"
+            style={{
+              fontSize: '1rem',
+              lineHeight: '1.5',
+              color: 'rgba(255,255,255,0.92)',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {wordsRight.map((word, i) => {
+              const isAccent = rightAccent.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
+              return (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, x: 8, filter: 'blur(4px)' }}
+                  animate={inView ? {
+                    opacity: 1, x: 0, filter: 'blur(0px)',
+                    color: isAccent ? '#7EB8FF' : 'rgba(245,245,240,0.90)',
+                  } : { opacity: 0, x: 8, filter: 'blur(4px)' }}
+                  transition={{ delay: (half + i) * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ display: 'inline-block', marginRight: '0.22em' }}
+                >
+                  {word}
+                </motion.span>
+              )
+            })}
+          </p>
+        </div>
       </motion.div>
 
     </div>
