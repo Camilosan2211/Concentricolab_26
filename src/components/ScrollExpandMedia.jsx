@@ -150,15 +150,6 @@ const ScrollExpandMedia = ({
             </div>
           )}
 
-          {/* Ocultar watermark jitter.video */}
-          <div
-            className="pointer-events-none absolute bottom-0 right-0 z-40"
-            style={{
-              width: '140px',
-              height: '40px',
-              background: 'linear-gradient(to top left, rgba(0,3,31,0.98) 40%, transparent 100%)',
-            }}
-          />
         </motion.div>
 
         {/* Children overlay — z-30 */}
