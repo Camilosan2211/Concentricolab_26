@@ -45,8 +45,8 @@ function RevealedText({ lang }) {
         </p>
         <p
           ref={ref}
-          className="font-cal text-xs md:text-sm leading-[1.5] text-white/90"
-          style={{ maxWidth: '150px', wordBreak: 'break-word' }}
+          className="font-cal text-base leading-snug text-white/90"
+          style={{ maxWidth: '110px', lineHeight: '1.4' }}
         >
           {wordsLeft.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
@@ -80,8 +80,8 @@ function RevealedText({ lang }) {
           {lang === 'es' ? 'Sistema' : 'System'}
         </p>
         <p
-          className="font-cal text-xs md:text-sm leading-[1.5] text-white/90"
-          style={{ maxWidth: '150px', wordBreak: 'break-word' }}
+          className="font-cal text-base leading-snug text-white/90"
+          style={{ maxWidth: '110px', lineHeight: '1.4' }}
         >
           {wordsRight.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
@@ -123,7 +123,7 @@ export default function Enfoque({ lang }) {
         className="pointer-events-none absolute inset-y-0 left-0 z-20"
         style={{
           width: '26%',
-          background: 'linear-gradient(to right, #00031F 0%, #00031F 10%, rgba(0,3,31,0.92) 30%, rgba(0,3,31,0.65) 55%, rgba(0,3,31,0.25) 78%, rgba(0,3,31,0.05) 92%, transparent 100%)',
+          background: 'linear-gradient(to right, #0D0E1A 0%, #0D0E1A 10%, rgba(13,14,26,0.92) 30%, rgba(13,14,26,0.65) 55%, rgba(13,14,26,0.25) 78%, rgba(13,14,26,0.05) 92%, transparent 100%)',
         }}
       />
 
@@ -132,7 +132,7 @@ export default function Enfoque({ lang }) {
         className="pointer-events-none absolute inset-y-0 right-0 z-20"
         style={{
           width: '26%',
-          background: 'linear-gradient(to left, #00031F 0%, #00031F 10%, rgba(0,3,31,0.92) 30%, rgba(0,3,31,0.65) 55%, rgba(0,3,31,0.25) 78%, rgba(0,3,31,0.05) 92%, transparent 100%)',
+          background: 'linear-gradient(to left, #0D0E1A 0%, #0D0E1A 10%, rgba(13,14,26,0.92) 30%, rgba(13,14,26,0.65) 55%, rgba(13,14,26,0.25) 78%, rgba(13,14,26,0.05) 92%, transparent 100%)',
         }}
       />
 
