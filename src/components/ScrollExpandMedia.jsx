@@ -26,8 +26,8 @@ const ScrollExpandMedia = ({
   const bgOpacity = useTransform(progress, [0.5, 0.9], [1, 0.3])
 
   /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
-  const mediaW = useTransform(progress, [0, 1], [300, isMobile ? 900 : 1500])
-  const mediaH = useTransform(mediaW, w => w * (10 / 16))
+  const mediaW = useTransform(progress, [0, 1], [300, isMobile ? 1000 : 1920])
+  const mediaH = useTransform(mediaW, w => w * (9 / 21))
   const borderR = useTransform(progress, [0, 1], [32, 16])
 
   /* ── Opacidades ───────────────────────────────────────────────── */
@@ -80,7 +80,7 @@ const ScrollExpandMedia = ({
       </div>
 
       {/* ── Media ────────────────────────────────────────────────── */}
-      <div className="relative z-10 flex items-center justify-center w-full px-4 md:px-6 py-6 md:py-8" style={{ minHeight: '45vh', overflow: 'visible' }}>
+      <div className="relative z-10 flex items-center justify-center w-full py-6 md:py-8" style={{ minHeight: '45vh', overflow: 'visible' }}>
         <motion.div
           className="overflow-hidden relative"
           style={{
@@ -157,6 +157,16 @@ const ScrollExpandMedia = ({
               background: 'linear-gradient(to bottom, transparent 0%, rgba(0,3,31,0.15) 30%, rgba(0,3,31,0.35) 70%, rgba(0,3,31,0.55) 100%)',
               borderBottomLeftRadius: borderR,
               borderBottomRightRadius: borderR,
+            }}
+          />
+
+          {/* Ocultar watermark jitter.video */}
+          <div
+            className="pointer-events-none absolute bottom-0 right-0 z-40"
+            style={{
+              width: '140px',
+              height: '40px',
+              background: 'linear-gradient(to top left, rgba(0,3,31,0.98) 40%, transparent 100%)',
             }}
           />
         </motion.div>

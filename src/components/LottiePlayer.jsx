@@ -14,6 +14,10 @@ export default function LottiePlayer({ src, loop = true, autoplay = true, speed 
       loop,
       autoplay,
       path: src,
+      rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice',
+        progressiveLoad: true,
+      },
     })
 
     anim.setSpeed(speed)
