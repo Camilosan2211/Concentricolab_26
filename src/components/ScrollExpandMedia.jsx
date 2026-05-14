@@ -161,27 +161,7 @@ const ScrollExpandMedia = ({
           />
         </motion.div>
 
-        {/* Fade lateral izquierdo — sibling del video, no se corta */}
-        <div
-          className="pointer-events-none absolute top-0 bottom-0 z-20"
-          style={{
-            left: 0,
-            width: '28%',
-            background: 'linear-gradient(to right, #00031F 0%, rgba(0,3,31,0.95) 20%, rgba(0,3,31,0.75) 45%, rgba(0,3,31,0.30) 70%, transparent 100%)',
-          }}
-        />
-
-        {/* Fade lateral derecho — sibling del video, no se corta */}
-        <div
-          className="pointer-events-none absolute top-0 bottom-0 z-20"
-          style={{
-            right: 0,
-            width: '28%',
-            background: 'linear-gradient(to left, #00031F 0%, rgba(0,3,31,0.95) 20%, rgba(0,3,31,0.75) 45%, rgba(0,3,31,0.30) 70%, transparent 100%)',
-          }}
-        />
-
-        {/* Children overlay — z-30, encima de los fades laterales */}
+        {/* Children overlay — z-30 */}
         <motion.div
           className="absolute inset-0 z-30"
           style={{ opacity: contentOpacity }}

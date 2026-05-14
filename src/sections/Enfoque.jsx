@@ -101,9 +101,28 @@ export default function Enfoque({ lang }) {
   return (
     <section
       id="enfoque"
-      className="relative py-12 md:py-16 px-4 overflow-hidden bg-transparent"
+      className="relative py-12 md:py-16 px-4 bg-transparent"
+      style={{ overflow: 'visible' }}
       aria-label={t('Nuestro enfoque', 'Our approach')}
     >
+      {/* Fade lateral izquierdo — sobre toda la sección */}
+      <div
+        className="pointer-events-none absolute inset-y-0 left-0 z-20"
+        style={{
+          width: '18%',
+          background: 'linear-gradient(to right, #00031F 0%, rgba(0,3,31,0.97) 25%, rgba(0,3,31,0.80) 50%, rgba(0,3,31,0.40) 75%, transparent 100%)',
+        }}
+      />
+
+      {/* Fade lateral derecho — sobre toda la sección */}
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 z-20"
+        style={{
+          width: '18%',
+          background: 'linear-gradient(to left, #00031F 0%, rgba(0,3,31,0.97) 25%, rgba(0,3,31,0.80) 50%, rgba(0,3,31,0.40) 75%, transparent 100%)',
+        }}
+      />
+
       <div className="max-w-[1400px] mx-auto">
         <ScrollExpandMedia
           mediaType="lottie"
