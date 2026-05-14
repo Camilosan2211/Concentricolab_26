@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'motion/react'
+import LottiePlayer from './LottiePlayer'
 
 /* ── Componente principal ────────────────────────────────────────── */
 const ScrollExpandMedia = ({
@@ -91,7 +92,18 @@ const ScrollExpandMedia = ({
             boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
           }}
         >
-          {mediaType === 'video' ? (
+          {mediaType === 'lottie' ? (
+            <div className="relative w-full h-full pointer-events-none">
+              {mediaSrc ? (
+                <LottiePlayer src={mediaSrc} loop autoplay speed={1} />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #050828, #0D1340, #1A0A28)' }}>
+                  <span style={{ fontFamily: "'Cal Sans', sans-serif", fontSize: '48px', color: 'rgba(255,255,255,0.08)' }}>CL</span>
+                </div>
+              )}
+              <motion.div className="absolute inset-0 bg-black/30" style={{ opacity: useTransform(progress, [0, 1], [0.7, 0.2]) }} />
+            </div>
+          ) : mediaType === 'video' ? (
             mediaSrc?.includes('youtube.com') ? (
               <div className="relative w-full h-full pointer-events-none">
                 <iframe
@@ -147,12 +159,12 @@ const ScrollExpandMedia = ({
               borderBottomRightRadius: borderR,
             }}
           />
-          {/* Contenido revelado — overlay cinematic caption */}
+          {/* Overlay caption — dos columnas */}
           <motion.div
-            className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 px-6 md:px-10 pb-7 pt-14"
+            className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 px-6 md:px-10 pb-8 pt-20"
             style={{
               opacity: contentOpacity,
-              background: 'linear-gradient(to top, rgba(0,3,31,0.88) 0%, rgba(0,3,31,0.60) 45%, transparent 100%)',
+              background: 'linear-gradient(to top, rgba(0,3,31,0.92) 0%, rgba(0,3,31,0.72) 40%, rgba(0,3,31,0.30) 70%, transparent 100%)',
               borderBottomLeftRadius: borderR,
               borderBottomRightRadius: borderR,
             }}
