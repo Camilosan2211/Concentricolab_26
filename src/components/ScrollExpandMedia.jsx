@@ -27,7 +27,7 @@ const ScrollExpandMedia = ({
 
   /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
   const mediaW = useTransform(progress, [0, 1], [300, isMobile ? 900 : 1500])
-  const mediaH = useTransform(progress, [0, 1], [400, isMobile ? 500 : 700])
+  const mediaH = useTransform(mediaW, w => w * (10 / 16))
   const borderR = useTransform(progress, [0, 1], [32, 16])
 
   /* ── Opacidades ───────────────────────────────────────────────── */
@@ -159,9 +159,31 @@ const ScrollExpandMedia = ({
               borderBottomRightRadius: borderR,
             }}
           />
+          {/* Fade lateral izquierdo */}
+          <motion.div
+            className="pointer-events-none absolute top-0 left-0 bottom-0 z-20"
+            style={{
+              width: '22%',
+              background: 'linear-gradient(to right, rgba(0,3,31,1) 0%, rgba(0,3,31,0.85) 25%, rgba(0,3,31,0.40) 60%, transparent 100%)',
+              borderTopLeftRadius: borderR,
+              borderBottomLeftRadius: borderR,
+            }}
+          />
+
+          {/* Fade lateral derecho */}
+          <motion.div
+            className="pointer-events-none absolute top-0 right-0 bottom-0 z-20"
+            style={{
+              width: '22%',
+              background: 'linear-gradient(to left, rgba(0,3,31,1) 0%, rgba(0,3,31,0.85) 25%, rgba(0,3,31,0.40) 60%, transparent 100%)',
+              borderTopRightRadius: borderR,
+              borderBottomRightRadius: borderR,
+            }}
+          />
+
           {/* Overlay caption — dos columnas */}
           <motion.div
-            className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 px-6 md:px-10 pb-8 pt-20"
+            className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 px-6 md:px-10 pb-8 pt-20"
             style={{
               opacity: contentOpacity,
               background: 'linear-gradient(to top, rgba(0,3,31,0.92) 0%, rgba(0,3,31,0.72) 40%, rgba(0,3,31,0.30) 70%, transparent 100%)',

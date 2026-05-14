@@ -44,22 +44,25 @@ function RevealedText({ lang }) {
   const wordsRight = words.slice(half)
 
   return (
-    <div className="absolute inset-0 z-20 pointer-events-none flex items-end">
+    <div className="absolute inset-0 z-30 pointer-events-none flex items-center">
 
-      {/* LEFT fragment */}
-      <div className="w-1/2 px-6 md:px-8 pb-10 flex flex-col justify-end">
-        <p className="text-[9px] font-bold tracking-[0.14em] uppercase text-white/30 mb-2">
-          {lang === 'es' ? 'Nuestro enfoque' : 'Our approach'}
+      {/* LEFT zone — first half of paragraph */}
+      <div className="hidden md:flex w-[22%] h-full flex-col justify-center px-4 md:px-6 gap-3">
+        <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/35 mb-1">
+          {lang === 'es' ? 'Enfoque' : 'Approach'}
         </p>
-        <p ref={ref} className="font-cal text-sm sm:text-base leading-[1.45] text-white/85">
+        <p ref={ref} className="font-cal text-sm md:text-base leading-[1.5] text-white/90">
           {wordsLeft.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
             return (
               <motion.span
                 key={i}
-                initial={{ opacity: 0, y: 6, filter: 'blur(3px)' }}
-                animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)', color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.85)' } : { opacity: 0 }}
-                transition={{ delay: i * 0.03, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, x: -8, filter: 'blur(4px)' }}
+                animate={inView ? {
+                  opacity: 1, x: 0, filter: 'blur(0px)',
+                  color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.90)',
+                } : { opacity: 0, x: -8, filter: 'blur(4px)' }}
+                transition={{ delay: i * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 style={{ display: 'inline-block', marginRight: '0.22em' }}
               >
                 {word}
@@ -69,17 +72,26 @@ function RevealedText({ lang }) {
         </p>
       </div>
 
-      {/* RIGHT fragment */}
-      <div className="w-1/2 px-6 md:px-8 pb-10 flex flex-col justify-end items-end text-right">
-        <p className="font-cal text-sm sm:text-base leading-[1.45] text-white/85">
+      {/* CENTER — empty, video shows through */}
+      <div className="flex-1" />
+
+      {/* RIGHT zone — second half of paragraph */}
+      <div className="hidden md:flex w-[22%] h-full flex-col justify-center px-4 md:px-6 gap-3 items-end text-right">
+        <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/35 mb-1">
+          {lang === 'es' ? 'Sistema' : 'System'}
+        </p>
+        <p className="font-cal text-sm md:text-base leading-[1.5] text-white/90">
           {wordsRight.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
             return (
               <motion.span
                 key={i}
-                initial={{ opacity: 0, y: 6, filter: 'blur(3px)' }}
-                animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)', color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.85)' } : { opacity: 0 }}
-                transition={{ delay: (half + i) * 0.03, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, x: 8, filter: 'blur(4px)' }}
+                animate={inView ? {
+                  opacity: 1, x: 0, filter: 'blur(0px)',
+                  color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.90)',
+                } : { opacity: 0, x: 8, filter: 'blur(4px)' }}
+                transition={{ delay: (half + i) * 0.04, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 style={{ display: 'inline-block', marginRight: '0.22em' }}
               >
                 {word}
