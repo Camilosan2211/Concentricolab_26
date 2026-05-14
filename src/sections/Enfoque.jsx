@@ -39,38 +39,27 @@ function RevealedText({ lang }) {
     : 'We build from the core outward — from form to system, from object to screen — combining design, automation and applied intelligence to create brands, products and experiences that work and communicate.'
 
   const words = text.split(' ')
+  const half = Math.ceil(words.length / 2)
+  const wordsLeft = words.slice(0, half)
+  const wordsRight = words.slice(half)
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 items-end w-full">
+    <div className="absolute inset-0 z-20 pointer-events-none flex items-end">
 
-      {/* Columna izquierda — label + párrafo animado */}
-      <div className="flex flex-col gap-3">
-        <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-white/35 mb-1">
+      {/* LEFT fragment */}
+      <div className="w-1/2 px-6 md:px-8 pb-10 flex flex-col justify-end">
+        <p className="text-[9px] font-bold tracking-[0.14em] uppercase text-white/30 mb-2">
           {lang === 'es' ? 'Nuestro enfoque' : 'Our approach'}
         </p>
-        <p
-          ref={ref}
-          className="font-cal text-base sm:text-lg leading-[1.4] tracking-[-0.15px] text-white/85"
-          style={{ maxWidth: '42ch' }}
-        >
-          {words.map((word, i) => {
+        <p ref={ref} className="font-cal text-sm sm:text-base leading-[1.45] text-white/85">
+          {wordsLeft.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
             return (
               <motion.span
                 key={i}
-                aria-hidden="true"
-                initial={{ opacity: 0, y: 8, filter: 'blur(3px)', color: 'rgba(140,148,180,0.25)' }}
-                animate={inView ? {
-                  opacity: 1, y: 0, filter: 'blur(0px)',
-                  color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.85)',
-                  ...(isCoral ? { textShadow: ['0 0 8px rgba(255,109,77,0)', '0 0 18px rgba(255,109,77,0.5)', '0 0 8px rgba(255,109,77,0)'] } : {}),
-                } : { opacity: 0, y: 8, filter: 'blur(3px)', color: 'rgba(140,148,180,0.25)' }}
-                transition={{
-                  delay: i * 0.035,
-                  duration: 0.45,
-                  ease: [0.16, 1, 0.3, 1],
-                  ...(isCoral ? { textShadow: { duration: 2, delay: i * 0.035 + 0.4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' } } : {}),
-                }}
+                initial={{ opacity: 0, y: 6, filter: 'blur(3px)' }}
+                animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)', color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.85)' } : { opacity: 0 }}
+                transition={{ delay: i * 0.03, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 style={{ display: 'inline-block', marginRight: '0.22em' }}
               >
                 {word}
@@ -80,41 +69,24 @@ function RevealedText({ lang }) {
         </p>
       </div>
 
-      {/* Columna derecha — tags pills */}
-      <div className="flex flex-col gap-3 md:items-end">
-        <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-white/35 hidden md:block mb-1">
-          {lang === 'es' ? 'Capacidades' : 'Capabilities'}
+      {/* RIGHT fragment */}
+      <div className="w-1/2 px-6 md:px-8 pb-10 flex flex-col justify-end items-end text-right">
+        <p className="font-cal text-sm sm:text-base leading-[1.45] text-white/85">
+          {wordsRight.map((word, i) => {
+            const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
+            return (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 6, filter: 'blur(3px)' }}
+                animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)', color: isCoral ? '#FF6D4D' : 'rgba(245,245,240,0.85)' } : { opacity: 0 }}
+                transition={{ delay: (half + i) * 0.03, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                style={{ display: 'inline-block', marginRight: '0.22em' }}
+              >
+                {word}
+              </motion.span>
+            )
+          })}
         </p>
-        <motion.div
-          className="flex flex-wrap gap-2 md:justify-end"
-          initial="hidden"
-          animate={inView ? 'show' : 'hidden'}
-          variants={{
-            hidden: {},
-            show: { transition: { staggerChildren: 0.055, delayChildren: words.length * 0.035 + 0.1 } },
-          }}
-        >
-          {[
-            { es: 'Diseño', en: 'Design' },
-            { es: 'Producto · forma', en: 'Product · form' },
-            { es: 'Experiencia digital', en: 'Digital experience' },
-            { es: 'Branding', en: 'Branding' },
-            { es: 'Sistemas visuales', en: 'Visual systems' },
-            { es: 'Video · contenido', en: 'Video · content' },
-            { es: 'Automatización · IA', en: 'Automation · AI' },
-          ].map((tag, i) => (
-            <motion.span
-              key={i}
-              className="inline-flex items-center glass-blue text-b-blue-lt text-[11px] font-semibold px-3 py-1.5 rounded-full border border-b-blue/18"
-              variants={{
-                hidden: { opacity: 0, scale: 0.84, rotate: -3 },
-                show: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.45, ease: [0.34, 1.56, 0.64, 1] } },
-              }}
-            >
-              {lang === 'es' ? tag.es : tag.en}
-            </motion.span>
-          ))}
-        </motion.div>
       </div>
 
     </div>
@@ -141,6 +113,38 @@ export default function Enfoque({ lang }) {
         >
           <RevealedText lang={lang} />
         </ScrollExpandMedia>
+
+        {/* Disciplinas — debajo del video */}
+        <motion.div
+          className="flex flex-wrap justify-center gap-2 mt-6 px-4"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-40px' }}
+          variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } },
+          }}
+        >
+          {[
+            { es: 'Diseño de producto', en: 'Product design' },
+            { es: 'Experiencia digital', en: 'Digital experience' },
+            { es: 'Branding', en: 'Branding' },
+            { es: 'Sistemas visuales', en: 'Visual systems' },
+            { es: 'Video · contenido', en: 'Video · content' },
+            { es: 'Automatización · IA', en: 'Automation · AI' },
+          ].map((tag, i) => (
+            <motion.span
+              key={i}
+              className="glass-blue text-b-blue-lt text-[11px] font-semibold px-3 py-1.5 rounded-full border border-b-blue/18"
+              variants={{
+                hidden: { opacity: 0, scale: 0.8, rotate: -4 },
+                show: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] } },
+              }}
+            >
+              {lang === 'es' ? tag.es : tag.en}
+            </motion.span>
+          ))}
+        </motion.div>
       </div>
     </section>
   )
