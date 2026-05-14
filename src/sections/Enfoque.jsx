@@ -51,12 +51,12 @@ function RevealedText({ lang }) {
   ]
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="flex flex-col items-start gap-4">
 
       {/* Párrafo */}
       <p
         ref={ref}
-        className="font-cal text-lg sm:text-xl md:text-2xl leading-[1.35] tracking-[-0.2px] text-center max-w-[720px] dark:text-white/80 text-black/60"
+        className="font-cal text-sm sm:text-base md:text-lg leading-[1.35] tracking-[-0.2px] max-w-[580px] dark:text-white/80 text-black/60"
       >
         {words.map((word, i) => {
           const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúñü]/gi, ''))

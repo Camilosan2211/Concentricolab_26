@@ -147,16 +147,21 @@ const ScrollExpandMedia = ({
               borderBottomRightRadius: borderR,
             }}
           />
+          {/* Contenido revelado — overlay cinematic caption */}
+          <motion.div
+            className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 px-6 md:px-10 pb-7 pt-14"
+            style={{
+              opacity: contentOpacity,
+              background: 'linear-gradient(to top, rgba(0,3,31,0.88) 0%, rgba(0,3,31,0.60) 45%, transparent 100%)',
+              borderBottomLeftRadius: borderR,
+              borderBottomRightRadius: borderR,
+            }}
+          >
+            {children}
+          </motion.div>
         </motion.div>
       </div>
 
-      {/* ── Contenido revelado ───────────────────────────────────── */}
-      <motion.div
-        className="relative z-10 px-6 md:px-8 pb-8 md:pb-10"
-        style={{ opacity: contentOpacity }}
-      >
-        {children}
-      </motion.div>
     </div>
   )
 }
