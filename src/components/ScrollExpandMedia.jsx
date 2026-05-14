@@ -27,8 +27,8 @@ const ScrollExpandMedia = ({
   const bgOpacity = useTransform(progress, [0.5, 0.9], [1, 0.3])
 
   /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
-  const mediaW = useTransform(progress, [0, 1], [300, isMobile ? 1000 : 1920])
-  const mediaH = useTransform(mediaW, w => w * (9 / 21))
+  const mediaW = useTransform(progress, [0, 0.85], ['38%', '100%'])
+  const mediaH = useTransform(progress, [0, 0.85], ['56vh', '42vh'])
   const borderR = useTransform(progress, [0, 1], [32, 16])
 
   /* ── Opacidades ───────────────────────────────────────────────── */
@@ -154,7 +154,7 @@ const ScrollExpandMedia = ({
 
         {/* Children overlay — z-40 */}
         <motion.div
-          className="absolute inset-0 z-40"
+          className="absolute inset-0 z-50"
           style={{ opacity: contentOpacity }}
         >
           {children}

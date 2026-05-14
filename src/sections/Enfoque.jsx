@@ -31,14 +31,18 @@ function RevealedText({ lang }) {
   const wordsRight = words.slice(half)
 
   return (
-    <div className="absolute inset-0 z-40 pointer-events-none flex items-center">
+    <div className="absolute inset-0 z-50 pointer-events-none flex items-center">
 
       {/* LEFT zone — first half of paragraph */}
       <motion.div
         className="hidden md:flex w-[26%] h-full flex-col justify-center items-start px-7 gap-2"
-        style={{ x: leftX, opacity: splitOpacity, isolation: 'isolate' }}
+        style={{ x: leftX, opacity: splitOpacity, isolation: 'isolate', zIndex: 50 }}
       >
-        <div
+        <motion.div
+          initial={{ opacity: 0, x: -32, scale: 0.88, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
           style={{
             background: 'rgba(13,14,26,0.45)',
             backdropFilter: 'blur(14px)',
@@ -47,6 +51,9 @@ function RevealedText({ lang }) {
             borderRadius: '14px',
             padding: '18px 16px',
             maxWidth: '160px',
+            position: 'relative',
+            zIndex: 50,
+            isolation: 'isolate',
           }}
         >
           <span
@@ -61,8 +68,12 @@ function RevealedText({ lang }) {
           >
             {lang === 'es' ? 'Enfoque' : 'Approach'}
           </span>
-          <p
+          <motion.p
             ref={ref}
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
             className="font-semibold leading-snug"
             style={{
               fontSize: '1rem',
@@ -88,8 +99,8 @@ function RevealedText({ lang }) {
                 </motion.span>
               )
             })}
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </motion.div>
 
       {/* CENTER — empty, video shows through */}
@@ -98,9 +109,13 @@ function RevealedText({ lang }) {
       {/* RIGHT zone — second half of paragraph */}
       <motion.div
         className="hidden md:flex w-[26%] h-full flex-col justify-center items-end px-7 gap-2 text-right"
-        style={{ x: rightX, opacity: splitOpacity, isolation: 'isolate' }}
+        style={{ x: rightX, opacity: splitOpacity, isolation: 'isolate', zIndex: 50 }}
       >
-        <div
+        <motion.div
+          initial={{ opacity: 0, x: 32, scale: 0.88, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, x: 0, scale: 1, filter: 'blur(0px)' }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
           style={{
             background: 'rgba(13,14,26,0.45)',
             backdropFilter: 'blur(14px)',
@@ -109,6 +124,9 @@ function RevealedText({ lang }) {
             borderRadius: '14px',
             padding: '18px 16px',
             maxWidth: '160px',
+            position: 'relative',
+            zIndex: 50,
+            isolation: 'isolate',
           }}
         >
           <span
@@ -123,7 +141,11 @@ function RevealedText({ lang }) {
           >
             {lang === 'es' ? 'Sistema' : 'System'}
           </span>
-          <p
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
             className="font-semibold leading-snug"
             style={{
               fontSize: '1rem',
@@ -149,8 +171,8 @@ function RevealedText({ lang }) {
                 </motion.span>
               )
             })}
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </motion.div>
 
     </div>
