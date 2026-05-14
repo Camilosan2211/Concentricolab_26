@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useInView } from 'motion/react'
+import { motion, useInView, useScroll, useTransform } from 'motion/react'
 import ScrollExpandMedia from '../components/ScrollExpandMedia'
 
 /* ── Assets ────────────────────────────────────────────────────────── */
@@ -15,6 +15,13 @@ const coralSet = new Set([
 function RevealedText({ lang }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  })
+  const leftX = useTransform(scrollYProgress, [0.3, 0.7], ['25%', '0%'])
+  const rightX = useTransform(scrollYProgress, [0.3, 0.7], ['-25%', '0%'])
+  const splitOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.9], [0, 1, 1])
 
   const text = lang === 'es'
     ? 'Construimos desde el núcleo hacia afuera — de la forma al sistema, del objeto a la pantalla — combinando diseño, automatización e inteligencia aplicada para crear marcas, productos y experiencias que funcionan y comunican.'
@@ -29,14 +36,17 @@ function RevealedText({ lang }) {
     <div className="absolute inset-0 z-30 pointer-events-none flex items-center">
 
       {/* LEFT zone — first half of paragraph */}
-      <div className="hidden md:flex w-[28%] h-full flex-col justify-center items-start px-6 gap-2">
+      <motion.div
+        className="hidden md:flex w-[26%] h-full flex-col justify-center items-start px-7 gap-2"
+        style={{ x: leftX, opacity: splitOpacity }}
+      >
         <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/30 mb-1">
           {lang === 'es' ? 'Enfoque' : 'Approach'}
         </p>
         <p
           ref={ref}
           className="font-cal text-xs md:text-sm leading-[1.5] text-white/90"
-          style={{ maxWidth: '180px', wordBreak: 'break-word' }}
+          style={{ maxWidth: '150px', wordBreak: 'break-word' }}
         >
           {wordsLeft.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
@@ -56,19 +66,22 @@ function RevealedText({ lang }) {
             )
           })}
         </p>
-      </div>
+      </motion.div>
 
       {/* CENTER — empty, video shows through */}
       <div className="flex-1" />
 
       {/* RIGHT zone — second half of paragraph */}
-      <div className="hidden md:flex w-[28%] h-full flex-col justify-center items-end px-6 gap-2 text-right">
+      <motion.div
+        className="hidden md:flex w-[26%] h-full flex-col justify-center items-end px-7 gap-2 text-right"
+        style={{ x: rightX, opacity: splitOpacity }}
+      >
         <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/30 mb-1">
           {lang === 'es' ? 'Sistema' : 'System'}
         </p>
         <p
           className="font-cal text-xs md:text-sm leading-[1.5] text-white/90"
-          style={{ maxWidth: '180px', wordBreak: 'break-word' }}
+          style={{ maxWidth: '150px', wordBreak: 'break-word' }}
         >
           {wordsRight.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
@@ -88,7 +101,7 @@ function RevealedText({ lang }) {
             )
           })}
         </p>
-      </div>
+      </motion.div>
 
     </div>
   )
@@ -105,21 +118,21 @@ export default function Enfoque({ lang }) {
       style={{ overflow: 'visible' }}
       aria-label={t('Nuestro enfoque', 'Our approach')}
     >
-      {/* Fade lateral izquierdo — sobre toda la sección */}
+      {/* Fade lateral izquierdo */}
       <div
         className="pointer-events-none absolute inset-y-0 left-0 z-20"
         style={{
-          width: '18%',
-          background: 'linear-gradient(to right, #00031F 0%, rgba(0,3,31,0.97) 25%, rgba(0,3,31,0.80) 50%, rgba(0,3,31,0.40) 75%, transparent 100%)',
+          width: '26%',
+          background: 'linear-gradient(to right, #00031F 0%, #00031F 10%, rgba(0,3,31,0.92) 30%, rgba(0,3,31,0.65) 55%, rgba(0,3,31,0.25) 78%, rgba(0,3,31,0.05) 92%, transparent 100%)',
         }}
       />
 
-      {/* Fade lateral derecho — sobre toda la sección */}
+      {/* Fade lateral derecho */}
       <div
         className="pointer-events-none absolute inset-y-0 right-0 z-20"
         style={{
-          width: '18%',
-          background: 'linear-gradient(to left, #00031F 0%, rgba(0,3,31,0.97) 25%, rgba(0,3,31,0.80) 50%, rgba(0,3,31,0.40) 75%, transparent 100%)',
+          width: '26%',
+          background: 'linear-gradient(to left, #00031F 0%, #00031F 10%, rgba(0,3,31,0.92) 30%, rgba(0,3,31,0.65) 55%, rgba(0,3,31,0.25) 78%, rgba(0,3,31,0.05) 92%, transparent 100%)',
         }}
       />
 
@@ -130,41 +143,41 @@ export default function Enfoque({ lang }) {
           bgImageSrc={BG_SRC}
           title={t('Del objeto a la pantalla.', 'From object to screen.')}
           subtitle={t('Diseño, automatización e inteligencia', 'Design, automation & intelligence')}
+          bottomOverlay={
+            <motion.div
+              className="flex flex-wrap justify-center gap-2"
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              variants={{
+                hidden: {},
+                show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } },
+              }}
+            >
+              {[
+                { es: 'Diseño de producto', en: 'Product design' },
+                { es: 'Experiencia digital', en: 'Digital experience' },
+                { es: 'Branding', en: 'Branding' },
+                { es: 'Sistemas visuales', en: 'Visual systems' },
+                { es: 'Video · contenido', en: 'Video · content' },
+                { es: 'Automatización · IA', en: 'Automation · AI' },
+              ].map((tag, i) => (
+                <motion.span
+                  key={i}
+                  className="glass-blue text-b-blue-lt text-[11px] font-semibold px-3 py-1.5 rounded-full border border-b-blue/18"
+                  variants={{
+                    hidden: { opacity: 0, scale: 0.8, y: 10 },
+                    show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] } },
+                  }}
+                >
+                  {lang === 'es' ? tag.es : tag.en}
+                </motion.span>
+              ))}
+            </motion.div>
+          }
         >
           <RevealedText lang={lang} />
         </ScrollExpandMedia>
-
-        {/* Disciplinas — debajo del video */}
-        <motion.div
-          className="flex flex-wrap justify-center gap-2 mt-6 px-4"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-40px' }}
-          variants={{
-            hidden: {},
-            show: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } },
-          }}
-        >
-          {[
-            { es: 'Diseño de producto', en: 'Product design' },
-            { es: 'Experiencia digital', en: 'Digital experience' },
-            { es: 'Branding', en: 'Branding' },
-            { es: 'Sistemas visuales', en: 'Visual systems' },
-            { es: 'Video · contenido', en: 'Video · content' },
-            { es: 'Automatización · IA', en: 'Automation · AI' },
-          ].map((tag, i) => (
-            <motion.span
-              key={i}
-              className="glass-blue text-b-blue-lt text-[11px] font-semibold px-3 py-1.5 rounded-full border border-b-blue/18"
-              variants={{
-                hidden: { opacity: 0, scale: 0.8, rotate: -4 },
-                show: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] } },
-              }}
-            >
-              {lang === 'es' ? tag.es : tag.en}
-            </motion.span>
-          ))}
-        </motion.div>
       </div>
     </section>
   )

@@ -10,6 +10,7 @@ const ScrollExpandMedia = ({
   title,
   subtitle,
   children,
+  bottomOverlay,
 }) => {
   const sectionRef = useRef(null)
   const [isMobile, setIsMobile] = useState(false)
@@ -149,17 +150,6 @@ const ScrollExpandMedia = ({
             </div>
           )}
 
-          {/* ── Fade inferior del video → se difumina con el fondo ── */}
-          <motion.div
-            className="pointer-events-none absolute bottom-0 left-0 right-0"
-            style={{
-              height: '140px',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,3,31,0.15) 30%, rgba(0,3,31,0.35) 70%, rgba(0,3,31,0.55) 100%)',
-              borderBottomLeftRadius: borderR,
-              borderBottomRightRadius: borderR,
-            }}
-          />
-
           {/* Ocultar watermark jitter.video */}
           <div
             className="pointer-events-none absolute bottom-0 right-0 z-40"
@@ -178,6 +168,15 @@ const ScrollExpandMedia = ({
         >
           {children}
         </motion.div>
+
+        {bottomOverlay && (
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 z-30 flex justify-center pb-6 px-4"
+            style={{ opacity: contentOpacity }}
+          >
+            {bottomOverlay}
+          </motion.div>
+        )}
       </div>
 
     </div>
