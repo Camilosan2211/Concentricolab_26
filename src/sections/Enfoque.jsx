@@ -7,26 +7,8 @@ const BG_SRC      = '/assets/images/imagen_dinamico.webp'
 const LOTTIE_SRC  = '/assets/images/efectos.json'
 
 const coralSet = new Set([
-  'diseño',
-  'forma',
-  'sistema',
-  'objeto',
-  'pantalla',
-  'automatización',
-  'inteligencia',
-  'marcas',
-  'productos',
-  'experiencias',
-  'design',
-  'form',
-  'system',
-  'object',
-  'screen',
-  'automation',
-  'intelligence',
-  'brands',
-  'products',
-  'experiences',
+  'núcleo', 'nucleo', 'forma', 'pantalla',
+  'core', 'form', 'screen',
 ])
 
 /* ── RevealedText ────────────────────────────────────────────────── */
@@ -47,11 +29,15 @@ function RevealedText({ lang }) {
     <div className="absolute inset-0 z-30 pointer-events-none flex items-center">
 
       {/* LEFT zone — first half of paragraph */}
-      <div className="hidden md:flex w-[22%] h-full flex-col justify-center px-4 md:px-6 gap-3">
-        <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/35 mb-1">
+      <div className="hidden md:flex w-[28%] h-full flex-col justify-center items-start px-6 gap-2">
+        <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/30 mb-1">
           {lang === 'es' ? 'Enfoque' : 'Approach'}
         </p>
-        <p ref={ref} className="font-cal text-sm md:text-base leading-[1.5] text-white/90">
+        <p
+          ref={ref}
+          className="font-cal text-xs md:text-sm leading-[1.5] text-white/90"
+          style={{ maxWidth: '180px', wordBreak: 'break-word' }}
+        >
           {wordsLeft.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
             return (
@@ -76,11 +62,14 @@ function RevealedText({ lang }) {
       <div className="flex-1" />
 
       {/* RIGHT zone — second half of paragraph */}
-      <div className="hidden md:flex w-[22%] h-full flex-col justify-center px-4 md:px-6 gap-3 items-end text-right">
-        <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/35 mb-1">
+      <div className="hidden md:flex w-[28%] h-full flex-col justify-center items-end px-6 gap-2 text-right">
+        <p className="text-[9px] font-bold tracking-[0.15em] uppercase text-white/30 mb-1">
           {lang === 'es' ? 'Sistema' : 'System'}
         </p>
-        <p className="font-cal text-sm md:text-base leading-[1.5] text-white/90">
+        <p
+          className="font-cal text-xs md:text-sm leading-[1.5] text-white/90"
+          style={{ maxWidth: '180px', wordBreak: 'break-word' }}
+        >
           {wordsRight.map((word, i) => {
             const isCoral = coralSet.has(word.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ''))
             return (

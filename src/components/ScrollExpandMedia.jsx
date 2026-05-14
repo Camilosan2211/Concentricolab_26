@@ -80,7 +80,7 @@ const ScrollExpandMedia = ({
       </div>
 
       {/* ── Media ────────────────────────────────────────────────── */}
-      <div className="relative z-10 flex items-center justify-center w-full px-4 md:px-6 py-6 md:py-8" style={{ minHeight: '45vh' }}>
+      <div className="relative z-10 flex items-center justify-center w-full px-4 md:px-6 py-6 md:py-8" style={{ minHeight: '45vh', overflow: 'visible' }}>
         <motion.div
           className="overflow-hidden relative"
           style={{
@@ -89,7 +89,7 @@ const ScrollExpandMedia = ({
             maxWidth: '95vw',
             maxHeight: '80vh',
             borderRadius: borderR,
-            boxShadow: '0px 0px 50px rgba(0, 0, 0, 0.3)',
+            boxShadow: 'none',
           }}
         >
           {mediaType === 'lottie' ? (
@@ -159,40 +159,34 @@ const ScrollExpandMedia = ({
               borderBottomRightRadius: borderR,
             }}
           />
-          {/* Fade lateral izquierdo */}
-          <motion.div
-            className="pointer-events-none absolute top-0 left-0 bottom-0 z-20"
-            style={{
-              width: '22%',
-              background: 'linear-gradient(to right, rgba(0,3,31,1) 0%, rgba(0,3,31,0.85) 25%, rgba(0,3,31,0.40) 60%, transparent 100%)',
-              borderTopLeftRadius: borderR,
-              borderBottomLeftRadius: borderR,
-            }}
-          />
+        </motion.div>
 
-          {/* Fade lateral derecho */}
-          <motion.div
-            className="pointer-events-none absolute top-0 right-0 bottom-0 z-20"
-            style={{
-              width: '22%',
-              background: 'linear-gradient(to left, rgba(0,3,31,1) 0%, rgba(0,3,31,0.85) 25%, rgba(0,3,31,0.40) 60%, transparent 100%)',
-              borderTopRightRadius: borderR,
-              borderBottomRightRadius: borderR,
-            }}
-          />
+        {/* Fade lateral izquierdo — sibling del video, no se corta */}
+        <div
+          className="pointer-events-none absolute top-0 bottom-0 z-20"
+          style={{
+            left: 0,
+            width: '28%',
+            background: 'linear-gradient(to right, #00031F 0%, rgba(0,3,31,0.95) 20%, rgba(0,3,31,0.75) 45%, rgba(0,3,31,0.30) 70%, transparent 100%)',
+          }}
+        />
 
-          {/* Overlay caption — dos columnas */}
-          <motion.div
-            className="pointer-events-none absolute bottom-0 left-0 right-0 z-30 px-6 md:px-10 pb-8 pt-20"
-            style={{
-              opacity: contentOpacity,
-              background: 'linear-gradient(to top, rgba(0,3,31,0.92) 0%, rgba(0,3,31,0.72) 40%, rgba(0,3,31,0.30) 70%, transparent 100%)',
-              borderBottomLeftRadius: borderR,
-              borderBottomRightRadius: borderR,
-            }}
-          >
-            {children}
-          </motion.div>
+        {/* Fade lateral derecho — sibling del video, no se corta */}
+        <div
+          className="pointer-events-none absolute top-0 bottom-0 z-20"
+          style={{
+            right: 0,
+            width: '28%',
+            background: 'linear-gradient(to left, #00031F 0%, rgba(0,3,31,0.95) 20%, rgba(0,3,31,0.75) 45%, rgba(0,3,31,0.30) 70%, transparent 100%)',
+          }}
+        />
+
+        {/* Children overlay — z-30, encima de los fades laterales */}
+        <motion.div
+          className="absolute inset-0 z-30"
+          style={{ opacity: contentOpacity }}
+        >
+          {children}
         </motion.div>
       </div>
 
