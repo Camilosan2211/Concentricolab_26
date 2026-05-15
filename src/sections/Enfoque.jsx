@@ -35,7 +35,7 @@ export default function Enfoque({ lang }) {
       />
 
       <div className="max-w-[1600px] mx-auto">
-        <div className="relative w-full" style={{ isolation: 'isolate' }}>
+        <div className="relative w-full">
 
           {/* Layer 4 — Video (inside ScrollExpandMedia) */}
           <ScrollExpandMedia
