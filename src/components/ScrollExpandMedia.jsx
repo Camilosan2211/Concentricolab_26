@@ -27,12 +27,15 @@ const ScrollExpandMedia = ({
   const bgOpacity = useTransform(progress, [0.5, 0.9], [1, 0.3])
 
   /* ── Video sizing — bordes redondeados flat/cute, menos altura ── */
-  const mediaW = useTransform(progress, [0, 0.85], ['38%', '100%'])
-  const mediaH = useTransform(progress, [0, 0.85], ['560px', '520px'])
+  const mediaW = useTransform(progress, [0, 0.9], ['42%', '100%'])
+  const mediaH = useTransform(progress, [0, 0.9], ['74vh', '48vh'])
   const borderR = useTransform(progress, [0, 1], [32, 16])
 
   /* ── Opacidades ───────────────────────────────────────────────── */
   const contentOpacity = useTransform(progress, [0.65, 0.95], [0, 1])
+
+  /* ── Glow border — peaks at mid-scroll, disappears at full width ── */
+  const glowOpacity = useTransform(progress, [0, 0.35, 0.7, 0.95], [0, 1, 1, 0])
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
@@ -151,6 +154,28 @@ const ScrollExpandMedia = ({
           )}
 
         </motion.div>
+
+        {/* Glow ring — sibling of video wrapper */}
+        <motion.div
+          className="pointer-events-none"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: mediaW,
+            height: mediaH,
+            borderRadius: borderR,
+            opacity: glowOpacity,
+            boxShadow: `
+              0 0 35px 4px rgba(255,107,53,0.6),
+              0 0 70px 8px rgba(74,158,255,0.3),
+              0 0 12px 2px rgba(255,107,53,0.9)
+            `,
+            border: '1px solid rgba(255,107,53,0.4)',
+            zIndex: 15,
+          }}
+        />
 
         {/* Children overlay — z-40 */}
         <motion.div
