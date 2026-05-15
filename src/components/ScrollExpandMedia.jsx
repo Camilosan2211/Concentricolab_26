@@ -168,11 +168,12 @@ const ScrollExpandMedia = ({
             borderRadius: borderR,
             opacity: glowOpacity,
             boxShadow: `
-              0 0 35px 4px rgba(255,107,53,0.6),
-              0 0 70px 8px rgba(74,158,255,0.3),
-              0 0 12px 2px rgba(255,107,53,0.9)
+              0 0 0 1.5px rgba(74,158,255,0.55),
+              0 0 32px 6px rgba(74,158,255,0.45),
+              0 0 65px 12px rgba(74,158,255,0.20),
+              0 0 8px 1px rgba(74,158,255,0.90)
             `,
-            border: '1px solid rgba(255,107,53,0.4)',
+            border: '1.5px solid rgba(74,158,255,0.50)',
             zIndex: 15,
           }}
         />

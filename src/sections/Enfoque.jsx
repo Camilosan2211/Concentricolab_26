@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import ScrollExpandMedia from '../components/ScrollExpandMedia'
-import LiquidText from '../components/LiquidText'
+import TypewriterText from '../components/TypewriterText'
 import TagsRow from '../components/TagsRow'
 
 /* ── Assets ────────────────────────────────────────────────────────── */
@@ -9,6 +10,7 @@ const LOTTIE_SRC  = '/assets/images/efectos.json'
 /* ── Componente principal ─────────────────────────────────────────── */
 export default function Enfoque({ lang }) {
   const t = (es, en) => lang === 'es' ? es : en
+  const [textDone, setTextDone] = useState(false)
 
   return (
     <section
@@ -49,8 +51,8 @@ export default function Enfoque({ lang }) {
 
           {/* Text and tags below video */}
           <div className="relative z-40 flex flex-col items-center text-center px-6 pt-10 pb-8 gap-8">
-            <LiquidText lang={lang} />
-            <TagsRow lang={lang} />
+            <TypewriterText lang={lang} onComplete={() => setTextDone(true)} />
+            <TagsRow lang={lang} visible={textDone} />
           </div>
         </div>
       </div>
