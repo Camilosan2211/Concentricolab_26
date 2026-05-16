@@ -122,6 +122,7 @@
     --cursor-dot: #4D66FF;
     --cursor-ring: rgba(77, 102, 255, 0.5);
     --cursor-ring-hov: rgba(77, 102, 255, 0.35);
+    color-scheme: light;
   }
 
 }
@@ -183,8 +184,26 @@
   .glow-coral { box-shadow: 0 0 36px rgba(255,109,77,.25); }
 
   /* Surface light */
- 
+  
   .surface { /* dark fallback */ }
+
+  /* ── LIGHT MODE — sistema completo ── */
+  html.light .section-premium {
+    background: rgba(255,255,255,0.60);
+    border-color: rgba(77,102,255,0.14);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  html.light .hero-brand-aurora    { opacity: 0.20; }
+  html.light .hero-brand-aurora-2  { opacity: 0.14; }
+  html.light .hero-blur-layer      { opacity: 0.06; }
+  html.light .hero-blur-layer-2    { opacity: 0.05; }
+  html.light .hero-blur-layer-3    { opacity: 0.04; }
+  html.light .hero-grid-lines      { border-color: rgba(77,102,255,.10); }
+  html.light .film-grain-overlay   {
+    mix-blend-mode: multiply;
+    opacity: 0.008;
+  }
 }
 
 /* Scrollbar */

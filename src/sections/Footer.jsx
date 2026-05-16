@@ -114,9 +114,16 @@ export default function Footer({ lang }) {
               className="h-5 w-auto opacity-55 group-hover:opacity-90 transition-opacity duration-200 dark:brightness-0 dark:invert"
             />
           </a>
-          <p className="text-[11px] text-center dark:text-white/30 text-black/35">
-            © {year} Concéntrico Lab. Bogotá, Colombia.
-          </p>
+          <div className="flex items-center justify-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 52 52" fill="none">
+              <path d="M26 6 L40 32 L12 32Z" stroke="#FF6D4D" strokeWidth="2" fill="rgba(255,109,77,.12)"/>
+              <path d="M17 32 L26 14 L35 32Z" stroke="#FF6D4D" strokeWidth="1.5" fill="rgba(255,109,77,.07)"/>
+              <line x1="12" y1="32" x2="40" y2="32" stroke="#FF6D4D" strokeWidth="1.5" opacity=".5"/>
+            </svg>
+            <span className="text-[11px] dark:text-white/30 text-black/35">
+              {t('Desde los cerros · Bogotá', 'From the hills · Bogotá')}
+            </span>
+          </div>
           <p className="text-[11px] text-right italic hidden sm:block dark:text-white/30 text-black/35">
             {t('Construido con diseño, IA y mucho café.', 'Built with design, AI and a lot of coffee.')}
           </p>
