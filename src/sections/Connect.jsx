@@ -5,9 +5,9 @@ import { Mail, Instagram, Linkedin, Youtube, Send } from 'lucide-react'
 const EMAIL = 'concentriclabco@gmail.com'
 
 const socialGrid = [
-  { Icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
+  { Icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/concentricolab' },
   { Icon: Linkedin,  label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/' },
-  { Icon: Youtube,   label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab' },
+  { Icon: Youtube,   label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricoLab' },
 ]
 
 export default function Connect({ lang }) {

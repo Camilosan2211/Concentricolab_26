@@ -1652,9 +1652,9 @@ export default {
         "addressCountry": "CO"
       },
       "sameAs": [
-        "https://www.instagram.com/concentriclab",
+        "https://www.instagram.com/concentricolab",
         "https://www.linkedin.com/company/concentriclab/",
-        "https://www.youtube.com/@ConcentricLab"
+        "https://www.youtube.com/@ConcentricoLab"
       ]
     }
     </script>
@@ -3113,9 +3113,9 @@ import { Mail, Instagram, Linkedin, Youtube, Send } from 'lucide-react'
 const EMAIL = 'concentriclabco@gmail.com'
 
 const socialGrid = [
-  { Icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/concentriclab' },
+  { Icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/concentricolab' },
   { Icon: Linkedin,  label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/' },
-  { Icon: Youtube,   label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab' },
+  { Icon: Youtube,   label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricoLab' },
 ]
 
 export default function Connect({ lang }) {
@@ -3591,9 +3591,9 @@ const navLinks = [
   { href: '#productos',   es: 'Recursos',   en: 'Resources' },
 ]
 const social = [
-  { label: 'Instagram', href: 'https://www.instagram.com/concentriclab', color: '#FF6D4D' },
+  { label: 'Instagram', href: 'https://www.instagram.com/concentricolab', color: '#FF6D4D' },
   { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/', color: '#4D66FF' },
-  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab', color: '#828AFF' },
+  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricoLab', color: '#828AFF' },
 ]
 const products = [
   { label: 'Kit de Métricas', href: 'https://concentriclab.gumroad.com/l/metricasdigitales' },

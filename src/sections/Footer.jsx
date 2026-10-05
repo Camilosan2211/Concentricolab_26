@@ -8,9 +8,9 @@ const navLinks = [
   { href: '#productos',   es: 'Recursos',   en: 'Resources' },
 ]
 const social = [
-  { label: 'Instagram', href: 'https://www.instagram.com/concentriclab', color: '#FF6D4D' },
+  { label: 'Instagram', href: 'https://www.instagram.com/concentricolab', color: '#FF6D4D' },
   { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/', color: '#4D66FF' },
-  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricLab', color: '#828AFF' },
+  { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricoLab', color: '#828AFF' },
 ]
 const products = [
   { label: 'Kit de Métricas', href: 'https://concentriclab.gumroad.com/l/metricasdigitales' },
