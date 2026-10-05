@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://concentricolab.vercel.app/sitemap.xml

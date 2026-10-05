@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { useLenis }   from './hooks/useLenis'
 import { useCursor }  from './hooks/useCursor'
 
@@ -42,19 +44,6 @@ export default function App() {
     return () => window.removeEventListener('scroll', update)
   }, [])
   
-  useEffect(() => {
-    const pb = document.getElementById('pb')
-    if (!pb) return
-    const update = () => {
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
-      pb.style.width = pct + '%'
-    }
-    window.addEventListener('scroll', update, { passive: true })
-    return () => window.removeEventListener('scroll', update)
-  }, [])
-
   useEffect(() => {
     const handleAnchorClick = (e) => {
       const anchor = e.target.closest('a[href^="#"]')
@@ -111,6 +100,8 @@ export default function App() {
 
       <Footer lang={lang} />
       <ScrollToTop />
+      <Analytics />
+      <SpeedInsights />
     </>
   )
 }
