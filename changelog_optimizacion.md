@@ -1,5 +1,11 @@
 # Changelog de optimización
 
+## 2026-10-07 — Restauración de cápsulas del fondo
+
+- Eliminada la línea de scan azul animada del Hero; no formaba parte de la composición visual solicitada.
+- Restaurada la visibilidad de las cápsulas flotantes: el fondo geométrico se renderiza sobre la superficie base, detrás del contenido, sin quedar oculto por el stacking context del documento.
+- Conservadas las dimensiones proporcionales del logo móvil; no se alteró su relación de aspecto.
+
 ## 2026-10-07 — Validación y correcciones de estabilidad
 
 - **SEO público:** se actualizaron canonical, Open Graph, Twitter, JSON-LD, logo, imagen social y sitemap a `https://concentricolab.com/`; se añadió `og:locale` (`es_CO`).
