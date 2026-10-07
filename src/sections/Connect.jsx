@@ -2,11 +2,9 @@ import { useState } from 'react'
 import { motion } from 'motion/react'
 import { Mail, Instagram, Linkedin, Youtube, Send } from 'lucide-react'
 
-const EMAIL = 'concentriclabco@gmail.com'
-
 const socialGrid = [
   { Icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/concentricolab' },
-  { Icon: Linkedin,  label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/' },
+  { Icon: Linkedin,  label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentricolab/' },
   { Icon: Youtube,   label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricoLab' },
 ]
 
@@ -31,7 +29,10 @@ export default function Connect({ lang }) {
       const res = await fetch('https://formspree.io/f/xreoreqr', {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          _subject: 'Nueva suscripción al newsletter — Concéntrico Lab',
+        }),
       })
       const data = await res.json()
       if (data.ok) { setStatus('ok'); setEmail('') } else throw new Error()
@@ -47,7 +48,10 @@ export default function Connect({ lang }) {
       const res = await fetch('https://formspree.io/f/xreoreqr', {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          _subject: `Nueva solicitud de proyecto — ${formData.nombre || 'sin nombre'}`,
+        }),
       })
       const data = await res.json()
       if (data.ok) {
@@ -206,7 +210,7 @@ export default function Connect({ lang }) {
               </div>
             ) : (
               <form onSubmit={submitProject} className="flex flex-col gap-3 flex-1">
-                <div className="flex gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row">
                   <input
                     type="text"
                     value={formData.nombre}

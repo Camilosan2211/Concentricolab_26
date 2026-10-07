@@ -22,12 +22,19 @@ export default function App() {
   const [dark, setDark] = useState(true)
 
   useEffect(() => {
+    const root = document.documentElement
     if (dark) {
-      document.documentElement.classList.add('dark')
-      document.documentElement.classList.remove('light')
+      root.classList.add('dark')
+      root.classList.remove('light')
+      root.style.colorScheme = 'dark'
+      root.style.backgroundColor = '#00031F'
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#00031F')
     } else {
-      document.documentElement.classList.remove('dark')
-      document.documentElement.classList.add('light')
+      root.classList.remove('dark')
+      root.classList.add('light')
+      root.style.colorScheme = 'light'
+      root.style.backgroundColor = '#EEF1FF'
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#EEF1FF')
     }
   }, [dark])
 
