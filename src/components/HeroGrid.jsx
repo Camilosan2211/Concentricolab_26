@@ -10,9 +10,6 @@ export default function HeroGrid() {
         <div className="hero-grid-lines" />
       </div>
 
-      {/* Línea de scan horizontal animada */}
-      <div className="hero-scan-line" />
-
       {/* Glows laterales — azul izq, coral der */}
       <div className="hero-side-glow hero-side-glow-left" />
       <div className="hero-side-glow hero-side-glow-right" />

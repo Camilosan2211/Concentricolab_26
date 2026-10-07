@@ -469,35 +469,6 @@ html.light, html.light body, html.light #root {
   50%       { opacity: 1.0; }
 }
 
-/* ---- Línea de scan ---- */
-.hero-scan-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1.5px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(65, 234, 255, 0.0) 5%,
-    rgba(65, 234, 255, 0.55) 35%,
-    rgba(65, 234, 255, 0.85) 50%,
-    rgba(65, 234, 255, 0.55) 65%,
-    rgba(65, 234, 255, 0.0) 95%,
-    transparent 100%
-  );
-  animation: scanDown 9s linear infinite;
-  will-change: top;
-  filter: blur(0.5px);
-  display: block;
-}
-
-@keyframes scanDown {
-  0%   { top: 15%; opacity: 0; }
-  8%   { opacity: 1; }
-  88%  { opacity: 0.8; }
-  100% { top: 82%; opacity: 0; }
-}
-
 /* ---- Glows laterales ---- */
 .hero-side-glow {
   position: absolute;

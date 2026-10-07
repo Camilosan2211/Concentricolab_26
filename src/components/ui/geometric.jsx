@@ -71,7 +71,7 @@ export default function GeometricBackground({ className, darkMode = true }) {
 
   return (
     <div
-      className={cn("fixed inset-0 w-full h-full z-[-1]", className)}
+      className={cn("fixed inset-0 w-full h-full z-0 pointer-events-none", className)}
       style={{ backgroundColor: bg }}
     >
       <div className={cn("absolute inset-0 blur-3xl", radial)} />
