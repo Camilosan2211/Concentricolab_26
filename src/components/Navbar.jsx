@@ -75,7 +75,7 @@ export default function Navbar({ lang, setLang, dark, setDark }) {
 
         <div className="w-full max-w-[1200px] flex items-center justify-between px-6 lg:px-10 py-3">
           <a href="#hero" className="flex items-center gap-2">
-            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-5 w-auto dark:brightness-100 brightness-75" />
+            <img src="/assets/images/logo.png" alt="Concéntrico Lab" className="h-4 sm:h-5 w-auto dark:brightness-100 brightness-75" />
           </a>
 
           <nav className="hidden md:flex items-center gap-7">

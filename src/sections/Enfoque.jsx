@@ -48,7 +48,7 @@ export default function Enfoque({ lang }) {
   return (
     <section
       id="enfoque"
-      className="relative py-12 md:py-16 px-4 bg-transparent"
+      className="enfoque-fixed relative py-12 md:py-16 px-4 bg-transparent"
       style={{ overflow: 'visible' }}
       aria-label={t('Nuestro enfoque', 'Our approach')}
     >

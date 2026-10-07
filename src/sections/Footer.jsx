@@ -9,7 +9,7 @@ const navLinks = [
 ]
 const social = [
   { label: 'Instagram', href: 'https://www.instagram.com/concentricolab', color: '#FF6D4D' },
-  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentriclab/', color: '#4D66FF' },
+  { label: 'LinkedIn',  href: 'https://www.linkedin.com/company/concentricolab/', color: '#4D66FF' },
   { label: 'YouTube',   href: 'https://www.youtube.com/@ConcentricoLab', color: '#828AFF' },
 ]
 const products = [
