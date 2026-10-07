@@ -130,7 +130,7 @@ export default function Hero({ lang }) {
           <motion.span
             custom={0}
             variants={variants.row}
-            className="inline-flex flex-nowrap items-center justify-center gap-2"
+            className="inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1"
             animate={{ y: [0, -3, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
           >
@@ -142,7 +142,7 @@ export default function Hero({ lang }) {
           <motion.span
             custom={1}
             variants={variants.row}
-            className="inline-flex flex-nowrap items-center justify-center gap-2"
+            className="inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1"
             animate={{ y: [0, 2, 0] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay: 0.35 }}
           >
@@ -154,7 +154,7 @@ export default function Hero({ lang }) {
           <motion.span
             custom={2}
             variants={variants.row}
-            className="inline-flex flex-nowrap items-center justify-center gap-2"
+            className="inline-flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1"
             animate={{ y: [0, -2, 0] }}
             transition={{ duration: 2.1, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
           >
