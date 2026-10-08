@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    {"source": "/((?!camilo(?:/|$)).*)", "destination": "/index.html"}
+    {"source": "/((?!(?:camilo|david)(?:/|$)).*)", "destination": "/index.html"}
   ],
   "headers": [
     {
@@ -8,6 +8,14 @@
       "headers": [
         {"key": "Content-Type", "value": "text/vcard; charset=utf-8"},
         {"key": "Content-Disposition", "value": "inline; filename=\"Camilo-Sanchez-Concentrico-Lab.vcf\""},
+        {"key": "Cache-Control", "value": "public, max-age=3600"}
+      ]
+    },
+    {
+      "source": "/david/david.vcf",
+      "headers": [
+        {"key": "Content-Type", "value": "text/vcard; charset=utf-8"},
+        {"key": "Content-Disposition", "value": "inline; filename=\"David-Gonzalez-Concentrico-Lab.vcf\""},
         {"key": "Cache-Control", "value": "public, max-age=3600"}
       ]
     }
