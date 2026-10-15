@@ -35,6 +35,23 @@
     <meta id="theme-color" name="theme-color" content="#00031F"/>
     <link rel="icon" href="/assets/images/favicon.png"/>
 
+    <!-- Metricool tracking -->
+    <script>
+      function loadScript(callback) {
+        var head = document.getElementsByTagName("head")[0]
+        var script = document.createElement("script")
+        script.type = "text/javascript"
+        script.src = "https://tracker.metricool.com/resources/be.js"
+        script.onreadystatechange = callback
+        script.onload = callback
+        head.appendChild(script)
+      }
+
+      loadScript(function () {
+        beTracker.t({ hash: "874094ea906d85e548afd0cd2e7ea92d" })
+      })
+    </script>
+
     <!-- Fonts — Inter desde Google, Cal Sans self-hosted vía npm -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
