@@ -30,7 +30,7 @@ export default function InstagramFeed({ lang }) {
               <ArrowUpRight size={14} className="opacity-60" />
             </motion.a>
           </div>
-          <div className="w-full min-w-0 glass rounded-card p-3 md:p-5 border dark:border-white/8 border-black/8">
+          <div className="w-full min-w-0 glass rounded-card p-1.5 md:p-2 border dark:border-white/8 border-black/8">
             <div className="elfsight-app-9ad9c274-eab2-4b84-aa56-1a35308734dc" data-elfsight-app-lazy />
           </div>
         </div>
