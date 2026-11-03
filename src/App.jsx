@@ -14,6 +14,7 @@ import Capacidades from './sections/Capacidades'
 import Enfoque     from './sections/Enfoque'
 import Manifiesto  from './sections/Manifiesto'
 import Productos   from './sections/Productos'
+import InstagramFeed from './sections/InstagramFeed'
 import Connect     from './sections/Connect'
 import Footer      from './sections/Footer'
 
@@ -102,6 +103,7 @@ export default function App() {
         <Capacidades lang={lang} />
         <Manifiesto  lang={lang} />
         <Productos   lang={lang} />
+        <InstagramFeed lang={lang} />
         <Connect     lang={lang} />
       </main>
 
