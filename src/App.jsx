@@ -102,8 +102,8 @@ export default function App() {
         <Enfoque     lang={lang} />
         <Capacidades lang={lang} />
         <Manifiesto  lang={lang} />
-        <Productos   lang={lang} />
         <InstagramFeed lang={lang} />
+        <Productos   lang={lang} />
         <Connect     lang={lang} />
       </main>
 
